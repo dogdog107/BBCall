@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+	xmlns:aop="http://www.springframework.org/schema/aop"
+	xmlns:context="http://www.springframework.org/schema/context" 
+	xmlns:tx="http://www.springframework.org/schema/tx"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+		http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop-4.1.xsd
+		http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-4.1.xsd
+		http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx-4.1.xsd">
+
+	<!-- 
+		#1. Spring 定义数据源连接: DriverManagerDataSource 
+		需要定义的参数：url, username, password, driverClassName
+	-->
+
+	<bean id="dataSource"
+		class="org.springframework.jdbc.datasource.DriverManagerDataSource">
+		<property name="url" value="jdbc:mysql://localhost:3306/bbcall" />
+		<property name="username" value="root" />
+		<property name="password" value="root" />
+		<property name="driverClassName" value="com.mysql.jdbc.Driver" />
+
+		<!-- <property name="maxActive" value="100"/> -->
+		<!-- <property name="maxIdle" value="30"/> -->
+		<!-- <property name="maxWait" value="500"/> -->
+		<!-- <property name="defaultAutoCommit" value="true"/> -->
+
+	</bean>
+	
+	<!-- 
+		#2. MyBatis的SqlSession的工厂，定义SqlSessionFactory: SqlSessionFactoryBean 
+	-->
+
+	<bean id="sqlSessionFactory" class="org.mybatis.spring.SqlSessionFactoryBean">
+
+		<!-- dataSource: 需要引用上面的数据源ID, 所以ref＝id -->
+		<property name="dataSource" ref="dataSource" />
+
+		<!-- typeAliasesPackage: 指定实体类的包名，自动将实体的简单类名映射成为别名 -->
+		<property name="typeAliasesPackage" value="com.bbcall.mybatis.table" />
+
+		<!-- <property name="mapperLocations" value="classpath*:com/bbcall/dao/*.xml" 
+			/> -->
+	</bean>
+	
+	<!-- 
+		#3. MyBatis 自动扫描并加载sql映射文件/接口: MapperScannerConfigurer 
+		允许自动注入(根据类型匹配),不需要逐个配置mapper
+	-->
+
+	<bean class="org.mybatis.spring.mapper.MapperScannerConfigurer">
+
+		<!-- basePackage: 指定sql映射文件/接口所在的包（自动扫描） -->
+		<property name="basePackage" value="com.bbcall.mybatis.dao" />
+
+		<!-- sqlSessionFactory: 需要引用上面的sqlSessionFactory的ID -->
+		<property name="sqlSessionFactory" ref="sqlSessionFactory" />
+	</bean>
+	
+	<!-- 
+		#4. Spring 事务管理, 定 义全局的事务控制: DataSourceTransactionManager 
+	-->
+
+	<bean id="transactionManager"
+		class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
+
+		<!-- dataSource: 需要引用上面的数据源ID, 所以ref＝id -->
+		<property name="dataSource" ref="dataSource" />
+
+	</bean>
+	
+	<!-- 
+		#5. Spring 开启注解方式声明事务 
+	-->
+
+	<!-- transaction-manager: 引用上面定义的事物管理器ID -->
+	<tx:annotation-driven transaction-manager="transactionManager" />
+	
+	<!-- Struts2 Related -->
+	<bean id="userServices" class="com.bbcall.struts.services.UserServices"></bean>
+	<bean id="loginAction" class="com.bbcall.struts.actions.LoginAction" scope="prototype">
+		<property name="userServices" ref="userServices"></property>
+	</bean>
+	
+</beans>

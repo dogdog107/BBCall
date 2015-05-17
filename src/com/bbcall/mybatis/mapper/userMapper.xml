@@ -1,0 +1,173 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper    PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<!-- 
+	这里namespace必须是UserMapper接口的全类名路径，
+	不然运行的时候要报错 "is not known to the MapperRegistry" 
+-->
+
+<mapper namespace="com.bbcall.mybatis.dao.UserMapper">
+
+<!-- 
+	## SQL Command ##
+CREATE TABLE USER (
+	user_id INT NOT NULL auto_increment PRIMARY KEY,
+	user_account VARCHAR (30) UNIQUE,
+	user_password VARCHAR (30),
+	user_email VARCHAR (30) UNIQUE,
+	user_mobile INT (11) NOT NULL UNIQUE,
+	user_type VARCHAR (10),
+	user_name VARCHAR (20),
+	user_sex VARCHAR (10),
+	user_pic_url VARCHAR (255),
+	user_language VARCHAR (10),
+	user_address text,
+	user_skill text,
+	user_description text,
+	user_access_group VARCHAR (30),
+	user_status VARCHAR (10),
+	user_create_time TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+	user_login_time datetime,
+	user_token VARCHAR (255)
+) DEFAULT CHARSET = utf8;
+ 	
+ 	## Value ##
+	private int user_id;
+	private String user_account;
+	private String user_password;
+	private String user_email;
+	private int user_mobile;
+	private String user_type;
+	private String user_name;
+	private String user_sex;
+	private String user_pic_url;
+	private String user_language;
+	private String user_address;
+	private String user_skill;
+	private String user_description;
+	private String user_access_group;
+	private String user_status;
+	private Date user_login_time;
+	private String user_token;
+ -->
+
+<!-- 
+	ID: 必须与对应接口的对应的方法名一致：
+	void save(User user);
+	void update(User user);
+	void delete(int id);
+	User findById(int id);
+	List<User> findAll();
+ -->
+	<insert id="save" parameterType="User">
+		insert into
+		user(user_name,user_birth,user_salary)
+		value(#{name},#{birth},#{salary})
+	</insert>
+
+	<update id="update" parameterType="User">
+		update user set
+		user_name=#{name},user_birth=#{birth},user_salary=#{salary} where
+		user_id=#{id}
+	</update>
+
+	<delete id="delete" parameterType="int">
+		delete from user where
+		user_id=#{id}
+	</delete>
+
+	<select id="findById" parameterType="int" resultType="User">
+		select
+		user_id id,user_name name,user_birth birth,user_salary salary from
+		user where user_id=#{id}
+	</select>
+	<select id="findAll" parameterType="int" resultType="User">
+		select
+		user_id id,user_name name,user_birth birth,user_salary salary from
+		user
+	</select>
+
+	<resultMap id="UserResultMap" type="com.bbcall.mybatis.table.User" >
+    	<id column="user_id" property="user_id" jdbcType="INTEGER" />
+    	<result column="user_account" property="user_account" jdbcType="VARCHAR" />
+    	<result column="user_password" property="user_password" jdbcType="VARCHAR" />
+    	<result column="user_email" property="user_email" jdbcType="VARCHAR" />
+    	<result column="user_mobile" property="user_mobile" jdbcType="INTEGER" />
+    	<result column="user_type" property="user_type" jdbcType="VARCHAR" />
+    	<result column="user_name" property="user_name" jdbcType="VARCHAR" />
+    	<result column="user_sex" property="user_sex" jdbcType="VARCHAR" />
+    	<result column="user_pic_url" property="user_pic_url" jdbcType="VARCHAR" />
+    	<result column="user_language" property="user_language" jdbcType="VARCHAR" />
+    	<result column="user_address" property="user_address" jdbcType="text" />
+    	<result column="user_skill" property="user_skill" jdbcType="text" />
+    	<result column="user_description" property="user_description" jdbcType="text" />
+    	<result column="user_access_group" property="user_access_group" jdbcType="VARCHAR" />
+    	<result column="user_status" property="user_status" jdbcType="VARCHAR" />
+    	<result column="user_login_time" property="user_login_time" jdbcType="datetime" />
+    	<result column="user_token" property="user_token" jdbcType="VARCHAR" />
+	</resultMap>
+
+	<insert id="addUserByMobile" parameterType="User"
+		useGeneratedKeys="true" keyProperty="user_id">
+		insert into USER(user_mobile,
+		user_password, user_type, user_status)
+		values(#{user_mobile},
+		#{user_password}, #{user_type}, #{user_status})
+	</insert>
+
+	<insert id="addUserByAccount" parameterType="User"
+		useGeneratedKeys="true" keyProperty="user_id">
+		insert into USER(user_account,
+		user_password, user_type, user_status)
+		values(#{user_account},
+		#{user_password}, #{user_type}, #{user_status})
+	</insert>
+
+	<insert id="addUserByEmail" parameterType="User"
+		useGeneratedKeys="true" keyProperty="user_id">
+		insert into USER(user_email,
+		user_password, user_type, user_status)
+		values(#{user_email},
+		#{user_password}, #{user_type}, #{user_status})
+	</insert>
+
+	<select id="getUserByAccount" parameterType="String" resultMap="UserResultMap">
+		select user_id, user_account, user_password, user_email, user_mobile,
+		user_type, user_name, user_sex, user_pic_url, user_language,
+		user_address, user_skill, user_description, user_access_group,
+		user_status, user_login_time, user_token
+		from USER
+		where
+		user_account=#{user_account}
+	</select>
+
+	<select id="getUserById" parameterType="int" resultMap="UserResultMap">
+		select
+		user_id, user_account, user_password, user_email, user_mobile,
+		user_type, user_name, user_sex, user_pic_url, user_language,
+		user_address, user_skill, user_description, user_access_group,
+		user_status, user_login_time, user_token
+		from USER
+		where user_id=#{user_id}
+	</select>
+
+	<select id="getUserByToken" parameterType="String" resultMap="UserResultMap">
+		select user_id, user_account, user_password, user_email, user_mobile,
+		user_type, user_name, user_sex, user_pic_url, user_language,
+		user_address, user_skill, user_description, user_access_group,
+		user_status, user_login_time, user_token
+		from USER
+		where user_token=#{user_token}
+	</select>
+
+	<update id="updateUser" parameterType="User">
+		update cars_user set user_nickname=#{user_nickname}, user_sign=#{user_sign}
+		where user_token=#{user_token}
+	</update>
+
+	<update id="updateToken" parameterType="User">
+		update cars_user set user_token=#{user_token}
+		where user_id=#{user_id}
+	</update>
+
+</mapper>    
