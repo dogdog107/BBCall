@@ -1,5 +1,8 @@
 package com.bbcall.struts.actions;
 
+import java.util.HashMap;
+import java.util.Map;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Controller;
@@ -17,11 +20,15 @@ public class LoginAction extends ActionSupport {
 	private String username;
 	private String password;
 	private String result;
-
+    private Map<String,Object> dataMap; 
+    
 	@Override
 	public String execute() throws Exception {
 		System.out.println("Here is LoginAction");
 		String result = userServices.login(username, password);
+		
+        // dataMap中的数据将会被Struts2转换成JSON字符串，所以这里要先清空其中的数据  
+        dataMap = new HashMap<String, Object>();  
 		if (result == "Login Success") {
 			return SUCCESS;
 		} else {
@@ -44,5 +51,10 @@ public class LoginAction extends ActionSupport {
 	public String getResult() {
 		return result;
 	}
+
+	public Map<String, Object> getDataMap() {
+		return dataMap;
+	}
+
 
 }

@@ -37,16 +37,19 @@ public class UserServices {
 			User user1 = userMapper.getUserByMobile(username);
 			if (null != user1) {
 				user = user1;
+				System.out.println("getUserByMobile() selected.");
 			}
 		} else if (username.contains("@")) {
 			User user2 = userMapper.getUserByEmail(username);
 			if (null != user2) {
 				user = user2;
+				System.out.println("getUserByEmail() selected.");
 			}
 		} else {
 			User user3 = userMapper.getUserByAccount(username);
 			if (null != user3) {
 				user = user3;
+				System.out.println("getUserByAccount() selected.");
 			} else {
 				result = "No user";
 			}
