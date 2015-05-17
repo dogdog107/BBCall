@@ -11,7 +11,7 @@ import com.bbcall.mybatis.table.User;
 public class UserServices {
 	@Autowired
 	private UserMapper userMapper;
-	
+	Object userinfo = null;
 
 	RandomCode randomCode = new RandomCode();
 	
@@ -23,55 +23,67 @@ public class UserServices {
 //		userMapper.addUserByAccount("");
 //		userMapper.addUserByEmail("");
 	}
+	
 	//用户登录
 
 	public String login(String username, String password) {
 		System.out.println("Here is UserServices - Login method...");
+
 		User user = new User();
 		String result = null;
 
 		// 判断用户名的类型：
-		if (username.length() == 11 && username.startsWith("13")
-				&& isNumeric(username)) {
-			// 通过账号获取用户资料
+		if (isNumeric(username)) { // 判断登录名是否为手机号码
 			User user1 = userMapper.getUserByMobile(username);
 			if (null != user1) {
 				user = user1;
+				result = "User Detected";
 				System.out.println("getUserByMobile() selected.");
 			}
-		} else if (username.contains("@")) {
+		}
+		if (username.contains("@")) { // 判断登录名是否为邮箱地址
 			User user2 = userMapper.getUserByEmail(username);
 			if (null != user2) {
 				user = user2;
+				result = "User Detected";
 				System.out.println("getUserByEmail() selected.");
 			}
-		} else {
+		}
+		if (result != "User Detected") {
 			User user3 = userMapper.getUserByAccount(username);
-			if (null != user3) {
+			if (null != user3) { // 判断登录名是否为帐号
 				user = user3;
 				System.out.println("getUserByAccount() selected.");
 			} else {
-				result = "No user";
+				result = "User Not found!";
 			}
 		}
 
-		System.out.println(user.toString());
+		if (result != "User Not found!") {
+			System.out.println(user.toString());
+			try {
+				if (password.equals(user.getUser_password())) {// 验证密码是否正确
 
-		if (result != "No user" && password.equals(user.getUser_password())) {// 验证密码是否正确
+					// 正确则创建新token，并更新数据库
+					String token = randomCode.getToken();
+					while (null != userMapper.getUserByToken(token)) {// 确保token唯一
+						token = randomCode.getToken();
+					}
+					user.setToken(token);
+					userMapper.updateToken(user);
+					result = "Login Success";
+					userinfo = user;
+				} else {
+					result = "Password incorrect";
+				}
+			} catch (Exception e) {
 
-			// 正确则创建新token，并更新数据库
-			String token = randomCode.getToken();
-			while (null != userMapper.getUserByToken(token)) {// 确保token唯一
-				token = randomCode.getToken();
 			}
-			user.setToken(token);
-			userMapper.updateToken(user);
-			result = "Login Success";
-			// return user.toString();
 		}
 		System.out.println(result);
 		return result;
 	}
+	
 	//用户信息修改
 	public void update() {
 		System.out.println("Here is UserServices - update method...");
@@ -89,5 +101,11 @@ public class UserServices {
 			}
 		}
 		return true;
+	}
+	
+	public Object userInfo() {
+
+		return userinfo;
+
 	}
 }

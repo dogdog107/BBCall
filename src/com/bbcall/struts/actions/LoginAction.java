@@ -15,6 +15,10 @@ import com.opensymphony.xwork2.ActionSupport;
 @Controller("loginAction")
 public class LoginAction extends ActionSupport {
 	
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
 	@Autowired
 	private UserServices userServices;
 	private String username;
@@ -25,13 +29,18 @@ public class LoginAction extends ActionSupport {
 	@Override
 	public String execute() throws Exception {
 		System.out.println("Here is LoginAction");
+
 		String result = userServices.login(username, password);
-		
-        // dataMap中的数据将会被Struts2转换成JSON字符串，所以这里要先清空其中的数据  
-        dataMap = new HashMap<String, Object>();  
+
+		// dataMap中的数据将会被Struts2转换成JSON字符串，所以这里要先清空其中的数据
+		dataMap = new HashMap<String, Object>();
 		if (result == "Login Success") {
+			Object userinfo = userServices.userInfo();
+			System.out.println(userinfo.toString());
 			return SUCCESS;
 		} else {
+
+			System.out.println("Failed");
 			return INPUT;
 		}
 	}
