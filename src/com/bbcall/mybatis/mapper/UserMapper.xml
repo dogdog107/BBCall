@@ -59,51 +59,24 @@ CREATE TABLE USER (
 	User findById(int id);
 	List<User> findAll();
  -->
-	<insert id="save" parameterType="User">
-		insert into
-		user(user_name,user_birth,user_salary)
-		value(#{name},#{birth},#{salary})
-	</insert>
-
-	<update id="update" parameterType="User">
-		update user set
-		user_name=#{name},user_birth=#{birth},user_salary=#{salary} where
-		user_id=#{id}
-	</update>
-
-	<delete id="delete" parameterType="int">
-		delete from user where
-		user_id=#{id}
-	</delete>
-
-	<select id="findById" parameterType="int" resultType="User">
-		select
-		user_id id,user_name name,user_birth birth,user_salary salary from
-		user where user_id=#{id}
-	</select>
-	<select id="findAll" parameterType="int" resultType="User">
-		select
-		user_id id,user_name name,user_birth birth,user_salary salary from
-		user
-	</select>
 
 	<resultMap id="UserResultMap" type="com.bbcall.mybatis.table.User" >
     	<id column="user_id" property="user_id" jdbcType="INTEGER" />
     	<result column="user_account" property="user_account" jdbcType="VARCHAR" />
     	<result column="user_password" property="user_password" jdbcType="VARCHAR" />
     	<result column="user_email" property="user_email" jdbcType="VARCHAR" />
-    	<result column="user_mobile" property="user_mobile" jdbcType="INTEGER" />
+    	<result column="user_mobile" property="user_mobile" jdbcType="BIGINT" />
     	<result column="user_type" property="user_type" jdbcType="VARCHAR" />
     	<result column="user_name" property="user_name" jdbcType="VARCHAR" />
     	<result column="user_sex" property="user_sex" jdbcType="VARCHAR" />
     	<result column="user_pic_url" property="user_pic_url" jdbcType="VARCHAR" />
     	<result column="user_language" property="user_language" jdbcType="VARCHAR" />
-    	<result column="user_address" property="user_address" jdbcType="text" />
-    	<result column="user_skill" property="user_skill" jdbcType="text" />
-    	<result column="user_description" property="user_description" jdbcType="text" />
+    	<result column="user_address" property="user_address" jdbcType="VARCHAR" />
+    	<result column="user_skill" property="user_skill" jdbcType="VARCHAR" />
+    	<result column="user_description" property="user_description" jdbcType="VARCHAR" />
     	<result column="user_access_group" property="user_access_group" jdbcType="VARCHAR" />
     	<result column="user_status" property="user_status" jdbcType="VARCHAR" />
-    	<result column="user_login_time" property="user_login_time" jdbcType="datetime" />
+    	<result column="user_login_time" property="user_login_time" jdbcType="DATE" />
     	<result column="user_token" property="user_token" jdbcType="VARCHAR" />
 	</resultMap>
 
@@ -161,12 +134,12 @@ CREATE TABLE USER (
 	</select>
 
 	<update id="updateUser" parameterType="User">
-		update cars_user set user_nickname=#{user_nickname}, user_sign=#{user_sign}
+		update USER set user_nickname=#{user_nickname}, user_sign=#{user_sign}
 		where user_token=#{user_token}
 	</update>
 
 	<update id="updateToken" parameterType="User">
-		update cars_user set user_token=#{user_token}
+		update USER set user_token=#{user_token}
 		where user_id=#{user_id}
 	</update>
 

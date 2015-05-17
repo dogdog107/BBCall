@@ -36,12 +36,12 @@
 
 		<!-- dataSource: 需要引用上面的数据源ID, 所以ref＝id -->
 		<property name="dataSource" ref="dataSource" />
-
+		
+		<property name="mapperLocations" value="classpath*:com/bbcall/mybatis/mapper/*.xml" />
+		
 		<!-- typeAliasesPackage: 指定实体类的包名，自动将实体的简单类名映射成为别名 -->
 		<property name="typeAliasesPackage" value="com.bbcall.mybatis.table" />
 
-		<!-- <property name="mapperLocations" value="classpath*:com/bbcall/dao/*.xml" 
-			/> -->
 	</bean>
 	
 	<!-- 
@@ -53,7 +53,7 @@
 
 		<!-- basePackage: 指定sql映射文件/接口所在的包（自动扫描） -->
 		<property name="basePackage" value="com.bbcall.mybatis.dao" />
-
+		
 		<!-- sqlSessionFactory: 需要引用上面的sqlSessionFactory的ID -->
 		<property name="sqlSessionFactory" ref="sqlSessionFactory" />
 	</bean>
@@ -77,10 +77,17 @@
 	<!-- transaction-manager: 引用上面定义的事物管理器ID -->
 	<tx:annotation-driven transaction-manager="transactionManager" />
 	
+	<context:component-scan base-package="com.bbcall" use-default-filters="false" >
+  		<context:include-filter type="annotation" expression="org.springframework.stereotype.Controller" />	    
+  		<context:include-filter type="annotation" expression="org.springframework.stereotype.Service" />
+  		<context:include-filter type="annotation" expression="org.springframework.stereotype.Repository" />
+	</context:component-scan>
+	
+	
 	<!-- Struts2 Related -->
-	<bean id="userServices" class="com.bbcall.struts.services.UserServices"></bean>
+<!-- 	<bean id="userServices" class="com.bbcall.struts.services.UserServices"></bean>
 	<bean id="loginAction" class="com.bbcall.struts.actions.LoginAction" scope="prototype">
 		<property name="userServices" ref="userServices"></property>
-	</bean>
+	</bean> -->
 	
 </beans>

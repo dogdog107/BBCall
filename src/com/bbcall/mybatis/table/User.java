@@ -1,37 +1,38 @@
 package com.bbcall.mybatis.table;
 
+import java.math.BigInteger;
 import java.util.Date;
 
 /*	
  * Table USER's sql command:
-CREATE TABLE USER (
-	user_id INT NOT NULL auto_increment PRIMARY KEY,
-	user_account VARCHAR (30) UNIQUE,
-	user_password VARCHAR (30),
-	user_email VARCHAR (30) UNIQUE,
-	user_mobile INT (11) NOT NULL UNIQUE,
-	user_type VARCHAR (10),
-	user_name VARCHAR (20),
-	user_sex VARCHAR (10),
-	user_pic_url VARCHAR (255),
-	user_language VARCHAR (10),
-	user_address text,
-	user_skill text,
-	user_description text,
-	user_access_group VARCHAR (30),
-	user_status VARCHAR (10),
-	user_create_time TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-	user_login_time datetime,
-	user_token VARCHAR (255)
-) DEFAULT CHARSET = utf8;
-*/
+ CREATE TABLE USER (
+ user_id INT NOT NULL auto_increment PRIMARY KEY,
+ user_account VARCHAR (30),
+ user_password VARCHAR (30) NOT NULL,
+ user_email VARCHAR (30),
+ user_mobile BIGINT,
+ user_type VARCHAR (10),
+ user_name VARCHAR (20),
+ user_sex VARCHAR (10),
+ user_pic_url VARCHAR (255),
+ user_language VARCHAR (10),
+ user_address text,
+ user_skill text,
+ user_description text,
+ user_access_group VARCHAR (30),
+ user_status VARCHAR (10),
+ user_create_time TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+ user_login_time datetime,
+ user_token VARCHAR (255)
+ ) DEFAULT CHARSET = utf8;
+ */
 
 public class User {
 	private int user_id;
 	private String user_account;
 	private String user_password;
 	private String user_email;
-	private int user_mobile;
+	private BigInteger user_mobile;
 	private String user_type;
 	private String user_name;
 	private String user_sex;
@@ -46,7 +47,7 @@ public class User {
 	private String user_token;
 
 	public User(int user_id, String user_account, String user_password,
-			String user_email, int user_mobile, String user_type,
+			String user_email, BigInteger user_mobile, String user_type,
 			String user_name, String user_sex, String user_pic_url,
 			String user_language, String user_skill, String user_description,
 			String user_access_group, String user_status, Date user_login_time,
@@ -115,11 +116,11 @@ public class User {
 		this.user_email = user_email;
 	}
 
-	public int getUser_mobile() {
+	public BigInteger getUser_mobile() {
 		return user_mobile;
 	}
 
-	public void setUser_mobile(int user_mobile) {
+	public void setUser_mobile(BigInteger user_mobile) {
 		this.user_mobile = user_mobile;
 	}
 
@@ -209,6 +210,10 @@ public class User {
 
 	public void setUser_token(String user_token) {
 		this.user_token = user_token;
+	}
+
+	public void setToken(String user_token) {
+		this.user_token = user_token == null ? null : user_token.trim();
 	}
 
 	@Override
