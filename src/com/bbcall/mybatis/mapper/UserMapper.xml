@@ -160,5 +160,10 @@ CREATE TABLE USER (
 		update USER set user_token=#{user_token}
 		where user_id=#{user_id}
 	</update>
+	
+	<update id="updateLoginTime" parameterType="User">
+		update USER set user_login_time=#{user_login_time}
+		where user_id=#{user_id}
+	</update>
 
 </mapper>    

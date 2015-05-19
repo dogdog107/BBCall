@@ -32,7 +32,7 @@ public class User {
 	private String user_account;
 	private String user_password;
 	private String user_email;
-	private BigInteger user_mobile;
+	private String user_mobile;
 	private String user_type;
 	private String user_name;
 	private String user_sex;
@@ -47,7 +47,7 @@ public class User {
 	private String user_token;
 
 	public User(int user_id, String user_account, String user_password,
-			String user_email, BigInteger user_mobile, String user_type,
+			String user_email, String user_mobile, String user_type,
 			String user_name, String user_sex, String user_pic_url,
 			String user_language, String user_skill, String user_description,
 			String user_access_group, String user_status, Date user_login_time,
@@ -115,11 +115,11 @@ public class User {
 		this.user_email = user_email;
 	}
 
-	public BigInteger getUser_mobile() {
+	public String getUser_mobile() {
 		return user_mobile;
 	}
 
-	public void setUser_mobile(BigInteger user_mobile) {
+	public void setUser_mobile(String user_mobile) {
 		this.user_mobile = user_mobile;
 	}
 

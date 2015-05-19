@@ -12,6 +12,12 @@ public class ResultCode {
 	public static Integer USERID_ERROR = 10004;//用户id不存在
 	public static Integer USERNAME_EXIST = 10005;//用户名已被使用
 	
+	//用户返回码11XXX
+	public static Integer USERNAME_NOTEXIST = 11001;//用户名可以使用
+	public static Integer USERNAME_ACCOUNT = 11002;//帐号用户名
+	public static Integer USERNAME_MOBILE = 11003;//手机号用户名
+	public static Integer USERNAME_EMAIL = 11004;//邮箱用户名
+	
 	//新闻错误码20XXX
 	public static Integer NEWSID_ERROR = 20001;//新闻id不存在
 	public static Integer NEWSCATEGORY_ERROR = 20002;//新闻分类id不存在
@@ -41,6 +47,11 @@ public class ResultCode {
 			case 10002: errmsg = "wrong password"; break;
 			case 10003: errmsg = "invalid token"; break;
 			case 10004: errmsg = "invalid user_id"; break;
+			case 10005: errmsg = "username exist"; break;
+			case 11001: errmsg = "username not exist"; break;
+			case 11002: errmsg = "account username"; break;
+			case 11003: errmsg = "mobile username"; break;
+			case 11004: errmsg = "email username"; break;
 			
 			//新闻类
 			case 20001: errmsg = "invalid news_id"; break;

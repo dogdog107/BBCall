@@ -10,7 +10,7 @@
 </head>
 <body>
 
-	<s:form action="login" theme="simple">
+	<s:form action="user_login" theme="simple">
   	username:<s:textfield name="username" size="20" />
 		<br>
   	password:<s:password name="password" size="20" />

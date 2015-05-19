@@ -5,8 +5,7 @@
 
 <struts>
 
-	<!-- <constant name="struts.enable.DynamicMethodInvocation" value="false" 
-		/> -->
+	<!-- <constant name="struts.enable.DynamicMethodInvocation" value="false" /> -->
 	<constant name="struts.devMode" value="true" />
 
 	<package name="default" extends="struts-default,json-default">
@@ -34,30 +33,14 @@
 			<exception-mapping result="error" exception="java.lang.Exception" />
 		</global-exception-mappings>
 
-
-
-		<action name="login" class="loginAction">
+		<action name="user_*" method="{1}" class="userAction">
 			<result name="success">/main.jsp</result>
+			<result name="loginSuccess">/main.jsp</result>
 			<result name="input">/login.jsp</result>
+			<result name="loginFailed">/login.jsp</result>
 			<result type="json" name="json">
 				<param name="root">dataMap</param>
-			</result>
-		</action>
-
-	</package>
-
-	<package name="json" extends="json-default">
-
-
-		<action name="login_json" class="loginAction">
-			<result type="json">
-				<param name="root">dataMap</param>
-			</result>
-		</action>
-
-
-		<action name="checkUserName" class="checkUserNameAction">
-			<result type="json">
+				<param name="excludeProperties">user.user_password</param>
 			</result>
 		</action>
 

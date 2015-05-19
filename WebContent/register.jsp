@@ -12,8 +12,8 @@
 	$(function() {
 		$("#username").blur(function(){
 			//alert($(this).val());
-			$.post("${pageContext.request.contextPath}/checkUserName.action",{"username": $(this).val()}, function(data){
-				if(data.userResult){
+			$.post("${pageContext.request.contextPath}/user_checkUserNameJson.action",{"username": $(this).val()}, function(data){
+				if(data.checkUserNameResult){
 					alert("用户名不存在！");
 				}else{
 					alert("用户名已存在！");
