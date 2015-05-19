@@ -5,14 +5,35 @@
 
 <struts>
 
-	<constant name="struts.enable.DynamicMethodInvocation" value="false" />
+	<!-- <constant name="struts.enable.DynamicMethodInvocation" value="false" 
+		/> -->
 	<constant name="struts.devMode" value="true" />
 
-	<package name="default" namespace="/" extends="struts-default">
+	<package name="default" extends="struts-default,json-default">
 
 		<action name="login" class="loginAction">
 			<result name="success">/main.jsp</result>
 			<result name="input">/login.jsp</result>
+			<result type="json" name="json">
+				<param name="root">dataMap</param>
+			</result>
+		</action>
+
+	</package>
+
+	<package name="json" extends="json-default">
+
+
+		<action name="login_json" class="loginAction">
+			<result type="json">
+				<param name="root">dataMap</param>
+			</result>
+		</action>
+
+
+		<action name="checkUserName" class="checkUserNameAction">
+			<result type="json">
+			</result>
 		</action>
 
 	</package>

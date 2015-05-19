@@ -82,12 +82,13 @@
   		<context:include-filter type="annotation" expression="org.springframework.stereotype.Service" />
   		<context:include-filter type="annotation" expression="org.springframework.stereotype.Repository" />
 	</context:component-scan>
-	
-	
+
+
 	<!-- Struts2 Related -->
-<!-- 	<bean id="userServices" class="com.bbcall.struts.services.UserServices"></bean>
-	<bean id="loginAction" class="com.bbcall.struts.actions.LoginAction" scope="prototype">
-		<property name="userServices" ref="userServices"></property>
-	</bean> -->
+	<!-- 
+		<bean id="userServices" class="com.bbcall.struts.services.UserServices"></bean> 
+		<bean id="loginAction" class="com.bbcall.struts.actions.LoginAction" scope="prototype"> 
+		<property name="userServices" ref="userServices"></property> </bean> 
+	-->
 	
 </beans>

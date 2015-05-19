@@ -6,7 +6,6 @@ import org.springframework.stereotype.Controller;
 import com.bbcall.mybatis.dao.UserMapper;
 import com.bbcall.mybatis.table.User;
 
-
 @Controller("userServices")
 public class UserServices {
 	@Autowired
@@ -14,17 +13,17 @@ public class UserServices {
 	Object userinfo = null;
 
 	RandomCode randomCode = new RandomCode();
-	
-	//用户注册
+
+	// 用户注册
 	public void register() {
 		System.out.println("Here is UserServices - register method...");
-		
-//		userMapper.addUserByMobile("");
-//		userMapper.addUserByAccount("");
-//		userMapper.addUserByEmail("");
+
+		// userMapper.addUserByMobile("");
+		// userMapper.addUserByAccount("");
+		// userMapper.addUserByEmail("");
 	}
-	
-	//用户登录
+
+	// 用户登录
 
 	public String login(String username, String password) {
 		System.out.println("Here is UserServices - Login method...");
@@ -72,6 +71,7 @@ public class UserServices {
 					user.setToken(token);
 					userMapper.updateToken(user);
 					result = "Login Success";
+
 					userinfo = user;
 				} else {
 					result = "Password incorrect";
@@ -83,16 +83,42 @@ public class UserServices {
 		System.out.println(result);
 		return result;
 	}
-	
-	//用户信息修改
+
+	// 检测用户名
+	public boolean checkUserName(String username) {
+		// 判断用户名的类型：
+		if (isNumeric(username)) { // 判断登录名是否为手机号码
+			User user1 = userMapper.getUserByMobile(username);
+			if (null != user1) {
+				System.out.println("getUserByMobile() false.");
+				return false;
+			}
+		}
+		if (username.contains("@")) { // 判断登录名是否为邮箱地址
+			User user2 = userMapper.getUserByEmail(username);
+			if (null != user2) {
+				System.out.println("getUserByEmail() false.");
+				return false;
+			}
+		}
+
+		User user3 = userMapper.getUserByAccount(username);
+		if (null != user3) { // 判断登录名是否为帐号
+			System.out.println("getUserByAccount() false.");
+			return false;
+		} else {
+			return true;
+		}
+
+	}
+	// 用户信息修改
 	public void update() {
 		System.out.println("Here is UserServices - update method...");
-		
-//		userMapper.updateUser("");
-//		userMapper.updateToken("");
+
+		// userMapper.updateUser("");
+		// userMapper.updateToken("");
 	}
-	
-	
+
 	// 判断是否数字的方法
 	private static boolean isNumeric(String str) {
 		for (int i = str.length(); --i >= 0;) {
@@ -102,7 +128,7 @@ public class UserServices {
 		}
 		return true;
 	}
-	
+
 	public Object userInfo() {
 
 		return userinfo;
