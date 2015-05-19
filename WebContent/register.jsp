@@ -11,12 +11,11 @@
 <script type="text/javascript">
 	$(function() {
 		$("#username").blur(function(){
-			//alert($(this).val());
 			$.post("${pageContext.request.contextPath}/user_checkUserNameJson.action",{"username": $(this).val()}, function(data){
 				if(data.checkUserNameResult){
-					alert("用户名不存在！");
+					$("#checkUserNameResult").html("<font color=green>用户名可以使用</font>");
 				}else{
-					alert("用户名已存在！");
+					$("#checkUserNameResult").html("<font color=red>用户名已存在</font>");
 				}
 			});
 		});
@@ -25,7 +24,7 @@
 <body>
 	<h1>Register Page</h1>
 	<form>
-		Username:<input type="text" name="username" id="username" /><br />
+		Username:<input type="text" name="username" id="username" /><span id="checkUserNameResult"></span><br />
 		Password:<input type="password" name="password" id="password" /><br />
 		<input type="submit" value="Submit" />
 	</form>
