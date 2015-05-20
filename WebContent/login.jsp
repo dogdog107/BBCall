@@ -9,7 +9,7 @@
 <title>Insert title here</title>
 </head>
 <body>
-
+	<h1>Struts Login Page</h1>
 	<s:form action="user_login" theme="simple">
   	username:<s:textfield name="username" size="20" />
 		<br>

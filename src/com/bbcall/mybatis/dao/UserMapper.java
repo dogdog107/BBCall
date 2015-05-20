@@ -14,19 +14,15 @@ public interface UserMapper {
 //	User findById(int id);
 //
 //	List<User> findAll();
-	
-//	用户注册
-
-//	用户登录
-	
-	// 通过手机号创建用户
-	public void addUserByMobile(User user);
 
 	// 通过帐号创建用户
 	public void addUserByAccount(User user);
+	
+	// 通过手机号创建用户
+//	public void addUserByMobile(User user);
 
 	// 通过邮箱创建用户
-	public void addUserByEmail(User user);
+//	public void addUserByEmail(User user);
 
 	// 通过账号获取用户资料
 	public User getUserByAccount(String user_account);

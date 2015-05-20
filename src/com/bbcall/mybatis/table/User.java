@@ -11,16 +11,16 @@ import java.util.Date;
  user_password VARCHAR (30) NOT NULL,
  user_email VARCHAR (30),
  user_mobile BIGINT,
- user_type VARCHAR (10),
+ user_type INT, // 0=admin, 1=customer, 2=master
  user_name VARCHAR (20),
- user_sex VARCHAR (10),
+ user_gender VARCHAR (10),
  user_pic_url VARCHAR (255),
  user_language VARCHAR (10),
  user_address text,
  user_skill text,
  user_description text,
  user_access_group VARCHAR (30),
- user_status VARCHAR (10),
+ user_status INT,// 0=active, 1=pause, 2=pending, 3=locked
  user_create_time TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
  user_login_time datetime,
  user_token VARCHAR (255)

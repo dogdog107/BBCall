@@ -1,6 +1,5 @@
 package com.bbcall.struts.services;
 
-
 import java.util.Date;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,30 +16,56 @@ public class UserServices {
 	RandomCode randomCode = new RandomCode();
 
 	// 用户注册
-	
-	public int register(String username, String password) {
-		System.out.println("Here is UserServices.register method...");
 
-		int loginResult = 0;// 新建返回值
-		int checkUserNameResult = checkUserName(username);// 调用checkUserName方法并得到返回码
+	public int register(String account, String password, String usertype,
+			String name, String picurl, String mobile, String sex,
+			String email, String language, String skill) {
+		System.out.println("Here is UserServices.register method...");
 		
-		if(checkUserNameResult == ResultCode.USERNAME_NOTEXIST){
-			User user = new User();
-			user.setUser_mobile(username);
-			user.setUser_password(password);
-			userMapper.addUserByMobile(user);
-			userinfo = user;// 返回更新的user对象给userinfo
-			loginResult = ResultCode.SUCCESS;
-		}else{
-			loginResult = checkUserNameResult;
-			System.out.println(checkUserNameResult);
+		if (usertype == "2") {
+			if (account.equals(null) || password.equals(null) || usertype.equals(null)
+					|| name.equals(null) || picurl.equals(null) || mobile.equals(null)
+					|| sex.equals(null) || email.equals(null) || language.equals(null)
+					|| skill.equals(null)) {
+				
+
+			}
 		}
 		
+		int registerResult;// 新建返回值
+		int checkUserNameResult = checkUserName(account);// 调用checkUserName方法并得到返回码
+
+		if (checkUserNameResult == ResultCode.USERNAME_NOTEXIST) {
+			User user = new User();
+			user.setUser_account(account);
+			user.setUser_password(password);
+			user.setUser_type(usertype);
+			if (usertype == "2") {// 0=admin, 1=customer, 2=master
+				user.setUser_status("2"); // 0=active, 1=pause, 2=pending, 3=locked
+			} else {
+				user.setUser_status("0");
+			}
+			user.setUser_name(name);
+			user.setUser_pic_url(picurl);
+			user.setUser_mobile(mobile);
+			user.setUser_sex(sex);
+			user.setUser_email(email);
+			user.setUser_language(language);
+			user.setUser_skill(skill);
+
+			userMapper.addUserByAccount(user);
+			userinfo = user;// 返回更新的user对象给userinfo
+			registerResult = ResultCode.SUCCESS;
+		} else {
+			registerResult = checkUserNameResult;
+			System.out.println(checkUserNameResult);
+		}
+
 		// userMapper.addUserByMobile("");
 		// userMapper.addUserByAccount("");
 		// userMapper.addUserByEmail("");
-		
-		return loginResult;
+
+		return registerResult;
 	}
 
 	// 用户登录
@@ -61,10 +86,10 @@ public class UserServices {
 				}
 				user.setToken(token);
 				userMapper.updateToken(user);
-				
+
 				user.setUser_login_time(new Date());
 				userMapper.updateLoginTime(user);
-				
+
 				loginResult = ResultCode.SUCCESS;
 				userinfo = user;// 返回更新的user对象给userinfo
 			} else {
@@ -78,7 +103,7 @@ public class UserServices {
 	}
 
 	// 检测用户名是否存在
-	
+
 	public int checkUserName(String username) {
 		System.out.println("Here is UserServices.checkUserName method...");
 
@@ -111,7 +136,7 @@ public class UserServices {
 	}
 
 	// 用户信息修改
-	
+
 	public void update() {
 		System.out.println("Here is UserServices - update method...");
 
@@ -120,7 +145,7 @@ public class UserServices {
 	}
 
 	// 判断是否数字的方法
-	
+
 	private static boolean isNumeric(String str) {
 		for (int i = str.length(); --i >= 0;) {
 			if (!Character.isDigit(str.charAt(i))) {
@@ -131,7 +156,7 @@ public class UserServices {
 	}
 
 	// 返回用户信息, 用于json返回
-	
+
 	public Object userInfo() {
 
 		return userinfo;

@@ -80,19 +80,21 @@ CREATE TABLE USER (
     	<result column="user_token" property="user_token" jdbcType="VARCHAR" />
 	</resultMap>
 
+	<insert id="addUserByAccount" parameterType="User"
+		useGeneratedKeys="true" keyProperty="user_id">
+		insert into USER(user_account,
+		user_password, user_type, user_status, user_name, user_pic_url,
+		user_mobile, user_sex, user_email, user_language, user_skill)
+		values(#{user_account}, #{user_password}, #{user_type},
+		#{user_status}, #{user_name}, #{user_pic_url}, #{user_mobile},
+		#{user_sex}, #{user_email}, #{user_language}, #{user_skill})
+	</insert>
+<!-- 
 	<insert id="addUserByMobile" parameterType="User"
 		useGeneratedKeys="true" keyProperty="user_id">
 		insert into USER(user_mobile,
 		user_password, user_type, user_status)
 		values(#{user_mobile},
-		#{user_password}, #{user_type}, #{user_status})
-	</insert>
-
-	<insert id="addUserByAccount" parameterType="User"
-		useGeneratedKeys="true" keyProperty="user_id">
-		insert into USER(user_account,
-		user_password, user_type, user_status)
-		values(#{user_account},
 		#{user_password}, #{user_type}, #{user_status})
 	</insert>
 
@@ -103,6 +105,7 @@ CREATE TABLE USER (
 		values(#{user_email},
 		#{user_password}, #{user_type}, #{user_status})
 	</insert>
+ -->	
 
 	<select id="getUserByAccount" parameterType="String" resultMap="UserResultMap">
 		select user_id, user_account, user_password, user_email, user_mobile,

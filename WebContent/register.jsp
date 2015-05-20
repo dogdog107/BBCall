@@ -1,5 +1,7 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
+<%@ taglib prefix="s" uri="/struts-tags"%>
+
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
 <head>
@@ -22,11 +24,18 @@
 	});
 </script>
 <body>
-	<h1>Register Page</h1>
+	<h1>Normal Register Page</h1>
 	<form>
 		Username:<input type="text" name="username" id="username" /><span id="checkUserNameResult"></span><br />
 		Password:<input type="password" name="password" id="password" /><br />
 		<input type="submit" value="Submit" />
 	</form>
+	
+	<h1>Struts Register Page</h1>
+	<s:form action="user_register" theme="simple">
+		Username:<s:textfield name="username" size="20" id="username" /><span id="checkUserNameResult"></span><br />
+		Password:<s:password name="password" size="20" id="password" /><br />
+		<s:submit label="Submit"></s:submit>
+	</s:form>
 </body>
 </html>
