@@ -1,6 +1,7 @@
 package com.bbcall.mybatis.table;
 
 import java.math.BigInteger;
+import java.sql.Timestamp;
 import java.util.Date;
 
 
@@ -45,14 +46,14 @@ public class User {
 	private String user_description;
 	private String user_access_group;
 	private int user_status;
-	private Date user_login_time;
+	private Timestamp user_login_time;
 	private String user_token;
 
 	public User(int user_id, String user_account, String user_password,
 			String user_email, BigInteger user_mobile, int user_type,
 			String user_name, String user_gender, String user_pic_url,
 			String user_language, String user_skill, String user_description,
-			String user_access_group, int user_status, Date user_login_time,
+			String user_access_group, int user_status, Timestamp user_login_time,
 			String user_token) {
 		super();
 		this.user_id = user_id;
@@ -201,7 +202,7 @@ public class User {
 		return user_login_time;
 	}
 
-	public void setUser_login_time(Date user_login_time) {
+	public void setUser_login_time(Timestamp user_login_time) {
 		this.user_login_time = user_login_time;
 	}
 

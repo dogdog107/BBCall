@@ -1,4 +1,4 @@
-package com.bbcall.struts.services;
+package com.bbcall.functions;
 
 public class RandomCode {
 

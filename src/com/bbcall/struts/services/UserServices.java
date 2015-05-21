@@ -2,11 +2,13 @@ package com.bbcall.struts.services;
 
 import java.math.BigInteger;
 import java.util.Date;
+import java.sql.Timestamp;
 
-import org.apache.ibatis.annotations.Case;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.bbcall.functions.RandomCode;
+import com.bbcall.functions.ResultCode;
 import com.bbcall.mybatis.dao.UserMapper;
 import com.bbcall.mybatis.table.User;
 
@@ -14,13 +16,13 @@ import com.bbcall.mybatis.table.User;
 public class UserServices {
 	@Autowired
 	private UserMapper userMapper;
-	
+
 	Object userinfo = null;
 
 	// #############
 	// ## 用户注册
 	// #############
-	
+
 	public int register(String account, String password, int usertype,
 			String name, String picurl, BigInteger mobile, String gender,
 			String email, String language, String skill) {
@@ -78,14 +80,13 @@ public class UserServices {
 	// #############
 	// ## 用户登录
 	// #############
-	
+
 	public int login(String username, String password) {
 		System.out.println("Here is UserServices.login method...");
 
 		if (isEmpty(username, password))// 检测参数是否为空、null
 			return ResultCode.REQUIREINFO_NOTENOUGH;
 
-		int loginResult;// 新建返回值
 		int checkUserNameResult = checkUserName(username);// 调用checkUserName方法并得到返回码
 
 		// 判断用户名的类型：
@@ -100,49 +101,69 @@ public class UserServices {
 				user.setToken(token);
 				userMapper.updateToken(user);// 插入 token 值
 
-				user.setUser_login_time(new Date());
+				user.setUser_login_time(new Timestamp(new Date().getTime()));
 				userMapper.updateLoginTime(user);// 插入 login 时间
 
-				loginResult = ResultCode.SUCCESS;
 				userinfo = user;// 返回更新的user对象给userinfo
+				return ResultCode.SUCCESS;
 			} else {
-				loginResult = ResultCode.PASSWORD_ERROR;
+				return ResultCode.PASSWORD_ERROR;
 			}
-
 		} else {
-			loginResult = ResultCode.USERNAME_NOTEXIST;
+			return ResultCode.USERNAME_NOTEXIST;
 		}
-		return loginResult;
 	}
-	
+
 	// ###################
 	// ## 用户信息修改、更新
 	// ###################
-	
-	public void update() {
+
+	public int update() {
 		System.out.println("Here is UserServices.update method...");
 
 		// userMapper.updateUser("");
 		// userMapper.updateToken("");
-	}
-
-	//## 检测用户 token
-	public int checkToken(){
-		
-		
 		return 1;
 	}
-	
+
 	// ###################
-	// 检测用户名是否存在
+	// ## 检测用户 token
 	// ###################
-	
+
+	public int checkToken(String token) {
+		System.out.println("Here is UserServices.checkToken method...");
+
+		if (isEmpty(token))
+			return ResultCode.REQUIREINFO_NOTENOUGH;
+
+		User user = userMapper.getUserByToken(token);
+
+		if (null != user) {
+			long currenttime = new Date().getTime();
+			long logintime = user.getUser_login_time().getTime();
+			long duringtime = currenttime - logintime;
+
+			if (duringtime > (7 * 24 * 60 * 60 * 1000)) { // Token 7天有效期
+				return ResultCode.USERTOKEN_EXPIRED;
+			} else {
+				userinfo = user;// 返回更新的user对象给userinfo
+				return ResultCode.SUCCESS;
+			}
+		} else {
+			return ResultCode.USERTOKEN_ERROR;
+		}
+	}
+
+	// ###################
+	// ## 检测用户名是否存在
+	// ###################
+
 	public int checkUserName(String username) {
 		System.out.println("Here is UserServices.checkUserName method...");
-		
+
 		if (isEmpty(username))
 			return ResultCode.REQUIREINFO_NOTENOUGH;
-		
+
 		// 判断用户名的类型：
 		if (isNumeric(username)) { // 判断登录名是否为手机号码
 
@@ -175,7 +196,7 @@ public class UserServices {
 	// ###################
 	// 判断是否数字的方法
 	// ###################
-	
+
 	public static boolean isNumeric(String str) {
 		for (int i = str.length(); --i >= 0;) {
 			if (!Character.isDigit(str.charAt(i))) {
@@ -184,14 +205,14 @@ public class UserServices {
 		}
 		return true;
 	}
-	
+
 	// ###################
 	// 判断String参数是否为空 / null
 	// ###################
-	
+
 	public static boolean isEmpty(String... strings) {
 		for (int i = 0; i < strings.length; i++) {
-			if(strings[i] == null || strings[i].isEmpty()){
+			if (strings[i] == null || strings[i].isEmpty()) {
 				return true;
 			}
 		}
@@ -201,10 +222,9 @@ public class UserServices {
 	// ###################
 	// 返回用户信息, 用于json返回
 	// ###################
-	
+
 	public Object userInfo() {
 
 		return userinfo;
-
 	}
 }

@@ -8,7 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Controller;
 
-import com.bbcall.struts.services.ResultCode;
+import com.bbcall.functions.ResultCode;
 import com.bbcall.struts.services.UserServices;
 import com.opensymphony.xwork2.ActionSupport;
 
@@ -32,6 +32,7 @@ public class UserAction extends ActionSupport {
 	private String email;
 	private String language;
 	private String skill;
+	private String token;
 	
 	@Override
 	public String execute() throws Exception {
@@ -131,6 +132,37 @@ public class UserAction extends ActionSupport {
 	
 	// Update Action
 
+	
+	// Check user token Action
+	public String checkToken() throws Exception {
+		System.out.println("Here is UserAction.checkToken");
+
+		dataMap = new HashMap<String, Object>(); // 新建dataMap来储存JSON字符串
+		dataMap.clear(); // dataMap中的数据将会被Struts2转换成JSON字符串，所以这里要先清空其中的数据
+		int result = userServices.checkToken(token); // 调用userServices.login
+
+		if (result == ResultCode.SUCCESS) {
+			dataMap.put("resultcode", result); // 放入一个是否操作成功的标识
+			dataMap.put("errmsg", ResultCode.getErrmsg(result));
+			dataMap.put("checkTokenResult", true); // 放入registerResult
+			System.out.println(dataMap);
+			return "checkTokenSuccess";
+		} else {
+			dataMap.put("resultcode", result); // 放入一个是否操作成功的标识
+			dataMap.put("errmsg", ResultCode.getErrmsg(result));
+			dataMap.put("registerResult", false); // 放入registerResult
+			System.out.println(dataMap);
+			System.out.println("Check Token Failed");
+			return "checkTokenFailed";
+		}
+	}
+	
+	public String checkTokenJson() throws Exception {
+		System.out.println("Here is UserAction.checkTokenJson");
+		checkToken();
+		return "json";
+	}
+	
 	// Json Format Return 
 	public Map<String, Object> getDataMap() {
 		return dataMap;
@@ -178,6 +210,10 @@ public class UserAction extends ActionSupport {
 
 	public void setType(int type) {
 		this.type = type;
+	}
+
+	public void setToken(String token) {
+		this.token = token;
 	}
 
 }
