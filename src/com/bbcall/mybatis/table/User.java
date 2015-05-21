@@ -3,54 +3,56 @@ package com.bbcall.mybatis.table;
 import java.math.BigInteger;
 import java.util.Date;
 
-/*	
- * Table USER's sql command:
- CREATE TABLE USER (
- user_id INT NOT NULL auto_increment PRIMARY KEY,
- user_account VARCHAR (30),
- user_password VARCHAR (30) NOT NULL,
- user_email VARCHAR (30),
- user_mobile BIGINT,
- user_type INT, // 0=admin, 1=customer, 2=master
- user_name VARCHAR (20),
- user_gender VARCHAR (10),
- user_pic_url VARCHAR (255),
- user_language VARCHAR (10),
- user_address text,
- user_skill text,
- user_description text,
- user_access_group VARCHAR (30),
- user_status INT,// 0=active, 1=pause, 2=pending, 3=locked
- user_create_time TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
- user_login_time datetime,
- user_token VARCHAR (255)
- ) DEFAULT CHARSET = utf8;
- */
+
+//* Table USER's sql command:
+//CREATE TABLE USER (
+//	user_id INT NOT NULL auto_increment PRIMARY KEY,
+//	user_account VARCHAR (30),
+//	user_password VARCHAR (30) NOT NULL,
+//	user_email VARCHAR (30),
+//	user_mobile BIGINT,
+//	user_type INT,
+//	/* 1=customer, 2=master, 3=admin */
+//	user_name VARCHAR (20),
+//	user_gender VARCHAR (10),
+//	user_pic_url VARCHAR (255),
+//	user_language VARCHAR (10),
+//	user_address text,
+//	user_skill text,
+//	user_description text,
+//	user_access_group VARCHAR (30),
+//	user_status INT,
+//	/* 0=active, 1=pause, 2=pending, 3=locked */
+//	user_create_time TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+//	user_login_time datetime,
+//	user_token VARCHAR (255)
+//) DEFAULT CHARSET = utf8;
+
 
 public class User {
 	private int user_id;
 	private String user_account;
 	private String user_password;
 	private String user_email;
-	private String user_mobile;
-	private String user_type;
+	private BigInteger user_mobile;
+	private int user_type;
 	private String user_name;
-	private String user_sex;
+	private String user_gender;
 	private String user_pic_url;
 	private String user_language;
 	private String user_address;
 	private String user_skill;
 	private String user_description;
 	private String user_access_group;
-	private String user_status;
+	private int user_status;
 	private Date user_login_time;
 	private String user_token;
 
 	public User(int user_id, String user_account, String user_password,
-			String user_email, String user_mobile, String user_type,
-			String user_name, String user_sex, String user_pic_url,
+			String user_email, BigInteger user_mobile, int user_type,
+			String user_name, String user_gender, String user_pic_url,
 			String user_language, String user_skill, String user_description,
-			String user_access_group, String user_status, Date user_login_time,
+			String user_access_group, int user_status, Date user_login_time,
 			String user_token) {
 		super();
 		this.user_id = user_id;
@@ -60,7 +62,7 @@ public class User {
 		this.user_mobile = user_mobile;
 		this.user_type = user_type;
 		this.user_name = user_name;
-		this.user_sex = user_sex;
+		this.user_gender = user_gender;
 		this.user_pic_url = user_pic_url;
 		this.user_language = user_language;
 		this.user_skill = user_skill;
@@ -115,19 +117,19 @@ public class User {
 		this.user_email = user_email;
 	}
 
-	public String getUser_mobile() {
+	public BigInteger getUser_mobile() {
 		return user_mobile;
 	}
 
-	public void setUser_mobile(String user_mobile) {
+	public void setUser_mobile(BigInteger user_mobile) {
 		this.user_mobile = user_mobile;
 	}
 
-	public String getUser_type() {
+	public int getUser_type() {
 		return user_type;
 	}
 
-	public void setUser_type(String user_type) {
+	public void setUser_type(int user_type) {
 		this.user_type = user_type;
 	}
 
@@ -139,12 +141,12 @@ public class User {
 		this.user_name = user_name;
 	}
 
-	public String getUser_sex() {
-		return user_sex;
+	public String getUser_gender() {
+		return user_gender;
 	}
 
-	public void setUser_sex(String user_sex) {
-		this.user_sex = user_sex;
+	public void setUser_gender(String user_gender) {
+		this.user_gender = user_gender;
 	}
 
 	public String getUser_pic_url() {
@@ -187,11 +189,11 @@ public class User {
 		this.user_access_group = user_access_group;
 	}
 
-	public String getUser_status() {
+	public int getUser_status() {
 		return user_status;
 	}
 
-	public void setUser_status(String user_status) {
+	public void setUser_status(int user_status) {
 		this.user_status = user_status;
 	}
 
@@ -220,8 +222,8 @@ public class User {
 		return "User [user_id=" + user_id + ", user_account=" + user_account
 				+ ", user_password=" + user_password + ", user_email="
 				+ user_email + ", user_mobile=" + user_mobile + ", user_type="
-				+ user_type + ", user_name=" + user_name + ", user_sex="
-				+ user_sex + ", user_pic_url=" + user_pic_url
+				+ user_type + ", user_name=" + user_name + ", user_gender="
+				+ user_gender + ", user_pic_url=" + user_pic_url
 				+ ", user_language=" + user_language + ", user_skill="
 				+ user_skill + ", user_description=" + user_description
 				+ ", user_access_group=" + user_access_group + ", user_status="

@@ -24,18 +24,51 @@
 	});
 </script>
 <body>
-	<h1>Normal Register Page</h1>
-	<form>
-		Username:<input type="text" name="username" id="username" /><span id="checkUserNameResult"></span><br />
-		Password:<input type="password" name="password" id="password" /><br />
-		<input type="submit" value="Submit" />
-	</form>
-	
-	<h1>Struts Register Page</h1>
+	<h1>Normal Customer Register Page</h1>
+	<table>
+		<tr>
+			<td width="150">Register Type:</td>
+			<td><select name="type" size="1">
+					<option value="1" selected>Customer
+					<option value="2">Master
+			</select></td>
+		</tr>
+		<tr>
+			<td>Username:</td>
+			<td><input type="text" name="username" id="username" /></td>
+			<td><span
+				id="checkUserNameResult"></span></td>
+		</tr>
+		<tr>
+			<td>Password:</td>
+			<td><input type="password" name="password" id="password" /></td>
+		</tr>
+		<tr>
+			<td colspan="2"><input type="submit" value="Submit" /></td>
+		</tr>
+	</table>
+
+
+	<h1>Struts Customer Register Page</h1>
 	<s:form action="user_register" theme="simple">
-		Username:<s:textfield name="username" size="20" id="username" /><span id="checkUserNameResult"></span><br />
-		Password:<s:password name="password" size="20" id="password" /><br />
-		<s:submit label="Submit"></s:submit>
+		<table>
+			<tr>
+				<td width="150">Register Type:</td>
+				<td><s:select name="type" size="1" list="#{1:'Customer',2:'Master'}"></s:select></td>
+			</tr>
+			<tr>
+				<td>Username:</td>
+				<td><s:textfield name="account" size="20" id="username" /></td>
+				<td><span id="checkUserNameResult"></span></td>
+			</tr>
+			<tr>
+				<td>Password:</td>
+				<td><s:password name="password" size="20" id="password" /></td>
+			</tr>
+			<tr>
+				<td colspan="2"><s:submit label="Submit"></s:submit></td>
+			</tr>
+		</table>
 	</s:form>
 </body>
 </html>

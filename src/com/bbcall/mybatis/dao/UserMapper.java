@@ -1,5 +1,6 @@
 package com.bbcall.mybatis.dao;
 
+import java.math.BigInteger;
 import java.util.List;
 
 import com.bbcall.mybatis.table.User;
@@ -28,7 +29,7 @@ public interface UserMapper {
 	public User getUserByAccount(String user_account);
 
 	// 通过手机获取用户资料
-	public User getUserByMobile(String user_mobile);
+	public User getUserByMobile(BigInteger user_mobile);
 
 	// 通过邮箱获取用户资料
 	public User getUserByEmail(String user_email);

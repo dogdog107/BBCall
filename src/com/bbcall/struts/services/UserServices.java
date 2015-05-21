@@ -1,7 +1,9 @@
 package com.bbcall.struts.services;
 
+import java.math.BigInteger;
 import java.util.Date;
 
+import org.apache.ibatis.annotations.Case;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -12,66 +14,76 @@ import com.bbcall.mybatis.table.User;
 public class UserServices {
 	@Autowired
 	private UserMapper userMapper;
+	
 	Object userinfo = null;
-	RandomCode randomCode = new RandomCode();
 
-	// 用户注册
-
-	public int register(String account, String password, String usertype,
-			String name, String picurl, String mobile, String sex,
+	// #############
+	// ## 用户注册
+	// #############
+	
+	public int register(String account, String password, int usertype,
+			String name, String picurl, BigInteger mobile, String gender,
 			String email, String language, String skill) {
 		System.out.println("Here is UserServices.register method...");
-		
-		if (usertype == "2") {
-			if (account.equals(null) || password.equals(null) || usertype.equals(null)
-					|| name.equals(null) || picurl.equals(null) || mobile.equals(null)
-					|| sex.equals(null) || email.equals(null) || language.equals(null)
-					|| skill.equals(null)) {
-				
 
+		if (usertype != 1 && usertype != 2 && usertype != 3) {// 检测userype
+			return ResultCode.REGISTERINFO_TYPEERROR;
+		}
+
+		if (usertype == 2) {// usertype=2时为师傅号，检测注册信息是否完整
+			if (isEmpty(account, password, name, picurl, gender, email,
+					language, skill) || mobile == null) {
+				return ResultCode.REGISTERINFO_NOTENOUGH;
 			}
 		}
-		
+
+		if (usertype == 1 || usertype == 3) {// usertype=1时为用户号，检测注册信息是否完整
+			if (isEmpty(account, password)) {
+				return ResultCode.REGISTERINFO_NOTENOUGH;
+			}
+		}
+
 		int registerResult;// 新建返回值
 		int checkUserNameResult = checkUserName(account);// 调用checkUserName方法并得到返回码
 
-		if (checkUserNameResult == ResultCode.USERNAME_NOTEXIST) {
+		if (checkUserNameResult == ResultCode.USERNAME_NOTEXIST) {// 检测用户名是否存在
 			User user = new User();
 			user.setUser_account(account);
 			user.setUser_password(password);
 			user.setUser_type(usertype);
-			if (usertype == "2") {// 0=admin, 1=customer, 2=master
-				user.setUser_status("2"); // 0=active, 1=pause, 2=pending, 3=locked
+			if (usertype == 2) {// 1=customer, 2=master, 3=admin
+				user.setUser_status(2); // 0=active, 1=pause, 2=pending,
+										// 3=locked
 			} else {
-				user.setUser_status("0");
+				user.setUser_status(0);
 			}
 			user.setUser_name(name);
 			user.setUser_pic_url(picurl);
 			user.setUser_mobile(mobile);
-			user.setUser_sex(sex);
+			user.setUser_gender(gender);
 			user.setUser_email(email);
 			user.setUser_language(language);
 			user.setUser_skill(skill);
 
-			userMapper.addUserByAccount(user);
+			userMapper.addUserByAccount(user);// 把用户信息插入数据表
 			userinfo = user;// 返回更新的user对象给userinfo
 			registerResult = ResultCode.SUCCESS;
 		} else {
-			registerResult = checkUserNameResult;
+			registerResult = ResultCode.USERNAME_EXIST;
 			System.out.println(checkUserNameResult);
 		}
-
-		// userMapper.addUserByMobile("");
-		// userMapper.addUserByAccount("");
-		// userMapper.addUserByEmail("");
-
 		return registerResult;
 	}
 
-	// 用户登录
-
+	// #############
+	// ## 用户登录
+	// #############
+	
 	public int login(String username, String password) {
 		System.out.println("Here is UserServices.login method...");
+
+		if (isEmpty(username, password))// 检测参数是否为空、null
+			return ResultCode.REQUIREINFO_NOTENOUGH;
 
 		int loginResult;// 新建返回值
 		int checkUserNameResult = checkUserName(username);// 调用checkUserName方法并得到返回码
@@ -80,15 +92,16 @@ public class UserServices {
 		if (checkUserNameResult != ResultCode.USERNAME_NOTEXIST) {
 			User user = (User) userinfo;// 引用user对象
 			if (password.equals(user.getUser_password())) {// 验证密码是否正确
+				RandomCode randomCode = new RandomCode();
 				String token = randomCode.getToken();// 正确则创建新token，并更新数据库
 				while (null != userMapper.getUserByToken(token)) {// 确保token唯一
 					token = randomCode.getToken();
 				}
 				user.setToken(token);
-				userMapper.updateToken(user);
+				userMapper.updateToken(user);// 插入 token 值
 
 				user.setUser_login_time(new Date());
-				userMapper.updateLoginTime(user);
+				userMapper.updateLoginTime(user);// 插入 login 时间
 
 				loginResult = ResultCode.SUCCESS;
 				userinfo = user;// 返回更新的user对象给userinfo
@@ -101,15 +114,39 @@ public class UserServices {
 		}
 		return loginResult;
 	}
+	
+	// ###################
+	// ## 用户信息修改、更新
+	// ###################
+	
+	public void update() {
+		System.out.println("Here is UserServices.update method...");
 
+		// userMapper.updateUser("");
+		// userMapper.updateToken("");
+	}
+
+	//## 检测用户 token
+	public int checkToken(){
+		
+		
+		return 1;
+	}
+	
+	// ###################
 	// 检测用户名是否存在
-
+	// ###################
+	
 	public int checkUserName(String username) {
 		System.out.println("Here is UserServices.checkUserName method...");
-
+		
+		if (isEmpty(username))
+			return ResultCode.REQUIREINFO_NOTENOUGH;
+		
 		// 判断用户名的类型：
 		if (isNumeric(username)) { // 判断登录名是否为手机号码
-			User user1 = userMapper.getUserByMobile(username);
+
+			User user1 = userMapper.getUserByMobile(new BigInteger(username));
 			if (null != user1) {
 				System.out.println("Username_mobile exist");
 				userinfo = user1;
@@ -135,18 +172,11 @@ public class UserServices {
 		}
 	}
 
-	// 用户信息修改
-
-	public void update() {
-		System.out.println("Here is UserServices - update method...");
-
-		// userMapper.updateUser("");
-		// userMapper.updateToken("");
-	}
-
+	// ###################
 	// 判断是否数字的方法
-
-	private static boolean isNumeric(String str) {
+	// ###################
+	
+	public static boolean isNumeric(String str) {
 		for (int i = str.length(); --i >= 0;) {
 			if (!Character.isDigit(str.charAt(i))) {
 				return false;
@@ -154,9 +184,24 @@ public class UserServices {
 		}
 		return true;
 	}
+	
+	// ###################
+	// 判断String参数是否为空 / null
+	// ###################
+	
+	public static boolean isEmpty(String... strings) {
+		for (int i = 0; i < strings.length; i++) {
+			if(strings[i] == null || strings[i].isEmpty()){
+				return true;
+			}
+		}
+		return false;
+	}
 
+	// ###################
 	// 返回用户信息, 用于json返回
-
+	// ###################
+	
 	public Object userInfo() {
 
 		return userinfo;

@@ -11,6 +11,10 @@ public class ResultCode {
 	public static Integer USERTOKEN_ERROR = 10003;//用户token错误
 	public static Integer USERID_ERROR = 10004;//用户id不存在
 	public static Integer USERNAME_EXIST = 10005;//用户名已被使用
+	public static Integer REGISTERINFO_NOTENOUGH = 10006;//注册信息不全
+	public static Integer REGISTERINFO_TYPEERROR = 10007;//注册的用户类型错误
+	public static Integer REQUIREINFO_NOTENOUGH = 10008;//请求的参数不全
+	
 	
 	//用户返回码11XXX
 	public static Integer USERNAME_NOTEXIST = 11001;//用户名可以使用
@@ -48,6 +52,10 @@ public class ResultCode {
 			case 10003: errmsg = "invalid token"; break;
 			case 10004: errmsg = "invalid user_id"; break;
 			case 10005: errmsg = "username exist"; break;
+			case 10006: errmsg = "register info not enough"; break;
+			case 10007: errmsg = "register user type error"; break;
+			case 10008: errmsg = "require info not enough"; break;
+			
 			case 11001: errmsg = "username not exist"; break;
 			case 11002: errmsg = "account username"; break;
 			case 11003: errmsg = "mobile username"; break;

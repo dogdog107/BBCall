@@ -22,6 +22,7 @@ public class BusinessException extends RuntimeException {
 		friendlyErrMsg.append(prefixStr);
 		friendlyErrMsg.append(msgBody);
 		friendlyErrMsg.append(suffixStr);
+		System.out.println(friendlyErrMsg.toString());
 		return friendlyErrMsg.toString();
 	}
 

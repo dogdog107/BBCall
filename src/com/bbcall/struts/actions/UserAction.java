@@ -1,5 +1,6 @@
 package com.bbcall.struts.actions;
 
+import java.math.BigInteger;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -23,11 +24,11 @@ public class UserAction extends ActionSupport {
 	private String username;
 	private String password;
 	private String account;
-	private String usertype;
+	private int type;
 	private String name;
 	private String picurl;
-	private String mobile;
-	private String sex;
+	private BigInteger mobile;
+	private String gender;
 	private String email;
 	private String language;
 	private String skill;
@@ -40,12 +41,10 @@ public class UserAction extends ActionSupport {
 	// CheckUserName Action
 
 	public String checkUserName() throws Exception {
-		
 		System.out.println("Here is UserAction.checkusername");
 		dataMap = new HashMap<String, Object>(); // 新建dataMap来储存JSON字符串
 		dataMap.clear(); // dataMap中的数据将会被Struts2转换成JSON字符串，所以这里要先清空其中的数据
 		int result = userServices.checkUserName(username);// 调用userServices.checkUserName
-
 		if (result == ResultCode.USERNAME_NOTEXIST) {
 			dataMap.put("resultcode", result); // 放入一个是否操作成功的标识
 			dataMap.put("errmsg", ResultCode.getErrmsg(result));
@@ -106,7 +105,7 @@ public class UserAction extends ActionSupport {
 
 		dataMap = new HashMap<String, Object>(); // 新建dataMap来储存JSON字符串
 		dataMap.clear(); // dataMap中的数据将会被Struts2转换成JSON字符串，所以这里要先清空其中的数据
-		int result = userServices.register(account, password, usertype, name, picurl, mobile, sex, email, language, skill); // 调用userServices.register
+		int result = userServices.register(account, password, type, name, picurl, mobile, gender, email, language, skill); // 调用userServices.register
 
 		if (result == ResultCode.SUCCESS) {
 			dataMap.put("resultcode", result); // 放入一个是否操作成功的标识
@@ -157,12 +156,12 @@ public class UserAction extends ActionSupport {
 		this.picurl = picurl;
 	}
 
-	public void setMobile(String mobile) {
+	public void setMobile(BigInteger  mobile) {
 		this.mobile = mobile;
 	}
 
-	public void setSex(String sex) {
-		this.sex = sex;
+	public void setGender(String gender) {
+		this.gender = gender;
 	}
 
 	public void setEmail(String email) {
@@ -177,8 +176,8 @@ public class UserAction extends ActionSupport {
 		this.skill = skill;
 	}
 
-	public void setUsertype(String usertype) {
-		this.usertype = usertype;
+	public void setType(int type) {
+		this.type = type;
 	}
 
 }

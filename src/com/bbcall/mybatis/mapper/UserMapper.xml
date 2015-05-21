@@ -10,43 +10,43 @@
 
 <!-- 
 	## SQL Command ##
-CREATE TABLE USER (
-	user_id INT NOT NULL auto_increment PRIMARY KEY,
-	user_account VARCHAR (30) UNIQUE,
-	user_password VARCHAR (30),
-	user_email VARCHAR (30) UNIQUE,
-	user_mobile INT (11) NOT NULL UNIQUE,
-	user_type VARCHAR (10),
-	user_name VARCHAR (20),
-	user_sex VARCHAR (10),
-	user_pic_url VARCHAR (255),
-	user_language VARCHAR (10),
-	user_address text,
-	user_skill text,
-	user_description text,
-	user_access_group VARCHAR (30),
-	user_status VARCHAR (10),
-	user_create_time TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-	user_login_time datetime,
-	user_token VARCHAR (255)
-) DEFAULT CHARSET = utf8;
+ CREATE TABLE USER (
+ user_id INT NOT NULL auto_increment PRIMARY KEY,
+ user_account VARCHAR (30),
+ user_password VARCHAR (30) NOT NULL,
+ user_email VARCHAR (30),
+ user_mobile BIGINT,
+ user_type INT, // 0=admin, 1=customer, 2=master
+ user_name VARCHAR (20),
+ user_gender VARCHAR (10),
+ user_pic_url VARCHAR (255),
+ user_language VARCHAR (10),
+ user_address text,
+ user_skill text,
+ user_description text,
+ user_access_group VARCHAR (30),
+ user_status INT,// 0=active, 1=pause, 2=pending, 3=locked
+ user_create_time TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+ user_login_time datetime,
+ user_token VARCHAR (255)
+ ) DEFAULT CHARSET = utf8;
  	
  	## Value ##
 	private int user_id;
 	private String user_account;
 	private String user_password;
 	private String user_email;
-	private int user_mobile;
-	private String user_type;
+	private BigInteger user_mobile;
+	private int user_type;
 	private String user_name;
-	private String user_sex;
+	private String user_gender;
 	private String user_pic_url;
 	private String user_language;
 	private String user_address;
 	private String user_skill;
 	private String user_description;
 	private String user_access_group;
-	private String user_status;
+	private int user_status;
 	private Date user_login_time;
 	private String user_token;
  -->
@@ -66,16 +66,16 @@ CREATE TABLE USER (
     	<result column="user_password" property="user_password" jdbcType="VARCHAR" />
     	<result column="user_email" property="user_email" jdbcType="VARCHAR" />
     	<result column="user_mobile" property="user_mobile" jdbcType="BIGINT" />
-    	<result column="user_type" property="user_type" jdbcType="VARCHAR" />
+    	<result column="user_type" property="user_type" jdbcType="INTEGER" />
     	<result column="user_name" property="user_name" jdbcType="VARCHAR" />
-    	<result column="user_sex" property="user_sex" jdbcType="VARCHAR" />
+    	<result column="user_gender" property="user_gender" jdbcType="VARCHAR" />
     	<result column="user_pic_url" property="user_pic_url" jdbcType="VARCHAR" />
     	<result column="user_language" property="user_language" jdbcType="VARCHAR" />
     	<result column="user_address" property="user_address" jdbcType="VARCHAR" />
     	<result column="user_skill" property="user_skill" jdbcType="VARCHAR" />
     	<result column="user_description" property="user_description" jdbcType="VARCHAR" />
     	<result column="user_access_group" property="user_access_group" jdbcType="VARCHAR" />
-    	<result column="user_status" property="user_status" jdbcType="VARCHAR" />
+    	<result column="user_status" property="user_status" jdbcType="INTEGER" />
     	<result column="user_login_time" property="user_login_time" jdbcType="DATE" />
     	<result column="user_token" property="user_token" jdbcType="VARCHAR" />
 	</resultMap>
@@ -84,10 +84,10 @@ CREATE TABLE USER (
 		useGeneratedKeys="true" keyProperty="user_id">
 		insert into USER(user_account,
 		user_password, user_type, user_status, user_name, user_pic_url,
-		user_mobile, user_sex, user_email, user_language, user_skill)
+		user_mobile, user_gender, user_email, user_language, user_skill)
 		values(#{user_account}, #{user_password}, #{user_type},
 		#{user_status}, #{user_name}, #{user_pic_url}, #{user_mobile},
-		#{user_sex}, #{user_email}, #{user_language}, #{user_skill})
+		#{user_gender}, #{user_email}, #{user_language}, #{user_skill})
 	</insert>
 <!-- 
 	<insert id="addUserByMobile" parameterType="User"
@@ -109,7 +109,7 @@ CREATE TABLE USER (
 
 	<select id="getUserByAccount" parameterType="String" resultMap="UserResultMap">
 		select user_id, user_account, user_password, user_email, user_mobile,
-		user_type, user_name, user_sex, user_pic_url, user_language,
+		user_type, user_name, user_gender, user_pic_url, user_language,
 		user_address, user_skill, user_description, user_access_group,
 		user_status, user_login_time, user_token
 		from USER
@@ -118,7 +118,7 @@ CREATE TABLE USER (
 	</select>
 	<select id="getUserByEmail" parameterType="String" resultMap="UserResultMap">
 		select user_id, user_account, user_password, user_email, user_mobile,
-		user_type, user_name, user_sex, user_pic_url, user_language,
+		user_type, user_name, user_gender, user_pic_url, user_language,
 		user_address, user_skill, user_description, user_access_group,
 		user_status, user_login_time, user_token
 		from USER
@@ -127,7 +127,7 @@ CREATE TABLE USER (
 	</select>
 	<select id="getUserByMobile" parameterType="String" resultMap="UserResultMap">
 		select user_id, user_account, user_password, user_email, user_mobile,
-		user_type, user_name, user_sex, user_pic_url, user_language,
+		user_type, user_name, user_gender, user_pic_url, user_language,
 		user_address, user_skill, user_description, user_access_group,
 		user_status, user_login_time, user_token
 		from USER
@@ -138,7 +138,7 @@ CREATE TABLE USER (
 	<select id="getUserById" parameterType="int" resultMap="UserResultMap">
 		select
 		user_id, user_account, user_password, user_email, user_mobile,
-		user_type, user_name, user_sex, user_pic_url, user_language,
+		user_type, user_name, user_gender, user_pic_url, user_language,
 		user_address, user_skill, user_description, user_access_group,
 		user_status, user_login_time, user_token
 		from USER
@@ -147,7 +147,7 @@ CREATE TABLE USER (
 
 	<select id="getUserByToken" parameterType="String" resultMap="UserResultMap">
 		select user_id, user_account, user_password, user_email, user_mobile,
-		user_type, user_name, user_sex, user_pic_url, user_language,
+		user_type, user_name, user_gender, user_pic_url, user_language,
 		user_address, user_skill, user_description, user_access_group,
 		user_status, user_login_time, user_token
 		from USER
