@@ -150,7 +150,7 @@ public class UserAction extends ActionSupport {
 		} else {
 			dataMap.put("resultcode", result); // 放入一个是否操作成功的标识
 			dataMap.put("errmsg", ResultCode.getErrmsg(result));
-			dataMap.put("registerResult", false); // 放入registerResult
+			dataMap.put("checkTokenResult", false); // 放入registerResult
 			System.out.println(dataMap);
 			System.out.println("Check Token Failed");
 			return "checkTokenFailed";

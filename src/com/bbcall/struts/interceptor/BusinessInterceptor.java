@@ -9,12 +9,19 @@ import com.bbcall.struts.exception.BusinessException;
 import com.opensymphony.xwork2.ActionInvocation;
 import com.opensymphony.xwork2.interceptor.AbstractInterceptor;
 
+
 public class BusinessInterceptor extends AbstractInterceptor {
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 5091701334705371275L;
+
 	@Override
 	public String intercept(ActionInvocation invocation) throws Exception {
 
 		System.out.println("BusinessInterceptor intercept() invoked! ");
 		System.out.println(invocation);
+		
 		before(invocation);
 
 		String result = "";
@@ -50,7 +57,6 @@ public class BusinessInterceptor extends AbstractInterceptor {
 		}
 
 		after(invocation, result);
-
 		return result;
 	}
 

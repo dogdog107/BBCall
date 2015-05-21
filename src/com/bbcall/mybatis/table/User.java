@@ -23,7 +23,7 @@ import java.util.Date;
 //	user_description text,
 //	user_access_group VARCHAR (30),
 //	user_status INT,
-//	/* 0=active, 1=pause, 2=pending, 3=locked */
+//	/* 1=active, 2=pause, 3=pending, 4=locked */
 //	user_create_time TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
 //	user_login_time datetime,
 //	user_token VARCHAR (255)

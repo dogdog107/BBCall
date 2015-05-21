@@ -54,10 +54,10 @@ public class UserServices {
 			user.setUser_password(password);
 			user.setUser_type(usertype);
 			if (usertype == 2) {// 1=customer, 2=master, 3=admin
-				user.setUser_status(2); // 0=active, 1=pause, 2=pending,
-										// 3=locked
+				user.setUser_status(3); // 1=active, 2=pause, 3=pending,
+										// 4=locked
 			} else {
-				user.setUser_status(0);
+				user.setUser_status(1);
 			}
 			user.setUser_name(name);
 			user.setUser_pic_url(picurl);
@@ -91,23 +91,28 @@ public class UserServices {
 
 		// 判断用户名的类型：
 		if (checkUserNameResult != ResultCode.USERNAME_NOTEXIST) {
-			User user = (User) userinfo;// 引用user对象
-			if (password.equals(user.getUser_password())) {// 验证密码是否正确
-				RandomCode randomCode = new RandomCode();
-				String token = randomCode.getToken();// 正确则创建新token，并更新数据库
-				while (null != userMapper.getUserByToken(token)) {// 确保token唯一
-					token = randomCode.getToken();
+			User user = (User) userinfo; // 引用user对象
+			int checkUserStatusResult = checkUserStatus(user.getUser_status());
+			if (checkUserStatusResult == ResultCode.USERSTATUS_ACTIVE) { // 验证用户状态
+				if (password.equals(user.getUser_password())) {// 验证密码是否正确
+					RandomCode randomCode = new RandomCode();
+					String token = randomCode.getToken();// 正确则创建新token，并更新数据库
+					while (null != userMapper.getUserByToken(token)) {// 确保token唯一
+						token = randomCode.getToken();
+					}
+					user.setToken(token);
+					userMapper.updateToken(user);// 插入 token 值
+
+					user.setUser_login_time(new Timestamp(new Date().getTime()));
+					userMapper.updateLoginTime(user);// 插入 login 时间
+
+					userinfo = user;// 返回更新的user对象给userinfo
+					return ResultCode.SUCCESS;
+				} else {
+					return ResultCode.PASSWORD_ERROR;
 				}
-				user.setToken(token);
-				userMapper.updateToken(user);// 插入 token 值
-
-				user.setUser_login_time(new Timestamp(new Date().getTime()));
-				userMapper.updateLoginTime(user);// 插入 login 时间
-
-				userinfo = user;// 返回更新的user对象给userinfo
-				return ResultCode.SUCCESS;
 			} else {
-				return ResultCode.PASSWORD_ERROR;
+				return checkUserStatusResult;
 			}
 		} else {
 			return ResultCode.USERNAME_NOTEXIST;
@@ -126,6 +131,7 @@ public class UserServices {
 		return 1;
 	}
 
+
 	// ###################
 	// ## 检测用户 token
 	// ###################
@@ -139,15 +145,20 @@ public class UserServices {
 		User user = userMapper.getUserByToken(token);
 
 		if (null != user) {
-			long currenttime = new Date().getTime();
-			long logintime = user.getUser_login_time().getTime();
-			long duringtime = currenttime - logintime;
+			int checkUserStatusResult = checkUserStatus(user.getUser_status());
+			if (checkUserStatusResult == ResultCode.USERSTATUS_ACTIVE) {
+				long currenttime = new Date().getTime();
+				long logintime = user.getUser_login_time().getTime();
+				long duringtime = currenttime - logintime;
 
-			if (duringtime > (7 * 24 * 60 * 60 * 1000)) { // Token 7天有效期
-				return ResultCode.USERTOKEN_EXPIRED;
+				if (duringtime > (7 * 24 * 60 * 60 * 1000)) { // Token 7天有效期
+					return ResultCode.USERTOKEN_EXPIRED;
+				} else {
+					userinfo = user;// 返回更新的user对象给userinfo
+					return ResultCode.SUCCESS;
+				}
 			} else {
-				userinfo = user;// 返回更新的user对象给userinfo
-				return ResultCode.SUCCESS;
+				return checkUserStatusResult;
 			}
 		} else {
 			return ResultCode.USERTOKEN_ERROR;
@@ -193,6 +204,34 @@ public class UserServices {
 		}
 	}
 
+	// ###################
+	// ## 检测用户状态
+	// ###################
+
+	public int checkUserStatus(int status) {
+		int checkUserResult;
+
+		switch (status) {// * 1=active, 2=pause, 3=pending,
+										// 4=locked
+		case 1:
+			checkUserResult = ResultCode.USERSTATUS_ACTIVE;
+			break;
+		case 2:
+			checkUserResult = ResultCode.USERSTATUS_PAUSE;
+			break;
+		case 3:
+			checkUserResult = ResultCode.USERSTATUS_PENDING;
+			break;
+		case 4:
+			checkUserResult = ResultCode.USERSTATUS_LOCKED;
+			break;
+		default:
+			checkUserResult = ResultCode.USERSTATUS_ERROR;
+			break;
+		}
+		return checkUserResult;
+	}
+	
 	// ###################
 	// 判断是否数字的方法
 	// ###################
