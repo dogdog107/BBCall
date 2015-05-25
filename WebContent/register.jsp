@@ -66,6 +66,111 @@
 				<td><s:password name="password" size="20" id="password" /></td>
 			</tr>
 			<tr>
+				<td>Nickname:</td>
+				<td><s:textfield name="name" size="20" /></td>
+			</tr>
+			<tr>
+				<td>Photo:</td>
+				<td><s:textfield name="picurl" size="20" /></td>
+			</tr>
+			<tr>
+				<td>Mobile:</td>
+				<td><s:textfield name="mobile" size="20" /></td>
+			</tr>
+			<tr>
+				<td>Gender:</td>
+				<td><s:select name="gender" size="1" list="#{'Male':'Male','Female':'Female'}"></s:select></td>
+			</tr>
+			<tr>
+				<td>E-Mail:</td>
+				<td><s:textfield name="email" size="20" /></td>
+			</tr>
+			<tr>
+				<td>language:</td>
+				<td><s:textfield name="language" size="20" /></td>
+			</tr>
+			<tr>
+				<td>skill:</td>
+				<td><s:textfield name="skill" size="20" /></td>
+			</tr>
+			<tr>
+				<td>Description:</td>
+				<td><s:textfield name="description" size="20" /></td>
+			</tr>
+			<tr>
+				<td colspan="2"><s:submit label="Submit"></s:submit></td>
+			</tr>
+		</table>
+	</s:form>
+	
+		<h1>Struts Update Page</h1>
+	<s:form action="user_update" theme="simple">
+		<table>
+			<tr>
+				<td width="150">Token:</td>
+				<td><s:textfield name="token" size="20" /></td>
+			</tr>
+			<tr>
+				<td>UserID:</td>
+				<td><s:textfield name="userid" size="20" /></td>
+			</tr>
+			<tr>
+				<td>Account:</td>
+				<td><s:textfield name="account" size="20" /></td>
+			</tr>
+			<tr>
+				<td>Password:</td>
+				<td><s:password name="password" size="20" /></td>
+			</tr>
+			<tr>
+				<td>User Type:</td>
+				<td><s:select name="type" size="1" list="#{1:'Customer',2:'Master',3:'Admin'}"></s:select></td>
+			</tr>
+			<tr>
+				<td>Nickname:</td>
+				<td><s:textfield name="name" size="20" /></td>
+			</tr>
+			<tr>
+				<td>Photo:</td>
+				<td><s:textfield name="picurl" size="20" /></td>
+			</tr>
+			<tr>
+				<td>Mobile:</td>
+				<td><s:textfield name="mobile" size="20" /></td>
+			</tr>
+			<tr>
+				<td>Gender:</td>
+				<td><s:select name="gender" size="1" list="#{'Male':'Male','Female':'Female'}"></s:select></td>
+			</tr>
+			<tr>
+				<td>Address:</td>
+				<td><s:textfield name="address" size="20" /></td>
+			</tr>
+			<tr>
+				<td>E-Mail:</td>
+				<td><s:textfield name="email" size="20" /></td>
+			</tr>
+			<tr>
+				<td>Language:</td>
+				<td><s:textfield name="language" size="20" /></td>
+			</tr>
+			<tr>
+				<td>Skill:</td>
+				<td><s:textfield name="skill" size="20" /></td>
+			</tr>
+			<tr>
+				<td>Description:</td>
+				<td><s:textfield name="description" size="20" /></td>
+			</tr>
+			<tr>
+				<td>Access Group:</td>
+				<td><s:textfield name="accessgroup" size="20" /></td>
+			</tr>
+			<tr>
+				<td>Status:</td>
+				<td><s:select name="status" size="1" list="#{1:'Active',2:'Pause',3:'Pending',4:'Locked'}"></s:select></td>
+			</tr>
+			<tr>
 				<td colspan="2"><s:submit label="Submit"></s:submit></td>
 			</tr>
 		</table>

@@ -14,21 +14,53 @@ import com.bbcall.mybatis.table.User;
 
 @Service("userServices")
 public class UserServices {
+	
 	@Autowired
 	private UserMapper userMapper;
-
 	Object userinfo = null;
 
-	// #############
-	// ## 用户注册
-	// #############
+	// ################################################################################
+	// ## 							User Register services
+	// ## 									用户注册
+	// ##==============================================================================
+	// ## 								Instructions
+	// ##
+	// ##------------------------------------------------------------------------------
+	// ##	1. Require parameters:
+	// ##		(1) Register by User / Master: 'usertype'
+	// ##		(2) Register by User / Master: 'account'
+	// ##		(3) Register by User / Master: 'password'
+	// ##		(4) Register by Master: 'name'
+	// ##		(5) Register by Master: 'picurl'
+	// ##		(6) Register by Master: 'mobile'
+	// ##		(7) Register by Master: 'gender'
+	// ##		(8) Register by Master: 'email'
+	// ##		(9) Register by Master: 'language'
+	// ##		(10) Register by Master: 'skill'
+	// ##
+	// ##------------------------------------------------------------------------------
+	// ##	2. Optional parameters:
+	// ##		(1) 'description'
+	// ##
+	// ##------------------------------------------------------------------------------
+	// ##	3. Return parameters:
+	// ##		(1) ResultCode.REGISTERINFO_TYPEERROR
+	// ##		(2) ResultCode.REGISTERINFO_NOTENOUGH
+	// ##		(3) ResultCode.USERNAME_EXIST
+	// ##		(4) ResultCode.SUCCESS
+	// ##
+	// ##------------------------------------------------------------------------------
+	// ##	4. Return userinfo:
+	// ##		(1) userinfo
+	// ##
+	// ################################################################################
 
 	public int register(String account, String password, int usertype,
 			String name, String picurl, BigInteger mobile, String gender,
-			String email, String language, String skill) {
+			String email, String language, String skill, String description) {
 		System.out.println("Here is UserServices.register method...");
 
-		if (usertype != 1 && usertype != 2 && usertype != 3) {// 检测userype
+		if (usertype != 1 && usertype != 2 && usertype != 3) {// 检测usertype
 			return ResultCode.REGISTERINFO_TYPEERROR;
 		}
 
@@ -77,9 +109,33 @@ public class UserServices {
 		return registerResult;
 	}
 
-	// #############
-	// ## 用户登录
-	// #############
+	// ################################################################################
+	// ## 							User Login services
+	// ## 									用户登录
+	// ##==============================================================================
+	// ## 								Instructions
+	// ##
+	// ##------------------------------------------------------------------------------
+	// ##	1. Require parameters:
+	// ##		(1) 'username'
+	// ##		(2) 'password'
+	// ##
+	// ##------------------------------------------------------------------------------
+	// ##	2. Optional parameters: NULL
+	// ##
+	// ##------------------------------------------------------------------------------
+	// ##	3. Return parameters:
+	// ##		(1) ResultCode.REQUIREINFO_NOTENOUGH
+	// ##		(2) ResultCode.SUCCESS
+	// ##		(3) ResultCode.PASSWORD_ERROR
+	// ##		(4) ResultCode.USERNAME_NOTEXIST
+	// ##		(5) checkUserStatus()
+	// ##
+	// ##------------------------------------------------------------------------------
+	// ##	4. Return userinfo:
+	// ##		(1) userinfo
+	// ##
+	// ################################################################################
 
 	public int login(String username, String password) {
 		System.out.println("Here is UserServices.login method...");
@@ -119,18 +175,130 @@ public class UserServices {
 		}
 	}
 
-	// ###################
-	// ## 用户信息修改、更新
-	// ###################
+	// ################################################################################
+	// ## 						User information Update services
+	// ## 								用户信息修改、更新
+	// ##==============================================================================
+	// ## 								Instructions
+	// ##
+	// ##------------------------------------------------------------------------------
+	// ##	1. Require parameters:
+	// ##		(1) Update by user: 'token'
+	// ##		(2) Update by admin: 'userid'
+	// ##
+	// ##------------------------------------------------------------------------------
+	// ##	2. Optional parameters: (leave blank will not change) 
+	// ##		(1) 'account'
+	// ##		(2) 'password'
+	// ##		(3) 'usertype'
+	// ##		(4) 'name'
+	// ##		(5) 'picurl'
+	// ##		(6) 'mobile'
+	// ##		(7) 'gender'
+	// ##		(8) 'address'
+	// ##		(9) 'email'
+	// ##		(10) 'language'
+	// ##		(11) 'skill'
+	// ##		(12) 'description'
+	// ##		(13) 'accessgroup'
+	// ##		(14) 'status'
+	// ##
+	// ##------------------------------------------------------------------------------
+	// ##	3. Return parameters:
+	// ##		(1) ResultCode.REQUIREINFO_NOTENOUGH
+	// ##		(2) ResultCode.SUCCESS
+	// ##		(3) ResultCode.USERID_ERROR
+	// ##		(4) ResultCode.UNKNOWN_ERROR
+	// ##		(5) checkResult()
+	// ##
+	// ##------------------------------------------------------------------------------
+	// ##	4. Return userinfo:
+	// ##		(1) userinfo
+	// ##
+	// ################################################################################
 
-	public int update() {
+	public int update(String account, String password, int usertype,
+			String name, String picurl, BigInteger mobile, String gender,
+			String address, String email, String language, String skill,
+			String description, String accessgroup, int status, String token,
+			int userid) {
 		System.out.println("Here is UserServices.update method...");
 
-		// userMapper.updateUser("");
-		// userMapper.updateToken("");
-		return 1;
-	}
+		if (isEmpty(token) && userid == 0)// 检测参数是否为空、null
+			return ResultCode.REQUIREINFO_NOTENOUGH;
 
+		int checkResult;
+		User user = new User();
+
+		if ((!isEmpty(token)) && userid == 0) {
+			checkResult = checkToken(token);
+
+			if (checkResult == ResultCode.SUCCESS) {
+				User user1 = userMapper.getUserByToken(token); //
+				user = user1;
+			} else {
+				return checkResult;
+			}
+		} else if (isEmpty(token) && userid != 0) {
+			User user2 = userMapper.getUserById(userid);
+
+			if (null == user2) {
+				return ResultCode.USERID_ERROR;
+			}
+			user = user2;
+		} else {
+			return ResultCode.UNKNOWN_ERROR;
+		}
+
+		if (!isEmpty(account))
+			user.setUser_account(account);
+
+		if (!isEmpty(password))
+			user.setUser_password(password);
+
+		if (usertype != 0 && user.getUser_type() != usertype)
+			user.setUser_type(usertype);
+
+		if (!isEmpty(name))
+			user.setUser_name(name);
+
+		if (!isEmpty(picurl))
+			user.setUser_pic_url(picurl);
+
+		if (mobile != null)
+			user.setUser_mobile(mobile);
+
+		if (!isEmpty(gender))
+			user.setUser_gender(gender);
+
+		if (!isEmpty(address))
+			user.setUser_gender(address);
+
+		if (!isEmpty(email))
+			user.setUser_email(email);
+
+		if (!isEmpty(language))
+			user.setUser_language(language);
+
+		if (!isEmpty(skill))
+			user.setUser_skill(skill);
+		if (!isEmpty(description))
+			user.setUser_language(description);
+
+		if (!isEmpty(accessgroup))
+			user.setUser_language(accessgroup);
+
+		if ((!isEmpty(token)) && userid == 0) {
+			if ((usertype != 0 && user.getUser_type() != usertype)
+					|| (!isEmpty(skill))) {
+				user.setUser_status(3); // set status to pending if skill /
+										// usertype changed
+			}
+		}
+		userMapper.updateUser(user);// 把用户信息插入数据表
+		userinfo = user;// 返回更新的user对象给userinfo
+		return ResultCode.SUCCESS;
+	}
 
 	// ###################
 	// ## 检测用户 token
@@ -211,8 +379,7 @@ public class UserServices {
 	public int checkUserStatus(int status) {
 		int checkUserResult;
 
-		switch (status) {// * 1=active, 2=pause, 3=pending,
-										// 4=locked
+		switch (status) {// * 1=active, 2=pause, 3=pending, 4=locked
 		case 1:
 			checkUserResult = ResultCode.USERSTATUS_ACTIVE;
 			break;

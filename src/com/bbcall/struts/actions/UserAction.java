@@ -33,6 +33,11 @@ public class UserAction extends ActionSupport {
 	private String language;
 	private String skill;
 	private String token;
+	private String description;
+	private String address;
+	private String accessgroup;
+	private int status;
+	private int userid;
 	
 	@Override
 	public String execute() throws Exception {
@@ -106,7 +111,7 @@ public class UserAction extends ActionSupport {
 
 		dataMap = new HashMap<String, Object>(); // 新建dataMap来储存JSON字符串
 		dataMap.clear(); // dataMap中的数据将会被Struts2转换成JSON字符串，所以这里要先清空其中的数据
-		int result = userServices.register(account, password, type, name, picurl, mobile, gender, email, language, skill); // 调用userServices.register
+		int result = userServices.register(account, password, type, name, picurl, mobile, gender, email, language, skill, description); // 调用userServices.register
 
 		if (result == ResultCode.SUCCESS) {
 			dataMap.put("resultcode", result); // 放入一个是否操作成功的标识
@@ -131,7 +136,36 @@ public class UserAction extends ActionSupport {
 	}
 	
 	// Update Action
+	public String update() throws Exception{
+		System.out.println("Here is UserAction.update");
+		
+		dataMap = new HashMap<String, Object>(); // 新建dataMap来储存JSON字符串
+		dataMap.clear(); // dataMap中的数据将会被Struts2转换成JSON字符串，所以这里要先清空其中的数据
+		int result = userServices.update(account, password, type, name, picurl, mobile, gender, address, email, language, skill, description, accessgroup, status, token, userid); // 调用userServices.login
 
+		if (result == ResultCode.SUCCESS) {
+			Object userinfo = userServices.userInfo(); // 调用userInfo对象
+			dataMap.put("user", userinfo); // 把userinfo对象放入dataMap
+			dataMap.put("resultcode", result); // 放入一个是否操作成功的标识
+			dataMap.put("errmsg", ResultCode.getErrmsg(result));
+			dataMap.put("updateResult", true); // 放入registerResult
+			System.out.println(dataMap);
+			return "updateSuccess";
+		} else {
+			dataMap.put("resultcode", result); // 放入一个是否操作成功的标识
+			dataMap.put("errmsg", ResultCode.getErrmsg(result));
+			dataMap.put("updateResult", false); // 放入registerResult
+			System.out.println(dataMap);
+			System.out.println("Update Failed");
+			return "updateFailed";
+		}
+		
+	}
+	public String updateJson() throws Exception{
+		System.out.println("Here is UserAction.updateJson");
+		update();
+		return "json";
+	}
 	
 	// Check user token Action
 	public String checkToken() throws Exception {
@@ -168,6 +202,7 @@ public class UserAction extends ActionSupport {
 		return dataMap;
 	}
 
+	// set methods
 	public void setUsername(String username) {
 		this.username = username;
 	}
@@ -214,6 +249,26 @@ public class UserAction extends ActionSupport {
 
 	public void setToken(String token) {
 		this.token = token;
+	}
+	
+	public void setDescription(String description) {
+		this.description = description;
+	}
+
+	public void setAddress(String address) {
+		this.address = address;
+	}
+
+	public void setAccessgroup(String accessgroup) {
+		this.accessgroup = accessgroup;
+	}
+
+	public void setStatus(int status) {
+		this.status = status;
+	}
+
+	public void setUserid(int userid) {
+		this.userid = userid;
 	}
 
 }

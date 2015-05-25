@@ -80,15 +80,6 @@
     	<result column="user_token" property="user_token" jdbcType="VARCHAR" />
 	</resultMap>
 
-	<insert id="addUserByAccount" parameterType="User"
-		useGeneratedKeys="true" keyProperty="user_id">
-		insert into USER(user_account,
-		user_password, user_type, user_status, user_name, user_pic_url,
-		user_mobile, user_gender, user_email, user_language, user_skill)
-		values(#{user_account}, #{user_password}, #{user_type},
-		#{user_status}, #{user_name}, #{user_pic_url}, #{user_mobile},
-		#{user_gender}, #{user_email}, #{user_language}, #{user_skill})
-	</insert>
 <!-- 
 	<insert id="addUserByMobile" parameterType="User"
 		useGeneratedKeys="true" keyProperty="user_id">
@@ -105,7 +96,17 @@
 		values(#{user_email},
 		#{user_password}, #{user_type}, #{user_status})
 	</insert>
- -->	
+ -->
+
+	<insert id="addUserByAccount" parameterType="User"
+		useGeneratedKeys="true" keyProperty="user_id">
+		insert into USER(user_account,
+		user_password, user_type, user_status, user_name, user_pic_url,
+		user_mobile, user_gender, user_email, user_language, user_skill)
+		values(#{user_account}, #{user_password}, #{user_type},
+		#{user_status}, #{user_name}, #{user_pic_url}, #{user_mobile},
+		#{user_gender}, #{user_email}, #{user_language}, #{user_skill})
+	</insert>
 
 	<select id="getUserByAccount" parameterType="String" resultMap="UserResultMap">
 		select user_id, user_account, user_password, user_email, user_mobile,
@@ -142,7 +143,8 @@
 		user_address, user_skill, user_description, user_access_group,
 		user_status, user_login_time, user_token
 		from USER
-		where user_id=#{user_id}
+		where
+		user_id=#{user_id}
 	</select>
 
 	<select id="getUserByToken" parameterType="String" resultMap="UserResultMap">
@@ -151,21 +153,33 @@
 		user_address, user_skill, user_description, user_access_group,
 		user_status, user_login_time, user_token
 		from USER
-		where user_token=#{user_token}
+		where
+		user_token=#{user_token}
 	</select>
 
 	<update id="updateUser" parameterType="User">
-		update USER set user_nickname=#{user_nickname}, user_sign=#{user_sign}
-		where user_token=#{user_token}
+
+		update USER set
+		user_account=#{user_account}, user_password=#{user_password},
+		user_email=#{user_email}, user_mobile=#{user_mobile},
+		user_type=#{user_type}, user_name=#{user_name},
+		user_gender=#{user_gender}, user_pic_url=#{user_pic_url},
+		user_language=#{user_language},
+		user_address=#{user_address},
+		user_skill=#{user_skill}, user_description=#{user_description},
+		user_access_group=#{user_access_group},
+		user_status=#{user_status} where user_id=#{user_id}
 	</update>
 
 	<update id="updateToken" parameterType="User">
-		update USER set user_token=#{user_token}
+		update USER set
+		user_token=#{user_token}
 		where user_id=#{user_id}
 	</update>
-	
+
 	<update id="updateLoginTime" parameterType="User">
-		update USER set user_login_time=#{user_login_time}
+		update USER set
+		user_login_time=#{user_login_time}
 		where user_id=#{user_id}
 	</update>
 

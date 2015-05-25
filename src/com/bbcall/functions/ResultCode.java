@@ -15,7 +15,8 @@ public class ResultCode {
 	public static Integer REGISTERINFO_NOTENOUGH = 10007;//注册信息不全
 	public static Integer REGISTERINFO_TYPEERROR = 10008;//注册的用户类型错误
 	public static Integer REQUIREINFO_NOTENOUGH = 10009;//请求的参数不全
-	public static Integer USERSTATUS_ERROR = 10010;//用户状态错误
+	public static Integer REQUIREINFO_ERROR = 10010;//请求的参数错误
+	public static Integer USERSTATUS_ERROR = 10011;//用户状态错误
 		
 	//用户返回码11XXX
 	public static Integer USERNAME_NOTEXIST = 11001;//用户名可以使用
@@ -63,7 +64,8 @@ public class ResultCode {
 			case 10007: errmsg = "register info not enough"; break;
 			case 10008: errmsg = "register user type error"; break;
 			case 10009: errmsg = "require info not enough"; break;
-			case 10010: errmsg = "user status error"; break;
+			case 10010: errmsg = "require info error"; break;
+			case 10011: errmsg = "user status error"; break;
 			
 			case 11001: errmsg = "username not exist"; break;
 			case 11002: errmsg = "account username"; break;
