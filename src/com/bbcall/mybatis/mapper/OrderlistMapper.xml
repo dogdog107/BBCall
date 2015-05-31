@@ -37,39 +37,31 @@
 		useGeneratedKeys="true" keyProperty="order_id">
 		insert into orderlist
 		(order_create_time,
-		order_end_time,
 		order_book_time,
 		order_book_location,
 		order_contact_mobile,
 		order_contact_name,
-		order_photo,
+		order_pic_url,
 		order_description,
 		order_price,
 		order_urgent,
 		order_urgent_bonus,
 		order_user_account,
-		order_master_account,
 		order_type,
-		order_status,
-		order_score,
-		order_evaluation) values
+		order_status) values
 		(#{order_create_time},
-		#{order_end_time},
 		#{order_book_time},
 		#{order_book_location},
 		#{order_contact_mobile},
 		#{order_contact_name},
-		#{order_photo},
+		#{order_pic_url},
 		#{order_description},
 		#{order_price},
 		#{order_urgent},
 		#{order_urgent_bonus},
 		#{order_user_account},
-		#{order_master_account},
 		#{order_type},
-		#{order_status},
-		#{order_score},
-		#{order_evaluation})
+		#{order_status})
 	</insert>
 	<select id="getUnOrdersByUserAccount" parameterType="String"
 		resultMap="OrderResultMap">
@@ -116,15 +108,13 @@
 		order_book_location=#{order_book_location},
 		order_contact_mobile=#{order_contact_mobile},
 		order_contact_name=#{order_contact_name},
-		order_photo=#{order_photo},
+		order_pic_url=#{order_pic_url},
 		order_description=#{order_description},
 		order_urgent=#{order_urgent},
 		order_urgent_bonus=#{order_urgent_bonus},
-		order_master_account=#{order_master_account},
+		order_user_account=#{order_user_account},
 		order_type=#{order_type},
-		order_status=#{order_status},
-		order_score=#{order_score},
-		order_evaluation=#{order_evaluation}
+		order_status=#{order_status}
 		where
 		order_id=#{order_id}
 	</update>

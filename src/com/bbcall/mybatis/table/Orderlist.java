@@ -27,7 +27,7 @@ import java.util.Date;
 //  order_evaluation text
 //) DEFAULT CHARSET = utf8;
 
-public class Order {
+public class Orderlist {
 
 	private int order_id;
 	private Timestamp order_create_time;
