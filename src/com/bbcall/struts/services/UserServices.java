@@ -249,15 +249,25 @@ public class UserServices {
 		} else {
 			return ResultCode.UNKNOWN_ERROR;
 		}
+		
+		if ((isEmpty(token)) && userid != 0) {
+			if (status != 0 && user.getUser_status() != status) {
+				user.setUser_status(status);
+			}
+		}
+		
+		if ((!isEmpty(token)) && userid == 0) {
+			if ((usertype != 0 && user.getUser_type() != usertype) || (!skill.equals(user.getUser_skill()))) {
+				user.setUser_status(3); // set status to pending if skill /
+				// usertype changed
+			}
+		}
 
 		if (!isEmpty(account))
 			user.setUser_account(account);
 
 		if (!isEmpty(password))
 			user.setUser_password(password);
-
-		if (usertype != 0 && user.getUser_type() != usertype)
-			user.setUser_type(usertype);
 
 		if (!isEmpty(name))
 			user.setUser_name(name);
@@ -282,19 +292,16 @@ public class UserServices {
 
 		if (!isEmpty(skill))
 			user.setUser_skill(skill);
+		
 		if (!isEmpty(description))
 			user.setUser_language(description);
 
 		if (!isEmpty(accessgroup))
 			user.setUser_language(accessgroup);
 
-		if ((!isEmpty(token)) && userid == 0) {
-			if ((usertype != 0 && user.getUser_type() != usertype)
-					|| (!isEmpty(skill))) {
-				user.setUser_status(3); // set status to pending if skill /
-										// usertype changed
-			}
-		}
+		if (usertype != 0)
+			user.setUser_type(usertype);
+		
 		userMapper.updateUser(user);// 把用户信息插入数据表
 		userinfo = user;// 返回更新的user对象给userinfo
 		return ResultCode.SUCCESS;
