@@ -22,8 +22,10 @@ public class OrderlistServices {
 	@Autowired
 	private UserMapper userMapper;
 
-	Orderlist orderlistinfo;
-	List<Orderlist> orderlistinfos;
+	public Orderlist orderlistinfo;
+	public List<Orderlist> orderlistinfos;
+	public String master_skill;
+	public List<String> master_skills;
 
 	// ################################################################################
 	// ## Add Order services
@@ -60,8 +62,8 @@ public class OrderlistServices {
 
 	public int addOrder(String order_book_time, String order_book_location,
 			BigInteger order_contact_mobile, String order_contact_name,
-			String order_urgent, int order_urgent_bonus, String order_pic_url,
-			String order_description, int order_price,
+			String order_urgent, double order_urgent_bonus, String order_pic_url,
+			String order_description, double order_price,
 			String order_user_account, String order_type) {
 		// TODO Auto-generated method stub
 
@@ -98,6 +100,8 @@ public class OrderlistServices {
 		orderlistMapper.addOrder(orderlist);
 
 		orderlistinfo = orderlist;
+		
+		System.out.println(orderlistinfo.toString());
 
 		return ResultCode.SUCCESS;
 
@@ -240,14 +244,14 @@ public class OrderlistServices {
 	}
 
 	// ################################################################################
-	// ## Get Unfinished Order by Master Account services
-	// ## 师傅查询未完成订单列表
+	// ## Get Unfinished Order Services
+	// ## 查询未完成订单列表
 	// ##==============================================================================
 	// ## Instructions
 	// ##
 	// ##------------------------------------------------------------------------------
 	// ## 1. Require parameters:
-	// ## (1) order_master_account
+	// ## (1) user_account
 	// ##
 	// ##------------------------------------------------------------------------------
 	// ## 2. Optional parameters: NONE
@@ -262,42 +266,234 @@ public class OrderlistServices {
 	// ##
 	// ################################################################################
 
-	public int getUnOrderForMaster(String order_master_account) {
+	public int getUnOrders(String user_account) {
 
-		// List<Skill> skills = skillMapper.getSkills(master_account);
+
+		String[] skilllist = null;
+		User user = userMapper.getUserByAccount(user_account);
+
+		if (user.getUser_type() == 1) { // 如果是用户的account
+			orderlistinfos = orderlistMapper
+					.getUnOrdersByUserAccount(user_account);
+		} else if (user.getUser_type() == 2) { // 如果是师傅的account
+			skilllist = user.getUser_skill().split(";"); // 取得师傅的技能列表
+			for (int i = 0; i < skilllist.length; i++) { // 通过技能列表取得所有符合师傅技能的订单
+				orderlistinfos
+						.addAll(orderlistMapper.getUnOrdersByMasterSkill(
+								user_account, skilllist[i]));
+			}
+
+		} else { // 如果是管理员的account,取出所有未确认的订单
+			orderlistinfos = orderlistMapper.getUnOrders();
+		}
+
+		return ResultCode.SUCCESS;
+	}
+
+	// ################################################################################
+	// ## Get Unfinished Order by order type & locationServices
+	// ## 查询未完成订单列表 (按发布时间排序)
+	// ##==============================================================================
+	// ## Instructions
+	// ##
+	// ##------------------------------------------------------------------------------
+	// ## 1. Require parameters:
+	// ## (1) master_account
+	// ## (2) skilllist
+	// ## (3) locationlist
+	// ##
+	// ##------------------------------------------------------------------------------
+	// ## 2. Optional parameters: NONE
+	// ##
+	// ##------------------------------------------------------------------------------
+	// ## 3. Return parameters:
+	// ## (4) ResultCode.SUCCESS
+	// ##
+	// ##------------------------------------------------------------------------------
+	// ## 4. Return orderlistinfos:
+	// ## (1) orderlistinfos
+	// ##
+	// ################################################################################
+
+	public int getUnOrders(String master_account, String[] skilllist,
+			String[] locationlist) {
+
+		if (null != locationlist) {
+			for (int i = 0; i < skilllist.length; i++) { // 通过技能列表取得所有符合师傅技能的订单
+				for (int j = 0; j < locationlist.length; j++) {
+					orderlistinfos.addAll(orderlistMapper
+							.getUnOrdersByMasterLocation(master_account,
+									skilllist[i], locationlist[j]));
+				}
+			}
+		} else {
+			for (int i = 0; i < skilllist.length; i++) { // 通过技能列表取得所有符合师傅技能的订单
+				orderlistinfos.addAll(orderlistMapper
+						.getUnOrdersByMasterSkill(master_account,
+								skilllist[i]));
+			}
+		}
+
+		return ResultCode.SUCCESS;
+	}
+
+	// ################################################################################
+	// ## Get Unfinished Order by order type & locationServices
+	// ## 查询未完成订单列表 (按工作截止时间排序)
+	// ##==============================================================================
+	// ## Instructions
+	// ##
+	// ##------------------------------------------------------------------------------
+	// ## 1. Require parameters:
+	// ## (1) master_account
+	// ## (2) skilllist
+	// ## (3) locationlist
+	// ##
+	// ##------------------------------------------------------------------------------
+	// ## 2. Optional parameters: NONE
+	// ##
+	// ##------------------------------------------------------------------------------
+	// ## 3. Return parameters:
+	// ## (4) ResultCode.SUCCESS
+	// ##
+	// ##------------------------------------------------------------------------------
+	// ## 4. Return orderlistinfos:
+	// ## (1) orderlistinfos
+	// ##
+	// ################################################################################
+
+	public int getUnOrdersByBookTime(String master_account, String[] skilllist,
+			String[] locationlist) {
+
+		if (null != locationlist) {
+			for (int i = 0; i < skilllist.length; i++) { // 通过技能列表取得所有符合师傅技能的订单
+				for (int j = 0; j < locationlist.length; j++) {
+					orderlistinfos.addAll(orderlistMapper
+							.getUnOrdersByMasterLocation(master_account,
+									skilllist[i], locationlist[j]));
+				}
+			}
+		} else {
+			for (int i = 0; i < skilllist.length; i++) { // 通过技能列表取得所有符合师傅技能的订单
+				orderlistinfos.addAll(orderlistMapper
+						.getUnOrdersByMasterSkill(master_account,
+								skilllist[i]));
+			}
+		}
+
+		return ResultCode.SUCCESS;
+	}
+
+	// ################################################################################
+	// ## Get Completed Order services
+	// ## 查询完成订单列表
+	// ##==============================================================================
+	// ## Instructions
+	// ##
+	// ##------------------------------------------------------------------------------
+	// ## 1. Require parameters:
+	// ## (1) user_account
+	// ##
+	// ##------------------------------------------------------------------------------
+	// ## 2. Optional parameters: NONE
+	// ##
+	// ##------------------------------------------------------------------------------
+	// ## 3. Return parameters:
+	// ## (4) ResultCode.SUCCESS
+	// ##
+	// ##------------------------------------------------------------------------------
+	// ## 4. Return orderlistinfos:
+	// ## (1) orderlistinfos
+	// ##
+	// ################################################################################
+	public int getComOrders(String user_account) {
+
+		User user = userMapper.getUserByAccount(user_account);
+
+		if (user.getUser_type() == 1) { // 如果是用户的account
+			orderlistinfos = orderlistMapper
+					.getComOrdersByUserAccount(user_account);
+		} else if (user.getUser_type() == 2) { // 如果是师傅的account
+			orderlistinfos = orderlistMapper
+					.getComOrdersByMasterAccount(user_account);
+		} else { // 如果是管理员的account,取出所有已完成的订单
+			orderlistinfos = orderlistMapper.getComOrders();
+		}
+
+		return ResultCode.SUCCESS;
+	}
+
+	// ################################################################################
+	// ## Get In progress Order services
+	// ## 查询正在处理订单列表
+	// ##==============================================================================
+	// ## Instructions
+	// ##
+	// ##------------------------------------------------------------------------------
+	// ## 1. Require parameters:
+	// ## (1) user_account
+	// ##
+	// ##------------------------------------------------------------------------------
+	// ## 2. Optional parameters: NONE
+	// ##
+	// ##------------------------------------------------------------------------------
+	// ## 3. Return parameters:
+	// ## (4) ResultCode.SUCCESS
+	// ##
+	// ##------------------------------------------------------------------------------
+	// ## 4. Return orderlistinfos:
+	// ## (1) orderlistinfos
+	// ##
+	// ################################################################################
+	public int getProOrders(String user_account) {
+
+		User user = userMapper.getUserByAccount(user_account);
+
+		if (user.getUser_type() == 1) { // 如果是用户的account
+			orderlistinfos = orderlistMapper
+					.getProOrdersByUserAccount(user_account);
+		} else if (user.getUser_type() == 2) { // 如果是师傅的account
+			orderlistinfos = orderlistMapper
+					.getProOrdersByMasterAccount(user_account);
+		} else { // 如果是管理员的account,取出所有已完成的订单
+			orderlistinfos = orderlistMapper.getProOrders();
+		}
+
+		return ResultCode.SUCCESS;
+	}
+
+	// ################################################################################
+	// ## Change Order In Progress services
+	// ## 用户和师傅确定订单
+	// ##==============================================================================
+	// ## Instructions
+	// ##
+	// ##------------------------------------------------------------------------------
+	// ## 1. Require parameters:
+	// ## (1) master_account
+	// ## (2) order_id
+	// ##
+	// ##------------------------------------------------------------------------------
+	// ## 2. Optional parameters: NONE
+	// ##
+	// ##------------------------------------------------------------------------------
+	// ## 3. Return parameters:
+	// ## (4) ResultCode.SUCCESS
+	// ##
+	// ##------------------------------------------------------------------------------
+	// ## 4. Return orderlistinfos:
+	// ## (1) orderlistinfos
+	// ##
+	// ################################################################################
+	public int ChangeOrderStatus(String master_account, int order_id) {
+
+		orderlistMapper.updateOrderAsMasterAccount(master_account, order_id);
 
 		orderlistinfos = orderlistMapper
-				.getUnOrdersByMasterAccount(order_master_account);
+				.getProOrdersByUserAccount(orderlistMapper.getOrder(order_id)
+						.getOrder_user_account());
 
 		return ResultCode.SUCCESS;
 	}
 
-	// ################################################################################
-	// ## Get Completed Order by Master Account services
-	// ## 师傅查询完成订单列表
-	// ##==============================================================================
-	// ## Instructions
-	// ##
-	// ##------------------------------------------------------------------------------
-	// ## 1. Require parameters:
-	// ## (1) order_master_account
-	// ##
-	// ##------------------------------------------------------------------------------
-	// ## 2. Optional parameters: NONE
-	// ##
-	// ##------------------------------------------------------------------------------
-	// ## 3. Return parameters:
-	// ## (4) ResultCode.SUCCESS
-	// ##
-	// ##------------------------------------------------------------------------------
-	// ## 4. Return orderlistinfos:
-	// ## (1) orderlistinfos
-	// ##
-	// ################################################################################
-	public int getUnOrderByMasterAccount(String order_master_account) {
-
-		orderlistinfos = orderlistMapper.getComOrdersByMasterAccount(order_master_account);
-		
-		return ResultCode.SUCCESS;
-	}
 }

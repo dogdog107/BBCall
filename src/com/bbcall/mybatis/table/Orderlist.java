@@ -15,9 +15,9 @@ import java.util.Date;
 //  order_contact_name  VARCHAR (30) NOT NULL,
 //  order_pic_url VARCHAR (255),
 //  order_description text,
-//  order_price INT,
+//  order_price DECIMAL(10,2),
 //  order_urgent BIT,
-//  order_urgent_bonus INT,
+//  order_urgent_bonus DECIMAL(10,2),
 //  order_user_account  VARCHAR (30),
 //  order_master_account VARCHAR (30),
 //  order_type VARCHAR (30),
@@ -38,9 +38,9 @@ public class Orderlist {
 	private String order_contact_name;
 	private String order_pic_url;
 	private String order_description;
-	private int order_price;
+	private double order_price;
 	private boolean order_urgent;
-	private int order_urgent_bonus;
+	private double order_urgent_bonus;
 	private String order_user_account;
 	private String order_master_account;
 	private String order_type;
@@ -120,11 +120,11 @@ public class Orderlist {
 		this.order_description = order_description;
 	}
 
-	public int getOrder_price() {
+	public double getOrder_price() {
 		return order_price;
 	}
 
-	public void setOrder_price(int order_price) {
+	public void setOrder_price(double order_price) {
 		this.order_price = order_price;
 	}
 
@@ -136,11 +136,11 @@ public class Orderlist {
 		this.order_urgent = order_urgent;
 	}
 
-	public int getOrder_urgent_bonus() {
+	public double getOrder_urgent_bonus() {
 		return order_urgent_bonus;
 	}
 
-	public void setOrder_urgent_bonus(int order_urgent_bonus) {
+	public void setOrder_urgent_bonus(double order_urgent_bonus) {
 		this.order_urgent_bonus = order_urgent_bonus;
 	}
 
