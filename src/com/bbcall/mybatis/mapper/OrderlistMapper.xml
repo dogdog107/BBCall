@@ -1,15 +1,16 @@
 <?xml version="1.0" encoding="UTF-8"?>  
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"   
  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.bbcall.dao.OrderMapper">
-	<resultMap id="OrderResultMap" type="com.bbcall.pojo.Order">
+<mapper namespace="com.bbcall.mybatis.dao.OrderlistMapper">
+
+	<resultMap id="OrderResultMap" type="com.bbcall.mybatis.table.Orderlist">
 		<id column="order_id" property="order_id" jdbcType="INTEGER" />
 		<result column="order_create_time" property="order_create_time"
-			jdbcType="DATETIME" />
+			jdbcType="TIMESTAMP" />
 		<result column="order_end_time" property="order_end_time"
-			jdbcType="DATETIME" />
+			jdbcType="TIMESTAMP" />
 		<result column="order_book_time" property="order_book_time"
-			jdbcType="DATETIME" />
+			jdbcType="TIMESTAMP" />
 		<result column="order_book_location" property="order_book_location"
 			jdbcType="VARCHAR" />
 		<result column="order_contact_mobile" property="order_contact_mobile"
@@ -33,10 +34,12 @@
 		<result column="order_evaluation" property="order_evaluation"
 			jdbcType="VARCHAR" />
 	</resultMap>
-	<insert id="addOrder" parameterType="com.bbcall.pojo.Order"
+
+	<insert id="addOrder" parameterType="com.bbcall.mybatis.table.Orderlist"
 		useGeneratedKeys="true" keyProperty="order_id">
 		insert into orderlist
 		(order_create_time,
+		order_end_time,
 		order_book_time,
 		order_book_location,
 		order_contact_mobile,
@@ -50,6 +53,7 @@
 		order_type,
 		order_status) values
 		(#{order_create_time},
+		#{order_end_time},
 		#{order_book_time},
 		#{order_book_location},
 		#{order_contact_mobile},
@@ -63,12 +67,14 @@
 		#{order_type},
 		#{order_status})
 	</insert>
+
 	<select id="getUnOrdersByUserAccount" parameterType="String"
 		resultMap="OrderResultMap">
 		select * from orderlist
 		where order_status=1 and
 		order_user_account=#{order_user_account}
 	</select>
+		
 	<select id="getProOrdersByUserAccount" parameterType="String"
 		resultMap="OrderResultMap">
 		select * from orderlist
@@ -81,6 +87,7 @@
 		where order_status=3 and
 		order_user_account=#{order_user_account}
 	</select>
+	
 	<select id="getUnOrdersByMasterSkill"
 		resultMap="OrderResultMap">
 		select * from orderlist where order_status=1 and order_type=#{order_type,jdbcType=VARCHAR} and 
@@ -88,6 +95,7 @@
 		blacklist where
 		blacklist_master_account=#{order_master_account,jdbcType=VARCHAR}) order by order_create_time
 	</select>
+	
 	<select id="getUnOrdersByMasterLocation"
 		resultMap="OrderResultMap">
 		select * from orderlist where order_status=1 and order_type=#{order_type,jdbcType=VARCHAR} and 
@@ -124,17 +132,20 @@
 		where
 		order_status=2
 	</select>
+	
 	<select id="getComOrders" resultMap="OrderResultMap">
 		select * from orderlist
 		where
 		order_status=3
 	</select>
-	<select id="getOrder" parameterType="int" resultMap="com.bbcall.pojo.Order">
-		select *
-		from orderlist
-		where order_id=#{order_id}
+	
+	<select id="getOrder" parameterType="int" resultMap="OrderResultMap">
+		select * from orderlist
+		where
+		order_id=#{order_id}
 	</select>
-	<update id="updateOrder" parameterType="com.bbcall.pojo.Order">
+	
+	<update id="updateOrder" parameterType="com.bbcall.mybatis.table.Orderlist">
 		update orderlist set
 		order_book_time=#{order_book_time},
 		order_book_location=#{order_book_location},
@@ -157,8 +168,10 @@
 		where
 		order_id=#{order_id,jdbcType=INTEGER}
 	</update>
+	
 	<delete id="deleteOrder" parameterType="int">
 		delete from orderlist where
 		order_id=#{order_id}
 	</delete>
+	
 </mapper>  

@@ -62,8 +62,8 @@ public class OrderlistServices {
 
 	public int addOrder(String order_book_time, String order_book_location,
 			BigInteger order_contact_mobile, String order_contact_name,
-			String order_urgent, double order_urgent_bonus, String order_pic_url,
-			String order_description, double order_price,
+			String order_urgent, double order_urgent_bonus,
+			String order_pic_url, String order_description, double order_price,
 			String order_user_account, String order_type) {
 		// TODO Auto-generated method stub
 
@@ -100,8 +100,6 @@ public class OrderlistServices {
 		orderlistMapper.addOrder(orderlist);
 
 		orderlistinfo = orderlist;
-		
-		System.out.println(orderlistinfo.toString());
 
 		return ResultCode.SUCCESS;
 
@@ -143,8 +141,8 @@ public class OrderlistServices {
 	public int updateOrder(int order_id, String order_book_time,
 			String order_book_location, BigInteger order_contact_mobile,
 			String order_contact_name, String order_urgent,
-			int order_urgent_bonus, String order_pic_url,
-			String order_description, int order_price,
+			double order_urgent_bonus, String order_pic_url,
+			String order_description, double order_price,
 			String order_user_account, String order_type) {
 
 		Orderlist orderlist = orderlistMapper.getOrder(order_id);
@@ -161,6 +159,7 @@ public class OrderlistServices {
 
 		orderlist
 				.setOrder_create_time(new Timestamp(System.currentTimeMillis()));
+		orderlist.setOrder_end_time(new Timestamp(System.currentTimeMillis()));
 		orderlist.setOrder_book_time(ts);
 		orderlist.setOrder_book_location(order_book_location);
 		orderlist.setOrder_contact_mobile(order_contact_mobile);
@@ -268,7 +267,6 @@ public class OrderlistServices {
 
 	public int getUnOrders(String user_account) {
 
-
 		String[] skilllist = null;
 		User user = userMapper.getUserByAccount(user_account);
 
@@ -278,9 +276,8 @@ public class OrderlistServices {
 		} else if (user.getUser_type() == 2) { // 如果是师傅的account
 			skilllist = user.getUser_skill().split(";"); // 取得师傅的技能列表
 			for (int i = 0; i < skilllist.length; i++) { // 通过技能列表取得所有符合师傅技能的订单
-				orderlistinfos
-						.addAll(orderlistMapper.getUnOrdersByMasterSkill(
-								user_account, skilllist[i]));
+				orderlistinfos.addAll(orderlistMapper.getUnOrdersByMasterSkill(
+						user_account, skilllist[i]));
 			}
 
 		} else { // 如果是管理员的account,取出所有未确认的订单
@@ -328,9 +325,8 @@ public class OrderlistServices {
 			}
 		} else {
 			for (int i = 0; i < skilllist.length; i++) { // 通过技能列表取得所有符合师傅技能的订单
-				orderlistinfos.addAll(orderlistMapper
-						.getUnOrdersByMasterSkill(master_account,
-								skilllist[i]));
+				orderlistinfos.addAll(orderlistMapper.getUnOrdersByMasterSkill(
+						master_account, skilllist[i]));
 			}
 		}
 
@@ -375,9 +371,8 @@ public class OrderlistServices {
 			}
 		} else {
 			for (int i = 0; i < skilllist.length; i++) { // 通过技能列表取得所有符合师傅技能的订单
-				orderlistinfos.addAll(orderlistMapper
-						.getUnOrdersByMasterSkill(master_account,
-								skilllist[i]));
+				orderlistinfos.addAll(orderlistMapper.getUnOrdersByMasterSkill(
+						master_account, skilllist[i]));
 			}
 		}
 
@@ -496,4 +491,13 @@ public class OrderlistServices {
 		return ResultCode.SUCCESS;
 	}
 
+	public Orderlist orderlistinfo() {
+
+		return orderlistinfo;
+	}
+	
+	public List<Orderlist> orderlistinfos() {
+
+		return orderlistinfos;
+	}
 }
