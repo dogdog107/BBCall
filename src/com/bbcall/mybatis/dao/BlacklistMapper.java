@@ -12,6 +12,9 @@ public interface BlacklistMapper {
 	// 删除黑名单
 	public void deleteBlacklistById(int blacklist_id);
 
+	// 取得详细黑名单
+	public Blacklist getBlacklistById(int blacklist_id);
+
 	// 获取用户的黑名单列表
 	public List<Blacklist> getBlacklistByUser(String blacklist_user_account);
 

@@ -2,6 +2,13 @@ package com.bbcall.mybatis.table;
 
 public class Blacklist {
 
+//* Table Blacklist's sql command:
+//CREATE TABLE Blacklist (
+//	blacklist_id INT NOT NULL auto_increment PRIMARY KEY,
+//  blacklist_user_account  VARCHAR (30),
+//  blacklist_master_account  VARCHAR (30),
+//  blacklist_order_id INT NOT NULL
+//) DEFAULT CHARSET = utf8;	
 	private int blacklist_id;
 	private String blacklist_user_account;
 	private String blacklist_master_account;
