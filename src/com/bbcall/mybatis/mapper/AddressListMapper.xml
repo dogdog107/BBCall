@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper    PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<!-- 
+	这里namespace必须是UserMapper接口的全类名路径，
+	不然运行的时候要报错 "is not known to the MapperRegistry" 
+-->
+
+<!-- 
+CREATE TABLE `ADDRESS_LIST` (
+		  `areano` mediumint(6) unsigned NOT NULL,
+		  `areaname` varchar(45) DEFAULT NULL,
+		  `parentno` mediumint(6) unsigned DEFAULT NULL,
+		  `areacode` varchar(5) DEFAULT NULL,
+		  `arealevel` tinyint(1) DEFAULT NULL,
+		  `typename` char(3) DEFAULT NULL,
+		  PRIMARY KEY (`areano`)
+		) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+ -->
+<mapper namespace="com.bbcall.mybatis.dao.AddressListMapper">
+
+	<resultMap id="AddressListResultMap" type="com.bbcall.mybatis.table.AddressList" >
+    	<id column="areano" property="areano" jdbcType="INTEGER" />
+    	<result column="areaname" property="areaname" jdbcType="VARCHAR" />
+    	<result column="parentno" property="parentno" jdbcType="INTEGER" />
+    	<result column="areacode" property="areacode" jdbcType="VARCHAR" />
+    	<result column="arealevel" property="arealevel" jdbcType="INTEGER" />
+    	<result column="typename" property="typename" jdbcType="VARCHAR" />
+	</resultMap>
+
+	<select id="getAddressByAreano" parameterType="int" resultMap="AddressListResultMap">
+		select areano, areaname, parentno, areacode, arealevel, typename from ADDRESS_LIST
+		where
+		areano=#{areano}
+	</select>
+	
+	<select id="getAddressByParentno" parameterType="int" resultMap="AddressListResultMap">
+		select areano, areaname, parentno, areacode, arealevel, typename from ADDRESS_LIST
+		where
+		parentno=#{parentno}
+	</select>
+	
+</mapper>    

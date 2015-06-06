@@ -28,7 +28,7 @@
 	<table>
 		<tr>
 			<td width="150">Register Type:</td>
-			<td><select name="type" size="1">
+			<td><select name="usertype" size="1">
 					<option value="1" selected>Customer
 					<option value="2">Master
 			</select></td>
@@ -54,7 +54,7 @@
 		<table>
 			<tr>
 				<td width="150">Register Type:</td>
-				<td><s:select name="type" size="1" list="#{1:'Customer',2:'Master'}"></s:select></td>
+				<td><s:select name="usertype" size="1" list="#{1:'Customer',2:'Master'}"></s:select></td>
 			</tr>
 			<tr>
 				<td>Username:</td>
@@ -124,7 +124,7 @@
 			</tr>
 			<tr>
 				<td>User Type:</td>
-				<td><s:select name="type" size="1" list="#{1:'Customer',2:'Master',3:'Admin'}"></s:select></td>
+				<td><s:select name="usertype" size="1" list="#{1:'Customer',2:'Master',3:'Admin'}"></s:select></td>
 			</tr>
 			<tr>
 				<td>Nickname:</td>
@@ -141,6 +141,10 @@
 			<tr>
 				<td>Gender:</td>
 				<td><s:select name="gender" size="1" list="#{'Male':'Male','Female':'Female'}"></s:select></td>
+			</tr>
+			<tr>
+				<td>AddressCode:</td>
+				<td><s:textfield name="addresscode" size="20" /></td>
 			</tr>
 			<tr>
 				<td>Address:</td>

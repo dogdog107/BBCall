@@ -1,8 +1,6 @@
 package com.bbcall.mybatis.dao;
 
 import java.math.BigInteger;
-import java.util.List;
-
 import com.bbcall.mybatis.table.User;
 
 public interface UserMapper {

@@ -2,13 +2,16 @@ package com.bbcall.struts.actions;
 
 import java.math.BigInteger;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
+import org.apache.struts2.json.annotations.JSON;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Controller;
 
 import com.bbcall.functions.ResultCode;
+import com.bbcall.mybatis.table.AddressList;
 import com.bbcall.struts.services.UserServices;
 import com.opensymphony.xwork2.ActionSupport;
 
@@ -24,7 +27,7 @@ public class UserAction extends ActionSupport {
 	private String username;
 	private String password;
 	private String account;
-	private int type;
+	private Integer usertype;
 	private String name;
 	private String picurl;
 	private BigInteger mobile;
@@ -34,59 +37,48 @@ public class UserAction extends ActionSupport {
 	private String skill;
 	private String token;
 	private String description;
+	private Integer addresscode;
 	private String address;
 	private String accessgroup;
-	private int status;
-	private int userid;
+	private Integer status;
+	private Integer userid;
+	
+//	private int test;
 	
 	@Override
 	public String execute() throws Exception {
 		return super.execute();
 	}
 
-	// CheckUserName Action
-
-	public String checkUserName() throws Exception {
-		System.out.println("Here is UserAction.checkusername");
-		dataMap = new HashMap<String, Object>(); // 新建dataMap来储存JSON字符串
-		dataMap.clear(); // dataMap中的数据将会被Struts2转换成JSON字符串，所以这里要先清空其中的数据
-		int result = userServices.checkUserName(username);// 调用userServices.checkUserName
-		if (result == ResultCode.USERNAME_NOTEXIST) {
-			dataMap.put("resultcode", result); // 放入一个是否操作成功的标识
-			dataMap.put("errmsg", ResultCode.getErrmsg(result));
-			dataMap.put("checkUserNameResult", true); // 放入checkUserNameResult
-			System.out.println(dataMap);
-		} else {
-			dataMap.put("resultcode", result); // 放入一个是否操作成功的标识
-			dataMap.put("errmsg", ResultCode.getErrmsg(result));
-			dataMap.put("checkUserNameResult", false); // 放入checkUserNameResult
-			System.out.println(dataMap);
-		}
-		return SUCCESS;
-	}
-
-	public String checkUserNameJson() throws Exception {
-		System.out.println("Here is UserAction.checkusernameJson");
-		checkUserName();
-		return "json";
-	}
+	
+//	public String test() throws Exception{
+//		dataMap = new HashMap<String, Object>(); // 新建dataMap来储存JSON字符串
+//		dataMap.clear(); // dataMap中的数据将会被Struts2转换成JSON字符串，所以这里要先清空其中的数据
+//		List<UserSkill> result = userServices.test(test);
+//		dataMap.put("test list", result);
+//		return "json";
+//	}
+	
+	
 
 	// Login Action
-	
+	@JSON(format="yyyy-MM-dd HH:mm:ss")
 	public String login() throws Exception {
 		System.out.println("Here is UserAction.login");
 
 		dataMap = new HashMap<String, Object>(); // 新建dataMap来储存JSON字符串
+		//Map<String, Map<String, String>> map0 = new HashMap<String, Map<String, String>>();
 		dataMap.clear(); // dataMap中的数据将会被Struts2转换成JSON字符串，所以这里要先清空其中的数据
 		int result = userServices.login(username, password); // 调用userServices.login
 
 		if (result == ResultCode.SUCCESS) {
 			Object userinfo = userServices.userInfo(); // 调用userInfo对象
-			dataMap.put("user", userinfo); // 把userinfo对象放入dataMap
+			dataMap.put("userinfo", userinfo); // 把userinfo对象放入dataMap
 			dataMap.put("resultcode", result); // 放入一个是否操作成功的标识
 			dataMap.put("errmsg", ResultCode.getErrmsg(result));
 			dataMap.put("loginResult", true); // 放入loginResult
 			System.out.println(dataMap);
+			System.out.println((dataMap.get("userinfo")));
 			return "loginSuccess";
 		} else {
 			dataMap.put("resultcode", result); // 放入一个是否操作成功的标识
@@ -111,7 +103,7 @@ public class UserAction extends ActionSupport {
 
 		dataMap = new HashMap<String, Object>(); // 新建dataMap来储存JSON字符串
 		dataMap.clear(); // dataMap中的数据将会被Struts2转换成JSON字符串，所以这里要先清空其中的数据
-		int result = userServices.register(account, password, type, name, picurl, mobile, gender, email, language, skill, description); // 调用userServices.register
+		int result = userServices.register(account, password, usertype, name, picurl, mobile, gender, email, language, skill, description); // 调用userServices.register
 
 		if (result == ResultCode.SUCCESS) {
 			dataMap.put("resultcode", result); // 放入一个是否操作成功的标识
@@ -141,11 +133,11 @@ public class UserAction extends ActionSupport {
 		
 		dataMap = new HashMap<String, Object>(); // 新建dataMap来储存JSON字符串
 		dataMap.clear(); // dataMap中的数据将会被Struts2转换成JSON字符串，所以这里要先清空其中的数据
-		int result = userServices.update(account, password, type, name, picurl, mobile, gender, address, email, language, skill, description, accessgroup, status, token, userid); // 调用userServices.login
+		int result = userServices.update(account, password, usertype, name, picurl, mobile, gender, addresscode, address, email, language, skill, description, accessgroup, status, token, userid); // 调用userServices.login
 
 		if (result == ResultCode.SUCCESS) {
 			Object userinfo = userServices.userInfo(); // 调用userInfo对象
-			dataMap.put("user", userinfo); // 把userinfo对象放入dataMap
+			dataMap.put("userinfo", userinfo); // 把userinfo对象放入dataMap
 			dataMap.put("resultcode", result); // 放入一个是否操作成功的标识
 			dataMap.put("errmsg", ResultCode.getErrmsg(result));
 			dataMap.put("updateResult", true); // 放入registerResult
@@ -164,6 +156,60 @@ public class UserAction extends ActionSupport {
 	public String updateJson() throws Exception{
 		System.out.println("Here is UserAction.updateJson");
 		update();
+		return "json";
+	}
+	
+	// checkAddressList Action
+	public String checkAddressList() throws Exception {
+		System.out.println("Here is UserAction.checkAddressList");
+		dataMap = new HashMap<String, Object>(); // 新建dataMap来储存JSON字符串
+		dataMap.clear(); // dataMap中的数据将会被Struts2转换成JSON字符串，所以这里要先清空其中的数据
+		int result = userServices.checkAddressList(addresscode);// 调用userServices.checkAddressList
+		
+		if (result == ResultCode.SUCCESS) {
+			List<AddressList> addresslist = userServices.addressList();
+			dataMap.put("addresslist", addresslist); // 把addresslist对象放入dataMap
+			dataMap.put("resultcode", result); // 放入一个是否操作成功的标识
+			dataMap.put("errmsg", ResultCode.getErrmsg(result));
+			dataMap.put("checkAddressListResult", true); // 放入checkUserNameResult
+		} else {
+			dataMap.put("resultcode", result); // 放入一个是否操作成功的标识
+			dataMap.put("errmsg", ResultCode.getErrmsg(result));
+			dataMap.put("checkAddressListResult", false); // 放入checkUserNameResult
+			System.out.println(dataMap);
+		}
+		return SUCCESS;
+	}
+	
+	public String checkAddressListJson() throws Exception {
+		System.out.println("Here is UserAction.checkAddressListJson");
+		checkAddressList();
+		return "json";
+	}
+	
+	// checkUserName Action
+	public String checkUserName() throws Exception {
+		System.out.println("Here is UserAction.checkUserName");
+		dataMap = new HashMap<String, Object>(); // 新建dataMap来储存JSON字符串
+		dataMap.clear(); // dataMap中的数据将会被Struts2转换成JSON字符串，所以这里要先清空其中的数据
+		int result = userServices.checkUserName(username);// 调用userServices.checkUserName
+		if (result == ResultCode.USERNAME_NOTEXIST) {
+			dataMap.put("resultcode", result); // 放入一个是否操作成功的标识
+			dataMap.put("errmsg", ResultCode.getErrmsg(result));
+			dataMap.put("checkUserNameResult", true); // 放入checkUserNameResult
+			System.out.println(dataMap);
+		} else {
+			dataMap.put("resultcode", result); // 放入一个是否操作成功的标识
+			dataMap.put("errmsg", ResultCode.getErrmsg(result));
+			dataMap.put("checkUserNameResult", false); // 放入checkUserNameResult
+			System.out.println(dataMap);
+		}
+		return SUCCESS;
+	}
+	
+	public String checkUserNameJson() throws Exception {
+		System.out.println("Here is UserAction.checkUserNameJson");
+		checkUserName();
 		return "json";
 	}
 	
@@ -198,11 +244,15 @@ public class UserAction extends ActionSupport {
 	}
 	
 	// Json Format Return 
+	@JSON(format="yyyy-MM-dd HH:mm:ss")
 	public Map<String, Object> getDataMap() {
 		return dataMap;
 	}
 
-	// set methods
+	public void setUserServices(UserServices userServices) {
+		this.userServices = userServices;
+	}
+
 	public void setUsername(String username) {
 		this.username = username;
 	}
@@ -215,6 +265,10 @@ public class UserAction extends ActionSupport {
 		this.account = account;
 	}
 
+	public void setUsertype(Integer usertype) {
+		this.usertype = usertype;
+	}
+
 	public void setName(String name) {
 		this.name = name;
 	}
@@ -223,7 +277,7 @@ public class UserAction extends ActionSupport {
 		this.picurl = picurl;
 	}
 
-	public void setMobile(BigInteger  mobile) {
+	public void setMobile(BigInteger mobile) {
 		this.mobile = mobile;
 	}
 
@@ -243,16 +297,16 @@ public class UserAction extends ActionSupport {
 		this.skill = skill;
 	}
 
-	public void setType(int type) {
-		this.type = type;
-	}
-
 	public void setToken(String token) {
 		this.token = token;
 	}
-	
+
 	public void setDescription(String description) {
 		this.description = description;
+	}
+
+	public void setAddresscode(Integer addresscode) {
+		this.addresscode = addresscode;
 	}
 
 	public void setAddress(String address) {
@@ -263,12 +317,16 @@ public class UserAction extends ActionSupport {
 		this.accessgroup = accessgroup;
 	}
 
-	public void setStatus(int status) {
+	public void setStatus(Integer status) {
 		this.status = status;
 	}
 
-	public void setUserid(int userid) {
+	public void setUserid(Integer userid) {
 		this.userid = userid;
 	}
+	
+//	public void setTest(int test) {
+//		this.test = test;
+//	}
 
 }

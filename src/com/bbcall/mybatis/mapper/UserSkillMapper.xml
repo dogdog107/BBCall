@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper    PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<!-- 
+	这里namespace必须是UserMapper接口的全类名路径，
+	不然运行的时候要报错 "is not known to the MapperRegistry" 
+-->
+
+<mapper namespace="com.bbcall.mybatis.dao.UserSkillMapper">
+
+	<resultMap id="UserSkillResultMap" type="com.bbcall.mybatis.table.UserSkill" >
+    	<id column="userskill_id" property="userskill_id" jdbcType="INTEGER" />
+    	<result column="user_id" property="user_id" jdbcType="INTEGER" />
+    	<result column="user_skill" property="user_skill" jdbcType="VARCHAR" />
+	</resultMap>
+
+
+	<insert id="addUserSkill" parameterType="UserSkill"
+		useGeneratedKeys="true" keyProperty="userskill_id">
+		insert into USERSKILL(user_id,
+		user_skill)
+		values(#{user_id}, #{user_skill})
+	</insert>
+
+	<select id="getUserSkillById" parameterType="int" resultMap="UserSkillResultMap">
+		select userskill_id, user_id, user_skill from USERSKILL
+		where
+		user_id=#{user_id}
+	</select>
+	
+	<delete id="deleteUserSkill" parameterType="int">
+		delete from USERSKILL where user_id=#{user_id}
+	</delete>
+
+	<update id="updateUserSkill" parameterType="UserSkill">
+
+	</update>
+
+
+</mapper>    
