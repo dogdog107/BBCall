@@ -2,7 +2,7 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"   
  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.bbcall.mybatis.dao.BlacklistMapper">
-	<resultMap type="com.bbcall.mybatis.table.Blacklist" id="BlacklistResultMap">
+	<resultMap id="BlacklistResultMap" type="com.bbcall.mybatis.table.Blacklist" >
 		<id column="blacklist_id" property="blacklist_id" jdbcType="INTEGER" />
 		<result column="blacklist_user_account" property="blacklist_user_account"
 			jdbcType="VARCHAR" />
@@ -12,28 +12,28 @@
 			jdbcType="INTEGER" />
 	</resultMap>
 	<select id="getBlacklistByUser" parameterType="String"
-		resultType="BlacklistResultMap">
+		resultMap="BlacklistResultMap">
 		select *
 		from blacklist where
 		blacklist_id=#{blacklist_id}
 	</select>
 	<select id="getBlacklistById" parameterType="int"
-		resultType="BlacklistResultMap">
+		resultMap="BlacklistResultMap">
 		select *
 		from blacklist where
 		blacklist_user_account=#{blacklist_user_account}
 	</select>
 	<select id="getBlacklistByMaster" parameterType="String"
-		resultType="BlacklistResultMap">
+		resultMap="BlacklistResultMap">
 		select *
 		from blacklist where
 		blacklist_master_account=#{blacklist_master_account}
 	</select>
-	<select id="getBlacklist" parameterType="String" resultType="BlacklistResultMap">
+	<select id="getBlacklist" parameterType="String" resultMap="BlacklistResultMap">
 		select *
 		from blacklist order by blacklist_user_account
 	</select>
-	<insert id="addBlacklist" parameterType="com.bbcall.mybatis.table.Blacklist"
+	<insert id="addBlacklist" parameterType="Blacklist"
 		useGeneratedKeys="true" keyProperty="blacklist_id">
 		insert into blacklist
 		(blacklist_user_account,
