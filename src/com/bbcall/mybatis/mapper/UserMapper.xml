@@ -8,6 +8,11 @@
 
 <mapper namespace="com.bbcall.mybatis.dao.UserMapper">
 
+    <!--mybatis ehcache缓存配置 -->
+    <!-- 以下两个<cache>标签二选一,第一个可以输出日志,第二个不输出日志 -->
+     <cache type="org.mybatis.caches.ehcache.LoggingEhcache" />
+<!-- <cache type="org.mybatis.caches.ehcache.EhcacheCache"/>  -->
+
 <!-- 
 	## SQL Command ##
 CREATE TABLE USER (

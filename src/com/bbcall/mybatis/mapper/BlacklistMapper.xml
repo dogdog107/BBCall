@@ -2,7 +2,7 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"   
  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.bbcall.mybatis.dao.BlacklistMapper">
-	<resultMap id="BlacklistResultMap" type="com.bbcall.mybatis.table.Blacklist" >
+	<resultMap id="BlacklistResultMap" type="com.bbcall.mybatis.table.Blacklist">
 		<id column="blacklist_id" property="blacklist_id" jdbcType="INTEGER" />
 		<result column="blacklist_user_account" property="blacklist_user_account"
 			jdbcType="VARCHAR" />
@@ -17,8 +17,7 @@
 		from blacklist where
 		blacklist_id=#{blacklist_id}
 	</select>
-	<select id="getBlacklistById" parameterType="int"
-		resultMap="BlacklistResultMap">
+	<select id="getBlacklistById" parameterType="int" resultMap="BlacklistResultMap">
 		select *
 		from blacklist where
 		blacklist_user_account=#{blacklist_user_account}

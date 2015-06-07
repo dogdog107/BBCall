@@ -11,6 +11,29 @@
 
 	<package name="default" extends="struts-default,json-default">
 
+		<!--注册拦截器 -->
+		<interceptors>
+			<interceptor name="businessInterceptor"
+				class="com.bbcall.struts.interceptor.BusinessInterceptor" />
+			<interceptor-stack name="mystack">
+				<interceptor-ref name="defaultStack" />
+				<interceptor-ref name="businessInterceptor" />
+			</interceptor-stack>
+		</interceptors>
+
+		<!-- 设置默认拦截器栈 -->
+		<default-interceptor-ref name="mystack" />
+
+		<!-- 全局跳转页面 -->
+		<global-results>
+			<result name="error">/error.jsp</result>
+		</global-results>
+
+		<!-- 全局异常 -->
+		<global-exception-mappings>
+			<exception-mapping result="error" exception="java.lang.Exception" />
+		</global-exception-mappings>
+
 		<action name="user_*" method="{1}" class="userAction">
 			<result name="success">/main.jsp</result>
 			<result name="loginSuccess">/main.jsp</result>
