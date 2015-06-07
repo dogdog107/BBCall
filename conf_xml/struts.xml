@@ -22,6 +22,12 @@
 				<param name="contentType">text/html</param>
 			</result>
 		</action>
+		<action name="orderlist_*" method="{1}" class="orderlistAction">
+			<result name="success">/main.jsp</result>
+			<result type="json" name="json">
+				<param name="root">dataMap</param>
+			</result>
+		</action>
 
 	</package>
 
