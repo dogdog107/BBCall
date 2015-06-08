@@ -14,18 +14,18 @@
 			jdbcType="INTEGER" />
 	</resultMap>
 	<select id="getPreordersByAccount" parameterType="String"
-		resultType="PreorderResultMap">
+		resultMap="PreorderResultMap">
 		select *
 		from preorder where
 		preorder_master_account=#{preorder_master_account}
 	</select>
 	<select id="getPreodersByOrderId" parameterType="int"
-		resultType="PreorderResultMap">
+		resultMap="PreorderResultMap">
 		select *
 		from preorder where
 		preorder_order_id=#{preorder_order_id}
 	</select>
-	<select id="getPreorderById" parameterType="int" resultType="PreorderResultMap">
+	<select id="getPreorderById" parameterType="int" resultMap="PreorderResultMap">
 		select *
 		from preorder where preorder_id=#{preorder_id}
 	</select>

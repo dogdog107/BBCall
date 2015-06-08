@@ -9,7 +9,7 @@ public class ResultCode {
 	public static Integer USERNAME_ERROR = 10001;//用户名错误
 	public static Integer PASSWORD_ERROR = 10002;//密码错误
 	public static Integer USERTOKEN_ERROR = 10003;//用户token错误
-	public static Integer USERTOKEN_EXPIRED = 10004;//用户token错误
+	public static Integer USERTOKEN_EXPIRED = 10004;//用户token过期
 	public static Integer USERID_ERROR = 10005;//用户id不存在
 	public static Integer USERNAME_EXIST = 10006;//用户名已被使用
 	public static Integer REGISTERINFO_NOTENOUGH = 10007;//注册信息不全
@@ -29,6 +29,11 @@ public class ResultCode {
 	public static Integer USERSTATUS_PAUSE = 12002;//Pause
 	public static Integer USERSTATUS_PENDING = 12003;//Pending
 	public static Integer USERSTATUS_LOCKED = 12004;//Locked
+	
+	//地址错误码13XXX
+	public static Integer ADDRESS_NULL = 13001;//地址不存在
+	public static Integer ADDRESS_NOTMATCH = 13002;//地址码与地址名不一致
+	public static Integer ADDRESSCODE_ERROR = 13003;//地址码错误
 	
 	//新闻错误码20XXX
 	public static Integer NEWSID_ERROR = 20001;//新闻id不存在
@@ -68,14 +73,18 @@ public class ResultCode {
 			case 10011: errmsg = "user status error"; break;
 			
 			case 11001: errmsg = "username not exist"; break;
-			case 11002: errmsg = "account username"; break;
-			case 11003: errmsg = "mobile username"; break;
-			case 11004: errmsg = "email username"; break;
+			case 11002: errmsg = "account exist"; break;
+			case 11003: errmsg = "mobile exist"; break;
+			case 11004: errmsg = "email exist"; break;
 			
 			case 12001: errmsg = "active status"; break;
 			case 12002: errmsg = "pause status"; break;
 			case 12003: errmsg = "pending status"; break;
 			case 12004: errmsg = "locked status"; break;
+			
+			case 13001: errmsg = "address list null"; break;
+			case 13002: errmsg = "addresscode not match with address"; break;
+			case 13003: errmsg = "addresscode invalid"; break;
 			
 			//新闻类
 			case 20001: errmsg = "invalid news_id"; break;

@@ -2,6 +2,7 @@ package com.bbcall.struts.services;
 
 import java.math.BigInteger;
 import java.util.Date;
+import java.util.List;
 import java.sql.Timestamp;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -9,15 +10,23 @@ import org.springframework.stereotype.Service;
 
 import com.bbcall.functions.RandomCode;
 import com.bbcall.functions.ResultCode;
+import com.bbcall.mybatis.dao.AddressListMapper;
 import com.bbcall.mybatis.dao.UserMapper;
+import com.bbcall.mybatis.table.AddressList;
 import com.bbcall.mybatis.table.User;
 
 @Service("userServices")
 public class UserServices {
 	
+//	@Autowired
+//	private UserSkillMapper userSkillMapper;
 	@Autowired
 	private UserMapper userMapper;
-	Object userinfo = null;
+	@Autowired
+	private AddressListMapper addressListMapper;
+	
+	User userinfo = new User();
+	List<AddressList> addresslist = null;
 
 	// ################################################################################
 	// ## 							User Register services
@@ -55,7 +64,7 @@ public class UserServices {
 	// ##
 	// ################################################################################
 
-	public int register(String account, String password, int usertype,
+	public int register(String account, String password, Integer usertype,
 			String name, String picurl, BigInteger mobile, String gender,
 			String email, String language, String skill, String description) {
 		System.out.println("Here is UserServices.register method...");
@@ -100,6 +109,18 @@ public class UserServices {
 			user.setUser_skill(skill);
 
 			userMapper.addUserByAccount(user);// 把用户信息插入数据表
+			
+//** user_skill子表的逻辑部分			
+//			if (!isEmpty(skill)) {
+//				UserSkill userskill = new UserSkill();
+//				userskill.setUser_id(user.getUser_id());
+//				String skillTemp[] = skill.split(";");
+//				for (int i = 0; i < skillTemp.length; i++) {
+//					userskill.setUser_skill(skillTemp[i]);
+//					userSkillMapper.addUserSkill(userskill);
+//				}
+//			}
+			
 			userinfo = user;// 返回更新的user对象给userinfo
 			registerResult = ResultCode.SUCCESS;
 		} else {
@@ -156,7 +177,7 @@ public class UserServices {
 					while (null != userMapper.getUserByToken(token)) {// 确保token唯一
 						token = randomCode.getToken();
 					}
-					user.setToken(token);
+					user.setUser_token(token);
 					userMapper.updateToken(user);// 插入 token 值
 
 					user.setUser_login_time(new Timestamp(new Date().getTime()));
@@ -195,13 +216,14 @@ public class UserServices {
 	// ##		(5) 'picurl'
 	// ##		(6) 'mobile'
 	// ##		(7) 'gender'
-	// ##		(8) 'address'
-	// ##		(9) 'email'
-	// ##		(10) 'language'
-	// ##		(11) 'skill'
-	// ##		(12) 'description'
-	// ##		(13) 'accessgroup'
-	// ##		(14) 'status'
+	// ##		(8) 'addresscode'
+	// ##		(9) 'address'
+	// ##		(10) 'email'
+	// ##		(11) 'language'
+	// ##		(12) 'skill'
+	// ##		(13) 'description'
+	// ##		(14) 'accessgroup'
+	// ##		(15) 'status'
 	// ##
 	// ##------------------------------------------------------------------------------
 	// ##	3. Return parameters:
@@ -217,96 +239,225 @@ public class UserServices {
 	// ##
 	// ################################################################################
 
-	public int update(String account, String password, int usertype,
+	public int update(String account, String password, Integer usertype,
 			String name, String picurl, BigInteger mobile, String gender,
-			String address, String email, String language, String skill,
-			String description, String accessgroup, int status, String token,
-			int userid) {
+			Integer addresscode, String address, String email, String language,
+			String skill, String description, String accessgroup, Integer status,
+			String token, Integer userid) {
 		System.out.println("Here is UserServices.update method...");
 
-		if (isEmpty(token) && userid == 0)// 检测参数是否为空、null
+		int updatemode = 0; //记录update的模式: 1=user,2=admin
+		int changecount = 0; //记录更改次数
+		User user = new User();
+		
+		// ***** 检测 token & userid *****
+		if (isEmpty(token) && userid == null)// 检测必要参数是否为空、null
 			return ResultCode.REQUIREINFO_NOTENOUGH;
 
-		int checkResult;
-		User user = new User();
-
-		if ((!isEmpty(token)) && userid == 0) {
-			checkResult = checkToken(token);
-
+		if ((!isEmpty(token)) && userid == null) {// 用户update模式
+			int checkResult = checkToken(token);
 			if (checkResult == ResultCode.SUCCESS) {
-				User user1 = userMapper.getUserByToken(token); //
-				user = user1;
-			} else {
+				user = userinfo;
+				updatemode = 1;
+			} else
 				return checkResult;
-			}
-		} else if (isEmpty(token) && userid != 0) {
-			User user2 = userMapper.getUserById(userid);
-
-			if (null == user2) {
+		} else if (isEmpty(token) && userid != null) {// 管理员后台update模式
+			user = userMapper.getUserById(userid);// 根据userID读取用户数据
+			updatemode = 2;
+			if (null == user)
 				return ResultCode.USERID_ERROR;
-			}
-			user = user2;
-		} else {
+		} else
 			return ResultCode.UNKNOWN_ERROR;
-		}
-		
-		if ((isEmpty(token)) && userid != 0) {
-			if (status != 0 && user.getUser_status() != status) {
-				user.setUser_status(status);
-			}
-		}
-		
-		if ((!isEmpty(token)) && userid == 0) {
-			if ((usertype != 0 && user.getUser_type() != usertype) || (!skill.equals(user.getUser_skill()))) {
-				user.setUser_status(3); // set status to pending if skill /
-				// usertype changed
-			}
-		}
 
-		if (!isEmpty(account))
+		// ***** 检测 addresscode & address *****
+		if (addresscode != null && (addresscode+"").length() != 6)// 判断地址码是否六位数
+			return ResultCode.ADDRESSCODE_ERROR;
+		
+		if (addresscode != null && isEmpty(address))
+				return ResultCode.ADDRESS_NOTMATCH;
+		
+		if (addresscode == null && !isEmpty(address)) {// 判断更改的地址名是否与原来的addresscode对应
+			addresscode = user.getUser_address_code();// 读取数据库的addresscode
+			
+			if (addresscode == null)
+				return ResultCode.ADDRESSCODE_ERROR;
+			
+			String addressname = checkAddresscodeName(addresscode);// 调用checkAddresscodeName方法，获取地址名
+			if (address.replace(";", "").matches(addressname + "(.*)")) {// 判断地址名是否一致
+				user.setUser_address(address);// 放入新地址名
+				changecount++;
+				System.out.println("address changed!");
+			} else
+				return ResultCode.ADDRESS_NOTMATCH;
+		}
+		
+		if ((addresscode != null && !isEmpty(address)) && 
+				(!user.getUser_address_code().equals(addresscode) || 
+						!user.getUser_address().equals(address))){
+			
+			String addressname = checkAddresscodeName(addresscode);// 调用checkAddresscodeName方法，获取地址名
+			if (addressname == null)// 如果addressname 返回null, 表明addresscode错误
+				return ResultCode.ADDRESSCODE_ERROR;
+			if (address.replace(";", "").matches(addressname + "(.*)")) {// 判断地址名是否一致
+				user.setUser_address(address);// 放入新地址名
+				user.setUser_address_code(addresscode);// 放入新地址码
+				changecount++;
+				System.out.println("address&addresscode changed!");
+			} else
+				return ResultCode.ADDRESS_NOTMATCH;
+		}
+		
+		// ***** 检测其它变量 *****
+		if (!isEmpty(account) && !user.getUser_account().equals(account)) {
 			user.setUser_account(account);
-
-		if (!isEmpty(password))
+			changecount++;
+			System.out.println("account changed!");
+		}
+		if (!isEmpty(password) && !user.getUser_password().equals(password)) {
 			user.setUser_password(password);
-
-		if (!isEmpty(name))
+			changecount++;
+			System.out.println("password changed!");
+		}
+		if (!isEmpty(name) && !user.getUser_name().equals(name)) {
 			user.setUser_name(name);
-
-		if (!isEmpty(picurl))
+			changecount++;
+			System.out.println("name changed!");
+		}
+		if (!isEmpty(picurl) && !user.getUser_pic_url().equals(picurl)) {
 			user.setUser_pic_url(picurl);
-
-		if (mobile != null)
+			changecount++;
+			System.out.println("picurl changed!");
+		}
+		if (mobile != null && user.getUser_mobile() != mobile) {
 			user.setUser_mobile(mobile);
-
-		if (!isEmpty(gender))
+			changecount++;
+			System.out.println("mobile changed!");
+		}
+		if (!isEmpty(gender) && !user.getUser_gender().equals(gender)) {
 			user.setUser_gender(gender);
-
-		if (!isEmpty(address))
-			user.setUser_gender(address);
-
-		if (!isEmpty(email))
+			changecount++;
+			System.out.println("gender changed!");
+		}
+		if (!isEmpty(email) && !user.getUser_email().equals(email)) {
 			user.setUser_email(email);
-
-		if (!isEmpty(language))
+			changecount++;
+			System.out.println("email changed!");
+		}
+		if (!isEmpty(language) && !user.getUser_language().equals(language)) {
 			user.setUser_language(language);
-
-		if (!isEmpty(skill))
+			changecount++;
+			System.out.println("language changed!");
+		}
+		if (!isEmpty(description)
+				&& !user.getUser_description().equals(description)) {
+			user.setUser_description(description);
+			changecount++;
+			System.out.println("description changed!");
+		}
+		if (!isEmpty(accessgroup)
+				&& !user.getUser_access_group().equals(accessgroup)) {
+			user.setUser_access_group(accessgroup);
+			changecount++;
+			System.out.println("accessgroup changed!");
+		}
+		if (updatemode == 2 && status != null && user.getUser_status() != status) {// admin模式时，判断status是否有变化
+			user.setUser_status(status);
+			changecount++;
+			System.out.println("status changed!");
+		}
+		if (!isEmpty(skill) && !user.getUser_skill().equals(skill)) {
 			user.setUser_skill(skill);
-		
-		if (!isEmpty(description))
-			user.setUser_language(description);
-
-		if (!isEmpty(accessgroup))
-			user.setUser_language(accessgroup);
-
-		if (usertype != 0)
+			changecount++;
+			System.out.println("skill changed!");
+			if (updatemode == 1) {// 用户模式时，user状态转为pending 待审核
+				user.setUser_status(3);
+				System.out.println("status changed as user mode!(skill)");
+			}
+		}
+		if (usertype != null && user.getUser_type() != usertype) {
 			user.setUser_type(usertype);
+			changecount++;
+			System.out.println("usertype changed!");
+			if (updatemode == 1) {// 用户模式时，user状态转为pending 待审核
+				user.setUser_status(3);
+				System.out.println("status changed as user mode!(usertype)");
+			}
+		}
 		
-		userMapper.updateUser(user);// 把用户信息插入数据表
+//** user_skill子表的逻辑部分	
+//		if (!isEmpty(skill)) {
+//			UserSkill userskill = new UserSkill();
+//			userskill.setUser_id(user.getUser_id());
+//			String skillTemp[] = skill.split(";");
+//			for (int i = 0; i < skillTemp.length; i++) {
+//				userskill.setUser_skill(skillTemp[i]);
+//				userSkillMapper.addUserSkill(userskill);
+//			}
+//		}
+		
+		if (changecount > 0)
+			userMapper.updateUser(user);// 把用户信息插入数据表
+
 		userinfo = user;// 返回更新的user对象给userinfo
 		return ResultCode.SUCCESS;
+		
 	}
 
+	// ###################
+	// ## 根据addresscode读取省、市、区名
+	// ###################
+	
+	public String checkAddresscodeName(Integer addresscode){
+		List<AddressList> addresslist = addressListMapper
+				.getAddressByAreano(addresscode);// addressList 对象
+		
+		if (addresslist.size() == 0)
+			return null;
+		int arealevel = addresslist.get(0).getArealevel();// 读取对应的地址level
+
+		String addressname = "";
+		if (arealevel > 1) {
+			for (int i = 1; i < arealevel; i++) {// 完整读取地址名（省、市、区）
+				switch (i) {
+				case 1:// 得到省级名字
+					int tempcode1 = addresscode / 10000;
+					addressname = addressListMapper
+							.getAddressByAreano(tempcode1 * 10000).get(0)
+							.getAreaname();
+					break;
+				case 2:// 得到市级名字
+					int tempcode2 = addresscode / 100;
+					addressname = addressname
+							+ addressListMapper
+									.getAddressByAreano(tempcode2 * 100).get(0)
+									.getAreaname();
+					break;
+				}
+			}
+		}
+		
+		addressname = addressname + addresslist.get(0).getAreaname();// 得到原来addresscode的地址名
+		return addressname;
+	}
+	
+	// ###################
+	// ## 读取省、市、区列表
+	// ###################
+	
+	public int checkAddressList(Integer addresscode){
+		System.out.println("Here is UserServices.checkAddressList method...");
+		
+		List<AddressList> addresslist = addressListMapper.getAddressByParentno(addresscode);
+		if (addresslist.size() > 0){
+			
+			this.addresslist = addresslist;
+			
+			return ResultCode.SUCCESS;
+		}else {
+			return ResultCode.ADDRESS_NULL;
+		}
+	}
+	
 	// ###################
 	// ## 检测用户 token
 	// ###################
@@ -353,26 +504,23 @@ public class UserServices {
 		// 判断用户名的类型：
 		if (isNumeric(username)) { // 判断登录名是否为手机号码
 
-			User user1 = userMapper.getUserByMobile(new BigInteger(username));
-			if (null != user1) {
+			userinfo = userMapper.getUserByMobile(new BigInteger(username));
+			if (null != userinfo) {
 				System.out.println("Username_mobile exist");
-				userinfo = user1;
 				return ResultCode.USERNAME_MOBILE;
 			}
 		}
 		if (username.contains("@")) { // 判断登录名是否为邮箱地址
-			User user2 = userMapper.getUserByEmail(username);
-			if (null != user2) {
+			userinfo = userMapper.getUserByEmail(username);
+			if (null != userinfo) {
 				System.out.println("Username_email exist");
-				userinfo = user2;
 				return ResultCode.USERNAME_EMAIL;
 			}
 		}
 
-		User user3 = userMapper.getUserByAccount(username);
-		if (null != user3) { // 判断登录名是否为帐号
+		userinfo = userMapper.getUserByAccount(username);
+		if (null != userinfo) { // 判断登录名是否为帐号
 			System.out.println("Username_account exist");
-			userinfo = user3;
 			return ResultCode.USERNAME_ACCOUNT;
 		} else {
 			return ResultCode.USERNAME_NOTEXIST;
@@ -440,4 +588,20 @@ public class UserServices {
 
 		return userinfo;
 	}
+	
+	public List<AddressList> addressList(){
+		
+		return addresslist;
+	}
+	
+//	public List<UserSkill> test(int test){
+//		
+//		List<UserSkill> temp = userSkillMapper.getUserSkillById(test);
+//		
+//		for (int i = 0; i < temp.size(); i++) {
+//			System.out.println(temp.get(i).getUser_skill());
+//		}
+//		
+//		return temp;
+//	}
 }

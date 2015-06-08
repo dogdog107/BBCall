@@ -41,7 +41,8 @@
 			<result name="loginFailed">/login.jsp</result>
 			<result type="json" name="json">
 				<param name="root">dataMap</param>
-				<param name="excludeProperties">user.user_password</param>
+				<param name="excludeProperties">userinfo.user_password</param>
+				<param name="contentType">text/html</param>
 			</result>
 		</action>
 		<action name="orderlist_*" method="{1}" class="orderlistAction">
