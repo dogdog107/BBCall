@@ -8,6 +8,13 @@
 	<!-- <constant name="struts.enable.DynamicMethodInvocation" value="false" 
 		/> -->
 	<constant name="struts.devMode" value="true" />
+	
+	<!-- 上传的全部图片的最大限制 -->
+	<constant name="struts.multipart.maxSize" value="1024102400" />
+
+	<!-- 临时存放文件的路径 -->
+	<constant name="struts.multipart.saveDir" value="d:/test" />
+
 
 	<package name="default" extends="struts-default,json-default">
 
@@ -34,6 +41,8 @@
 			<exception-mapping result="error" exception="java.lang.Exception" />
 		</global-exception-mappings>
 
+
+
 		<action name="user_*" method="{1}" class="userAction">
 			<result name="success">/main.jsp</result>
 			<result name="loginSuccess">/main.jsp</result>
@@ -45,7 +54,18 @@
 				<param name="contentType">text/html</param>
 			</result>
 		</action>
+
 		<action name="orderlist_*" method="{1}" class="orderlistAction">
+			<!-- 限制图片的格式和图片的大小 -->
+			<interceptor-ref name="fileUpload">
+				<param name="allowedTypes">
+					image/bmp,image/png,image/gif,image/jpeg,image/pjpeg
+				</param>
+			</interceptor-ref>
+
+			<!-- 默认的拦截器，必须要写 -->
+			<interceptor-ref name="defaultStack" />
+
 			<result name="success">/main.jsp</result>
 			<result type="json" name="json">
 				<param name="root">dataMap</param>

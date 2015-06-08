@@ -11,6 +11,7 @@ import java.util.Date;
 //  order_end_time TIMESTAMP,
 //  order_book_time TIMESTAMP NOT NULL,
 //  order_book_location text NOT NULL,
+//  order_book_location_code INT NOT NULL,
 //  order_contact_mobile  BIGINT NOT NULL,
 //  order_contact_name  VARCHAR (30) NOT NULL,
 //  order_pic_url VARCHAR (255),
@@ -34,6 +35,7 @@ public class Orderlist {
 	private Timestamp order_end_time;
 	private Timestamp order_book_time;
 	private String order_book_location;
+	private int order_book_location_code;
 	private BigInteger order_contact_mobile;
 	private String order_contact_name;
 	private String order_pic_url;
@@ -190,6 +192,14 @@ public class Orderlist {
 
 	public void setOrder_evaluation(String order_evaluation) {
 		this.order_evaluation = order_evaluation;
+	}
+
+	public int getOrder_book_location_code() {
+		return order_book_location_code;
+	}
+
+	public void setOrder_book_location_code(int order_book_location_code) {
+		this.order_book_location_code = order_book_location_code;
 	}
 
 }
