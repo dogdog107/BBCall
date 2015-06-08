@@ -9,6 +9,7 @@ import org.springframework.stereotype.Service;
 
 import com.bbcall.functions.ResultCode;
 import com.bbcall.mybatis.dao.OrderlistMapper;
+import com.bbcall.mybatis.dao.PreorderMapper;
 import com.bbcall.mybatis.dao.UserMapper;
 import com.bbcall.mybatis.table.Orderlist;
 import com.bbcall.mybatis.table.User;
@@ -21,6 +22,9 @@ public class OrderlistServices {
 
 	@Autowired
 	private UserMapper userMapper;
+
+	@Autowired
+	private PreorderMapper preorderMapper;
 
 	public Orderlist orderlistinfo;
 	public List<Orderlist> orderlistinfos;
@@ -484,6 +488,8 @@ public class OrderlistServices {
 
 		orderlistMapper.updateOrderAsMasterAccount(master_account, order_id);
 
+		preorderMapper.deletePreorderByOrderId(order_id);
+
 		orderlistinfos = orderlistMapper
 				.getProOrdersByUserAccount(orderlistMapper.getOrder(order_id)
 						.getOrder_user_account());
@@ -495,7 +501,7 @@ public class OrderlistServices {
 
 		return orderlistinfo;
 	}
-	
+
 	public List<Orderlist> orderlistinfos() {
 
 		return orderlistinfos;

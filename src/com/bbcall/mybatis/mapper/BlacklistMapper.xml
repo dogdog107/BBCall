@@ -12,24 +12,24 @@
 			jdbcType="INTEGER" />
 	</resultMap>
 	<select id="getBlacklistByUser" parameterType="String"
-		resultType="BlacklistResultMap">
+		resultMap="BlacklistResultMap">
 		select *
 		from blacklist where
 		blacklist_id=#{blacklist_id}
 	</select>
 	<select id="getBlacklistById" parameterType="int"
-		resultType="BlacklistResultMap">
+		resultMap="BlacklistResultMap">
 		select *
 		from blacklist where
 		blacklist_user_account=#{blacklist_user_account}
 	</select>
 	<select id="getBlacklistByMaster" parameterType="String"
-		resultType="BlacklistResultMap">
+		resultMap="BlacklistResultMap">
 		select *
 		from blacklist where
 		blacklist_master_account=#{blacklist_master_account}
 	</select>
-	<select id="getBlacklist" parameterType="String" resultType="BlacklistResultMap">
+	<select id="getBlacklist" parameterType="String" resultMap="BlacklistResultMap">
 		select *
 		from blacklist order by blacklist_user_account
 	</select>
@@ -42,7 +42,6 @@
 		values
 		(#{blacklist_user_account},
 		#{blacklist_master_account},
-		#{user_mobile},
 		#{blacklist_order_id})
 	</insert>
 	<delete id="deleteBlacklistById" parameterType="int">
