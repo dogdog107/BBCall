@@ -10,19 +10,8 @@
 </head>
 <script type="text/javascript"
 	src="${pageContext.request.contextPath }/jquery/jquery-1.8.3.js"></script>
-<script type="text/javascript">
-	$(function() {
-		$("#username").blur(function(){
-			$.post("${pageContext.request.contextPath}/user_checkUserNameJson.action",{"username": $(this).val()}, function(data){
-				if(data.checkUserNameResult){
-					$("#checkUserNameResult").html("<font color=green>用户名可以使用</font>");
-				}else{
-					$("#checkUserNameResult").html("<font color=red>用户名已存在</font>");
-				}
-			});
-		});
-	});
-</script>
+<script type="text/javascript"
+	src="${pageContext.request.contextPath }/jquery/checkUserName.js"></script>
 <body>
 	<h1>Normal Customer Register Page</h1>
 	<table>
