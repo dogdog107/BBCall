@@ -9,17 +9,16 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.math.BigInteger;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import org.apache.struts2.ServletActionContext;
 import org.apache.struts2.json.annotations.JSON;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Controller;
 
+import com.bbcall.functions.RandomCode;
 import com.bbcall.functions.ResultCode;
 import com.bbcall.mybatis.table.Orderlist;
 import com.bbcall.struts.services.OrderlistServices;
@@ -54,9 +53,8 @@ public class OrderlistAction extends ActionSupport {
 	private String[] locationlist;
 
 	private List<File> orderFile = new ArrayList<File>();
-	private List<String> contentType = new ArrayList<String>();
-	private List<String> fileName = new ArrayList<String>(); // 文件名
-	private List<String> imageFileName = new ArrayList<String>();
+	private List<String> orderFileContentType;
+	private List<String> orderFileFileName = new ArrayList<String>(); // 文件名
 
 	private static final int BUFFER_SIZE = 16 * 1024;
 
@@ -87,11 +85,6 @@ public class OrderlistAction extends ActionSupport {
 		}
 	}
 
-	private static String getExtention(String fileName) {
-		int pos = fileName.lastIndexOf(".");
-		return fileName.substring(pos);
-	}
-
 	@Override
 	public String execute() throws Exception {
 		return super.execute();
@@ -108,17 +101,32 @@ public class OrderlistAction extends ActionSupport {
 
 		if (orderFile == null)
 			return ERROR;
-		
-		for (int i = 0; i < orderFile.size(); i++) { 
-			imageFileName.add(new Date().getTime()+ getExtention(this.getOrderFileFileName().get(i)));
-			//得到图片保存的位置(根据root来得到图片保存的路径在tomcat下的该工程里) 
-			File imageFile = new File(ServletActionContext.getServletContext().getRealPath("UploadImages")+ "/" + imageFileName);
-			
-			order_pic_url = order_pic_url + imageFile.getAbsolutePath() + ";";
-			
-			copy(orderFile.get(i), imageFile);  //把图片写入到上面设置的路径里
+
+		for (int i = 0; i < orderFile.size(); i++) {
+
+			RandomCode randomCode = new RandomCode();
+
+			String imageFileName = randomCode.getToken();
+
+			// imageFileName.add(new Date().getTime()
+			// + getExtention(this.getOrderFileFileName().get(i)));
+			// 得到图片保存的位置(根据root来得到图片保存的路径在tomcat下的该工程里)
+			File imageFile = new File(
+					"D:\\git\\BBCall\\WebContent\\UploadImages\\"
+							+ imageFileName + ".jpg");
+
+			if (order_pic_url == null) {
+				order_pic_url = "D:\\git\\BBCall\\WebContent\\UploadImages\\"
+						+ imageFileName + ".jpg" + ";";
+			} else {
+				order_pic_url = order_pic_url
+						+ "D:\\git\\BBCall\\WebContent\\UploadImages\\"
+						+ imageFileName + ".jpg" + ";";
+			}
+
+			copy(orderFile.get(i), imageFile); // 把图片写入到上面设置的路径里
 		}
-		
+
 		int result = orderlistServices.addOrder(order_book_time,
 				order_book_location, order_book_location_code,
 				order_contact_mobile, order_contact_name, order_urgent,
@@ -454,21 +462,21 @@ public class OrderlistAction extends ActionSupport {
 	public void setOrderFile(List<File> orderFile) {
 		this.orderFile = orderFile;
 	}
-	
+
+	public List<String> getOrderFileContentType() {
+		return orderFileContentType;
+	}
+
+	public void setOrderFileContentType(List<String> orderFileContentType) {
+		this.orderFileContentType = orderFileContentType;
+	}
+
 	public List<String> getOrderFileFileName() {
-		return fileName;
-	}
-	
-	public void setOrderFileFileName(List<String> fileName) {
-		this.fileName = fileName;
+		return orderFileFileName;
 	}
 
-	public void setContentType(List<String> contentType) {
-		this.contentType = contentType;
-	}
-
-	public void setImageFileName(List<String> imageFileName) {
-		this.imageFileName = imageFileName;
+	public void setOrderFileFileName(List<String> orderFileFileName) {
+		this.orderFileFileName = orderFileFileName;
 	}
 
 }

@@ -10,7 +10,7 @@
 </head>
 <body>
 	<h1>Struts add order Page</h1>
-	<s:form action="orderlist_add" theme="simple">
+	<s:form action="orderlist_add" theme="simple" method="post" enctype="multipart/form-data">
 	order_book_year:<s:select list="#{'1990':'1990','2000':'2000','2010':'2010'}" name="order_book_year"></s:select>
 	<br>
 	order_book_month:<s:select list="#{'1':'1','2':'2','3':'3'}" name="order_book_month"></s:select>
@@ -27,7 +27,11 @@
 	<br>
 	order_urgent_bonus:<s:textfield name="order_urgent_bonus" size="20"></s:textfield>
 	<br>
-	order_pic_url:<s:textfield name="order_pic_url" size="20"></s:textfield>
+	order_pic_url1:<s:file name="orderFile" label="文件1"></s:file>
+	<br>
+	order_pic_url2:<s:file name="orderFile" label="文件2"></s:file>
+	<br>
+	order_pic_url3:<s:file name="orderFile" label="文件3"></s:file>
 	<br>
 	order_description:<s:textfield name="order_description" size="20"></s:textfield>
 	<br>

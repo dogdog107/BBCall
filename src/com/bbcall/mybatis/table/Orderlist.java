@@ -14,7 +14,7 @@ import java.util.Date;
 //  order_book_location_code INT NOT NULL,
 //  order_contact_mobile  BIGINT NOT NULL,
 //  order_contact_name  VARCHAR (30) NOT NULL,
-//  order_pic_url VARCHAR (255),
+//  order_pic_url text,
 //  order_description text,
 //  order_price DECIMAL(10,2),
 //  order_urgent BIT,
