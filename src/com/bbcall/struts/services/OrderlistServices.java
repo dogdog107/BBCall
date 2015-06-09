@@ -297,8 +297,15 @@ public class OrderlistServices {
 		} else if (user.getUser_type() == 2) { // 如果是师傅的account
 			skilllist = user.getUser_skill().split(";"); // 取得师傅的技能列表
 			for (int i = 0; i < skilllist.length; i++) { // 通过技能列表取得所有符合师傅技能的订单
-				orderlistinfos.addAll(orderlistMapper.getUnOrdersByMasterSkill(
-						user_account, skilllist[i]));
+
+				if (orderlistinfos == null) {
+					orderlistinfos = orderlistMapper.getUnOrdersByMasterSkill(
+							user_account, skilllist[i]);
+				} else {
+					orderlistinfos.addAll(orderlistMapper
+							.getUnOrdersByMasterSkill(user_account,
+									skilllist[i]));
+				}
 			}
 
 		} else { // 如果是管理员的account,取出所有未确认的订单
