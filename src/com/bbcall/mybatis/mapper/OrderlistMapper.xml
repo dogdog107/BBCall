@@ -75,26 +75,26 @@
 	<select id="getUnOrdersByUserAccount" parameterType="String"
 		resultMap="OrderResultMap">
 		select * from orderlist
-		where order_status=1 and
+		where order_status="1" and
 		order_user_account=#{order_user_account} order by order_create_time
 	</select>
 		
 	<select id="getProOrdersByUserAccount" parameterType="String"
 		resultMap="OrderResultMap">
 		select * from orderlist
-		where order_status=2 and
+		where order_status="2" and
 		order_user_account=#{order_user_account} order by order_create_time
 	</select>
 	<select id="getComOrdersByUserAccount" parameterType="String"
 		resultMap="OrderResultMap">
 		select * from orderlist
-		where order_status=3 and
+		where order_status="3" and
 		order_user_account=#{order_user_account} order by order_create_time
 	</select>
 	
 	<select id="getUnOrdersByMasterSkill"
 		resultMap="OrderResultMap">
-		select * from orderlist where order_status=1 and order_type=#{order_type,jdbcType=VARCHAR} and 
+		select * from orderlist where order_status="1" and order_type=#{order_type,jdbcType=VARCHAR} and 
 		order_user_account not in (select blacklist_user_account from
 		blacklist where
 		blacklist_master_account=#{order_master_account,jdbcType=VARCHAR}) order by order_book_location_code, order_create_time
@@ -102,7 +102,7 @@
 	
 	<select id="getUnOrdersByMasterLocation"
 		resultMap="OrderResultMap">
-		select * from orderlist where order_status=1 and order_type=#{order_type,jdbcType=VARCHAR} and 
+		select * from orderlist where order_status="1" and order_type=#{order_type,jdbcType=VARCHAR} and 
 		order_book_location like #{order_book_location,jdbcType=VARCHAR} and
 		order_user_account not in (select blacklist_user_account from
 		blacklist where
@@ -110,7 +110,7 @@
 	</select>
 	<select id="getUnOrdersByBookTime"
 		resultMap="OrderResultMap">
-		select * from orderlist where order_status=1 and order_type=#{order_type,jdbcType=VARCHAR} and 
+		select * from orderlist where order_status="1" and order_type=#{order_type,jdbcType=VARCHAR} and 
 		order_book_location like #{order_book_location,jdbcType=VARCHAR} and
 		order_user_account not in (select blacklist_user_account from
 		blacklist where
@@ -118,29 +118,29 @@
 	</select>
 	<select id="getComOrdersByMasterAccount" parameterType="String"
 		resultMap="OrderResultMap">
-		select * from orderlist where order_status=3 and
+		select * from orderlist where order_status="3" and
 		order_master_account=#{order_master_account} order by order_end_time
 	</select>
 	<select id="getProOrdersByMasterAccount" parameterType="String"
 		resultMap="OrderResultMap">
-		select * from orderlist where order_status=2 and
+		select * from orderlist where order_status="2" and
 		order_master_account=#{order_master_account}
 	</select>
 	<select id="getUnOrders" resultMap="OrderResultMap">
 		select * from orderlist
 		where
-		order_status=1
+		order_status="1"
 	</select>
 	<select id="getProOrders" resultMap="OrderResultMap">
 		select * from orderlist
 		where
-		order_status=2
+		order_status="2"
 	</select>
 	
 	<select id="getComOrders" resultMap="OrderResultMap">
 		select * from orderlist
 		where
-		order_status=3
+		order_status="3"
 	</select>
 	
 	<select id="getOrder" parameterType="int" resultMap="OrderResultMap">
@@ -169,7 +169,7 @@
 	<update id="updateOrderAsMasterAccount">
 		update orderlist set
 		order_master_account=#{order_master_account,jdbcType=VARCHAR},
-		order_status=2
+		order_status="2"
 		where
 		order_id=#{order_id,jdbcType=INTEGER}
 	</update>

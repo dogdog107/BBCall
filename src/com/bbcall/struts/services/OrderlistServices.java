@@ -95,7 +95,6 @@ public class OrderlistServices {
 
 		}
 
-
 		orderlist
 				.setOrder_create_time(new Timestamp(System.currentTimeMillis()));
 		orderlist.setOrder_book_time(ts);
@@ -334,21 +333,21 @@ public class OrderlistServices {
 	// ##
 	// ################################################################################
 
-	public int getUnOrders(String master_account, String[] skilllist,
-			String[] locationlist) {
+	public int getUnOrders(String master_account, List<String> skilllist,
+			List<String> locationlist) {
 
 		if (null != locationlist) {
-			for (int i = 0; i < skilllist.length; i++) { // 通过技能列表取得所有符合师傅技能的订单
-				for (int j = 0; j < locationlist.length; j++) {
+			for (int i = 0; i < skilllist.size(); i++) { // 通过技能列表取得所有符合师傅技能的订单
+				for (int j = 0; j < locationlist.size(); j++) {
 					orderlistinfos.addAll(orderlistMapper
 							.getUnOrdersByMasterLocation(master_account,
-									skilllist[i], locationlist[j]));
+									skilllist.get(i), locationlist.get(j)));
 				}
 			}
 		} else {
-			for (int i = 0; i < skilllist.length; i++) { // 通过技能列表取得所有符合师傅技能的订单
+			for (int i = 0; i < skilllist.size(); i++) { // 通过技能列表取得所有符合师傅技能的订单
 				orderlistinfos.addAll(orderlistMapper.getUnOrdersByMasterSkill(
-						master_account, skilllist[i]));
+						master_account, skilllist.get(i)));
 			}
 		}
 
@@ -380,21 +379,21 @@ public class OrderlistServices {
 	// ##
 	// ################################################################################
 
-	public int getUnOrdersByBookTime(String master_account, String[] skilllist,
-			String[] locationlist) {
+	public int getUnOrdersByBookTime(String master_account,
+			List<String> skilllist, List<String> locationlist) {
 
 		if (null != locationlist) {
-			for (int i = 0; i < skilllist.length; i++) { // 通过技能列表取得所有符合师傅技能的订单
-				for (int j = 0; j < locationlist.length; j++) {
+			for (int i = 0; i < skilllist.size(); i++) { // 通过技能列表取得所有符合师傅技能的订单
+				for (int j = 0; j < locationlist.size(); j++) {
 					orderlistinfos.addAll(orderlistMapper
 							.getUnOrdersByMasterLocation(master_account,
-									skilllist[i], locationlist[j]));
+									skilllist.get(i), locationlist.get(j)));
 				}
 			}
 		} else {
-			for (int i = 0; i < skilllist.length; i++) { // 通过技能列表取得所有符合师傅技能的订单
+			for (int i = 0; i < skilllist.size(); i++) { // 通过技能列表取得所有符合师傅技能的订单
 				orderlistinfos.addAll(orderlistMapper.getUnOrdersByMasterSkill(
-						master_account, skilllist[i]));
+						master_account, skilllist.get(i)));
 			}
 		}
 

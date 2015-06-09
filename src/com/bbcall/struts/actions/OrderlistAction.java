@@ -49,8 +49,8 @@ public class OrderlistAction extends ActionSupport {
 	private double order_price;
 	private String user_account;
 	private String order_type;
-	private String[] skilllist;
-	private String[] locationlist;
+	private List<String> skilllist;
+	private List<String> locationlist;
 
 	private List<File> orderFile = new ArrayList<File>();
 	private List<String> orderFileContentType;
@@ -159,6 +159,36 @@ public class OrderlistAction extends ActionSupport {
 		String order_book_time = order_book_year + "-" + order_book_month + "-"
 				+ order_book_day;
 
+		if (orderFile == null) {
+			orderlistServices.getOrderById(order_id);
+			order_pic_url = orderlistServices.orderlistinfo.getOrder_pic_url();
+		} else {
+			for (int i = 0; i < orderFile.size(); i++) {
+
+				RandomCode randomCode = new RandomCode();
+
+				String imageFileName = randomCode.getToken();
+
+				// imageFileName.add(new Date().getTime()
+				// + getExtention(this.getOrderFileFileName().get(i)));
+				// 得到图片保存的位置(根据root来得到图片保存的路径在tomcat下的该工程里)
+				File imageFile = new File(
+						"D:\\git\\BBCall\\WebContent\\UploadImages\\"
+								+ imageFileName + ".jpg");
+
+				if (order_pic_url == null) {
+					order_pic_url = "D:\\git\\BBCall\\WebContent\\UploadImages\\"
+							+ imageFileName + ".jpg" + ";";
+				} else {
+					order_pic_url = order_pic_url
+							+ "D:\\git\\BBCall\\WebContent\\UploadImages\\"
+							+ imageFileName + ".jpg" + ";";
+				}
+
+				copy(orderFile.get(i), imageFile); // 把图片写入到上面设置的路径里
+			}
+		}
+
 		int result = orderlistServices.updateOrder(order_id, order_book_time,
 				order_book_location, order_book_location_code,
 				order_contact_mobile, order_contact_name, order_urgent,
@@ -221,7 +251,7 @@ public class OrderlistAction extends ActionSupport {
 			dataMap.put("resultcode", result);
 			dataMap.put("errmsg", ResultCode.getErrmsg(result));
 			dataMap.put("unOrderlistResult", true);
-			System.out.println(dataMap);
+			System.out.println(dataMap.toString());
 		}
 
 		return SUCCESS;
@@ -339,7 +369,15 @@ public class OrderlistAction extends ActionSupport {
 
 		if (result == ResultCode.SUCCESS) {
 			Orderlist orderlist = orderlistServices.orderlistinfo();
+
+			String[] url = orderlist.getOrder_pic_url().split(";");
+
+			for (int i = 0; i < url.length; i++) {
+				orderFileFileName.add(url[i]);
+			}
+
 			dataMap.put("orderlist", orderlist);
+			dataMap.put("orderFileFileName", orderFileFileName);
 			dataMap.put("resultcode", result);
 			dataMap.put("errmsg", ResultCode.getErrmsg(result));
 			dataMap.put("selectResult", true);
@@ -447,11 +485,11 @@ public class OrderlistAction extends ActionSupport {
 		this.order_book_location_code = order_book_location_code;
 	}
 
-	public void setSkilllist(String[] skilllist) {
+	public void setSkilllist(List<String> skilllist) {
 		this.skilllist = skilllist;
 	}
 
-	public void setLocationlist(String[] locationlist) {
+	public void setLocationlist(List<String> locationlist) {
 		this.locationlist = locationlist;
 	}
 
@@ -477,6 +515,78 @@ public class OrderlistAction extends ActionSupport {
 
 	public void setOrderFileFileName(List<String> orderFileFileName) {
 		this.orderFileFileName = orderFileFileName;
+	}
+
+	public OrderlistServices getOrderlistServices() {
+		return orderlistServices;
+	}
+
+	public String getOrder_book_year() {
+		return order_book_year;
+	}
+
+	public String getOrder_book_month() {
+		return order_book_month;
+	}
+
+	public String getOrder_book_day() {
+		return order_book_day;
+	}
+
+	public int getOrder_id() {
+		return order_id;
+	}
+
+	public String getOrder_book_location() {
+		return order_book_location;
+	}
+
+	public int getOrder_book_location_code() {
+		return order_book_location_code;
+	}
+
+	public BigInteger getOrder_contact_mobile() {
+		return order_contact_mobile;
+	}
+
+	public String getOrder_contact_name() {
+		return order_contact_name;
+	}
+
+	public String getOrder_urgent() {
+		return order_urgent;
+	}
+
+	public double getOrder_urgent_bonus() {
+		return order_urgent_bonus;
+	}
+
+	public String getOrder_pic_url() {
+		return order_pic_url;
+	}
+
+	public String getOrder_description() {
+		return order_description;
+	}
+
+	public double getOrder_price() {
+		return order_price;
+	}
+
+	public String getUser_account() {
+		return user_account;
+	}
+
+	public String getOrder_type() {
+		return order_type;
+	}
+
+	public List<String> getSkilllist() {
+		return skilllist;
+	}
+
+	public List<String> getLocationlist() {
+		return locationlist;
 	}
 
 }
