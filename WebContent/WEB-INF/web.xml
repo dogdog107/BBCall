@@ -5,7 +5,7 @@
 	id="WebApp_ID" version="3.0">
 
 	<welcome-file-list>
-		<welcome-file>login.jsp</welcome-file>
+		<welcome-file>page/login.jsp</welcome-file>
 	</welcome-file-list>
 
 	<!-- needed for ContextLoaderListener -->
