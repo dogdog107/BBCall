@@ -346,15 +346,29 @@ public class OrderlistServices {
 		if (null != locationlist) {
 			for (int i = 0; i < skilllist.size(); i++) { // 通过技能列表取得所有符合师傅技能的订单
 				for (int j = 0; j < locationlist.size(); j++) {
-					orderlistinfos.addAll(orderlistMapper
-							.getUnOrdersByMasterLocation(master_account,
-									skilllist.get(i), locationlist.get(j)));
+					if (orderlistinfos == null) {
+						orderlistinfos = orderlistMapper
+								.getUnOrdersByMasterLocation(master_account,
+										skilllist.get(i), locationlist.get(j));
+					} else {
+						orderlistinfos.addAll(orderlistMapper
+								.getUnOrdersByMasterLocation(master_account,
+										skilllist.get(i), locationlist.get(j)));
+					}
+
 				}
 			}
 		} else {
 			for (int i = 0; i < skilllist.size(); i++) { // 通过技能列表取得所有符合师傅技能的订单
-				orderlistinfos.addAll(orderlistMapper.getUnOrdersByMasterSkill(
-						master_account, skilllist.get(i)));
+				if (orderlistinfos == null) {
+					orderlistinfos = orderlistMapper.getUnOrdersByMasterSkill(
+							master_account, skilllist.get(i));
+				} else {
+					orderlistinfos.addAll(orderlistMapper
+							.getUnOrdersByMasterSkill(master_account,
+									skilllist.get(i)));
+				}
+
 			}
 		}
 
@@ -392,15 +406,28 @@ public class OrderlistServices {
 		if (null != locationlist) {
 			for (int i = 0; i < skilllist.size(); i++) { // 通过技能列表取得所有符合师傅技能的订单
 				for (int j = 0; j < locationlist.size(); j++) {
-					orderlistinfos.addAll(orderlistMapper
-							.getUnOrdersByMasterLocation(master_account,
-									skilllist.get(i), locationlist.get(j)));
+					if (orderlistinfos == null) {
+						orderlistinfos = orderlistMapper
+								.getUnOrdersByMasterLocation(master_account,
+										skilllist.get(i), locationlist.get(j));
+					}else{
+						orderlistinfos.addAll(orderlistMapper
+								.getUnOrdersByMasterLocation(master_account,
+										skilllist.get(i), locationlist.get(j)));
+					}
+					
 				}
 			}
 		} else {
 			for (int i = 0; i < skilllist.size(); i++) { // 通过技能列表取得所有符合师傅技能的订单
-				orderlistinfos.addAll(orderlistMapper.getUnOrdersByMasterSkill(
-						master_account, skilllist.get(i)));
+				if (orderlistinfos == null) {
+					orderlistinfos = orderlistMapper.getUnOrdersByMasterSkill(
+							master_account, skilllist.get(i));
+				} else {
+					orderlistinfos.addAll(orderlistMapper.getUnOrdersByMasterSkill(
+							master_account, skilllist.get(i)));
+				}
+				
 			}
 		}
 
