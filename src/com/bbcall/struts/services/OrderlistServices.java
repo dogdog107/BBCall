@@ -2,6 +2,8 @@ package com.bbcall.struts.services;
 
 import java.math.BigInteger;
 import java.sql.Timestamp;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -9,6 +11,7 @@ import org.springframework.stereotype.Service;
 
 import com.bbcall.functions.ResultCode;
 import com.bbcall.mybatis.dao.OrderlistMapper;
+import com.bbcall.mybatis.dao.PreorderMapper;
 import com.bbcall.mybatis.dao.UserMapper;
 import com.bbcall.mybatis.table.Orderlist;
 import com.bbcall.mybatis.table.User;
@@ -21,6 +24,9 @@ public class OrderlistServices {
 
 	@Autowired
 	private UserMapper userMapper;
+
+	@Autowired
+	private PreorderMapper preorderMapper;
 
 	public Orderlist orderlistinfo;
 	public List<Orderlist> orderlistinfos;
@@ -37,15 +43,16 @@ public class OrderlistServices {
 	// ## 1. Require parameters:
 	// ## (1) order_book_time
 	// ## (2) order_book_location
-	// ## (3) order_contact_mobile
-	// ## (4) order_contact_name
-	// ## (5) order_urgent
-	// ## (6) order_urgent_bonus
-	// ## (7) order_pic_url
-	// ## (8) order_description
-	// ## (9) order_price
-	// ## (10) order_user_account
-	// ## (11) order_type
+	// ## (3) order_book_location_code
+	// ## (4) order_contact_mobile
+	// ## (5) order_contact_name
+	// ## (6) order_urgent
+	// ## (7) order_urgent_bonus
+	// ## (8) order_pic_url
+	// ## (9) order_description
+	// ## (10) order_price
+	// ## (11) order_user_account
+	// ## (12) order_type
 	// ##
 	// ##------------------------------------------------------------------------------
 	// ## 2. Optional parameters: NONE
@@ -61,9 +68,10 @@ public class OrderlistServices {
 	// ################################################################################
 
 	public int addOrder(String order_book_time, String order_book_location,
-			BigInteger order_contact_mobile, String order_contact_name,
-			String order_urgent, double order_urgent_bonus,
-			String order_pic_url, String order_description, double order_price,
+			int order_book_location_code, BigInteger order_contact_mobile,
+			String order_contact_name, String order_urgent,
+			double order_urgent_bonus, String order_pic_url,
+			String order_description, double order_price,
 			String order_user_account, String order_type) {
 		// TODO Auto-generated method stub
 
@@ -72,20 +80,26 @@ public class OrderlistServices {
 		// 创建订单对象，写入数据
 		Orderlist orderlist = new Orderlist();
 
+		DateFormat format = new SimpleDateFormat("yyyy-MM-dd");
+		format.setLenient(false);
+
 		Timestamp ts = new Timestamp(System.currentTimeMillis());
 
 		try {
 
-			ts = Timestamp.valueOf(order_book_time);
+			ts = new Timestamp(format.parse(order_book_time).getTime());
 
 		} catch (Exception e) {
+			// TODO Auto-generated catch block
 			e.printStackTrace();
+
 		}
 
 		orderlist
 				.setOrder_create_time(new Timestamp(System.currentTimeMillis()));
 		orderlist.setOrder_book_time(ts);
 		orderlist.setOrder_book_location(order_book_location);
+		orderlist.setOrder_book_location_code(order_book_location_code);
 		orderlist.setOrder_contact_mobile(order_contact_mobile);
 		orderlist.setOrder_contact_name(order_contact_name);
 		orderlist.setOrder_pic_url(order_pic_url);
@@ -115,15 +129,16 @@ public class OrderlistServices {
 	// ## 1. Require parameters:
 	// ## (1) order_book_time
 	// ## (2) order_book_location
-	// ## (3) order_contact_mobile
-	// ## (4) order_contact_name
-	// ## (5) order_urgent
-	// ## (6) order_urgent_bonus
-	// ## (7) order_pic_url
-	// ## (8) order_description
-	// ## (9) order_price
-	// ## (10) order_user_account
-	// ## (11) order_type
+	// ## (3) order_book_location
+	// ## (4) order_contact_mobile
+	// ## (5) order_contact_name
+	// ## (6) order_urgent
+	// ## (7) order_urgent_bonus
+	// ## (8) order_pic_url
+	// ## (9) order_description
+	// ## (10) order_price
+	// ## (11) order_user_account
+	// ## (12) order_type
 	// ##
 	// ##------------------------------------------------------------------------------
 	// ## 2. Optional parameters: NONE
@@ -139,22 +154,27 @@ public class OrderlistServices {
 	// ################################################################################
 
 	public int updateOrder(int order_id, String order_book_time,
-			String order_book_location, BigInteger order_contact_mobile,
-			String order_contact_name, String order_urgent,
-			double order_urgent_bonus, String order_pic_url,
-			String order_description, double order_price,
+			String order_book_location, int order_book_location_code,
+			BigInteger order_contact_mobile, String order_contact_name,
+			String order_urgent, double order_urgent_bonus,
+			String order_pic_url, String order_description, double order_price,
 			String order_user_account, String order_type) {
 
 		Orderlist orderlist = orderlistMapper.getOrder(order_id);
+
+		DateFormat format = new SimpleDateFormat("yyyy-MM-dd");
+		format.setLenient(false);
 
 		Timestamp ts = new Timestamp(System.currentTimeMillis());
 
 		try {
 
-			ts = Timestamp.valueOf(order_book_time);
+			ts = new Timestamp(format.parse(order_book_time).getTime());
 
 		} catch (Exception e) {
+			// TODO Auto-generated catch block
 			e.printStackTrace();
+
 		}
 
 		orderlist
@@ -162,6 +182,7 @@ public class OrderlistServices {
 		orderlist.setOrder_end_time(new Timestamp(System.currentTimeMillis()));
 		orderlist.setOrder_book_time(ts);
 		orderlist.setOrder_book_location(order_book_location);
+		orderlist.setOrder_book_location_code(order_book_location_code);
 		orderlist.setOrder_contact_mobile(order_contact_mobile);
 		orderlist.setOrder_contact_name(order_contact_name);
 		orderlist.setOrder_pic_url(order_pic_url);
@@ -312,21 +333,21 @@ public class OrderlistServices {
 	// ##
 	// ################################################################################
 
-	public int getUnOrders(String master_account, String[] skilllist,
-			String[] locationlist) {
+	public int getUnOrders(String master_account, List<String> skilllist,
+			List<String> locationlist) {
 
 		if (null != locationlist) {
-			for (int i = 0; i < skilllist.length; i++) { // 通过技能列表取得所有符合师傅技能的订单
-				for (int j = 0; j < locationlist.length; j++) {
+			for (int i = 0; i < skilllist.size(); i++) { // 通过技能列表取得所有符合师傅技能的订单
+				for (int j = 0; j < locationlist.size(); j++) {
 					orderlistinfos.addAll(orderlistMapper
 							.getUnOrdersByMasterLocation(master_account,
-									skilllist[i], locationlist[j]));
+									skilllist.get(i), locationlist.get(j)));
 				}
 			}
 		} else {
-			for (int i = 0; i < skilllist.length; i++) { // 通过技能列表取得所有符合师傅技能的订单
+			for (int i = 0; i < skilllist.size(); i++) { // 通过技能列表取得所有符合师傅技能的订单
 				orderlistinfos.addAll(orderlistMapper.getUnOrdersByMasterSkill(
-						master_account, skilllist[i]));
+						master_account, skilllist.get(i)));
 			}
 		}
 
@@ -358,21 +379,21 @@ public class OrderlistServices {
 	// ##
 	// ################################################################################
 
-	public int getUnOrdersByBookTime(String master_account, String[] skilllist,
-			String[] locationlist) {
+	public int getUnOrdersByBookTime(String master_account,
+			List<String> skilllist, List<String> locationlist) {
 
 		if (null != locationlist) {
-			for (int i = 0; i < skilllist.length; i++) { // 通过技能列表取得所有符合师傅技能的订单
-				for (int j = 0; j < locationlist.length; j++) {
+			for (int i = 0; i < skilllist.size(); i++) { // 通过技能列表取得所有符合师傅技能的订单
+				for (int j = 0; j < locationlist.size(); j++) {
 					orderlistinfos.addAll(orderlistMapper
 							.getUnOrdersByMasterLocation(master_account,
-									skilllist[i], locationlist[j]));
+									skilllist.get(i), locationlist.get(j)));
 				}
 			}
 		} else {
-			for (int i = 0; i < skilllist.length; i++) { // 通过技能列表取得所有符合师傅技能的订单
+			for (int i = 0; i < skilllist.size(); i++) { // 通过技能列表取得所有符合师傅技能的订单
 				orderlistinfos.addAll(orderlistMapper.getUnOrdersByMasterSkill(
-						master_account, skilllist[i]));
+						master_account, skilllist.get(i)));
 			}
 		}
 
@@ -484,6 +505,8 @@ public class OrderlistServices {
 
 		orderlistMapper.updateOrderAsMasterAccount(master_account, order_id);
 
+		preorderMapper.deletePreorderByOrderId(order_id);
+
 		orderlistinfos = orderlistMapper
 				.getProOrdersByUserAccount(orderlistMapper.getOrder(order_id)
 						.getOrder_user_account());
@@ -495,7 +518,7 @@ public class OrderlistServices {
 
 		return orderlistinfo;
 	}
-	
+
 	public List<Orderlist> orderlistinfos() {
 
 		return orderlistinfos;

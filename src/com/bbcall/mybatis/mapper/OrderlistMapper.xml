@@ -13,6 +13,8 @@
 			jdbcType="TIMESTAMP" />
 		<result column="order_book_location" property="order_book_location"
 			jdbcType="VARCHAR" />
+		<result column="order_book_location_code" property="order_book_location_code"
+			jdbcType="INTEGER" />	
 		<result column="order_contact_mobile" property="order_contact_mobile"
 			jdbcType="INTEGER" />
 		<result column="order_contact_name" property="order_contact_name"
@@ -42,6 +44,7 @@
 		order_end_time,
 		order_book_time,
 		order_book_location,
+		order_book_location_code,
 		order_contact_mobile,
 		order_contact_name,
 		order_pic_url,
@@ -56,6 +59,7 @@
 		#{order_end_time},
 		#{order_book_time},
 		#{order_book_location},
+		#{order_book_location_code},
 		#{order_contact_mobile},
 		#{order_contact_name},
 		#{order_pic_url},
@@ -71,34 +75,34 @@
 	<select id="getUnOrdersByUserAccount" parameterType="String"
 		resultMap="OrderResultMap">
 		select * from orderlist
-		where order_status=1 and
-		order_user_account=#{order_user_account}
+		where order_status="1" and
+		order_user_account=#{order_user_account} order by order_create_time
 	</select>
 		
 	<select id="getProOrdersByUserAccount" parameterType="String"
 		resultMap="OrderResultMap">
 		select * from orderlist
-		where order_status=2 and
-		order_user_account=#{order_user_account}
+		where order_status="2" and
+		order_user_account=#{order_user_account} order by order_create_time
 	</select>
 	<select id="getComOrdersByUserAccount" parameterType="String"
 		resultMap="OrderResultMap">
 		select * from orderlist
-		where order_status=3 and
-		order_user_account=#{order_user_account}
+		where order_status="3" and
+		order_user_account=#{order_user_account} order by order_create_time
 	</select>
 	
 	<select id="getUnOrdersByMasterSkill"
 		resultMap="OrderResultMap">
-		select * from orderlist where order_status=1 and order_type=#{order_type,jdbcType=VARCHAR} and 
+		select * from orderlist where order_status="1" and order_type=#{order_type,jdbcType=VARCHAR} and 
 		order_user_account not in (select blacklist_user_account from
 		blacklist where
-		blacklist_master_account=#{order_master_account,jdbcType=VARCHAR}) order by order_create_time
+		blacklist_master_account=#{order_master_account,jdbcType=VARCHAR}) order by order_book_location_code, order_create_time
 	</select>
 	
 	<select id="getUnOrdersByMasterLocation"
 		resultMap="OrderResultMap">
-		select * from orderlist where order_status=1 and order_type=#{order_type,jdbcType=VARCHAR} and 
+		select * from orderlist where order_status="1" and order_type=#{order_type,jdbcType=VARCHAR} and 
 		order_book_location like #{order_book_location,jdbcType=VARCHAR} and
 		order_user_account not in (select blacklist_user_account from
 		blacklist where
@@ -106,7 +110,7 @@
 	</select>
 	<select id="getUnOrdersByBookTime"
 		resultMap="OrderResultMap">
-		select * from orderlist where order_status=1 and order_type=#{order_type,jdbcType=VARCHAR} and 
+		select * from orderlist where order_status="1" and order_type=#{order_type,jdbcType=VARCHAR} and 
 		order_book_location like #{order_book_location,jdbcType=VARCHAR} and
 		order_user_account not in (select blacklist_user_account from
 		blacklist where
@@ -114,29 +118,29 @@
 	</select>
 	<select id="getComOrdersByMasterAccount" parameterType="String"
 		resultMap="OrderResultMap">
-		select * from orderlist where order_status=3 and
-		order_master_account=#{order_master_account}
+		select * from orderlist where order_status="3" and
+		order_master_account=#{order_master_account} order by order_end_time
 	</select>
 	<select id="getProOrdersByMasterAccount" parameterType="String"
 		resultMap="OrderResultMap">
-		select * from orderlist where order_status=2 and
+		select * from orderlist where order_status="2" and
 		order_master_account=#{order_master_account}
 	</select>
 	<select id="getUnOrders" resultMap="OrderResultMap">
 		select * from orderlist
 		where
-		order_status=1
+		order_status="1"
 	</select>
 	<select id="getProOrders" resultMap="OrderResultMap">
 		select * from orderlist
 		where
-		order_status=2
+		order_status="2"
 	</select>
 	
 	<select id="getComOrders" resultMap="OrderResultMap">
 		select * from orderlist
 		where
-		order_status=3
+		order_status="3"
 	</select>
 	
 	<select id="getOrder" parameterType="int" resultMap="OrderResultMap">
@@ -149,6 +153,7 @@
 		update orderlist set
 		order_book_time=#{order_book_time},
 		order_book_location=#{order_book_location},
+		order_book_location_code=#{order_book_location_code},
 		order_contact_mobile=#{order_contact_mobile},
 		order_contact_name=#{order_contact_name},
 		order_pic_url=#{order_pic_url},
@@ -164,7 +169,7 @@
 	<update id="updateOrderAsMasterAccount">
 		update orderlist set
 		order_master_account=#{order_master_account,jdbcType=VARCHAR},
-		order_status=2
+		order_status="2"
 		where
 		order_id=#{order_id,jdbcType=INTEGER}
 	</update>
