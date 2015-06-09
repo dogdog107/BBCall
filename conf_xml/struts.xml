@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE struts PUBLIC
+	"-//Apache Software Foundation//DTD Struts Configuration 2.3//EN"
+	"http://struts.apache.org/dtds/struts-2.3.dtd">
+
+<struts>
+
+	<!-- <constant name="struts.enable.DynamicMethodInvocation" value="false" 
+		/> -->
+	<constant name="struts.devMode" value="true" />
+	
+	<!-- 上传的全部图片的最大限制 -->
+	<constant name="struts.multipart.maxSize" value="1024102400" />
+
+	<!-- 临时存放文件的路径 -->
+	<constant name="struts.multipart.saveDir" value="d:/test" />
+
+
+	<package name="default" extends="struts-default,json-default">
+
+		<!--注册拦截器 -->
+		<interceptors>
+		
+			<!-- 自定义拦截器的名字 -->
+			<interceptor name="businessInterceptor"
+				class="com.bbcall.struts.interceptor.BusinessInterceptor" />
+				
+			<!-- 自定义拦截器堆栈 -->
+			<interceptor-stack name="mystack">
+			
+				<!-- 引用默认的拦截器堆栈 -->
+				<interceptor-ref name="defaultStack" />
+				<interceptor-ref name="businessInterceptor" />
+			</interceptor-stack>
+		</interceptors>
+
+		<!-- 重定义默认拦截器堆栈 -->
+		<default-interceptor-ref name="mystack" />
+
+		<!-- 全局跳转页面 -->
+		<global-results>
+			<result name="error">/error.jsp</result>
+		</global-results>
+
+		<!-- 全局异常 -->
+		<global-exception-mappings>
+			<exception-mapping result="error" exception="java.lang.Exception" />
+		</global-exception-mappings>
+
+
+		<!-- User Action -->
+		<action name="user_*" method="{1}" class="userAction">
+			
+			<result name="loginSuccess">
+				<param name="location">/page/index.jsp</param>
+			</result>
+			
+			<result name="loginFailed">
+				<param name="location">/page/login.jsp</param>
+			</result>
+			
+			<result name="input">/login.jsp</result>
+			
+			<result type="json" name="json">
+				<param name="root">dataMap</param>
+				<param name="excludeProperties">userinfo.user_password</param>
+			</result>
+		</action>
+
+
+		<!-- Order Action -->
+		<action name="orderlist_*" method="{1}" class="orderlistAction">
+			<!-- 限制图片的格式和图片的大小 -->
+			<interceptor-ref name="fileUpload">
+				<param name="allowedTypes">
+					image/bmp,image/png,image/gif,image/jpeg,image/pjpeg
+				</param>
+			</interceptor-ref>
+
+			<!-- 默认的拦截器，必须要写 -->
+			<interceptor-ref name="defaultStack" />
+
+			<result name="success">/main.jsp</result>
+			<result type="json" name="json">
+				<param name="root">dataMap</param>
+			</result>
+		</action>
+
+	</package>
+
+	<!-- Add packages here -->
+
+</struts>
