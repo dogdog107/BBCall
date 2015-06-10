@@ -53,7 +53,7 @@
 
 						</li>
 						<li class="user_main_r"><input id="IbtnEnter" type="image"
-							src="./img/user_botton.gif" class="ibtnentercssclass" /></li>
+							src="${pageContext.request.contextPath }/page/img/user_botton.gif" class="ibtnentercssclass" /></li>
 					</ul>
 				</form>
 			</dd>
