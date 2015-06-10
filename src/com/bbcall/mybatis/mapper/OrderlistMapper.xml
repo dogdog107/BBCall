@@ -22,10 +22,10 @@
 		<result column="order_photo" property="order_photo" jdbcType="VARCHAR" />
 		<result column="order_description" property="order_description"
 			jdbcType="VARCHAR" />
-		<result column="order_price" property="order_price" jdbcType="INTEGER" />
+		<result column="order_price" property="order_price" jdbcType="DECIMAL" />
 		<result column="order_urgent" property="order_urgent" jdbcType="BIT" />
 		<result column="order_urgent_bonus" property="order_urgent_bonus"
-			jdbcType="INTEGER" />
+			jdbcType="DECIMAL" />
 		<result column="order_user_account" property="order_user_account"
 			jdbcType="INTEGER" />
 		<result column="order_master_account" property="order_master_account"
@@ -169,6 +169,7 @@
 	<update id="updateOrderAsMasterAccount">
 		update orderlist set
 		order_master_account=#{order_master_account,jdbcType=VARCHAR},
+		order_price=#{order_price,jdbcType=DECIMAL},
 		order_status="2"
 		where
 		order_id=#{order_id,jdbcType=INTEGER}

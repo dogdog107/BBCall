@@ -289,6 +289,7 @@ public class OrderlistServices {
 	public int getUnOrders(String user_account) {
 
 		String[] skilllist = null;
+		orderlistinfos = null;
 		User user = userMapper.getUserByAccount(user_account);
 
 		if (user.getUser_type() == 1) { // 如果是用户的account
@@ -300,11 +301,11 @@ public class OrderlistServices {
 
 				if (orderlistinfos == null) {
 					orderlistinfos = orderlistMapper.getUnOrdersByMasterSkill(
-							user_account, skilllist[i]);
+							skilllist[i], user_account);
 				} else {
 					orderlistinfos.addAll(orderlistMapper
-							.getUnOrdersByMasterSkill(user_account,
-									skilllist[i]));
+							.getUnOrdersByMasterSkill(skilllist[i],
+									user_account));
 				}
 			}
 
@@ -340,20 +341,22 @@ public class OrderlistServices {
 	// ##
 	// ################################################################################
 
-	public int getUnOrders(String master_account, List<String> skilllist,
-			List<String> locationlist) {
+	public int getUnOrders(List<String> skilllist, List<String> locationlist,
+			String master_account) {
+
+		orderlistinfos = null;
 
 		if (null != locationlist) {
 			for (int i = 0; i < skilllist.size(); i++) { // 通过技能列表取得所有符合师傅技能的订单
 				for (int j = 0; j < locationlist.size(); j++) {
 					if (orderlistinfos == null) {
 						orderlistinfos = orderlistMapper
-								.getUnOrdersByMasterLocation(master_account,
-										skilllist.get(i), locationlist.get(j));
+								.getUnOrdersByMasterLocation(skilllist.get(i),
+										locationlist.get(j), master_account);
 					} else {
 						orderlistinfos.addAll(orderlistMapper
-								.getUnOrdersByMasterLocation(master_account,
-										skilllist.get(i), locationlist.get(j)));
+								.getUnOrdersByMasterLocation(skilllist.get(i),
+										locationlist.get(j), master_account));
 					}
 
 				}
@@ -362,11 +365,11 @@ public class OrderlistServices {
 			for (int i = 0; i < skilllist.size(); i++) { // 通过技能列表取得所有符合师傅技能的订单
 				if (orderlistinfos == null) {
 					orderlistinfos = orderlistMapper.getUnOrdersByMasterSkill(
-							master_account, skilllist.get(i));
+							skilllist.get(i), master_account);
 				} else {
 					orderlistinfos.addAll(orderlistMapper
-							.getUnOrdersByMasterSkill(master_account,
-									skilllist.get(i)));
+							.getUnOrdersByMasterSkill(skilllist.get(i),
+									master_account));
 				}
 
 			}
@@ -403,31 +406,20 @@ public class OrderlistServices {
 	public int getUnOrdersByBookTime(String master_account,
 			List<String> skilllist, List<String> locationlist) {
 
-		if (null != locationlist) {
-			for (int i = 0; i < skilllist.size(); i++) { // 通过技能列表取得所有符合师傅技能的订单
-				for (int j = 0; j < locationlist.size(); j++) {
-					if (orderlistinfos == null) {
-						orderlistinfos = orderlistMapper
-								.getUnOrdersByMasterLocation(master_account,
-										skilllist.get(i), locationlist.get(j));
-					}else{
-						orderlistinfos.addAll(orderlistMapper
-								.getUnOrdersByMasterLocation(master_account,
-										skilllist.get(i), locationlist.get(j)));
-					}
-					
-				}
-			}
-		} else {
-			for (int i = 0; i < skilllist.size(); i++) { // 通过技能列表取得所有符合师傅技能的订单
+		orderlistinfos = null;
+		
+		for (int i = 0; i < skilllist.size(); i++) { // 通过技能列表取得所有符合师傅技能的订单
+			for (int j = 0; j < locationlist.size(); j++) {
 				if (orderlistinfos == null) {
-					orderlistinfos = orderlistMapper.getUnOrdersByMasterSkill(
-							master_account, skilllist.get(i));
+					orderlistinfos = orderlistMapper.getUnOrdersByBookTime(
+							skilllist.get(i), locationlist.get(j),
+							master_account);
 				} else {
-					orderlistinfos.addAll(orderlistMapper.getUnOrdersByMasterSkill(
-							master_account, skilllist.get(i)));
+					orderlistinfos.addAll(orderlistMapper
+							.getUnOrdersByBookTime(skilllist.get(i),
+									locationlist.get(j), master_account));
 				}
-				
+
 			}
 		}
 
@@ -537,7 +529,11 @@ public class OrderlistServices {
 	// ################################################################################
 	public int ChangeOrderStatus(String master_account, int order_id) {
 
-		orderlistMapper.updateOrderAsMasterAccount(master_account, order_id);
+		double price = preorderMapper.getPreoder(master_account, order_id)
+				.getPreorder_price();
+
+		orderlistMapper.updateOrderAsMasterAccount(master_account, price,
+				order_id);
 
 		preorderMapper.deletePreorderByOrderId(order_id);
 

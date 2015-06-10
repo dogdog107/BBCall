@@ -9,7 +9,7 @@
 		<result column="preorder_create_time" property="preorder_create_time"
 			jdbcType="TIMESTAMP" />
 		<result column="preorder_price" property="preorder_price"
-			jdbcType="INTEGER" />
+			jdbcType="DECIMAL" />
 		<result column="preorder_order_id" property="preorder_order_id"
 			jdbcType="INTEGER" />
 	</resultMap>
@@ -27,7 +27,14 @@
 	</select>
 	<select id="getPreorderById" parameterType="int" resultMap="PreorderResultMap">
 		select *
-		from preorder where preorder_id=#{preorder_id}
+		from preorder where
+		preorder_id=#{preorder_id}
+	</select>
+	<select id="getPreoder" resultMap="PreorderResultMap">
+		select *
+		from preorder where
+		preorder_order_id=#{preorder_order_id,jdbcType=INTEGER} and
+		preorder_master_account=#{preorder_master_account,jdbcType=VARCHAR}
 	</select>
 	<insert id="addPreorder" parameterType="com.bbcall.mybatis.table.Preorder"
 		useGeneratedKeys="true" keyProperty="preorder_id">
