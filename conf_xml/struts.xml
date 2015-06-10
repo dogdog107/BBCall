@@ -51,8 +51,6 @@
 				<param name="location">/page/login.jsp</param>
 			</result>
 			
-			<result name="input">/login.jsp</result>
-			
 			<result type="json" name="json">
 				<param name="root">dataMap</param>
 				<param name="excludeProperties">userinfo.user_password</param>

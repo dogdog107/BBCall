@@ -31,6 +31,6 @@ body{font:12px/180% Arial, Helvetica, sans-serif, "新宋体";}
 .user_main_box .user_main_input{line-height:34px;height:34px}
 .user_main_box .user_main_text{width:60px;color:#000}
 .user_main_box .user_main_input img{margin-bottom:-2px;margin-left:-25px}
-.txtusernamecssclass{border-top-width:0px;padding-left:25px;border-left-width:0px;background:url(../img/user_login_name.gif) no-repeat;border-bottom-width:0px;width:165px;line-height:20px;height:21px;border-right-width:0px}
-.txtpasswordcssclass{border-top-width:0px;padding-left:25px;border-left-width:0px;background:url(../img/user_login_password.gif) no-repeat;border-bottom-width:0px;width:165px;line-height:20px;height:21px;border-right-width:0px}
+.txtusernamecssclass{border-top-width:0px;padding-left:25px;border-left-width:0px;background:url(../img/user_login_name.gif) no-repeat;border-bottom-width:0px;width:140px;line-height:20px;height:21px;border-right-width:0px}
+.txtpasswordcssclass{border-top-width:0px;padding-left:25px;border-left-width:0px;background:url(../img/user_login_password.gif) no-repeat;border-bottom-width:0px;width:140px;line-height:20px;height:21px;border-right-width:0px}
 .ibtnentercssclass{width:111px;height:122px;border:0;}

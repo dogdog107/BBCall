@@ -1,6 +1,7 @@
 /**
  * check username whether exist
  */
+document.open(); 
 var account = "${dataMap.user_account}";
 var name = "${dataMap.user_name}";
 var email = "${dataMap.user_email}";

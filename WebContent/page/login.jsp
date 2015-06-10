@@ -12,7 +12,6 @@
 
 <script type="text/javascript"
 	src="${pageContext.request.contextPath }/jquery/jquery-1.8.3.js"></script>
-<%-- <script type="text/javascript" src="${pageContext.request.contextPath }/jquery/login.js"></script> --%>
 </head>
 <body id="userlogin_body">
 
@@ -35,7 +34,7 @@
 								<ul>
 									<li class="user_main_text">用户名：</li>
 									<li class="user_main_input"><input name="username"
-										maxlength="20" id="username" class="txtusernamecssclass" /></li>
+										maxlength="18" id="username" class="txtusernamecssclass" /></li>
 								</ul>
 								<ul>
 									<li class="user_main_text">密 码：</li>
@@ -53,10 +52,8 @@
 							</div>
 
 						</li>
-						<li class="user_main_r"><input type="image" name="IbtnEnter"
-							id="IbtnEnter"
-							src="${pageContext.request.contextPath }/page/img/user_botton.gif"
-							class="ibtnentercssclass" /></li>
+						<li class="user_main_r"><input id="IbtnEnter" type="image"
+							src="./img/user_botton.gif" class="ibtnentercssclass" /></li>
 					</ul>
 				</form>
 			</dd>
