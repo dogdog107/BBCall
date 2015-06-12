@@ -280,7 +280,7 @@ public class OrderlistAction extends ActionSupport {
 	}
 
 	//按照截止日期排序
-	public String selectUnOrderlist2() throws Exception {
+	public String selectunordersbybooktime() throws Exception {
 		dataMap = new HashMap<String, Object>(); // 新建dataMap来储存JSON字符串
 		dataMap.clear(); // dataMap中的数据将会被Struts2转换成JSON字符串，所以这里要先清空其中的数据
 
@@ -300,11 +300,11 @@ public class OrderlistAction extends ActionSupport {
 	}
 
 	public String selectUnOrderlist2Json() throws Exception {
-		selectUnOrderlist2();
+		selectunordersbybooktime();
 		return "json";
 	}
 
-	public String selectProOrderlist() throws Exception {
+	public String selectproorderlist() throws Exception {
 		dataMap = new HashMap<String, Object>(); // 新建dataMap来储存JSON字符串
 		dataMap.clear(); // dataMap中的数据将会被Struts2转换成JSON字符串，所以这里要先清空其中的数据
 
@@ -312,6 +312,7 @@ public class OrderlistAction extends ActionSupport {
 
 		if (result == ResultCode.SUCCESS) {
 			List<Orderlist> orderlist = orderlistServices.orderlistinfos();
+			
 			dataMap.put("orderlists", orderlist);
 			dataMap.put("resultcode", result);
 			dataMap.put("errmsg", ResultCode.getErrmsg(result));
@@ -322,18 +323,17 @@ public class OrderlistAction extends ActionSupport {
 		return SUCCESS;
 	}
 
-	public String selectProOrderlistJson() throws Exception {
-		System.out.println("Here is OrderlistAction.selectProOrderlistJson");
-		selectProOrderlist();
+	public String selectproorderlistJson() throws Exception {
+		selectproorderlist();
 		return "json";
 	}
 
-	public String selectComOrderlist() throws Exception {
+	public String selectcomorderlist() throws Exception {
 		dataMap = new HashMap<String, Object>(); // 新建dataMap来储存JSON字符串
 		dataMap.clear(); // dataMap中的数据将会被Struts2转换成JSON字符串，所以这里要先清空其中的数据
 
 		int result = orderlistServices.getComOrders(user_account);
-
+		
 		if (result == ResultCode.SUCCESS) {
 			List<Orderlist> orderlist = orderlistServices.orderlistinfos();
 			dataMap.put("orderlists", orderlist);
@@ -346,9 +346,8 @@ public class OrderlistAction extends ActionSupport {
 		return SUCCESS;
 	}
 
-	public String selectComOrderlistJson() throws Exception {
-		System.out.println("Here is OrderlistAction.selectComOrderlistJson");
-		selectComOrderlist();
+	public String selectcomorderlistJson() throws Exception {
+		selectcomorderlist();
 		return "json";
 	}
 
@@ -379,7 +378,6 @@ public class OrderlistAction extends ActionSupport {
 	}
 
 	public String selectJson() throws Exception {
-		System.out.println("Here is OrderlistAction.selectJson");
 		select();
 		return "json";
 	}
@@ -391,6 +389,9 @@ public class OrderlistAction extends ActionSupport {
 		int result = orderlistServices.deleteOrder(order_id, user_account);
 		if (result == ResultCode.SUCCESS) {
 			List<Orderlist> orderlist = orderlistServices.orderlistinfos();
+			for (int j=0; j<orderlist.size(); j++) {
+				System.out.println(orderlist.get(j).getOrder_contact_name());
+			}
 			dataMap.put("orderlists", orderlist);
 			dataMap.put("resultcode", result);
 			dataMap.put("errmsg", ResultCode.getErrmsg(result));
@@ -402,7 +403,6 @@ public class OrderlistAction extends ActionSupport {
 	}
 
 	public String deleteJson() throws Exception {
-		System.out.println("Here is OrderlistAction.deleteJson");
 		delete();
 		return "json";
 	}
