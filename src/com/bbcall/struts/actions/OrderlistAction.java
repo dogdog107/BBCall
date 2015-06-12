@@ -138,7 +138,7 @@ public class OrderlistAction extends ActionSupport {
 			dataMap.put("orderlist", orderlist);
 			dataMap.put("resultcode", result);
 			dataMap.put("errmsg", ResultCode.getErrmsg(result));
-			dataMap.put("insertResult", true);
+			dataMap.put("addResult", true);
 		}
 
 		return SUCCESS;
@@ -233,7 +233,7 @@ public class OrderlistAction extends ActionSupport {
 		return "json";
 	}
 
-	public String unOrderlist() throws Exception {
+	public String unorderlist() throws Exception {
 		dataMap = new HashMap<String, Object>(); // 新建dataMap来储存JSON字符串
 		dataMap.clear(); // dataMap中的数据将会被Struts2转换成JSON字符串，所以这里要先清空其中的数据
 
@@ -244,19 +244,19 @@ public class OrderlistAction extends ActionSupport {
 			dataMap.put("orderlists", orderlist);
 			dataMap.put("resultcode", result);
 			dataMap.put("errmsg", ResultCode.getErrmsg(result));
-			dataMap.put("unOrderlistResult", true);
+			dataMap.put("unorderlistResult", true);
 		}
 
 		return SUCCESS;
 	}
 
-	public String unOrderlistJson() throws Exception {
-		unOrderlist();
+	public String unorderlistJson() throws Exception {
+		unorderlist();
 		return "json";
 	}
 
 	//按照发布日期排序
-	public String selectUnOrderlist() throws Exception {
+	public String selectunorderlist() throws Exception {
 		dataMap = new HashMap<String, Object>(); // 新建dataMap来储存JSON字符串
 		dataMap.clear(); // dataMap中的数据将会被Struts2转换成JSON字符串，所以这里要先清空其中的数据
 
@@ -268,14 +268,14 @@ public class OrderlistAction extends ActionSupport {
 			dataMap.put("orderlists", orderlist);
 			dataMap.put("resultcode", result);
 			dataMap.put("errmsg", ResultCode.getErrmsg(result));
-			dataMap.put("selectUnOrderlistResult", true);
+			dataMap.put("selectunorderlistResult", true);
 		}
 
 		return SUCCESS;
 	}
 
-	public String selectUnOrderlistJson() throws Exception {
-		selectUnOrderlist();
+	public String selectunorderlistJson() throws Exception {
+		selectunorderlist();
 		return "json";
 	}
 
@@ -293,13 +293,13 @@ public class OrderlistAction extends ActionSupport {
 			dataMap.put("orderlists", orderlist);
 			dataMap.put("resultcode", result);
 			dataMap.put("errmsg", ResultCode.getErrmsg(result));
-			dataMap.put("selectUnOrderlist2Result", true);
+			dataMap.put("selectunordersbybooktimeResult", true);
 		}
 
 		return SUCCESS;
 	}
 
-	public String selectUnOrderlist2Json() throws Exception {
+	public String selectunordersbybooktimeJson() throws Exception {
 		selectunordersbybooktime();
 		return "json";
 	}
@@ -317,7 +317,6 @@ public class OrderlistAction extends ActionSupport {
 			dataMap.put("resultcode", result);
 			dataMap.put("errmsg", ResultCode.getErrmsg(result));
 			dataMap.put("selectProOrderlistResult", true);
-			System.out.println(dataMap);
 		}
 
 		return SUCCESS;
@@ -340,7 +339,6 @@ public class OrderlistAction extends ActionSupport {
 			dataMap.put("resultcode", result);
 			dataMap.put("errmsg", ResultCode.getErrmsg(result));
 			dataMap.put("selectComOrderlistResult", true);
-			System.out.println(dataMap);
 		}
 
 		return SUCCESS;
@@ -371,7 +369,6 @@ public class OrderlistAction extends ActionSupport {
 			dataMap.put("resultcode", result);
 			dataMap.put("errmsg", ResultCode.getErrmsg(result));
 			dataMap.put("selectResult", true);
-			System.out.println(dataMap);
 		}
 
 		return SUCCESS;
@@ -389,14 +386,10 @@ public class OrderlistAction extends ActionSupport {
 		int result = orderlistServices.deleteOrder(order_id, user_account);
 		if (result == ResultCode.SUCCESS) {
 			List<Orderlist> orderlist = orderlistServices.orderlistinfos();
-			for (int j=0; j<orderlist.size(); j++) {
-				System.out.println(orderlist.get(j).getOrder_contact_name());
-			}
 			dataMap.put("orderlists", orderlist);
 			dataMap.put("resultcode", result);
 			dataMap.put("errmsg", ResultCode.getErrmsg(result));
 			dataMap.put("deleteResult", true);
-			System.out.println(dataMap);
 		}
 
 		return SUCCESS;

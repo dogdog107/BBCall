@@ -19,7 +19,7 @@
 			jdbcType="INTEGER" />
 		<result column="order_contact_name" property="order_contact_name"
 			jdbcType="VARCHAR" />
-		<result column="order_photo" property="order_photo" jdbcType="VARCHAR" />
+		<result column="order_pic_url" property="order_pic_url" jdbcType="VARCHAR" />
 		<result column="order_description" property="order_description"
 			jdbcType="VARCHAR" />
 		<result column="order_price" property="order_price" jdbcType="DECIMAL" />
