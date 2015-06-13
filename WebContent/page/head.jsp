@@ -10,7 +10,8 @@
 	src="${pageContext.request.contextPath }/jquery/jquery-1.8.3.js"></script>
 <script type="text/javascript">
 	$(function() {
-		$("#accountName").html(window.parent.account);
+
+		$("#accountName").html("${session.user.user_account}");
 	});
 </script>
 </head>

@@ -24,7 +24,8 @@ CREATE TABLE USER (
 	user_type INT,
 	/* 1=customer, 2=master, 3=admin */
 	user_name VARCHAR (20),
-	user_gender VARCHAR (10),
+	user_gender INT,
+	/* 1=male, 2=female */
 	user_pic_url VARCHAR (255),
 	user_language VARCHAR (10),
   user_skill text,
@@ -40,23 +41,24 @@ CREATE TABLE USER (
 ) DEFAULT CHARSET = utf8;
  	
  	## Value ##
-	private int user_id;
+	private Integer user_id;
 	private String user_account;
 	private String user_password;
 	private String user_email;
 	private BigInteger user_mobile;
-	private int user_type;
+	private Integer user_type;
 	private String user_name;
-	private String user_gender;
+	private Integer user_gender;
 	private String user_pic_url;
 	private String user_language;
-	private int user_address_code;
+	private Integer user_address_code;
 	private String user_address;
 	private String user_skill;
 	private String user_description;
 	private String user_access_group;
-	private int user_status;
+	private Integer user_status;
 	private Timestamp user_login_time;
+	private Timestamp user_create_time;
 	private String user_token;
  -->
 
@@ -77,7 +79,7 @@ CREATE TABLE USER (
     	<result column="user_mobile" property="user_mobile" jdbcType="BIGINT" />
     	<result column="user_type" property="user_type" jdbcType="INTEGER" />
     	<result column="user_name" property="user_name" jdbcType="VARCHAR" />
-    	<result column="user_gender" property="user_gender" jdbcType="VARCHAR" />
+    	<result column="user_gender" property="user_gender" jdbcType="INTEGER" />
     	<result column="user_pic_url" property="user_pic_url" jdbcType="VARCHAR" />
     	<result column="user_language" property="user_language" jdbcType="VARCHAR" />
     	<result column="user_address_code" property="user_address_code" jdbcType="INTEGER" />
@@ -87,6 +89,7 @@ CREATE TABLE USER (
     	<result column="user_access_group" property="user_access_group" jdbcType="VARCHAR" />
     	<result column="user_status" property="user_status" jdbcType="INTEGER" />
     	<result column="user_login_time" property="user_login_time" jdbcType="TIMESTAMP" />
+    	<result column="user_create_time" property="user_create_time" jdbcType="TIMESTAMP" />
     	<result column="user_token" property="user_token" jdbcType="VARCHAR" />
 	</resultMap>
 
@@ -110,7 +113,7 @@ CREATE TABLE USER (
 		select user_id, user_account, user_password, user_email, user_mobile,
 		user_type, user_name, user_gender, user_pic_url, user_language, user_address_code,
 		user_address, user_skill, user_description, user_access_group,
-		user_status, user_login_time, user_token
+		user_status, user_login_time, user_create_time, user_token
 		from USER
 		where
 		user_account=#{user_account}
@@ -119,7 +122,7 @@ CREATE TABLE USER (
 		select user_id, user_account, user_password, user_email, user_mobile,
 		user_type, user_name, user_gender, user_pic_url, user_language, user_address_code,
 		user_address, user_skill, user_description, user_access_group,
-		user_status, user_login_time, user_token
+		user_status, user_login_time, user_create_time, user_token
 		from USER
 		where
 		user_email=#{user_email}
@@ -128,7 +131,7 @@ CREATE TABLE USER (
 		select user_id, user_account, user_password, user_email, user_mobile,
 		user_type, user_name, user_gender, user_pic_url, user_language, user_address_code,
 		user_address, user_skill, user_description, user_access_group,
-		user_status, user_login_time, user_token
+		user_status, user_login_time, user_create_time, user_token
 		from USER
 		where
 		user_mobile=#{user_mobile}
@@ -138,7 +141,7 @@ CREATE TABLE USER (
 		select user_id, user_account, user_password, user_email, user_mobile,
 		user_type, user_name, user_gender, user_pic_url, user_language, user_address_code,
 		user_address, user_skill, user_description, user_access_group,
-		user_status, user_login_time, user_token
+		user_status, user_login_time, user_create_time, user_token
 		from USER
 		where
 		user_id=#{user_id}
@@ -148,12 +151,20 @@ CREATE TABLE USER (
 		select user_id, user_account, user_password, user_email, user_mobile,
 		user_type, user_name, user_gender, user_pic_url, user_language, user_address_code,
 		user_address, user_skill, user_description, user_access_group,
-		user_status, user_login_time, user_token
+		user_status, user_login_time, user_create_time, user_token
 		from USER
 		where
 		user_token=#{user_token}
 	</select>
-
+	
+	<select id="findAll" resultMap="UserResultMap">
+		select user_id, user_account, user_password, user_email, user_mobile,
+		user_type, user_name, user_gender, user_pic_url, user_language, user_address_code,
+		user_address, user_skill, user_description, user_access_group,
+		user_status, user_login_time, user_create_time, user_token
+		from USER
+	</select>
+	
 	<update id="updateUser" parameterType="User">
 		update USER set
 		user_account=#{user_account}, user_password=#{user_password},

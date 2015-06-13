@@ -19,8 +19,6 @@ public class BusinessInterceptor extends AbstractInterceptor {
 	@Override
 	public String intercept(ActionInvocation invocation) throws Exception {
 
-		System.out.println("BusinessInterceptor intercept() invoked! ");
-		
 		before(invocation);
 
 		String result = "";

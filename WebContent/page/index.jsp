@@ -23,15 +23,16 @@
 	var skill = "${dataMap.user_skill}";
 	var status = "${dataMap.user_status}";
 	var token = "${dataMap.user_token}";
+	var createtime = "${dataMap.user_create_time}";
 </script>
 <title>管理中心 v1.0</title>
 </head>
 <frameset border=0 framespacing=0 rows="60, *" frameborder=0>
 	<frame name=head src="${pageContext.request.contextPath }/page/head.jsp" frameborder=0 noresize scrolling=no>
 	<frameset cols="170, *">
-		<frame name=left src="${pageContext.request.contextPath }/page/left.html" frameborder=0 noresize />
+		<frame name=left src="${pageContext.request.contextPath }/page/left.jsp" frameborder=0 noresize />
 
-		<frame name=right src="${pageContext.request.contextPath }/page/right.jsp" frameborder=0 noresize scrolling=yes />
+		<frame name=main src="${pageContext.request.contextPath }/page/right.jsp" frameborder=0 noresize scrolling=yes />
 	</frameset>
 </frameset>
 <noframes>

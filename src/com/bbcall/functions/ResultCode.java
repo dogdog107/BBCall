@@ -17,6 +17,7 @@ public class ResultCode {
 	public static Integer REQUIREINFO_NOTENOUGH = 10009;//请求的参数不全
 	public static Integer REQUIREINFO_ERROR = 10010;//请求的参数错误
 	public static Integer USERSTATUS_ERROR = 10011;//用户状态错误
+	public static Integer USERLIST_NULL = 10012;//用户表不存在
 		
 	//用户返回码11XXX
 	public static Integer USERNAME_NOTEXIST = 11001;//用户名可以使用
@@ -34,6 +35,9 @@ public class ResultCode {
 	public static Integer ADDRESS_NULL = 13001;//地址不存在
 	public static Integer ADDRESS_NOTMATCH = 13002;//地址码与地址名不一致
 	public static Integer ADDRESSCODE_ERROR = 13003;//地址码错误
+	
+	//权限返回码14XXX
+	public static Integer ACCESS_REJECT = 14001;//拒绝访问
 	
 	//新闻错误码20XXX
 	public static Integer NEWSID_ERROR = 20001;//新闻id不存在
@@ -71,6 +75,7 @@ public class ResultCode {
 			case 10009: errmsg = "require info not enough"; break;
 			case 10010: errmsg = "require info error"; break;
 			case 10011: errmsg = "user status error"; break;
+			case 10012: errmsg = "user list null"; break;
 			
 			case 11001: errmsg = "username not exist"; break;
 			case 11002: errmsg = "account exist"; break;
@@ -85,6 +90,8 @@ public class ResultCode {
 			case 13001: errmsg = "address list null"; break;
 			case 13002: errmsg = "addresscode not match with address"; break;
 			case 13003: errmsg = "addresscode invalid"; break;
+			
+			case 14001: errmsg = "access reject"; break;
 			
 			//新闻类
 			case 20001: errmsg = "invalid news_id"; break;

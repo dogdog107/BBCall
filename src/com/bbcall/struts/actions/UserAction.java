@@ -5,6 +5,7 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.apache.struts2.interceptor.SessionAware;
 import org.apache.struts2.json.annotations.JSON;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
@@ -13,18 +14,20 @@ import org.springframework.stereotype.Controller;
 import com.bbcall.functions.ResultCode;
 import com.bbcall.functions.ObjectToMap;
 import com.bbcall.mybatis.table.AddressList;
+import com.bbcall.mybatis.table.User;
 import com.bbcall.struts.services.UserServices;
 import com.opensymphony.xwork2.ActionSupport;
 
 @Scope("prototype")
 @Controller("userAction")
 @SuppressWarnings("serial")
-public class UserAction extends ActionSupport {
+public class UserAction extends ActionSupport implements SessionAware{
 
 	@Autowired
 	private UserServices userServices;
 	private Map<String, Object> dataMap = new LinkedHashMap<String, Object>(); // 新建dataMap来储存JSON字符串
 	private ObjectToMap obj2map = new ObjectToMap();// 新建ObjectToMap对象
+	private Map<String, Object> session;
 	
 	private String username;
 	private String password;
@@ -33,7 +36,7 @@ public class UserAction extends ActionSupport {
 	private String name;
 	private String picurl;
 	private BigInteger mobile;
-	private String gender;
+	private Integer gender;
 	private String email;
 	private String language;
 	private String skill;
@@ -84,6 +87,8 @@ public class UserAction extends ActionSupport {
 			dataMap.put("errmsg", ResultCode.getErrmsg(result));
 			dataMap.put("loginResult", true); // 放入loginResult
 			System.out.println(dataMap);
+			session.put("user", userinfo);// 把用户信息放进session
+			System.out.println(session);
 //			System.out.println((dataMap.get("userinfo")));
 			return "loginSuccess";
 		} else {
@@ -148,6 +153,8 @@ public class UserAction extends ActionSupport {
 			dataMap.put("errmsg", ResultCode.getErrmsg(result));
 			dataMap.put("updateResult", true); // 放入registerResult
 			System.out.println(dataMap);
+			session.put("user", userinfo);// 把用户信息放进session
+			System.out.println(session);
 			return "updateSuccess";
 		} else {
 			dataMap.put("resultcode", result); // 放入一个是否操作成功的标识
@@ -172,7 +179,7 @@ public class UserAction extends ActionSupport {
 		int result = userServices.checkAddressList(addresscode);// 调用userServices.checkAddressList
 		
 		if (result == ResultCode.SUCCESS) {
-			List<AddressList> addresslist = userServices.addressList();
+			List<AddressList> addresslist = userServices.getAddresslist();
 			dataMap.put("addresslist", addresslist); // 把addresslist对象放入dataMap
 			dataMap.put("resultcode", result); // 放入一个是否操作成功的标识
 			dataMap.put("errmsg", ResultCode.getErrmsg(result));
@@ -189,6 +196,32 @@ public class UserAction extends ActionSupport {
 	public String checkAddressListJson() throws Exception {
 		System.out.println("Here is UserAction.checkAddressListJson");
 		checkAddressList();
+		return "json";
+	}
+	
+	// checkUserList Action
+	public String checkUserList() throws Exception {
+		System.out.println("Here is UserAction.checkUserList");
+		dataMap.clear(); // dataMap中的数据将会被Struts2转换成JSON字符串，所以这里要先清空其中的数据
+		int result = userServices.checkUserList(token);// 调用userServices.checkAddressList
+		if (result == ResultCode.SUCCESS) {
+			List<User> userlist = userServices.getUserlist();
+			dataMap.put("userlist", userlist); // 把addresslist对象放入dataMap
+			dataMap.put("resultcode", result); // 放入一个是否操作成功的标识
+			dataMap.put("errmsg", ResultCode.getErrmsg(result));
+			dataMap.put("checkUserListResult", true); // 放入checkUserNameResult
+		} else {
+			dataMap.put("resultcode", result); // 放入一个是否操作成功的标识
+			dataMap.put("errmsg", ResultCode.getErrmsg(result));
+			dataMap.put("checkUserListResult", false); // 放入checkUserNameResult
+			System.out.println(dataMap);
+		}
+		return SUCCESS;
+	}
+	
+	public String checkUserListJson() throws Exception {
+		System.out.println("Here is UserAction.checkUserListJson");
+		checkUserList();
 		return "json";
 	}
 	
@@ -258,6 +291,11 @@ public class UserAction extends ActionSupport {
 		return dataMap;
 	}
 
+	@Override
+	public void setSession(Map<String, Object> session) {
+		this.session = session;
+		
+	}
 	public void setDataMap(Map<String, Object> dataMap) {
 		this.dataMap = dataMap;
 	}
@@ -326,11 +364,11 @@ public class UserAction extends ActionSupport {
 		this.mobile = mobile;
 	}
 
-	public String getGender() {
+	public Integer getGender() {
 		return gender;
 	}
 
-	public void setGender(String gender) {
+	public void setGender(Integer gender) {
 		this.gender = gender;
 	}
 
@@ -413,5 +451,4 @@ public class UserAction extends ActionSupport {
 	public void setUserid(Integer userid) {
 		this.userid = userid;
 	}
-
 }

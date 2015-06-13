@@ -1,6 +1,8 @@
 package com.bbcall.mybatis.dao;
 
 import java.math.BigInteger;
+import java.util.List;
+
 import com.bbcall.mybatis.table.User;
 
 public interface UserMapper {
@@ -37,6 +39,9 @@ public interface UserMapper {
 
 	// 通过token获取用户资料
 	public User getUserByToken(String user_token);
+	
+	// 查找全部user
+	public List<User> findAll();
 
 	// 更新用户资料
 	public void updateUser(User user);

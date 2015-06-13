@@ -25,9 +25,9 @@ public class UserServices {
 	@Autowired
 	private AddressListMapper addressListMapper;
 	
-	User userinfo = new User();
-	List<AddressList> addresslist = null;
-
+	private User userinfo = new User();
+	private List<AddressList> addresslist;
+	private List<User> userlist;
 	// ################################################################################
 	// ## 							User Register services
 	// ## 									用户注册
@@ -65,7 +65,7 @@ public class UserServices {
 	// ################################################################################
 
 	public int register(String account, String password, Integer usertype,
-			String name, String picurl, BigInteger mobile, String gender,
+			String name, String picurl, BigInteger mobile, Integer gender,
 			String email, String language, String skill, String description) {
 		System.out.println("Here is UserServices.register method...");
 
@@ -74,8 +74,8 @@ public class UserServices {
 		}
 
 		if (usertype == 2) {// usertype=2时为师傅号，检测注册信息是否完整
-			if (isEmpty(account, password, name, picurl, gender, email,
-					language, skill) || mobile == null) {
+			if (isEmpty(account, password, name, picurl, email,
+					language, skill) || mobile == null || gender == null) {
 				return ResultCode.REGISTERINFO_NOTENOUGH;
 			}
 		}
@@ -240,7 +240,7 @@ public class UserServices {
 	// ################################################################################
 
 	public int update(String account, String password, Integer usertype,
-			String name, String picurl, BigInteger mobile, String gender,
+			String name, String picurl, BigInteger mobile, Integer gender,
 			Integer addresscode, String address, String email, String language,
 			String skill, String description, String accessgroup, Integer status,
 			String token, Integer userid) {
@@ -328,12 +328,12 @@ public class UserServices {
 			changecount++;
 			System.out.println("picurl changed!");
 		}
-		if (mobile != null && user.getUser_mobile() != mobile) {
+		if (mobile != null && !user.getUser_mobile().equals(mobile)) {
 			user.setUser_mobile(mobile);
 			changecount++;
 			System.out.println("mobile changed!");
 		}
-		if (!isEmpty(gender) && !user.getUser_gender().equals(gender)) {
+		if (gender != null && !user.getUser_gender().equals(gender)) {
 			user.setUser_gender(gender);
 			changecount++;
 			System.out.println("gender changed!");
@@ -360,7 +360,7 @@ public class UserServices {
 			changecount++;
 			System.out.println("accessgroup changed!");
 		}
-		if (updatemode == 2 && status != null && user.getUser_status() != status) {// admin模式时，判断status是否有变化
+		if (updatemode == 2 && status != null && !user.getUser_status().equals(status)) {// admin模式时，判断status是否有变化
 			user.setUser_status(status);
 			changecount++;
 			System.out.println("status changed!");
@@ -374,7 +374,7 @@ public class UserServices {
 				System.out.println("status changed as user mode!(skill)");
 			}
 		}
-		if (usertype != null && user.getUser_type() != usertype) {
+		if (usertype != null && !user.getUser_type().equals(usertype)) {
 			user.setUser_type(usertype);
 			changecount++;
 			System.out.println("usertype changed!");
@@ -458,6 +458,29 @@ public class UserServices {
 		}
 	}
 	
+	// ###################
+	// ## 拉取User表
+	// ###################
+
+	public int checkUserList(String token) {
+		System.out.println("Here is UserServices.checkUserList method...");
+
+		int checkTokenResult = checkToken(token);
+		if (checkTokenResult == ResultCode.SUCCESS) {
+				if (userinfo.getUser_type() != 3){
+					return ResultCode.ACCESS_REJECT;
+				}
+			List<User> userlist = userMapper.findAll();
+			if (userlist.size() > 0) {
+				this.userlist = userlist;
+				return ResultCode.SUCCESS;
+			} else {
+				return ResultCode.USERLIST_NULL;
+			}
+		} else {
+			return checkTokenResult;
+		}
+	}
 	// ###################
 	// ## 检测用户 token
 	// ###################
@@ -588,10 +611,13 @@ public class UserServices {
 
 		return userinfo;
 	}
-	
-	public List<AddressList> addressList(){
-		
+
+	public List<AddressList> getAddresslist() {
 		return addresslist;
+	}
+
+	public List<User> getUserlist() {
+		return userlist;
 	}
 	
 //	public List<UserSkill> test(int test){

@@ -14,7 +14,8 @@ import java.sql.Timestamp;
 //	user_type INT,
 //	/* 1=customer, 2=master, 3=admin */
 //	user_name VARCHAR (20),
-//	user_gender VARCHAR (10),
+//	user_gender INT,
+//  /* 1=male, 2=female */
 //	user_pic_url VARCHAR (255),
 //	user_language VARCHAR (10),
 //  user_skill text,
@@ -37,7 +38,7 @@ public class User {
 	private BigInteger user_mobile;
 	private Integer user_type;
 	private String user_name;
-	private String user_gender;
+	private Integer user_gender;
 	private String user_pic_url;
 	private String user_language;
 	private Integer user_address_code;
@@ -47,6 +48,7 @@ public class User {
 	private String user_access_group;
 	private Integer user_status;
 	private Timestamp user_login_time;
+	private Timestamp user_create_time;
 	private String user_token;
 
 	public Integer getUser_id() {
@@ -105,11 +107,11 @@ public class User {
 		this.user_name = user_name;
 	}
 
-	public String getUser_gender() {
+	public Integer getUser_gender() {
 		return user_gender;
 	}
 
-	public void setUser_gender(String user_gender) {
+	public void setUser_gender(Integer user_gender) {
 		this.user_gender = user_gender;
 	}
 
@@ -191,5 +193,13 @@ public class User {
 
 	public void setUser_token(String user_token) {
 		this.user_token = user_token == null ? null : user_token.trim();
+	}
+
+	public Timestamp getUser_create_time() {
+		return user_create_time;
+	}
+
+	public void setUser_create_time(Timestamp user_create_time) {
+		this.user_create_time = user_create_time;
 	}
 }

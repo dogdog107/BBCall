@@ -7,6 +7,7 @@ $(function() {
 	$("#name").html(window.parent.name);
 	$("#email").html(window.parent.email);
 	$("#logintime").html(window.parent.logintime);
+	$("#createtime").html(window.parent.createtime);
 	$("#mobile").html(window.parent.mobile);
 	$("#gender").html(window.parent.gender);
 	$("#language").html(window.parent.language);
