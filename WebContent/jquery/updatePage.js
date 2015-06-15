@@ -85,13 +85,11 @@ function checkpwd(id) {
 function onload() {
 	if (usertype == 1 || usertype == 2) {
 		document.getElementById('token').disabled = "";
-		document.getElementById('token_tr').style.display = "";
 		document.getElementById('usertype').options[value = '3'].remove();
 	}
 
 	if (usertype == 3) {
 		document.getElementById('userid').disabled = "";
-		document.getElementById('userid_tr').style.display = "";
 	}
 
 	document.getElementById('usertype')[usertype].selected = true;
@@ -107,7 +105,13 @@ function onload() {
 				}
 				showaddresslist(data.addresslist[0].arealevel,addresscode,data.addresslist[0].parentno);
 			} else {
-				alert("Error addresscode");
+				$.post("${pageContext.request.contextPath}/user_checkChildAdsListJson.action", {
+					"addresscode" : 0
+				}, function(data) {
+					for(var i=0;i<data.addresslist.length;i++){
+						document.getElementById('adscode_1').options.add(new Option(data.addresslist[i].areaname,data.addresslist[i].areano)); 
+					}
+				});
 			}
 		});
 	});

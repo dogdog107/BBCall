@@ -8,12 +8,6 @@
 <link href="./css/admin.css" type="text/css" rel="stylesheet" />
 <script type="text/javascript"
 	src="${pageContext.request.contextPath }/jquery/jquery-1.8.3.js"></script>
-<script type="text/javascript">
-	$(function() {
-
-		$("#accountName").html("${session.user.user_account}");
-	});
-</script>
 </head>
 <body>
 	<table cellspacing=0 cellpadding=0 width="100%"
@@ -22,7 +16,7 @@
 			<td width=260><img height=56 src="./img/header_left.jpg"
 				width=260></td>
 			<td style="font-weight: bold; color: #fff; padding-top: 20px"
-				align=middle>当前用户：<label id="accountName"></label>&nbsp;&nbsp;
+				align=middle>当前用户：${sessionScope.user.user_account}&nbsp;&nbsp;
 				<a style="color: #fff" href="" target=main>修改口令</a> &nbsp;&nbsp; <a
 				style="color: #fff"
 				onclick="if (confirm('确定要退出吗？')) return true; else return false;"

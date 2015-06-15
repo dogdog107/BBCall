@@ -68,7 +68,7 @@
 			</tr>
 			<tr>
 				<td>Gender:</td>
-				<td><s:select name="gender" size="1" list="#{'Male':'Male','Female':'Female'}"></s:select></td>
+				<td><s:select name="gender" size="1" list="#{'1':'Male','2':'Female'}"></s:select></td>
 			</tr>
 			<tr>
 				<td>E-Mail:</td>

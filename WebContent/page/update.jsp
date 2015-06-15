@@ -17,6 +17,8 @@
 	var usertype = "${sessionScope.user.user_type}";
 	var gender = "${sessionScope.user.user_gender}";
 	var addresscode = "${sessionScope.user.user_address_code}";
+	var language = "${sessionScope.user.user_language}";
+	var skill = "${sessionScope.user.user_skill}";
 </script>
 </head>
 
@@ -50,7 +52,7 @@
 							</s:else>
 						</s:if></span>
 				</div>
-				<tr id="userid_tr" style="display: none">
+				<tr id="userid_tr">
 					<td>用户ID</td>
 					<td><input type="text" name="userid" id="userid"
 						value="${sessionScope.user.user_id}" disabled="disabled" /></td>
@@ -113,9 +115,12 @@
 				</tr>
 				<tr>
 					<td>用户语言</td>
-					<td><input type="text" name="language" onfocus="this.value=''"
-						onblur="if(this.value==''){this.value='${sessionScope.user.user_language}'}"
-						value="${sessionScope.user.user_language}" /></td>
+					<td>
+					<input type="hidden" id="language" value="${sessionScope.user.user_language}"/>
+					
+					<input name="languagepart" type="checkbox" id="English" value="English" />英文(English)&nbsp;&nbsp;
+					<input name="languagepart" type="checkbox" id="Cantonese" value="Cantonese" />广东话(Cantonese)&nbsp;&nbsp;
+					<input name="languagepart" type="checkbox" id="Chinese" value="Chinese" />普通话(Chinese)&nbsp;&nbsp;
 				</tr>
 				<tr>
 					<td>用户头像</td>
@@ -124,7 +129,11 @@
 				</tr>
 				<tr>
 					<td>用户技能</td>
-					<td><input type="text" name="skill" onfocus="this.value=''"
+					<td>
+					<input name="skill" type="checkbox" value="English" />英文(English)&nbsp;&nbsp;
+					<input name="skill" type="checkbox" value="Cantonese" />广东话(Cantonese)&nbsp;&nbsp;
+					<input name="skill" type="checkbox" value="Chinese" />普通话(Chinese)&nbsp;&nbsp;
+					<input type="text" name="skill" onfocus="this.value=''"
 						onblur="if(this.value==''){this.value='${sessionScope.user.user_skill}'}"
 						value="${sessionScope.user.user_skill}" /></td>
 				</tr>
@@ -142,7 +151,9 @@
 					</select>
 					<input type="hidden" name="addresscode" id="addresscode" value="${sessionScope.user.user_address_code}"/>
 					<input type="hidden" id="addresscodename" value=""/>
+					<s:if test="%{#session.user.user_address!=null}">
 					<s:set name="lastadsset" value="%{#session.user.user_address.split(';')[#session.user.user_address.split(';').length-1]}"/>
+					</s:if>
 					<input type="text" onfocus="this.value=''" id="lastads"
 						onblur="if(this.value==''){this.value='${lastadsset}'}"
 						value="${lastadsset}" />
