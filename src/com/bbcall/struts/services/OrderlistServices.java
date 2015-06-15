@@ -226,6 +226,8 @@ public class OrderlistServices {
 
 	public int deleteOrder(int order_id, String order_user_account) {
 		orderlistMapper.deleteOrder(order_id);
+		
+		preorderMapper.deletePreorderByOrderId(order_id);
 
 		orderlistinfos = orderlistMapper
 				.getUnOrdersByUserAccount(order_user_account);
@@ -452,10 +454,10 @@ public class OrderlistServices {
 
 		User user = userMapper.getUserByAccount(user_account);
 
-		if (user.getUser_type() == 1) { // 如果是用户的account
+		if (user.getUser_type().equals(1)) { // 如果是用户的account
 			orderlistinfos = orderlistMapper
 					.getComOrdersByUserAccount(user_account);
-		} else if (user.getUser_type() == 2) { // 如果是师傅的account
+		} else if (user.getUser_type().equals(2)) { // 如果是师傅的account
 			orderlistinfos = orderlistMapper
 					.getComOrdersByMasterAccount(user_account);
 		} else { // 如果是管理员的account,取出所有已完成的订单
@@ -491,6 +493,8 @@ public class OrderlistServices {
 
 		User user = userMapper.getUserByAccount(user_account);
 
+		orderlistinfos = null;
+		
 		if (user.getUser_type() == 1) { // 如果是用户的account
 			orderlistinfos = orderlistMapper
 					.getProOrdersByUserAccount(user_account);
