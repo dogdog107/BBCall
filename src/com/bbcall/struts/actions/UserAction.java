@@ -172,30 +172,57 @@ public class UserAction extends ActionSupport implements SessionAware{
 		return "json";
 	}
 	
-	// checkAddressList Action
-	public String checkAddressList() throws Exception {
-		System.out.println("Here is UserAction.checkAddressList");
+	// checkParentAdsList Action
+	public String checkChildAdsList() throws Exception {
+		System.out.println("Here is UserAction.checkChildAdsList");
 		dataMap.clear(); // dataMap中的数据将会被Struts2转换成JSON字符串，所以这里要先清空其中的数据
-		int result = userServices.checkAddressList(addresscode);// 调用userServices.checkAddressList
+		int result = userServices.checkChildAdsList(addresscode);// 调用userServices.checkParentAdsList
 		
 		if (result == ResultCode.SUCCESS) {
 			List<AddressList> addresslist = userServices.getAddresslist();
 			dataMap.put("addresslist", addresslist); // 把addresslist对象放入dataMap
 			dataMap.put("resultcode", result); // 放入一个是否操作成功的标识
 			dataMap.put("errmsg", ResultCode.getErrmsg(result));
-			dataMap.put("checkAddressListResult", true); // 放入checkUserNameResult
+			dataMap.put("checkChildAdsListResult", true); // 放入checkUserNameResult
 		} else {
 			dataMap.put("resultcode", result); // 放入一个是否操作成功的标识
 			dataMap.put("errmsg", ResultCode.getErrmsg(result));
-			dataMap.put("checkAddressListResult", false); // 放入checkUserNameResult
+			dataMap.put("checkChildAdsListResult", false); // 放入checkUserNameResult
 			System.out.println(dataMap);
 		}
 		return SUCCESS;
 	}
 	
-	public String checkAddressListJson() throws Exception {
-		System.out.println("Here is UserAction.checkAddressListJson");
-		checkAddressList();
+	public String checkChildAdsListJson() throws Exception {
+		System.out.println("Here is UserAction.checkChildAdsListJson");
+		checkChildAdsList();
+		return "json";
+	}
+	
+	// checkAdsList Action
+	public String checkAdsList() throws Exception {
+		System.out.println("Here is UserAction.checkAdsList");
+		dataMap.clear(); // dataMap中的数据将会被Struts2转换成JSON字符串，所以这里要先清空其中的数据
+		int result = userServices.checkAdsList(addresscode);// 调用userServices.checkAdsList
+		
+		if (result == ResultCode.SUCCESS) {
+			List<AddressList> addresslist = userServices.getAddresslist();
+			dataMap.put("addresslist", addresslist); // 把addresslist对象放入dataMap
+			dataMap.put("resultcode", result); // 放入一个是否操作成功的标识
+			dataMap.put("errmsg", ResultCode.getErrmsg(result));
+			dataMap.put("checkAdsListResult", true); // 放入checkUserNameResult
+		} else {
+			dataMap.put("resultcode", result); // 放入一个是否操作成功的标识
+			dataMap.put("errmsg", ResultCode.getErrmsg(result));
+			dataMap.put("checkAdsListResult", false); // 放入checkUserNameResult
+			System.out.println(dataMap);
+		}
+		return SUCCESS;
+	}
+	
+	public String checkAdsListJson() throws Exception {
+		System.out.println("Here is UserAction.checkAdsListJson");
+		checkAdsList();
 		return "json";
 	}
 	

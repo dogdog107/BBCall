@@ -17,50 +17,51 @@ import com.bbcall.mybatis.table.User;
 
 @Service("userServices")
 public class UserServices {
-	
-//	@Autowired
-//	private UserSkillMapper userSkillMapper;
+
+	// @Autowired
+	// private UserSkillMapper userSkillMapper;
 	@Autowired
 	private UserMapper userMapper;
 	@Autowired
 	private AddressListMapper addressListMapper;
-	
+
 	private User userinfo = new User();
 	private List<AddressList> addresslist;
 	private List<User> userlist;
+
 	// ################################################################################
-	// ## 							User Register services
-	// ## 									用户注册
+	// ## User Register services
+	// ## 用户注册
 	// ##==============================================================================
-	// ## 								Instructions
+	// ## Instructions
 	// ##
 	// ##------------------------------------------------------------------------------
-	// ##	1. Require parameters:
-	// ##		(1) Register by User / Master: 'usertype'
-	// ##		(2) Register by User / Master: 'account'
-	// ##		(3) Register by User / Master: 'password'
-	// ##		(4) Register by Master: 'name'
-	// ##		(5) Register by Master: 'picurl'
-	// ##		(6) Register by Master: 'mobile'
-	// ##		(7) Register by Master: 'gender'
-	// ##		(8) Register by Master: 'email'
-	// ##		(9) Register by Master: 'language'
-	// ##		(10) Register by Master: 'skill'
+	// ## 1. Require parameters:
+	// ## (1) Register by User / Master: 'usertype'
+	// ## (2) Register by User / Master: 'account'
+	// ## (3) Register by User / Master: 'password'
+	// ## (4) Register by Master: 'name'
+	// ## (5) Register by Master: 'picurl'
+	// ## (6) Register by Master: 'mobile'
+	// ## (7) Register by Master: 'gender'
+	// ## (8) Register by Master: 'email'
+	// ## (9) Register by Master: 'language'
+	// ## (10) Register by Master: 'skill'
 	// ##
 	// ##------------------------------------------------------------------------------
-	// ##	2. Optional parameters:
-	// ##		(1) 'description'
+	// ## 2. Optional parameters:
+	// ## (1) 'description'
 	// ##
 	// ##------------------------------------------------------------------------------
-	// ##	3. Return parameters:
-	// ##		(1) ResultCode.REGISTERINFO_TYPEERROR
-	// ##		(2) ResultCode.REGISTERINFO_NOTENOUGH
-	// ##		(3) ResultCode.USERNAME_EXIST
-	// ##		(4) ResultCode.SUCCESS
+	// ## 3. Return parameters:
+	// ## (1) ResultCode.REGISTERINFO_TYPEERROR
+	// ## (2) ResultCode.REGISTERINFO_NOTENOUGH
+	// ## (3) ResultCode.USERNAME_EXIST
+	// ## (4) ResultCode.SUCCESS
 	// ##
 	// ##------------------------------------------------------------------------------
-	// ##	4. Return userinfo:
-	// ##		(1) userinfo
+	// ## 4. Return userinfo:
+	// ## (1) userinfo
 	// ##
 	// ################################################################################
 
@@ -74,8 +75,8 @@ public class UserServices {
 		}
 
 		if (usertype == 2) {// usertype=2时为师傅号，检测注册信息是否完整
-			if (isEmpty(account, password, name, picurl, email,
-					language, skill) || mobile == null || gender == null) {
+			if (isEmpty(account, password, name, picurl, email, language, skill)
+					|| mobile == null || gender == null) {
 				return ResultCode.REGISTERINFO_NOTENOUGH;
 			}
 		}
@@ -109,18 +110,18 @@ public class UserServices {
 			user.setUser_skill(skill);
 
 			userMapper.addUserByAccount(user);// 把用户信息插入数据表
-			
-//** user_skill子表的逻辑部分			
-//			if (!isEmpty(skill)) {
-//				UserSkill userskill = new UserSkill();
-//				userskill.setUser_id(user.getUser_id());
-//				String skillTemp[] = skill.split(";");
-//				for (int i = 0; i < skillTemp.length; i++) {
-//					userskill.setUser_skill(skillTemp[i]);
-//					userSkillMapper.addUserSkill(userskill);
-//				}
-//			}
-			
+
+			// ** user_skill子表的逻辑部分
+			// if (!isEmpty(skill)) {
+			// UserSkill userskill = new UserSkill();
+			// userskill.setUser_id(user.getUser_id());
+			// String skillTemp[] = skill.split(";");
+			// for (int i = 0; i < skillTemp.length; i++) {
+			// userskill.setUser_skill(skillTemp[i]);
+			// userSkillMapper.addUserSkill(userskill);
+			// }
+			// }
+
 			userinfo = user;// 返回更新的user对象给userinfo
 			registerResult = ResultCode.SUCCESS;
 		} else {
@@ -131,30 +132,30 @@ public class UserServices {
 	}
 
 	// ################################################################################
-	// ## 							User Login services
-	// ## 									用户登录
+	// ## User Login services
+	// ## 用户登录
 	// ##==============================================================================
-	// ## 								Instructions
+	// ## Instructions
 	// ##
 	// ##------------------------------------------------------------------------------
-	// ##	1. Require parameters:
-	// ##		(1) 'username'
-	// ##		(2) 'password'
+	// ## 1. Require parameters:
+	// ## (1) 'username'
+	// ## (2) 'password'
 	// ##
 	// ##------------------------------------------------------------------------------
-	// ##	2. Optional parameters: NULL
+	// ## 2. Optional parameters: NULL
 	// ##
 	// ##------------------------------------------------------------------------------
-	// ##	3. Return parameters:
-	// ##		(1) ResultCode.REQUIREINFO_NOTENOUGH
-	// ##		(2) ResultCode.SUCCESS
-	// ##		(3) ResultCode.PASSWORD_ERROR
-	// ##		(4) ResultCode.USERNAME_NOTEXIST
-	// ##		(5) checkUserStatus()
+	// ## 3. Return parameters:
+	// ## (1) ResultCode.REQUIREINFO_NOTENOUGH
+	// ## (2) ResultCode.SUCCESS
+	// ## (3) ResultCode.PASSWORD_ERROR
+	// ## (4) ResultCode.USERNAME_NOTEXIST
+	// ## (5) checkUserStatus()
 	// ##
 	// ##------------------------------------------------------------------------------
-	// ##	4. Return userinfo:
-	// ##		(1) userinfo
+	// ## 4. Return userinfo:
+	// ## (1) userinfo
 	// ##
 	// ################################################################################
 
@@ -197,59 +198,59 @@ public class UserServices {
 	}
 
 	// ################################################################################
-	// ## 						User information Update services
-	// ## 								用户信息修改、更新
+	// ## User information Update services
+	// ## 用户信息修改、更新
 	// ##==============================================================================
-	// ## 								Instructions
+	// ## Instructions
 	// ##
 	// ##------------------------------------------------------------------------------
-	// ##	1. Require parameters:
-	// ##		(1) Update by user: 'token'
-	// ##		(2) Update by admin: 'userid'
+	// ## 1. Require parameters:
+	// ## (1) Update by user: 'token'
+	// ## (2) Update by admin: 'userid'
 	// ##
 	// ##------------------------------------------------------------------------------
-	// ##	2. Optional parameters: (leave blank will not change) 
-	// ##		(1) 'account'
-	// ##		(2) 'password'
-	// ##		(3) 'usertype'
-	// ##		(4) 'name'
-	// ##		(5) 'picurl'
-	// ##		(6) 'mobile'
-	// ##		(7) 'gender'
-	// ##		(8) 'addresscode'
-	// ##		(9) 'address'
-	// ##		(10) 'email'
-	// ##		(11) 'language'
-	// ##		(12) 'skill'
-	// ##		(13) 'description'
-	// ##		(14) 'accessgroup'
-	// ##		(15) 'status'
+	// ## 2. Optional parameters: (leave blank will not change)
+	// ## (1) 'account'
+	// ## (2) 'password'
+	// ## (3) 'usertype'
+	// ## (4) 'name'
+	// ## (5) 'picurl'
+	// ## (6) 'mobile'
+	// ## (7) 'gender'
+	// ## (8) 'addresscode'
+	// ## (9) 'address'
+	// ## (10) 'email'
+	// ## (11) 'language'
+	// ## (12) 'skill'
+	// ## (13) 'description'
+	// ## (14) 'accessgroup'
+	// ## (15) 'status'
 	// ##
 	// ##------------------------------------------------------------------------------
-	// ##	3. Return parameters:
-	// ##		(1) ResultCode.REQUIREINFO_NOTENOUGH
-	// ##		(2) ResultCode.SUCCESS
-	// ##		(3) ResultCode.USERID_ERROR
-	// ##		(4) ResultCode.UNKNOWN_ERROR
-	// ##		(5) checkResult()
+	// ## 3. Return parameters:
+	// ## (1) ResultCode.REQUIREINFO_NOTENOUGH
+	// ## (2) ResultCode.SUCCESS
+	// ## (3) ResultCode.USERID_ERROR
+	// ## (4) ResultCode.UNKNOWN_ERROR
+	// ## (5) checkResult()
 	// ##
 	// ##------------------------------------------------------------------------------
-	// ##	4. Return userinfo:
-	// ##		(1) userinfo
+	// ## 4. Return userinfo:
+	// ## (1) userinfo
 	// ##
 	// ################################################################################
 
 	public int update(String account, String password, Integer usertype,
 			String name, String picurl, BigInteger mobile, Integer gender,
 			Integer addresscode, String address, String email, String language,
-			String skill, String description, String accessgroup, Integer status,
-			String token, Integer userid) {
+			String skill, String description, String accessgroup,
+			Integer status, String token, Integer userid) {
 		System.out.println("Here is UserServices.update method...");
 
-		int updatemode = 0; //记录update的模式: 1=user,2=admin
-		int changecount = 0; //记录更改次数
+		int updatemode = 0; // 记录update的模式: 1=user,2=admin
+		int changecount = 0; // 记录更改次数
 		User user = new User();
-		
+
 		// ***** 检测 token & userid *****
 		if (isEmpty(token) && userid == null)// 检测必要参数是否为空、null
 			return ResultCode.REQUIREINFO_NOTENOUGH;
@@ -270,18 +271,18 @@ public class UserServices {
 			return ResultCode.UNKNOWN_ERROR;
 
 		// ***** 检测 addresscode & address *****
-		if (addresscode != null && (addresscode+"").length() != 6)// 判断地址码是否六位数
+		if (addresscode != null && (addresscode + "").length() != 6)// 判断地址码是否六位数
 			return ResultCode.ADDRESSCODE_ERROR;
-		
+
 		if (addresscode != null && isEmpty(address))
-				return ResultCode.ADDRESS_NOTMATCH;
-		
+			return ResultCode.ADDRESS_NOTMATCH;
+
 		if (addresscode == null && !isEmpty(address)) {// 判断更改的地址名是否与原来的addresscode对应
 			addresscode = user.getUser_address_code();// 读取数据库的addresscode
-			
+
 			if (addresscode == null)
 				return ResultCode.ADDRESSCODE_ERROR;
-			
+
 			String addressname = checkAddresscodeName(addresscode);// 调用checkAddresscodeName方法，获取地址名
 			if (address.replace(";", "").matches(addressname + "(.*)")) {// 判断地址名是否一致
 				user.setUser_address(address);// 放入新地址名
@@ -290,11 +291,11 @@ public class UserServices {
 			} else
 				return ResultCode.ADDRESS_NOTMATCH;
 		}
-		
-		if ((addresscode != null && !isEmpty(address)) && 
-				(!user.getUser_address_code().equals(addresscode) || 
-						!user.getUser_address().equals(address))){
-			
+
+		if ((addresscode != null && !isEmpty(address))
+				&& (!user.getUser_address_code().equals(addresscode) || !user
+						.getUser_address().equals(address))) {
+
 			String addressname = checkAddresscodeName(addresscode);// 调用checkAddresscodeName方法，获取地址名
 			if (addressname == null)// 如果addressname 返回null, 表明addresscode错误
 				return ResultCode.ADDRESSCODE_ERROR;
@@ -306,7 +307,7 @@ public class UserServices {
 			} else
 				return ResultCode.ADDRESS_NOTMATCH;
 		}
-		
+
 		// ***** 检测其它变量 *****
 		if (!isEmpty(account) && !user.getUser_account().equals(account)) {
 			user.setUser_account(account);
@@ -360,7 +361,8 @@ public class UserServices {
 			changecount++;
 			System.out.println("accessgroup changed!");
 		}
-		if (updatemode == 2 && status != null && !user.getUser_status().equals(status)) {// admin模式时，判断status是否有变化
+		if (updatemode == 2 && status != null
+				&& !user.getUser_status().equals(status)) {// admin模式时，判断status是否有变化
 			user.setUser_status(status);
 			changecount++;
 			System.out.println("status changed!");
@@ -383,34 +385,34 @@ public class UserServices {
 				System.out.println("status changed as user mode!(usertype)");
 			}
 		}
-		
-//** user_skill子表的逻辑部分	
-//		if (!isEmpty(skill)) {
-//			UserSkill userskill = new UserSkill();
-//			userskill.setUser_id(user.getUser_id());
-//			String skillTemp[] = skill.split(";");
-//			for (int i = 0; i < skillTemp.length; i++) {
-//				userskill.setUser_skill(skillTemp[i]);
-//				userSkillMapper.addUserSkill(userskill);
-//			}
-//		}
-		
+
+		// ** user_skill子表的逻辑部分
+		// if (!isEmpty(skill)) {
+		// UserSkill userskill = new UserSkill();
+		// userskill.setUser_id(user.getUser_id());
+		// String skillTemp[] = skill.split(";");
+		// for (int i = 0; i < skillTemp.length; i++) {
+		// userskill.setUser_skill(skillTemp[i]);
+		// userSkillMapper.addUserSkill(userskill);
+		// }
+		// }
+
 		if (changecount > 0)
 			userMapper.updateUser(user);// 把用户信息插入数据表
 
 		userinfo = user;// 返回更新的user对象给userinfo
 		return ResultCode.SUCCESS;
-		
+
 	}
 
 	// ###################
 	// ## 根据addresscode读取省、市、区名
 	// ###################
-	
-	public String checkAddresscodeName(Integer addresscode){
+
+	public String checkAddresscodeName(Integer addresscode) {
 		List<AddressList> addresslist = addressListMapper
 				.getAddressByAreano(addresscode);// addressList 对象
-		
+
 		if (addresslist.size() == 0)
 			return null;
 		int arealevel = addresslist.get(0).getArealevel();// 读取对应的地址level
@@ -426,38 +428,58 @@ public class UserServices {
 							.getAreaname();
 					break;
 				case 2:// 得到市级名字
-					int tempcode2 = addresscode / 100;
 					addressname = addressname
 							+ addressListMapper
-									.getAddressByAreano(tempcode2 * 100).get(0)
-									.getAreaname();
+									.getAddressByAreano(
+											addresslist.get(0).getParentno())
+									.get(0).getAreaname();
 					break;
 				}
 			}
 		}
-		
+
 		addressname = addressname + addresslist.get(0).getAreaname();// 得到原来addresscode的地址名
 		return addressname;
 	}
-	
+
 	// ###################
-	// ## 读取省、市、区列表
+	// ## 读取Child省、市、区列表
 	// ###################
-	
-	public int checkAddressList(Integer addresscode){
-		System.out.println("Here is UserServices.checkAddressList method...");
-		
-		List<AddressList> addresslist = addressListMapper.getAddressByParentno(addresscode);
-		if (addresslist.size() > 0){
-			
+
+	public int checkChildAdsList(Integer addresscode) {
+		System.out.println("Here is UserServices.checkChildAdsList method...");
+
+		List<AddressList> addresslist = addressListMapper
+				.getAddressByParentno(addresscode);
+		if (addresslist.size() > 0) {
+
 			this.addresslist = addresslist;
-			
+
 			return ResultCode.SUCCESS;
-		}else {
+		} else {
 			return ResultCode.ADDRESS_NULL;
 		}
 	}
-	
+
+	// ###################
+	// ## 读取省、市、区列表
+	// ###################
+
+	public int checkAdsList(Integer addresscode) {
+		System.out.println("Here is UserServices.checkAdsList method...");
+
+		List<AddressList> addresslist = addressListMapper
+				.getAddressByAreano(addresscode);
+		if (addresslist.size() > 0) {
+
+			this.addresslist = addresslist;
+
+			return ResultCode.SUCCESS;
+		} else {
+			return ResultCode.ADDRESS_NULL;
+		}
+	}
+
 	// ###################
 	// ## 拉取User表
 	// ###################
@@ -467,9 +489,9 @@ public class UserServices {
 
 		int checkTokenResult = checkToken(token);
 		if (checkTokenResult == ResultCode.SUCCESS) {
-				if (userinfo.getUser_type() != 3){
-					return ResultCode.ACCESS_REJECT;
-				}
+			if (userinfo.getUser_type() != 3) {
+				return ResultCode.ACCESS_REJECT;
+			}
 			List<User> userlist = userMapper.findAll();
 			if (userlist.size() > 0) {
 				this.userlist = userlist;
@@ -481,6 +503,7 @@ public class UserServices {
 			return checkTokenResult;
 		}
 	}
+
 	// ###################
 	// ## 检测用户 token
 	// ###################
@@ -576,7 +599,7 @@ public class UserServices {
 		}
 		return checkUserResult;
 	}
-	
+
 	// ###################
 	// 判断是否数字的方法
 	// ###################
@@ -619,15 +642,15 @@ public class UserServices {
 	public List<User> getUserlist() {
 		return userlist;
 	}
-	
-//	public List<UserSkill> test(int test){
-//		
-//		List<UserSkill> temp = userSkillMapper.getUserSkillById(test);
-//		
-//		for (int i = 0; i < temp.size(); i++) {
-//			System.out.println(temp.get(i).getUser_skill());
-//		}
-//		
-//		return temp;
-//	}
+
+	// public List<UserSkill> test(int test){
+	//
+	// List<UserSkill> temp = userSkillMapper.getUserSkillById(test);
+	//
+	// for (int i = 0; i < temp.size(); i++) {
+	// System.out.println(temp.get(i).getUser_skill());
+	// }
+	//
+	// return temp;
+	// }
 }

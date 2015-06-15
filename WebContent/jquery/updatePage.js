@@ -1,3 +1,72 @@
+function showaddresslist(times,childcode,parentcode){
+	if(times < 1){
+		return; 
+	}
+	var idname = 'adscode_' + times;
+	$.ajax({
+		type : "post",
+		url : "${pageContext.request.contextPath}/user_checkChildAdsListJson.action", 
+		data : {"addresscode" : parentcode}, 
+		success : function(data) {
+			for(var j=0;j<data.addresslist.length;j++){
+				document.getElementById(idname).options.add(new Option(data.addresslist[j].areaname,data.addresslist[j].areano)); 
+			}
+			$("#"+idname).val(childcode);
+			times--;
+			childcode = parentcode;
+			if(times == 1){
+				parentcode = 0;
+			}else{
+				parentcode = parseInt(parentcode/10000)*10000;
+			}
+			showaddresslist(times,childcode,parentcode);
+		}
+	});
+}
+
+function updateaddresscodename(idno){
+	var namevalue = "";
+	var idname = "";
+	for(var i=idno;i>=1;i--){
+		idname = 'adscode_' + i;
+		var selectIndex = document.getElementById(idname).selectedIndex;
+		namevalue = document.getElementById(idname).options[selectIndex].text + ";" + namevalue;
+	}
+	document.getElementById("addresscodename").value = namevalue;
+}
+
+function getaddresslist(parentcode,idno){
+	updateaddresscodename(idno);
+	document.getElementById("addresscode").value = parentcode;
+	if(idno == 3){
+		return;
+	}
+	idno++;
+	var idname = 'adscode_' + idno;
+	if(idno == 2){
+		document.getElementById(idname).options.length = 1;
+		var idnameT = 'adscode_' + (idno + 1);
+		document.getElementById(idnameT).options.length = 1;
+	}else{
+		document.getElementById(idname).options.length = 1;
+	}
+	$.ajax({
+		type : "post",
+		url : "${pageContext.request.contextPath}/user_checkChildAdsListJson.action", 
+		data : {"addresscode" : parentcode}, 
+		success : function(data) {
+			if(data.checkChildAdsListResult){
+				document.getElementById(idname).style.display = "";
+				for(var j=0;j<data.addresslist.length;j++){
+					document.getElementById(idname).options.add(new Option(data.addresslist[j].areaname,data.addresslist[j].areano)); 
+				}
+			}else{
+				document.getElementById(idname).style.display = "none";
+			}
+		}
+	});
+}
+
 function checkpwd(id) {
 	childobj = document.getElementById(id);
 	if (childobj.value != document.getElementById('prepassword').value) {
@@ -13,19 +82,41 @@ function checkpwd(id) {
 	return;
 }
 
+function onload() {
+	if (usertype == 1 || usertype == 2) {
+		document.getElementById('token').disabled = "";
+		document.getElementById('token_tr').style.display = "";
+		document.getElementById('usertype').options[value = '3'].remove();
+	}
 
-function onload() {	
-	if(usertype == 1 || usertype == 2){
-		document.getElementById('token').disabled="";
-		document.getElementById('token_tr').style.display="";
-		document.getElementById('usertype').options.remove(3);
+	if (usertype == 3) {
+		document.getElementById('userid').disabled = "";
+		document.getElementById('userid_tr').style.display = "";
 	}
-	
-	if(usertype == 3){
-		document.getElementById('userid').disabled="";
-		document.getElementById('userid_tr').style.display="";
+
+	document.getElementById('usertype')[usertype].selected = true;
+	document.getElementById('gender')[gender].selected = true;
+
+	$(function() {
+		$.post("${pageContext.request.contextPath}/user_checkAdsListJson.action", {
+			"addresscode" : addresscode
+		}, function(data) {
+			if (data.checkAdsListResult) {
+				if(data.addresslist[0].arealevel < 3){
+					document.getElementById('adscode_3').style.display = "none";
+				}
+				showaddresslist(data.addresslist[0].arealevel,addresscode,data.addresslist[0].parentno);
+			} else {
+				alert("Error addresscode");
+			}
+		});
+	});
+}
+
+function validate(){
+	addresscodename = document.getElementById("addresscodename").value;
+	if(addresscodename != ""){
+		document.getElementById("address").value = addresscodename + document.getElementById("lastads").value;
 	}
-	
-	document.getElementById('usertype')[usertype].selected=true;
-	document.getElementById('gender')[gender].selected=true;
+	return true;
 }

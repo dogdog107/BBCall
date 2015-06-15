@@ -16,6 +16,7 @@
 <script type="text/javascript">
 	var usertype = "${sessionScope.user.user_type}";
 	var gender = "${sessionScope.user.user_gender}";
+	var addresscode = "${sessionScope.user.user_address_code}";
 </script>
 </head>
 
@@ -129,12 +130,27 @@
 				</tr>
 				<tr>
 					<td>默认地址</td>
-					<td><input type="text" name="address" onfocus="this.value=''"
-						onblur="if(this.value==''){this.value='${sessionScope.user.user_address}'}"
-						value="${sessionScope.user.user_address}" /></td>
+					<td>
+					<select id="adscode_1" onchange="getaddresslist(this.options[selectedIndex].value,1)">
+							<option>--请选择省份--</option>
+					</select>
+					<select id="adscode_2" onchange="getaddresslist(this.options[selectedIndex].value,2)">
+							<option>--请选择城市--</option>
+					</select>
+					<select id="adscode_3" onchange="getaddresslist(this.options[selectedIndex].value,3)">
+							<option>--请选择镇区--</option>
+					</select>
+					<input type="hidden" name="addresscode" id="addresscode" value="${sessionScope.user.user_address_code}"/>
+					<input type="hidden" id="addresscodename" value=""/>
+					<s:set name="lastadsset" value="%{#session.user.user_address.split(';')[#session.user.user_address.split(';').length-1]}"/>
+					<input type="text" onfocus="this.value=''" id="lastads"
+						onblur="if(this.value==''){this.value='${lastadsset}'}"
+						value="${lastadsset}" />
+					<input type="hidden" name="address" id="address" value="${sessionScope.user.user_address}"/>	
+					</td>
 				</tr>
 				<tr>
-					<td colspan="2" align="center"><input type="submit" value="修改" /><input
+					<td colspan="2" align="center"><input type="submit" value="修改" onclick="return validate();"/><input
 						type="button" value="取消" onclick="location.href='right.jsp'" /></td>
 				</tr>
 			</table>
