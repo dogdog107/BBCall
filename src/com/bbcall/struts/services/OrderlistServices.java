@@ -10,9 +10,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.bbcall.functions.ResultCode;
+import com.bbcall.mybatis.dao.AddressListMapper;
 import com.bbcall.mybatis.dao.OrderlistMapper;
 import com.bbcall.mybatis.dao.PreorderMapper;
 import com.bbcall.mybatis.dao.UserMapper;
+import com.bbcall.mybatis.table.AddressList;
 import com.bbcall.mybatis.table.Orderlist;
 import com.bbcall.mybatis.table.User;
 
@@ -28,10 +30,14 @@ public class OrderlistServices {
 	@Autowired
 	private PreorderMapper preorderMapper;
 
+	@Autowired
+	private AddressListMapper addressListMapper;
+
 	public Orderlist orderlistinfo;
 	public List<Orderlist> orderlistinfos;
 	public String master_skill;
 	public List<String> master_skills;
+	private List<AddressList> addresslist;
 
 	// ################################################################################
 	// ## Add Order services
@@ -226,7 +232,7 @@ public class OrderlistServices {
 
 	public int deleteOrder(int order_id, String order_user_account) {
 		orderlistMapper.deleteOrder(order_id);
-		
+
 		preorderMapper.deletePreorderByOrderId(order_id);
 
 		orderlistinfos = orderlistMapper
@@ -409,7 +415,7 @@ public class OrderlistServices {
 			List<String> skilllist, List<String> locationlist) {
 
 		orderlistinfos = null;
-		
+
 		for (int i = 0; i < skilllist.size(); i++) { // 通过技能列表取得所有符合师傅技能的订单
 			for (int j = 0; j < locationlist.size(); j++) {
 				if (orderlistinfos == null) {
@@ -494,7 +500,7 @@ public class OrderlistServices {
 		User user = userMapper.getUserByAccount(user_account);
 
 		orderlistinfos = null;
-		
+
 		if (user.getUser_type() == 1) { // 如果是用户的account
 			orderlistinfos = orderlistMapper
 					.getProOrdersByUserAccount(user_account);
@@ -548,6 +554,44 @@ public class OrderlistServices {
 		return ResultCode.SUCCESS;
 	}
 
+	// ###################
+	// ## 读取省、市、区列表
+	// ###################
+
+	public int checkAdsList(int addresscode) {
+		System.out.println("Here is UserServices.checkAdsList method...");
+
+		List<AddressList> addresslist = addressListMapper
+				.getAddressByAreano(addresscode);
+		if (addresslist.size() > 0) {
+
+			this.addresslist = addresslist;
+
+			return ResultCode.SUCCESS;
+		} else {
+			return ResultCode.ADDRESS_NULL;
+		}
+	}
+
+	// ###################
+	// ## 读取Child省、市、区列表
+	// ###################
+
+	public int checkChildAdsList(int addresscode) {
+		System.out.println("Here is UserServices.checkChildAdsList method...");
+
+		List<AddressList> addresslist = addressListMapper
+				.getAddressByParentno(addresscode);
+		if (addresslist.size() > 0) {
+
+			this.addresslist = addresslist;
+
+			return ResultCode.SUCCESS;
+		} else {
+			return ResultCode.ADDRESS_NULL;
+		}
+	}
+
 	public Orderlist orderlistinfo() {
 
 		return orderlistinfo;
@@ -557,4 +601,13 @@ public class OrderlistServices {
 
 		return orderlistinfos;
 	}
+
+	public List<AddressList> getAddresslist() {
+		return addresslist;
+	}
+
+	public void setAddresslist(List<AddressList> addresslist) {
+		this.addresslist = addresslist;
+	}
+
 }

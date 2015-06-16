@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8"?>  
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"   
+ "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.bbcall.mybatis.dao.ReferdocMapper">
+
+	<resultMap id="ReferdocResultMap" type="com.bbcall.mybatis.table.Referdoc">
+		<id column="referdoc_id" property="referdoc_id" jdbcType="INTEGER" />
+		<result column="referdoc_type" property="referdoc_type"
+			jdbcType="VARCHAR" />
+		<result column="referdoc_price" property="referdoc_price" jdbcType="DECIMAL" />
+	</resultMap>
+
+	<insert id="addReferdoc" parameterType="com.bbcall.mybatis.table.Referdoc"
+		useGeneratedKeys="true" keyProperty="referdoc_id">
+		insert into referdoc
+		(referdoc_type,
+		referdoc_price) values
+		(#{referdoc_type},
+		#{referdoc_price})
+	</insert>
+	<select id="getReferdoc" parameterType="int"
+		resultType="com.bbcall.mybatis.table.Referdoc">
+		select * from referdoc
+		where
+		referdoc_id=#{referdoc_id}
+	</select>
+	<select id="getReferdocByType" parameterType="String"
+		resultType="com.bbcall.mybatis.table.Referdoc">
+		select * from referdoc
+		where
+		referdoc_type=#{referdoc_type}
+	</select>
+	<select id="getReferdoclist" resultMap="ReferdocResultMap">
+		select * from referdoc
+	</select>
+	<update id="updateReferdoc" parameterType="com.bbcall.mybatis.table.Referdoc">
+		update referdoc set
+		referdoc_type=#{referdoc_type},
+		referdoc_price=#{referdoc_price}
+		where
+		referdoc_id=#{referdoc_id}
+	</update>
+	<delete id="deleteReferdoc" parameterType="int">
+		delete from referdoc
+		where
+		referdoc_id=#{referdoc_id}
+	</delete>
+
+</mapper>  

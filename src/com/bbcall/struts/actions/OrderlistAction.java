@@ -20,6 +20,7 @@ import org.springframework.stereotype.Controller;
 
 import com.bbcall.functions.RandomCode;
 import com.bbcall.functions.ResultCode;
+import com.bbcall.mybatis.table.AddressList;
 import com.bbcall.mybatis.table.Orderlist;
 import com.bbcall.struts.services.OrderlistServices;
 import com.opensymphony.xwork2.ActionSupport;
@@ -49,6 +50,7 @@ public class OrderlistAction extends ActionSupport {
 	private double order_price;
 	private String user_account;
 	private String order_type;
+	private int addresscode;
 	private List<String> skilllist;
 	private List<String> locationlist;
 
@@ -255,13 +257,13 @@ public class OrderlistAction extends ActionSupport {
 		return "json";
 	}
 
-	//按照发布日期排序
+	// 按照发布日期排序
 	public String selectunorderlist() throws Exception {
 		dataMap = new HashMap<String, Object>(); // 新建dataMap来储存JSON字符串
 		dataMap.clear(); // dataMap中的数据将会被Struts2转换成JSON字符串，所以这里要先清空其中的数据
 
-		int result = orderlistServices.getUnOrders(skilllist,
-				locationlist,user_account);
+		int result = orderlistServices.getUnOrders(skilllist, locationlist,
+				user_account);
 
 		if (result == ResultCode.SUCCESS) {
 			List<Orderlist> orderlist = orderlistServices.orderlistinfos();
@@ -279,7 +281,7 @@ public class OrderlistAction extends ActionSupport {
 		return "json";
 	}
 
-	//按照截止日期排序
+	// 按照截止日期排序
 	public String selectunordersbybooktime() throws Exception {
 		dataMap = new HashMap<String, Object>(); // 新建dataMap来储存JSON字符串
 		dataMap.clear(); // dataMap中的数据将会被Struts2转换成JSON字符串，所以这里要先清空其中的数据
@@ -289,7 +291,7 @@ public class OrderlistAction extends ActionSupport {
 
 		if (result == ResultCode.SUCCESS) {
 			List<Orderlist> orderlist = orderlistServices.orderlistinfos();
-			
+
 			dataMap.put("orderlists", orderlist);
 			dataMap.put("resultcode", result);
 			dataMap.put("errmsg", ResultCode.getErrmsg(result));
@@ -312,7 +314,7 @@ public class OrderlistAction extends ActionSupport {
 
 		if (result == ResultCode.SUCCESS) {
 			List<Orderlist> orderlist = orderlistServices.orderlistinfos();
-			
+
 			dataMap.put("orderlists", orderlist);
 			dataMap.put("resultcode", result);
 			dataMap.put("errmsg", ResultCode.getErrmsg(result));
@@ -332,7 +334,7 @@ public class OrderlistAction extends ActionSupport {
 		dataMap.clear(); // dataMap中的数据将会被Struts2转换成JSON字符串，所以这里要先清空其中的数据
 
 		int result = orderlistServices.getComOrders(user_account);
-		
+
 		if (result == ResultCode.SUCCESS) {
 			List<Orderlist> orderlist = orderlistServices.orderlistinfos();
 			dataMap.put("orderlists", orderlist);
@@ -393,6 +395,60 @@ public class OrderlistAction extends ActionSupport {
 		}
 
 		return SUCCESS;
+	}
+
+	// checkParentAdsList Action
+	public String checkChildAdsList() throws Exception {
+		System.out.println("Here is UserAction.checkChildAdsList");
+		dataMap.clear(); // dataMap中的数据将会被Struts2转换成JSON字符串，所以这里要先清空其中的数据
+		int result = orderlistServices.checkChildAdsList(addresscode);// 调用userServices.checkParentAdsList
+
+		if (result == ResultCode.SUCCESS) {
+			List<AddressList> addresslist = orderlistServices.getAddresslist();
+			dataMap.put("addresslist", addresslist); // 把addresslist对象放入dataMap
+			dataMap.put("resultcode", result); // 放入一个是否操作成功的标识
+			dataMap.put("errmsg", ResultCode.getErrmsg(result));
+			dataMap.put("checkChildAdsListResult", true); // 放入checkUserNameResult
+		} else {
+			dataMap.put("resultcode", result); // 放入一个是否操作成功的标识
+			dataMap.put("errmsg", ResultCode.getErrmsg(result));
+			dataMap.put("checkChildAdsListResult", false); // 放入checkUserNameResult
+			System.out.println(dataMap);
+		}
+		return SUCCESS;
+	}
+
+	public String checkChildAdsListJson() throws Exception {
+		System.out.println("Here is UserAction.checkChildAdsListJson");
+		checkChildAdsList();
+		return "json";
+	}
+
+	// checkAdsList Action
+	public String checkAdsList() throws Exception {
+		System.out.println("Here is UserAction.checkAdsList");
+		dataMap.clear(); // dataMap中的数据将会被Struts2转换成JSON字符串，所以这里要先清空其中的数据
+		int result = orderlistServices.checkAdsList(addresscode);// 调用userServices.checkAdsList
+
+		if (result == ResultCode.SUCCESS) {
+			List<AddressList> addresslist = orderlistServices.getAddresslist();
+			dataMap.put("addresslist", addresslist); // 把addresslist对象放入dataMap
+			dataMap.put("resultcode", result); // 放入一个是否操作成功的标识
+			dataMap.put("errmsg", ResultCode.getErrmsg(result));
+			dataMap.put("checkAdsListResult", true); // 放入checkUserNameResult
+		} else {
+			dataMap.put("resultcode", result); // 放入一个是否操作成功的标识
+			dataMap.put("errmsg", ResultCode.getErrmsg(result));
+			dataMap.put("checkAdsListResult", false); // 放入checkUserNameResult
+			System.out.println(dataMap);
+		}
+		return SUCCESS;
+	}
+
+	public String checkAdsListJson() throws Exception {
+		System.out.println("Here is UserAction.checkAdsListJson");
+		checkAdsList();
+		return "json";
 	}
 
 	public String deleteJson() throws Exception {
@@ -571,6 +627,14 @@ public class OrderlistAction extends ActionSupport {
 
 	public List<String> getLocationlist() {
 		return locationlist;
+	}
+
+	public int getAddresscode() {
+		return addresscode;
+	}
+
+	public void setAddresscode(int addresscode) {
+		this.addresscode = addresscode;
 	}
 
 }
