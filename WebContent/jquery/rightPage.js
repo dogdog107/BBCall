@@ -2,27 +2,30 @@
  * check username whether exist
  */
 $(function() {
-	$("#account").html(window.parent.account);
-	$("#accountName").html(window.parent.account);
-	$("#name").html(window.parent.name);
-	$("#email").html(window.parent.email);
-	$("#logintime").html(window.parent.logintime);
-	$("#createtime").html(window.parent.createtime);
-	$("#mobile").html(window.parent.mobile);
-	$("#gender").html(window.parent.gender);
-	$("#language").html(window.parent.language);
-	$("#skill").html(window.parent.skill);
-	$("#status").html(window.parent.status);
-	$("#token").html(window.parent.token);
-	switch (window.parent.type) {
+	switch (usertype) {
+	case 1:
+		$("#usertype").html("User");
+		break;
+	case 2:
+		$("#usertype").html("Master");
+		break;
+	case 3:
+		$("#usertype").html("Admin");
+		break;
+	}
+
+	switch (status) {
 	case "1":
-		$("#type").html("用户");
+		$("#status").html("active");
 		break;
 	case "2":
-		$("#type").html("师傅");
+		$("#status").html("pause");
 		break;
 	case "3":
-		$("#type").html("管理员");
+		$("#status").html("pending");
+		break;
+	case "4":
+		$("#status").html("locked");
 		break;
 	}
 });

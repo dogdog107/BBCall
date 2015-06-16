@@ -1,5 +1,21 @@
 body{
     font-size: 13px;
+    MARGIN: 0px
+}
+BODY {
+	FONT-SIZE: 13px; LINE-HEIGHT: 150%; FONT-FAMILY: "Verdana", "Arial", "Helvetica", "sans-serif"
+}
+TABLE {
+	FONT-SIZE: 14px; LINE-HEIGHT: 150%; FONT-FAMILY: "Verdana", "Arial", "Helvetica", "sans-serif"
+}
+INPUT {
+	FONT-SIZE: 13px; FONT-FAMILY: "Verdana", "Arial", "Helvetica", "sans-serif"
+}
+SELECT {
+	FONT-SIZE: 13px; FONT-FAMILY: "Verdana", "Arial", "Helvetica", "sans-serif"
+}
+TEXTAREA {
+	FONT-SIZE: 13px; FONT-FAMILY: "Verdana", "Arial", "Helvetica", "sans-serif"
 }
 .div_search{
     font-size: 13px;
@@ -9,6 +25,16 @@ body{
     height:30px;
     background-color: #E8F2FC;
     border: solid #1c94c4 1px;
+    overflow: hidden
+}
+.div_message{
+    font-size: 14px;
+    margin: 10px 5px;
+    padding-left: 10px;
+    line-height: 30px;
+    height:30px;
+    background-color: #FFFFAA;
+    border: solid #FFD306 1px;
     overflow: hidden
 }
 .table_a{

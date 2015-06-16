@@ -8,6 +8,10 @@
 <link href="css/admin.css" type="text/css" rel="stylesheet" />
 <script type="text/javascript"
 	src="${pageContext.request.contextPath }/jquery/jquery-1.8.3.js"></script>
+<script type="text/javascript">
+	var usertype = ${sessionScope.user.user_type};
+	var status = ${sessionScope.user.user_status};
+</script>
 <script type="text/javascript"
 	src="${pageContext.request.contextPath }/jquery/rightPage.js"></script>
 
@@ -36,8 +40,7 @@
 						<td>当前时间：<label id="showTime"></label></td>
 					</tr>
 					<tr>
-						<td style="font-weight: bold; font-size: 16px"><span
-							id="accountName"></span></td>
+						<td style="font-weight: bold; font-size: 16px">${sessionScope.user.user_account}</td>
 					</tr>
 					<tr>
 						<td>欢迎进入网站管理中心！</td>
@@ -67,23 +70,23 @@
 	<table cellspacing=0 cellpadding=2 width="95%" align=center border=0>
 		<tr>
 			<td align=right width=100>登陆帐号：</td>
-			<td style="color: #880000"><span id="account"></span></td>
+			<td style="color: #880000">${sessionScope.user.user_account}</td>
 		</tr>
 		<tr>
 			<td align=right>电子邮箱：</td>
-			<td style="color: #880000"><span id="email"></span></td>
+			<td style="color: #880000">${sessionScope.user.user_email}</td>
 		</tr>
 		<tr>
 			<td align=right>真实姓名：</td>
-			<td style="color: #880000"><span id="name"></span></td>
+			<td style="color: #880000">${sessionScope.user.user_name}</td>
 		</tr>
 		<tr>
 			<td align=right>手机号：</td>
-			<td style="color: #880000"><span id="mobile"></span></td>
+			<td style="color: #880000">${sessionScope.user.user_mobile}</td>
 		</tr>
 		<tr>
 			<td align=right>身份：</td>
-			<td style="color: #880000"><span id="type"></span></td>
+			<td style="color: #880000"><span id="usertype"></span></td>
 		</tr>
 		<tr>
 			<td align=right>帐号状态：</td>
@@ -91,15 +94,15 @@
 		</tr>
 		<tr>
 			<td align=right>登录标识：</td>
-			<td style="color: #880000"><span id="token"></span></td>
+			<td style="color: #880000">${sessionScope.user.user_token}</td>
 		</tr>
 		<tr>
 			<td align=right>登录时间：</td>
-			<td style="color: #880000"><span id="logintime"></span></td>
+			<td style="color: #880000">${sessionScope.user.user_login_time}</td>
 		</tr>
 		<tr>
 			<td align=right>注册时间：</td>
-			<td style="color: #880000"><span id="createtime"></span></td>
+			<td style="color: #880000">${sessionScope.user.user_create_time}</td>
 		</tr>
 	</table>
 	<div style="text-align: center;">

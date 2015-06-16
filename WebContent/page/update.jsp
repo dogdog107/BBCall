@@ -12,7 +12,7 @@
 <script type="text/javascript"
 	src="${pageContext.request.contextPath }/jquery/jquery-1.8.3.js"></script>
 <script type="text/javascript"
-	src="${pageContext.request.contextPath }/jquery/updatePage.js"></script>
+	src="${pageContext.request.contextPath }/jquery/updatePage.js?token=${sessionScope.user.user_token}"></script>
 <script type="text/javascript">
 	var usertype = "${sessionScope.user.user_type}";
 	var gender = "${sessionScope.user.user_gender}";
@@ -24,10 +24,9 @@
 
 <body onload="onload()">
 
-	<table cellspacing=0 cellpadding=0 width="100%" align=center border=0>
+	<table cellspacing=0 cellpadding=0 width="100%" align=center border=0 style="font-size: 12px;">
 		<tr height=28>
-			<td background=${pageContext.request.contextPath }
-				/page/img/title_bg1.jpg>当前位置:<a href="right.jsp" target=main>主页</a>
+			<td background=./img/title_bg1.jpg>当前位置:<a href="right.jsp" target=main>主页</a>
 				-> 修改用户信息
 			</td>
 		</tr>
@@ -35,8 +34,7 @@
 			<td bgcolor=#b1ceef height=1></td>
 		</tr>
 		<tr height=20>
-			<td background=${pageContext.request.contextPath }
-				/page/img/shadow_bg.jpg></td>
+			<td background=./img/shadow_bg.jpg></td>
 		</tr>
 	</table>
 	<div></div>
@@ -45,23 +43,22 @@
 		<form action="user_update" method="post">
 			<table border="1" width="100%" class="table_a">
 				<div style="font-size: 13px; margin: 10px 5px">
-					<span><s:if test="#{ dataMap.updateResult}">
+					<span> <s:if test="dataMap.updateResult">
 							<font color="green">修改成功！${ dataMap.errmsg}</font>
-							<s:else>
-								<font color="red">修改失败！</font>
-							</s:else>
-						</s:if></span>
+						</s:if>
+						<s:else>
+							<s:if test="!dataMap.updateResult">
+								<font color="red">修改失败！${ dataMap.errmsg}</font>
+							</s:if>
+						</s:else>
+					</span>
 				</div>
 				<tr id="userid_tr">
 					<td>用户ID</td>
 					<td><input type="text" name="userid" id="userid"
 						value="${sessionScope.user.user_id}" disabled="disabled" /></td>
 				</tr>
-				<tr id="token_tr" style="display: none">
-					<td>用户token</td>
-					<td><input type="text" name="token" id="token"
-						value="${sessionScope.user.user_token}" disabled="disabled" /></td>
-				</tr>
+				<input type="hidden" id="token" name="token" value="${sessionScope.user.user_token}"/>
 				<tr>
 					<td>用户类型</td>
 					<td><select name="usertype" id="usertype">
@@ -79,7 +76,7 @@
 				</tr>
 				<tr>
 					<td>修改密码</td>
-					<td><input type="password" name="prepassword" id="prepassword"
+					<td><input type="password" id="prepassword"
 						onblur="if(this.value!=''){document.getElementById('repwd').style.display=''}" /></td>
 				</tr>
 				<tr id="repwd" style="display: none">
@@ -89,7 +86,7 @@
 				</tr>
 				<tr>
 					<td>用户姓名</td>
-					<td><input type="text" name="" onfocus="this.value=''"
+					<td><input type="text" name="name" onfocus="this.value=''"
 						onblur="if(this.value==''){this.value='${sessionScope.user.user_name}'}"
 						value="${sessionScope.user.user_name}" /></td>
 				</tr>
@@ -116,11 +113,12 @@
 				<tr>
 					<td>用户语言</td>
 					<td>
-					<input type="hidden" id="language" value="${sessionScope.user.user_language}"/>
+					<input type="hidden" id="language" name="language" value="${sessionScope.user.user_language}"/>
 					
-					<input name="languagepart" type="checkbox" id="English" value="English" />英文(English)&nbsp;&nbsp;
-					<input name="languagepart" type="checkbox" id="Cantonese" value="Cantonese" />广东话(Cantonese)&nbsp;&nbsp;
-					<input name="languagepart" type="checkbox" id="Chinese" value="Chinese" />普通话(Chinese)&nbsp;&nbsp;
+					<label><input name="languagepart" type="checkbox" id="English" value="English" />英文(English)</label>&nbsp;&nbsp;
+					<label><input name="languagepart" type="checkbox" id="Cantonese" value="Cantonese" />广东话(Cantonese)</label>&nbsp;&nbsp;
+					<label><input name="languagepart" type="checkbox" id="Chinese" value="Chinese" />普通话(Chinese)</label>&nbsp;&nbsp;
+					</td>
 				</tr>
 				<tr>
 					<td>用户头像</td>
@@ -130,9 +128,6 @@
 				<tr>
 					<td>用户技能</td>
 					<td>
-					<input name="skill" type="checkbox" value="English" />英文(English)&nbsp;&nbsp;
-					<input name="skill" type="checkbox" value="Cantonese" />广东话(Cantonese)&nbsp;&nbsp;
-					<input name="skill" type="checkbox" value="Chinese" />普通话(Chinese)&nbsp;&nbsp;
 					<input type="text" name="skill" onfocus="this.value=''"
 						onblur="if(this.value==''){this.value='${sessionScope.user.user_skill}'}"
 						value="${sessionScope.user.user_skill}" /></td>
@@ -151,8 +146,9 @@
 					</select>
 					<input type="hidden" name="addresscode" id="addresscode" value="${sessionScope.user.user_address_code}"/>
 					<input type="hidden" id="addresscodename" value=""/>
+					
 					<s:if test="%{#session.user.user_address!=null}">
-					<s:set name="lastadsset" value="%{#session.user.user_address.split(';')[#session.user.user_address.split(';').length-1]}"/>
+						<s:set name="lastadsset" value="%{#session.user.user_address.split(';')[#session.user.user_address.split(';').length-1]}"/>
 					</s:if>
 					<input type="text" onfocus="this.value=''" id="lastads"
 						onblur="if(this.value==''){this.value='${lastadsset}'}"

@@ -271,10 +271,10 @@ public class UserServices {
 			return ResultCode.UNKNOWN_ERROR;
 
 		// ***** 检测 addresscode & address *****
-		if (addresscode != null && (addresscode + "").length() != 6)// 判断地址码是否六位数
+		if (addresscode != null && addresscode != 0 && (addresscode + "").length() != 6)// 判断地址码是否六位数
 			return ResultCode.ADDRESSCODE_ERROR;
 
-		if (addresscode != null && isEmpty(address))
+		if (addresscode != null && addresscode != 0 && isEmpty(address))
 			return ResultCode.ADDRESS_NOTMATCH;
 
 		if (addresscode == null && !isEmpty(address)) {// 判断更改的地址名是否与原来的addresscode对应
@@ -329,7 +329,7 @@ public class UserServices {
 			changecount++;
 			System.out.println("picurl changed!");
 		}
-		if (mobile != null && !user.getUser_mobile().equals(mobile)) {
+		if (mobile != null && !mobile.equals(user.getUser_mobile())) {
 			user.setUser_mobile(mobile);
 			changecount++;
 			System.out.println("mobile changed!");

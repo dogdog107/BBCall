@@ -321,6 +321,18 @@
                             <td align=middle width=30><img height=9 
                                                            src="./img/menu_icon.gif" width=9></td>
                             <td><a class=menuchild 
+                                   href="${pageContext.request.contextPath }/page/userlist.jsp" 
+                                   target=main>用户列表</a></td></tr>
+                        <tr height=20>
+                            <td align=middle width=30><img height=9 
+                                                           src="./img/menu_icon.gif" width=9></td>
+                            <td><a class=menuchild 
+                                   href="#" 
+                                   target=main>师傅列表</a></td></tr>
+                        <tr height=20>
+                            <td align=middle width=30><img height=9 
+                                                           src="./img/menu_icon.gif" width=9></td>
+                            <td><a class=menuchild 
                                    href="#" 
                                    target=main>管理员列表</a></td></tr>
                         <tr height=4>
@@ -348,9 +360,14 @@
                             <td><a class=menuchild 
                                    onclick="if (confirm('确定要退出吗？')) return true; else return false;" 
                                    href="http://www.865171.cn" 
-                                   target=_top>退出系统</a></td></tr></table></td>
+                                   target=_top>退出系统</a></td></tr></table>
+                                   </td>
                 <td width=1 bgcolor=#d1e6f7></td>
             </tr>
+            <tr height=20>
+				<td background=./img/shadow_bg.jpg></td>
+				<td width=1 background=./img/shadow_bg.jpg></td>
+			</tr>
         </table>
     </body>
 </html>

@@ -5,17 +5,22 @@
 <html>
 <head>
 <meta http-equiv=content-type content="text/html; charset=utf-8" />
-<link href="css/admin.css" type="text/css" rel="stylesheet" />
+<link href="./css/mine.css" type="text/css" rel="stylesheet" />
 <script type="text/javascript"
 	src="${pageContext.request.contextPath }/jquery/jquery-1.8.3.js"></script>
 <script type="text/javascript"
-	src="${pageContext.request.contextPath }/jquery/rightPage.js"></script>
-
+	src="${pageContext.request.contextPath }/jquery/userlistPage.js?token=${sessionScope.user.user_token}"></script>
+<script type="text/javascript">
+	var token = "${sessionScope.user.user_token}";
+</script>
 </head>
-<body onload="showTime()">
-	<table cellspacing=0 cellpadding=0 width="100%" align=center border=0>
+<body onload="onload()">
+
+	<table cellspacing=0 cellpadding=0 width="100%" align=center border=0 style="font-size: 12px;">
 		<tr height=28>
-			<td background=./img/title_bg1.jpg>当前位置:主页</td>
+			<td background=./img/title_bg1.jpg>当前位置:<a href="right.jsp" target=main>主页</a>
+				-> 用户列表
+			</td>
 		</tr>
 		<tr>
 			<td bgcolor=#b1ceef height=1></td>
@@ -24,88 +29,56 @@
 			<td background=./img/shadow_bg.jpg></td>
 		</tr>
 	</table>
-	<table cellspacing=0 cellpadding=0 width="90%" align=center border=0>
-		<tr height=100>
-			<td align=middle width=100><img height=100
-				src="./img/admin_p.gif" width=90></td>
-			<td width=60>&nbsp;</td>
-			<td>
-				<table height=100 cellspacing=0 cellpadding=0 width="100%" border=0>
+	<div></div>
 
-					<tr>
-						<td>当前时间：<label id="showTime"></label></td>
-					</tr>
-					<tr>
-						<td style="font-weight: bold; font-size: 16px"><span
-							id="accountName"></span></td>
-					</tr>
-					<tr>
-						<td>欢迎进入网站管理中心！</td>
-					</tr>
-				</table>
-			</td>
-		</tr>
-		<tr>
-			<td colspan=3 height=10></td>
-		</tr>
-	</table>
-	<table cellspacing=0 cellpadding=0 width="95%" align=center border=0>
-		<tr height=20>
-			<td></td>
-		</tr>
-		<tr height=22>
-			<td style="padding-left: 20px; font-weight: bold; color: #ffffff"
-				align=middle background=./img/title_bg2.jpg>您的相关信息</td>
-		</tr>
-		<tr bgcolor=#ecf4fc height=12>
-			<td></td>
-		</tr>
-		<tr height=20>
-			<td></td>
-		</tr>
-	</table>
-	<table cellspacing=0 cellpadding=2 width="95%" align=center border=0>
-		<tr>
-			<td align=right width=100>登陆帐号：</td>
-			<td style="color: #880000"><span id="account"></span></td>
-		</tr>
-		<tr>
-			<td align=right>电子邮箱：</td>
-			<td style="color: #880000"><span id="email"></span></td>
-		</tr>
-		<tr>
-			<td align=right>真实姓名：</td>
-			<td style="color: #880000"><span id="name"></span></td>
-		</tr>
-		<tr>
-			<td align=right>手机号：</td>
-			<td style="color: #880000"><span id="mobile"></span></td>
-		</tr>
-		<tr>
-			<td align=right>身份：</td>
-			<td style="color: #880000"><span id="type"></span></td>
-		</tr>
-		<tr>
-			<td align=right>帐号状态：</td>
-			<td style="color: #880000"><span id="status"></span></td>
-		</tr>
-		<tr>
-			<td align=right>登录标识：</td>
-			<td style="color: #880000"><span id="token"></span></td>
-		</tr>
-		<tr>
-			<td align=right>登录时间：</td>
-			<td style="color: #880000"><span id="logintime"></span></td>
-		</tr>
-		<tr>
-			<td align=right>注册时间：</td>
-			<td style="color: #880000"><span id="createtime"></span></td>
-		</tr>
-	</table>
-	<div style="text-align: center;">
-		<p>
-			来源：<a href="" target="_blank">源码之家</a>
-		</p>
-	</div>
+        <div class="div_search">
+            <span>
+                <form action="#" method="get">
+                    排序：<select name="s_product_mark" style="width: 100px;">
+                        <option selected="selected" value="0">请选择</option>
+                        <option value="1">苹果apple</option>
+                    </select>
+                    <input value="查询" type="submit" />
+                </form>
+            </span>
+        </div>
+		<div id="div_message" class="div_message" style="display: none">
+			<span id="message">
+			</span>
+		</div>
+        <div style="font-size: 13px; margin: 10px 5px;">
+		<table class="table_a" border="1" width="100%">
+                <tbody id="datas">
+                	<tr style="font-weight: bold;">
+                        <td>序号</td>
+                        <td>头像</td>
+                        <td>帐号</td>
+                        <td>姓名</td>
+                        <td>类型</td>
+                        <td>状态</td>
+                        <td>登录时间</td>
+                        <td>创建时间</td>
+                        <td colspan="2" align="center">操作</td>
+                    </tr>
+                    <tr id="template" style="display: none">
+                        <td id="userid"></td>
+                        <td id="picurl"><img src="./img/20121018-174034-58977.jpg" height="60" width="60"></td>
+                        <td id="account"></td>
+                        <td id="name"></td>
+                        <td id="usertype"></td>
+                        <td id="status"></td>
+                        <td id="logintime"></td>
+                        <td id="createtime"></td>
+                        <td><a href="#">修改</a></td>
+                        <td><a href="javascript:;" onclick="delete_product(1)">删除</a></td>
+                    </tr>
+                </tbody>
+                    <tr>
+                        <td colspan="20" style="text-align: center;">
+                            [1]2
+                        </td>
+                    </tr>
+            </table>
+        </div>
 </body>
 </html>

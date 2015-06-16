@@ -17,7 +17,7 @@ import java.sql.Timestamp;
 //	user_gender INT,
 //  /* 1=male, 2=female */
 //	user_pic_url VARCHAR (255),
-//	user_language VARCHAR (10),
+//	user_language VARCHAR (255),
 //  user_skill text,
 //  user_address_code INT,
 //	user_address text,
