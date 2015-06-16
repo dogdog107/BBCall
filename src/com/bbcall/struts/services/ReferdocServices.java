@@ -9,7 +9,7 @@ import com.bbcall.functions.ResultCode;
 import com.bbcall.mybatis.dao.ReferdocMapper;
 import com.bbcall.mybatis.table.Referdoc;
 
-@Service("orderlistServices")
+@Service("referdocServices")
 public class ReferdocServices {
 
 	@Autowired
