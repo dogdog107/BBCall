@@ -381,6 +381,31 @@ public class OrderlistAction extends ActionSupport {
 		return "json";
 	}
 
+	public String getwashorderlist() throws Exception {
+		dataMap = new HashMap<String, Object>(); // 新建dataMap来储存JSON字符串
+		dataMap.clear(); // dataMap中的数据将会被Struts2转换成JSON字符串，所以这里要先清空其中的数据
+		
+		System.out.println("getwashorderlist");
+		int result = orderlistServices.getWashOrderlist();
+
+		if (result == ResultCode.SUCCESS) {
+			List<Orderlist> orderlist = orderlistServices.orderlistinfos();
+
+			dataMap.put("orderlist", orderlist);
+			dataMap.put("resultcode", result);
+			dataMap.put("errmsg", ResultCode.getErrmsg(result));
+			dataMap.put("getwashorderlistResult", true);
+			System.out.println(dataMap);
+		}
+
+		return SUCCESS;
+	}
+
+	public String getwashorderlistJson() throws Exception {
+		getwashorderlist();
+		return "json";
+	}
+
 	public String delete() throws Exception {
 		dataMap = new HashMap<String, Object>(); // 新建dataMap来储存JSON字符串
 		dataMap.clear(); // dataMap中的数据将会被Struts2转换成JSON字符串，所以这里要先清空其中的数据

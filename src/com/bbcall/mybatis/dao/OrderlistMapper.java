@@ -29,7 +29,7 @@ public interface OrderlistMapper {
 			@Param("order_master_account") String order_master_account);
 
 	// 通过师傅账号/技能类型/订单地区取得未完成订单列表 (按工作截止时间排序)
-	public List<Orderlist> getUnOrdersByBookTime(		
+	public List<Orderlist> getUnOrdersByBookTime(
 			@Param("order_type") String order_type,
 			@Param("order_book_location") String order_book_location,
 			@Param("order_master_account") String order_master_account);
@@ -56,6 +56,9 @@ public interface OrderlistMapper {
 
 	// 获取所有正在处理订单列表
 	public List<Orderlist> getProOrders();
+
+	// 获取所有洗衣订单
+	public List<Orderlist> getWashOrderlist();
 
 	// 更新订单详情
 	public void updateOrder(Orderlist order);

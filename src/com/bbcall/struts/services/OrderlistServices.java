@@ -554,6 +554,44 @@ public class OrderlistServices {
 		return ResultCode.SUCCESS;
 	}
 
+	// ################################################################################
+	// ## Get Completed Order services
+	// ## 查询完成订单列表
+	// ##==============================================================================
+	// ## Instructions
+	// ##
+	// ##------------------------------------------------------------------------------
+	// ## 1. Require parameters:
+	// ## (1) user_account
+	// ##
+	// ##------------------------------------------------------------------------------
+	// ## 2. Optional parameters: NONE
+	// ##
+	// ##------------------------------------------------------------------------------
+	// ## 3. Return parameters:
+	// ## (4) ResultCode.SUCCESS
+	// ##
+	// ##------------------------------------------------------------------------------
+	// ## 4. Return orderlistinfos:
+	// ## (1) orderlistinfos
+	// ##
+	// ################################################################################
+	public int getWashOrderlist() {
+
+		System.out.println("getWashOrderlist");
+		orderlistinfos = orderlistMapper.getWashOrderlist();
+		
+		if (orderlistinfos == null) {
+			System.out.println("null");
+		}
+		
+		for (int i = 0; i< orderlistinfos.size(); i++) {
+			System.out.println(orderlistinfos.get(i).getOrder_book_location());
+		}
+
+		return ResultCode.SUCCESS;
+	}
+
 	// ###################
 	// ## 读取省、市、区列表
 	// ###################

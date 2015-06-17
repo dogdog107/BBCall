@@ -143,6 +143,12 @@
 		order_status="3"
 	</select>
 	
+	<select id="getWashOrderlist" resultMap="OrderResultMap">
+		select * from orderlist
+		where
+		order_type="wash" order by order_create_time desc
+	</select>
+	
 	<select id="getOrder" parameterType="int" resultMap="OrderResultMap">
 		select * from orderlist
 		where
