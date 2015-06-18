@@ -13,6 +13,10 @@
 <script type="text/javascript">
 	var token = "${sessionScope.user.user_token}";
 </script>
+<%
+String path = request.getContextPath();
+String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.getServerPort()+path+"/";
+%>
 </head>
 <body>
 
@@ -55,9 +59,9 @@
 			<td style="color: #880000">${dataMap.orderlist.order_book_location}</td>
 		</tr>
 		<tr>
-			<td align=right>照片：</td>
+			<td align=right >照片：</td>
 			<s:iterator value="dataMap.orderFileFileName" id="number">
-				<td style="color: #880000"><img src="<s:property value="number"/>"></img>
+				<td style="color: #880000"><img src="<s:property value="number"/>" height='60' width='60'></img>
 				</td>
 			</s:iterator>
 		</tr>

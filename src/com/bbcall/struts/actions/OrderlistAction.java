@@ -118,11 +118,11 @@ public class OrderlistAction extends ActionSupport {
 							+ imageFileName + ".jpg");
 
 			if (order_pic_url == null) {
-				order_pic_url = "D:\\git\\BBCall\\WebContent\\UploadImages\\"
+				order_pic_url = "../UploadImages/"
 						+ imageFileName + ".jpg" + ";";
 			} else {
 				order_pic_url = order_pic_url
-						+ "D:\\git\\BBCall\\WebContent\\UploadImages\\"
+						+ "../UploadImages/"
 						+ imageFileName + ".jpg" + ";";
 			}
 
@@ -177,11 +177,11 @@ public class OrderlistAction extends ActionSupport {
 								+ imageFileName + ".jpg");
 
 				if (order_pic_url == null) {
-					order_pic_url = "D:\\git\\BBCall\\WebContent\\UploadImages\\"
+					order_pic_url = "../UploadImages/"
 							+ imageFileName + ".jpg" + ";";
 				} else {
 					order_pic_url = order_pic_url
-							+ "D:\\git\\BBCall\\WebContent\\UploadImages\\"
+							+ "../UploadImages/"
 							+ imageFileName + ".jpg" + ";";
 				}
 
