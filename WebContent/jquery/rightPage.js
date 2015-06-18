@@ -16,16 +16,16 @@ $(function() {
 
 	switch (status) {
 	case "1":
-		$("#status").html("active");
+		$("#status").html("Active");
 		break;
 	case "2":
-		$("#status").html("pause");
+		$("#status").html("Pause");
 		break;
 	case "3":
-		$("#status").html("pending");
+		$("#status").html("Pending");
 		break;
 	case "4":
-		$("#status").html("locked");
+		$("#status").html("Locked");
 		break;
 	}
 });

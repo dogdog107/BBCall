@@ -171,6 +171,34 @@ public class UserAction extends ActionSupport implements SessionAware{
 		update();
 		return "json";
 	}
+	// UpdateStatus Action
+	public String updateStatus() throws Exception{
+		System.out.println("Here is UserAction.updateStatus");
+		
+		dataMap.clear(); // dataMap中的数据将会被Struts2转换成JSON字符串，所以这里要先清空其中的数据
+		int result = userServices.update(account, password, usertype, name, picurl, mobile, gender, addresscode, address, email, language, skill, description, accessgroup, status, token, userid); // 调用userServices.login
+		
+		if (result == ResultCode.SUCCESS) {
+			dataMap.put("resultcode", result); // 放入一个是否操作成功的标识
+			dataMap.put("errmsg", ResultCode.getErrmsg(result));
+			dataMap.put("updateStatusResult", true); // 放入registerResult
+			System.out.println(dataMap);
+			return "updateStatusSuccess";
+		} else {
+			dataMap.put("resultcode", result); // 放入一个是否操作成功的标识
+			dataMap.put("errmsg", ResultCode.getErrmsg(result));
+			dataMap.put("updateStatusResult", false); // 放入registerResult
+			System.out.println(dataMap);
+			System.out.println("updateStatus Failed");
+			return "updateStatusFailed";
+		}
+		
+	}
+	public String updateStatusJson() throws Exception{
+		System.out.println("Here is UserAction.updateStatusJson");
+		updateStatus();
+		return "json";
+	}
 	
 	// checkParentAdsList Action
 	public String checkChildAdsList() throws Exception {
