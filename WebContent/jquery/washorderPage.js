@@ -13,7 +13,7 @@ function onload() {
                     row.find("#order_book_time").text(n.order_book_time);
                     row.find("#order_book_location").text(n.order_book_location);
                     row.find("#order_type").text(n.order_type);                   
-                    row.find("#order_href").html("<a href=" + link + "/page/viewwashorder.jsp?order_id=" + n.order_id +">查看</a>");
+                    row.find("#order_href").html("<a href=" + link + "/page/orderlist_select.action?order_id=" + n.order_id +">查看</a>");
                     row.appendTo("#datas");//添加到模板的容器中
                     row.toggle();
 				});
