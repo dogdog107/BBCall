@@ -12,7 +12,11 @@
 	src="${pageContext.request.contextPath }/jquery/washorderPage.js?token=${sessionScope.user.user_token}"></script>
 <script type="text/javascript">
 	var token = "${sessionScope.user.user_token}";
+	var link = "${pageContext.request.contextPath}";
 </script>
+<%
+  String path=request.getContextPath();
+%>
 </head>
 <body onload="onload()">
 
@@ -64,7 +68,7 @@
                         <td id="order_book_time"></td>
                         <td id="order_book_location"></td>
                         <td id="order_type"></td>
-                        <td><a href="#">查看</a></td>
+                        <td id="order_href"></td>
                         <td><a href="javascript:;" onclick="delete_product(1)">删除</a></td>
                     </tr>
                 </tbody>
