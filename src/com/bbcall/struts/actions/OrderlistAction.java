@@ -357,6 +357,7 @@ public class OrderlistAction extends ActionSupport {
 
 		int result = orderlistServices.getOrderById(order_id);
 
+		System.out.println("getOrderById");
 		if (result == ResultCode.SUCCESS) {
 			Orderlist orderlist = orderlistServices.orderlistinfo();
 
@@ -364,6 +365,7 @@ public class OrderlistAction extends ActionSupport {
 
 			for (int i = 0; i < url.length; i++) {
 				orderFileFileName.add(url[i]);
+				System.out.println(url[i]);
 			}
 
 			dataMap.put("orderlist", orderlist);

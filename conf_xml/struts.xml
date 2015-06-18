@@ -72,7 +72,6 @@
 			</result>
 		</action>
 
-
 		<!-- Order Action -->
 		<action name="orderlist_*" method="{1}" class="orderlistAction">
 			<!-- 限制图片的格式和图片的大小 -->
@@ -85,7 +84,7 @@
 			<!-- 默认的拦截器，必须要写 -->
 			<interceptor-ref name="defaultStack" />
 
-			<result name="success">/main.jsp</result>
+			<result name="success">/page/viewwashorder.jsp</result>
 			<result type="json" name="json">
 				<param name="root">dataMap</param>
 			</result>

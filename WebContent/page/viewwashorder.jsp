@@ -14,7 +14,7 @@
 	var token = "${sessionScope.user.user_token}";
 </script>
 </head>
-<body onload="onload()">
+<body>
 
 	<table cellspacing=0 cellpadding=0 width="100%" align=center border=0 style="font-size: 12px;">
 		<tr height=28>
@@ -48,23 +48,26 @@
 	<table cellspacing=0 cellpadding=2 width="95%" align=center border=0>
 		<tr>
 			<td align=right width=100>预约时间：</td>
-			<td style="color: #880000">${sessionScope.orderlist.order_book_time}</td>
+			<td style="color: #880000">${dataMap.orderlist.order_book_time}</td>
 		</tr>
 		<tr>
 			<td align=right>预约地点：</td>
-			<td style="color: #880000">${sessionScope.orderlist.order_book_location}</td>
+			<td style="color: #880000">${dataMap.orderlist.order_book_location}</td>
 		</tr>
 		<tr>
 			<td align=right>照片：</td>
-			<td style="color: #880000">${sessionScope.orderlist.order_pic_url}</td>
+			<s:iterator value="dataMap.orderFileFileName" id="number">
+				<td style="color: #880000"><img src="<s:property value="number"/>"></img>
+				</td>
+			</s:iterator>
 		</tr>
 		<tr>
 			<td align=right>客户姓名：</td>
-			<td style="color: #880000">${sessionScope.orderlist.order_contact_name}</td>
+			<td style="color: #880000">${dataMap.orderlist.order_contact_name}</td>
 		</tr>
 		<tr>
 			<td align=right>客户联系方式：</td>
-			<td style="color: #880000">${sessionScope.orderlist.order_contact_mobile}</td>
+			<td style="color: #880000">${dataMap.orderlist.order_contact_mobile}</td>
 		</tr>
 	</table>	
         
