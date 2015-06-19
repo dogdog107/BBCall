@@ -67,7 +67,7 @@ function onload() {
 						$("#message").html(
 								"<font color=red>Page Fail ! " + data.errmsg
 										+ "</font>");
-						$("#div_message").toggle();
+						$("#div_message").show(300).delay(6000).hide(300);
 					}
 				}
 			});
@@ -75,7 +75,7 @@ function onload() {
 
 function updateStatus(idname, value) {
 	var userid = idname.split("_")[1];
-	if (confirm('确定要修改状态吗？')) {
+	if (confirm('確定要修改用戶(ID:'+ userid +')的狀態嗎？\n Confirm to change the (ID:'+ userid +') status?')) {
 		$.ajax({
 			type : "post",
 			url : "${pageContext.request.contextPath}/user_updateStatusJson.action",
@@ -85,7 +85,13 @@ function updateStatus(idname, value) {
 			},
 			success : function(data) {
 				if (data.updateStatusResult) {
-					window.location.reload()
+					window.location.reload();
+//					setTimeout(function(){
+//						alert("123");
+//						$("#message").html("<font color=green> (ID : "+ userid +") Status Update Success ! </font>");
+//						$("#div_message").show(300).delay(3000).hide(300);
+//					}, 5000);
+					window.setTimeout("alert('5000')", 2000);
 				} else {
 					alert("Update failed. " + data.errmsg);
 				}

@@ -48,19 +48,19 @@
 		<div id="div_message" class="div_message" style="display: none">
 			<span id="message"> </span>
 		</div>
-		<div style="font-size: 13px; margin: 10px 5px;">
+		<div style="font-size: 12px; margin: 10px 5px;">
 			<table class="table_list" border="1" width="100%">
 				<tbody id="datas">
 					<tr style="font-weight: bold;">
-						<td>序号</td>
-						<td>头像</td>
-						<td>帐号</td>
-						<td>姓名</td>
-						<td>类型</td>
-						<td>状态</td>
-						<td>登录时间</td>
-						<td>创建时间</td>
-						<td colspan="2" align="center">操作</td>
+						<td>用戶序號<br/>User ID</td>
+						<td>頭像<br/>User ID</td>
+						<td>帳戶<br/>Account</td>
+						<td>姓名<br/>Name</td>
+						<td>類型<br/>Type</td>
+						<td>狀態<br/>Status</td>
+						<td>登陸時間<br/>Login Time</td>
+						<td>創建時間<br/>Create Time</td>
+						<td colspan="2" align="center">操作<br/>Operations</td>
 					</tr>
 					<tr id="template" style="display: none; font-size: 12px;">
 						<td id="userid"></td>
@@ -79,7 +79,7 @@
 								<option value="3">Pending</option>
 								<option value="4">Locked</option>
 							</select><br/>
-							<input type="submit" value="修改" onclick=""/>
+							<input type="submit" value="刪除/Delete" onclick=""/>
 						</td>
 					</tr>
 				</tbody>
