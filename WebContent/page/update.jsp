@@ -41,7 +41,7 @@
 
 	<div style="font-size: 13px; margin: 10px 5px">
 		<form action="user_update" method="post">
-			<table border="1" width="100%" class="table_a">
+			<table border="1" width="100%" class="table_update">
 				<div style="font-size: 13px; margin: 10px 5px">
 					<span> <s:if test="dataMap.updateResult">
 							<font color="green">修改成功！${ dataMap.errmsg}</font>

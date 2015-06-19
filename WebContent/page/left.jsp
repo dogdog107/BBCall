@@ -323,7 +323,7 @@
                             <td><a class=menuchild 
                                    href="${pageContext.request.contextPath }/page/userlist.jsp" 
                                    target=main>用户列表</a></td></tr>
-                        <tr height=20>
+<!--                         <tr height=20>
                             <td align=middle width=30><img height=9 
                                                            src="./img/menu_icon.gif" width=9></td>
                             <td><a class=menuchild 
@@ -334,7 +334,7 @@
                                                            src="./img/menu_icon.gif" width=9></td>
                             <td><a class=menuchild 
                                    href="#" 
-                                   target=main>管理员列表</a></td></tr>
+                                   target=main>管理员列表</a></td></tr> -->
                         <tr height=4>
                             <td colspan=2></td></tr></table>
                     <table cellspacing=0 cellpadding=0 width=150 border=0>
