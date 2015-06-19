@@ -9,7 +9,7 @@
 <script type="text/javascript"
 	src="${pageContext.request.contextPath }/jquery/jquery-1.8.3.js"></script>
 <script type="text/javascript"
-	src="${pageContext.request.contextPath }/jquery/washorderPage.js?token=${sessionScope.user.user_token}"></script>
+	src="${pageContext.request.contextPath }/jquery/referdocPage.js?token=${sessionScope.user.user_token}"></script>
 <script type="text/javascript">
 	var token = "${sessionScope.user.user_token}";
 	var link = "${pageContext.request.contextPath}";
@@ -34,14 +34,18 @@
 		</tr>
 	</table>
 	<div></div>
-
+		<div class="div_search">
+			<span>
+				<input type="button" value="添加" Onclick="location='${pageContext.request.contextPath}/page/addreferdoc.jsp'" />
+			</span>
+		</div>
         
 		<div id="div_message" class="div_message" style="display: none">
 			<span id="message">
 			</span>
 		</div>
         <div style="font-size: 13px; margin: 10px 5px;">
-		<table class="table_a" border="1" width="100%">
+		<table class="table_list" border="1" width="100%">
                 <tbody id="datas">
                 	<tr style="font-weight: bold;">
                         <td>序號</td>
@@ -54,7 +58,6 @@
                         <td id="referdoc_type"></td>
                         <td id="referdoc_price"></td>
                         <td id="referdoc_href"></td>
-                        <td><a href="javascript:;" onclick="delete_product(1)">删除</a></td>
                     </tr>
                 </tbody>
                     <tr>

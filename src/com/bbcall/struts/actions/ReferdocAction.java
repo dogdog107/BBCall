@@ -41,12 +41,12 @@ public class ReferdocAction extends ActionSupport {
 				.addReferdoc(referdoc_type, referdoc_price);
 
 		if (result == ResultCode.SUCCESS) {
-			Referdoc referdoc = referdocServices.referdocinfo();
-			dataMap.put("referdoc", referdoc);
+			List<Referdoc> referdoclist = referdocServices.referdocinfos();
+			dataMap.put("referdoclist", referdoclist);
 			dataMap.put("resultcode", result);
 			dataMap.put("errmsg", ResultCode.getErrmsg(result));
 			dataMap.put("addResult", true);
-			return "addSuccess";
+			return SUCCESS;
 		} else {
 			dataMap.put("resultcode", result); // 放入一个是否操作成功的标识
 			dataMap.put("errmsg", ResultCode.getErrmsg(result));
@@ -142,7 +142,7 @@ public class ReferdocAction extends ActionSupport {
 			dataMap.put("referdoclist", referdoclist);
 			dataMap.put("resultcode", result);
 			dataMap.put("errmsg", ResultCode.getErrmsg(result));
-			dataMap.put("deleteResult", true);
+			dataMap.put("getlistResult", true);
 		}
 
 		return SUCCESS;

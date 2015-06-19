@@ -52,14 +52,14 @@ public class ReferdocServices {
 
 		if (checkResult == ResultCode.REFERDOC_TYPE_NOTEXIST) {
 
+			
 			Referdoc referdoc = new Referdoc();
 			referdoc.setReferdoc_type(referdoc_type);
-			;
 			referdoc.setReferdoc_price(referdoc_price);
 
-			referdocMapper.addReference(referdoc);
+			referdocMapper.addReferdoc(referdoc);
 
-			referdocinfo = referdoc;
+			referdocinfos = referdocMapper.getReferdoclist();
 			return ResultCode.SUCCESS;
 		} else {
 			return checkResult;

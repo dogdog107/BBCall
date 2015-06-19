@@ -52,7 +52,7 @@
 			</span>
 		</div>
         <div style="font-size: 13px; margin: 10px 5px;">
-		<table class="table_a" border="1" width="100%">
+		<table class="table_list" border="1" width="100%">
                 <tbody id="datas">
                 	<tr style="font-weight: bold;">
                         <td>序号</td>
