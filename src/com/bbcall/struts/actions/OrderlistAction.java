@@ -357,7 +357,6 @@ public class OrderlistAction extends ActionSupport {
 
 		int result = orderlistServices.getOrderById(order_id);
 
-		System.out.println("getOrderById");
 		if (result == ResultCode.SUCCESS) {
 			Orderlist orderlist = orderlistServices.orderlistinfo();
 
@@ -365,7 +364,6 @@ public class OrderlistAction extends ActionSupport {
 
 			for (int i = 0; i < url.length; i++) {
 				orderFileFileName.add(url[i]);
-				System.out.println(url[i]);
 			}
 
 			dataMap.put("orderlist", orderlist);
@@ -387,7 +385,6 @@ public class OrderlistAction extends ActionSupport {
 		dataMap = new HashMap<String, Object>(); // 新建dataMap来储存JSON字符串
 		dataMap.clear(); // dataMap中的数据将会被Struts2转换成JSON字符串，所以这里要先清空其中的数据
 		
-		System.out.println("getwashorderlist");
 		int result = orderlistServices.getWashOrderlist();
 
 		if (result == ResultCode.SUCCESS) {
@@ -397,7 +394,6 @@ public class OrderlistAction extends ActionSupport {
 			dataMap.put("resultcode", result);
 			dataMap.put("errmsg", ResultCode.getErrmsg(result));
 			dataMap.put("getwashorderlistResult", true);
-			System.out.println(dataMap);
 		}
 
 		return SUCCESS;

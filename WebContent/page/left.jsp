@@ -116,8 +116,8 @@
                             <td align=middle width=30><img height=9 
                                                            src="./img/menu_icon.gif" width=9></td>
                             <td><a class=menuchild 
-                                   href="#" 
-                                   target=main>最新产品</a></td></tr>
+                                   href="${pageContext.request.contextPath }/page/referdoc.jsp" 
+                                   target=main>价格推荐</a></td></tr>
                         <tr height=20>
                             <td align=middle width=30><img height=9 
                                                            src="./img/menu_icon.gif" width=9></td>
