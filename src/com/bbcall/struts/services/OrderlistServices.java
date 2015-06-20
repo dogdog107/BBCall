@@ -577,15 +577,51 @@ public class OrderlistServices {
 	// ################################################################################
 	public int getWashOrderlist() {
 
-		System.out.println("getWashOrderlist");
 		orderlistinfos = orderlistMapper.getWashOrderlist();
 
-		if (orderlistinfos == null) {
-			System.out.println("null");
-		}
+		return ResultCode.SUCCESS;
+	}
 
-		for (int i = 0; i < orderlistinfos.size(); i++) {
-			System.out.println(orderlistinfos.get(i).getOrder_book_location());
+	// ################################################################################
+	// ## Select wash Order services
+	// ## 筛选洗衣订单列表
+	// ##==============================================================================
+	// ## Instructions
+	// ##
+	// ##------------------------------------------------------------------------------
+	// ## 1. Require parameters:
+	// ## (1) order_status
+	// ## (1) order_master_account
+	// ##------------------------------------------------------------------------------
+	// ## 2. Optional parameters: NONE
+	// ##
+	// ##------------------------------------------------------------------------------
+	// ## 3. Return parameters:
+	// ## (4) ResultCode.SUCCESS
+	// ##
+	// ##------------------------------------------------------------------------------
+	// ## 4. Return orderlistinfos:
+	// ## (1) orderlistinfos
+	// ##
+	// ################################################################################
+	public int selectWashOrderlist(int order_status, String order_master_account) {
+
+		
+		if (order_status == 0) {
+			
+			if (order_master_account.equals("") ||  order_master_account == null) {
+				orderlistinfos = orderlistMapper.getWashOrderlist();
+			} else {
+				orderlistinfos = orderlistMapper.getWashOrderByMaster(order_master_account);
+			}
+			
+		} else {
+			if (order_master_account.equals("") || order_master_account == null) {
+				orderlistinfos = orderlistMapper.getWashOrderByStatus(order_status);
+				
+			} else {
+				orderlistinfos = orderlistMapper.getWashOrders(order_status, order_master_account);
+			}
 		}
 
 		return ResultCode.SUCCESS;
@@ -615,20 +651,11 @@ public class OrderlistServices {
 	// ################################################################################
 	public int getWashOrderlist(String sortparm) {
 
-		System.out.println("getWashOrderlistasc");
-		
+
 		if (sortparm.equals("order_status")) {
 			orderlistinfos = orderlistMapper.getWashOrderlistByStatus();
 		} else {
 			orderlistinfos = orderlistMapper.getWashOrderlistByMaster();
-		}
-
-		if (orderlistinfos == null) {
-			System.out.println("null");
-		}
-
-		for (int i = 0; i < orderlistinfos.size(); i++) {
-			System.out.println(orderlistinfos.get(i).getOrder_book_location());
 		}
 
 		return ResultCode.SUCCESS;

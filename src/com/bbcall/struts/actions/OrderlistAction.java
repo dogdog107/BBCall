@@ -49,6 +49,8 @@ public class OrderlistAction extends ActionSupport {
 	private String order_description;
 	private double order_price;
 	private String user_account;
+	private String order_master_account;
+	private int order_status;
 	private String order_type;
 	private int addresscode;
 	private List<String> skilllist;
@@ -384,10 +386,7 @@ public class OrderlistAction extends ActionSupport {
 		dataMap = new HashMap<String, Object>(); // 新建dataMap来储存JSON字符串
 		dataMap.clear(); // dataMap中的数据将会被Struts2转换成JSON字符串，所以这里要先清空其中的数据
 
-		System.out.println("getwashorderlistasc");
-		System.out.println(sortparm);
 		int result = orderlistServices.getWashOrderlist(sortparm);
-		
 
 		if (result == ResultCode.SUCCESS) {
 			List<Orderlist> orderlist = orderlistServices.orderlistinfos();
@@ -426,6 +425,30 @@ public class OrderlistAction extends ActionSupport {
 
 	public String getwashorderlistJson() throws Exception {
 		getwashorderlist();
+		return "json";
+	}
+
+	public String selectwashorderlist() throws Exception {
+		dataMap = new HashMap<String, Object>(); // 新建dataMap来储存JSON字符串
+		dataMap.clear(); // dataMap中的数据将会被Struts2转换成JSON字符串，所以这里要先清空其中的数据
+
+		int result = orderlistServices.selectWashOrderlist(order_status,
+				order_master_account);
+
+		if (result == ResultCode.SUCCESS) {
+			List<Orderlist> orderlist = orderlistServices.orderlistinfos();
+
+			dataMap.put("orderlist", orderlist);
+			dataMap.put("resultcode", result);
+			dataMap.put("errmsg", ResultCode.getErrmsg(result));
+			dataMap.put("selectwashorderlistResult", true);
+		}
+
+		return "getsuccess";
+	}
+
+	public String selectwashorderlistJson() throws Exception {
+		selectwashorderlist();
 		return "json";
 	}
 
@@ -691,6 +714,22 @@ public class OrderlistAction extends ActionSupport {
 
 	public void setSortparm(String sortparm) {
 		this.sortparm = sortparm;
+	}
+
+	public String getOrder_master_account() {
+		return order_master_account;
+	}
+
+	public void setOrder_master_account(String order_master_account) {
+		this.order_master_account = order_master_account;
+	}
+
+	public int getOrder_status() {
+		return order_status;
+	}
+
+	public void setOrder_status(int order_status) {
+		this.order_status = order_status;
 	}
 
 }

@@ -48,6 +48,20 @@
 				</select>
 				<input value="查询" type="submit" />
 			</form>
+		
+			<form action="orderlist_selectwashorderlist"
+				id="orderlist_selectwashorderlist" method="post">
+				订单状态：
+				<select name="order_status" style="width: 100px;">
+					<option selected="selected" value="0">请选择</option>
+					<option value="1">created</option>
+					<option value="2">in progress</option>
+					<option value="3">finished</option>
+				</select>
+				&nbsp;&nbsp;&nbsp;&nbsp;负责师傅：
+				<input type="text" name="order_master_account" />
+				<input value="筛选" type="submit" />
+			</form>
 		</span>
 	</div>
 	<div id="div_message" class="div_message" style="display: none">
@@ -75,9 +89,12 @@
 								value='#order.order_book_time' /></td>
 						<td id="order_book_location"><s:property
 								value='#order.order_book_location' /></td>
-						<td id="order_master_account"><s:property
-								value='#order.order_master_account' /></td>
-						<td id="order_status"><s:property value='#order.order_status' /></td>
+						<td id="order_master_account"><s:property value='#order.order_master_account' /></td>
+						<td id="order_status">
+							<s:if test="%{#order.order_status == 1}">created</s:if>
+							<s:if test="%{#order.order_status == 2}">in progress</s:if>
+							<s:if test="%{#order.order_status == 3}">finished</s:if>
+						</td>
 						<td id="order_type"><s:property value='#order.order_type' /></td>
 						<td id="order_href"><a
 							href="${pageContext.request.contextPath}/page/orderlist_select.action?order_id=<s:property value='#order.order_id'/>">查看</a>
