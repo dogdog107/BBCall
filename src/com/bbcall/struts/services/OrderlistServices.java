@@ -555,14 +555,13 @@ public class OrderlistServices {
 	}
 
 	// ################################################################################
-	// ## Get Completed Order services
-	// ## 查询完成订单列表
+	// ## Get wash Order services
+	// ## 查询洗衣订单列表
 	// ##==============================================================================
 	// ## Instructions
 	// ##
 	// ##------------------------------------------------------------------------------
 	// ## 1. Require parameters:
-	// ## (1) user_account
 	// ##
 	// ##------------------------------------------------------------------------------
 	// ## 2. Optional parameters: NONE
@@ -580,12 +579,55 @@ public class OrderlistServices {
 
 		System.out.println("getWashOrderlist");
 		orderlistinfos = orderlistMapper.getWashOrderlist();
-		
+
 		if (orderlistinfos == null) {
 			System.out.println("null");
 		}
+
+		for (int i = 0; i < orderlistinfos.size(); i++) {
+			System.out.println(orderlistinfos.get(i).getOrder_book_location());
+		}
+
+		return ResultCode.SUCCESS;
+	}
+
+	// ################################################################################
+	// ## Get wash Order services
+	// ## 查询洗衣订单列表排序
+	// ##==============================================================================
+	// ## Instructions
+	// ##
+	// ##------------------------------------------------------------------------------
+	// ## 1. Require parameters:
+	// ## (1) sortparm
+	// ##
+	// ##------------------------------------------------------------------------------
+	// ## 2. Optional parameters: NONE
+	// ##
+	// ##------------------------------------------------------------------------------
+	// ## 3. Return parameters:
+	// ## (4) ResultCode.SUCCESS
+	// ##
+	// ##------------------------------------------------------------------------------
+	// ## 4. Return orderlistinfos:
+	// ## (1) orderlistinfos
+	// ##
+	// ################################################################################
+	public int getWashOrderlist(String sortparm) {
+
+		System.out.println("getWashOrderlistasc");
 		
-		for (int i = 0; i< orderlistinfos.size(); i++) {
+		if (sortparm.equals("order_status")) {
+			orderlistinfos = orderlistMapper.getWashOrderlistByStatus();
+		} else {
+			orderlistinfos = orderlistMapper.getWashOrderlistByMaster();
+		}
+
+		if (orderlistinfos == null) {
+			System.out.println("null");
+		}
+
+		for (int i = 0; i < orderlistinfos.size(); i++) {
 			System.out.println(orderlistinfos.get(i).getOrder_book_location());
 		}
 

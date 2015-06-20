@@ -149,6 +149,18 @@
 		order_type="wash" order by order_create_time desc
 	</select>
 	
+	<select id="getWashOrderlistByStatus" resultMap="OrderResultMap">
+		select * from orderlist
+		where
+		order_type="wash" order by order_status asc
+	</select>
+	
+	<select id="getWashOrderlistByMaster" resultMap="OrderResultMap">
+		select * from orderlist
+		where
+		order_type="wash" order by order_master_account asc
+	</select>
+	
 	<select id="getOrder" parameterType="int" resultMap="OrderResultMap">
 		select * from orderlist
 		where

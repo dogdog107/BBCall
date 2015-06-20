@@ -15,15 +15,16 @@
 	var link = "${pageContext.request.contextPath}";
 </script>
 <%
-  String path=request.getContextPath();
+	String path = request.getContextPath();
 %>
 </head>
 <body onload="onload()">
 
-	<table cellspacing=0 cellpadding=0 width="100%" align=center border=0 style="font-size: 12px;">
+	<table cellspacing=0 cellpadding=0 width="100%" align=center border=0
+		style="font-size: 12px;">
 		<tr height=28>
-			<td background=./img/title_bg1.jpg>当前位置:<a href="right.jsp" target=main>主页</a>
-				-> 洗衣订单列表
+			<td background=./img/title_bg1.jpg>当前位置:<a href="right.jsp"
+				target=main>主页</a> -> 洗衣订单列表
 			</td>
 		</tr>
 		<tr>
@@ -35,49 +36,60 @@
 	</table>
 	<div></div>
 
-        <div class="div_search">
-            <span>
-                <form action="#" method="get">
-                    排序：<select name="s_product_mark" style="width: 100px;">
-                        <option selected="selected" value="0">请选择</option>
-                        <option value="1">订单状态</option>
-                        <option value="2">负责师傅</option>
-                    </select>
-                    <input value="查询" type="submit" />
-                </form>
-            </span>
-        </div>
-		<div id="div_message" class="div_message" style="display: none">
-			<span id="message">
-			</span>
-		</div>
-        <div style="font-size: 13px; margin: 10px 5px;">
+	<div class="div_search">
+		<span>
+			<form action="orderlist_getwashorderlistasc"
+				id="orderlist_getwashorderlistasc" method="post">
+				排序：
+				<select name="sortparm" style="width: 100px;">
+					<option selected="selected" value="0">请选择</option>
+					<option value="order_status">订单状态</option>
+					<option value="order_master_account">负责师傅</option>
+				</select>
+				<input value="查询" type="submit" />
+			</form>
+		</span>
+	</div>
+	<div id="div_message" class="div_message" style="display: none">
+		<span id="message"> </span>
+	</div>
+	<div style="font-size: 13px; margin: 10px 5px;">
 		<table class="table_list" border="1" width="100%">
-                <tbody id="datas">
-                	<tr style="font-weight: bold;">
-                        <td>序号</td>
-                        <td>訂單生成時間</td>
-                        <td>预约时间</td>
-                        <td>预约地点</td>
-                        <td>类型</td>
-                        <td colspan="2" align="center">操作</td>
-                    </tr>
-                    <tr id="template" style="display: none">
-                        <td id="order_id"></td>
-                        <td id="order_create_time"></td>
-                        <td id="order_book_time"></td>
-                        <td id="order_book_location"></td>
-                        <td id="order_type"></td>
-                        <td id="order_href"></td>
-                        <td><a href="javascript:;" onclick="delete_product(1)">删除</a></td>
-                    </tr>
-                </tbody>
-                    <tr>
-                        <td colspan="20" style="text-align: center;">
-                            [1]2
-                        </td>
-                    </tr>
-            </table>
-        </div>
+			<tbody id="datas">
+				<tr style="font-weight: bold;">
+					<td>序号</td>
+					<td>訂單生成時間</td>
+					<td>預約時間</td>
+					<td>預約地點</td>
+					<td>負責師傅</td>
+					<td>訂單狀態</td>
+					<td>类型</td>
+					<td colspan="2" align="center">操作</td>
+				</tr>
+				<s:iterator value="dataMap.orderlist" id="order">
+					<tr id="template">
+						<td id="order_id"><s:property value='#order.order_id' /></td>
+						<td id="order_create_time"><s:property
+								value='#order.order_create_time' /></td>
+						<td id="order_book_time"><s:property
+								value='#order.order_book_time' /></td>
+						<td id="order_book_location"><s:property
+								value='#order.order_book_location' /></td>
+						<td id="order_master_account"><s:property
+								value='#order.order_master_account' /></td>
+						<td id="order_status"><s:property value='#order.order_status' /></td>
+						<td id="order_type"><s:property value='#order.order_type' /></td>
+						<td id="order_href"><a
+							href="${pageContext.request.contextPath}/page/orderlist_select.action?order_id=<s:property value='#order.order_id'/>">查看</a>
+						</td>
+					</tr>
+				</s:iterator>
+
+			</tbody>
+			<tr>
+				<td colspan="20" style="text-align: center;">[1]2</td>
+			</tr>
+		</table>
+	</div>
 </body>
 </html>

@@ -53,6 +53,7 @@ public class OrderlistAction extends ActionSupport {
 	private int addresscode;
 	private List<String> skilllist;
 	private List<String> locationlist;
+	private String sortparm;
 
 	private List<File> orderFile = new ArrayList<File>();
 	private List<String> orderFileContentType;
@@ -118,11 +119,10 @@ public class OrderlistAction extends ActionSupport {
 							+ imageFileName + ".jpg");
 
 			if (order_pic_url == null) {
-				order_pic_url = "../UploadImages/"
-						+ imageFileName + ".jpg" + ";";
+				order_pic_url = "../UploadImages/" + imageFileName + ".jpg"
+						+ ";";
 			} else {
-				order_pic_url = order_pic_url
-						+ "../UploadImages/"
+				order_pic_url = order_pic_url + "../UploadImages/"
 						+ imageFileName + ".jpg" + ";";
 			}
 
@@ -177,11 +177,10 @@ public class OrderlistAction extends ActionSupport {
 								+ imageFileName + ".jpg");
 
 				if (order_pic_url == null) {
-					order_pic_url = "../UploadImages/"
-							+ imageFileName + ".jpg" + ";";
+					order_pic_url = "../UploadImages/" + imageFileName + ".jpg"
+							+ ";";
 				} else {
-					order_pic_url = order_pic_url
-							+ "../UploadImages/"
+					order_pic_url = order_pic_url + "../UploadImages/"
 							+ imageFileName + ".jpg" + ";";
 				}
 
@@ -381,10 +380,36 @@ public class OrderlistAction extends ActionSupport {
 		return "json";
 	}
 
+	public String getwashorderlistasc() throws Exception {
+		dataMap = new HashMap<String, Object>(); // 新建dataMap来储存JSON字符串
+		dataMap.clear(); // dataMap中的数据将会被Struts2转换成JSON字符串，所以这里要先清空其中的数据
+
+		System.out.println("getwashorderlistasc");
+		System.out.println(sortparm);
+		int result = orderlistServices.getWashOrderlist(sortparm);
+		
+
+		if (result == ResultCode.SUCCESS) {
+			List<Orderlist> orderlist = orderlistServices.orderlistinfos();
+
+			dataMap.put("orderlist", orderlist);
+			dataMap.put("resultcode", result);
+			dataMap.put("errmsg", ResultCode.getErrmsg(result));
+			dataMap.put("getwashorderlistascResult", true);
+		}
+
+		return "getsuccess";
+	}
+
+	public String getwashorderlistascJson() throws Exception {
+		getwashorderlistasc();
+		return "json";
+	}
+
 	public String getwashorderlist() throws Exception {
 		dataMap = new HashMap<String, Object>(); // 新建dataMap来储存JSON字符串
 		dataMap.clear(); // dataMap中的数据将会被Struts2转换成JSON字符串，所以这里要先清空其中的数据
-		
+
 		int result = orderlistServices.getWashOrderlist();
 
 		if (result == ResultCode.SUCCESS) {
@@ -396,7 +421,7 @@ public class OrderlistAction extends ActionSupport {
 			dataMap.put("getwashorderlistResult", true);
 		}
 
-		return SUCCESS;
+		return "getsuccess";
 	}
 
 	public String getwashorderlistJson() throws Exception {
@@ -658,6 +683,14 @@ public class OrderlistAction extends ActionSupport {
 
 	public void setAddresscode(int addresscode) {
 		this.addresscode = addresscode;
+	}
+
+	public String getSortparm() {
+		return sortparm;
+	}
+
+	public void setSortparm(String sortparm) {
+		this.sortparm = sortparm;
 	}
 
 }

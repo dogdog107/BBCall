@@ -60,6 +60,12 @@ public interface OrderlistMapper {
 	// 获取所有洗衣订单
 	public List<Orderlist> getWashOrderlist();
 
+	// 获取所有洗衣订单按照订单状态排序
+	public List<Orderlist> getWashOrderlistByStatus();
+
+	// 获取所有洗衣订单按照师傅账号排序
+	public List<Orderlist> getWashOrderlistByMaster();
+
 	// 更新订单详情
 	public void updateOrder(Orderlist order);
 

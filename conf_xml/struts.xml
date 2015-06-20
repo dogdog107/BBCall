@@ -85,6 +85,7 @@
 			<interceptor-ref name="defaultStack" />
 
 			<result name="success">/page/viewwashorder.jsp</result>
+			<result name="getsuccess">/page/washorder.jsp</result>
 			<result type="json" name="json">
 				<param name="root">dataMap</param>
 			</result>
