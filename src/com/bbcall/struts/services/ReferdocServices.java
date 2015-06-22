@@ -46,23 +46,24 @@ public class ReferdocServices {
 	public int addReferdoc(String referdoc_type, double referdoc_price) {
 		// TODO Auto-generated method stub
 
-		System.out.println("Here is referdocServices.add method...");
-
-		int checkResult = chkReferType(referdoc_type);
-
-		if (checkResult == ResultCode.REFERDOC_TYPE_NOTEXIST) {
-
-			
-			Referdoc referdoc = new Referdoc();
-			referdoc.setReferdoc_type(referdoc_type);
-			referdoc.setReferdoc_price(referdoc_price);
-
-			referdocMapper.addReferdoc(referdoc);
-
-			referdocinfos = referdocMapper.getReferdoclist();
-			return ResultCode.SUCCESS;
+		if (referdoc_type.equals("") || referdoc_price == 0) {
+			return ResultCode.REFERDOC_ADD_FAILED;
 		} else {
-			return checkResult;
+			int checkResult = chkReferType(referdoc_type);
+
+			if (checkResult == ResultCode.REFERDOC_TYPE_NOTEXIST) {
+
+				Referdoc referdoc = new Referdoc();
+				referdoc.setReferdoc_type(referdoc_type);
+				referdoc.setReferdoc_price(referdoc_price);
+
+				referdocMapper.addReferdoc(referdoc);
+
+				referdocinfos = referdocMapper.getReferdoclist();
+				return ResultCode.SUCCESS;
+			} else {
+				return checkResult;
+			}
 		}
 
 	}
@@ -94,8 +95,6 @@ public class ReferdocServices {
 
 	public int updateReferdoc(int referdoc_id, String referdoc_type,
 			double referdoc_price) {
-
-		System.out.println("Here is referdocServices.update method...");
 
 		Referdoc referdoc = referdocMapper.getReferdoc(referdoc_id);
 
@@ -134,8 +133,6 @@ public class ReferdocServices {
 
 	public int deleteReferdoc(int referdoc_id) {
 
-		System.out.println("Here is referdocServices.delete method...");
-
 		referdocMapper.deleteReferdoc(referdoc_id);
 
 		referdocinfos = referdocMapper.getReferdoclist();
@@ -168,8 +165,6 @@ public class ReferdocServices {
 
 	public int getReferdoc(int referdoc_id) {
 
-		System.out.println("Here is referdocServices.get method...");
-
 		referdocinfo = referdocMapper.getReferdoc(referdoc_id);
 
 		return ResultCode.SUCCESS;
@@ -199,8 +194,6 @@ public class ReferdocServices {
 
 	public int getReferdoclist() {
 
-		System.out.println("Here is referdocServices.get list method...");
-
 		referdocinfos = referdocMapper.getReferdoclist();
 
 		return ResultCode.SUCCESS;
@@ -214,10 +207,8 @@ public class ReferdocServices {
 		referdocinfo = referdocMapper.getReferdocByType(referdoc_type);
 
 		if (null != referdocinfo) {
-			System.out.println("referdoc type exist");
 			return ResultCode.REFERDOC_TYPE_TEXIST;
 		} else {
-			System.out.println("referdoc type not exist");
 			return ResultCode.REFERDOC_TYPE_NOTEXIST;
 		}
 	}

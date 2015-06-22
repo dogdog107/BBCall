@@ -10,6 +10,8 @@
 	src="${pageContext.request.contextPath }/jquery/jquery-1.8.3.js"></script>
 <script type="text/javascript"
 	src="${pageContext.request.contextPath }/jquery/referdocPage.js?token=${sessionScope.user.user_token}"></script>
+<script type="text/javascript"
+	src="${pageContext.request.contextPath }/jquery/addreferdocPage.js"></script>
 <script type="text/javascript">
 	var token = "${sessionScope.user.user_token}";
 	var link = "${pageContext.request.contextPath}";
@@ -40,6 +42,8 @@
 					<strong>訂單類型：</strong>
 				</label>
 				<input id="referdoc_type" name="referdoc_type" type="text"><span>訂單類型不能為空</span><br /><br />
+				<td><span
+				id="chkReferdocType"></span></td>
 				
 				<label for="referdoc_price">
 					<strong>訂單參考價位：</strong>

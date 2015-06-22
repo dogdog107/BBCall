@@ -51,8 +51,6 @@ public class ReferdocAction extends ActionSupport {
 			dataMap.put("resultcode", result); // 放入一个是否操作成功的标识
 			dataMap.put("errmsg", ResultCode.getErrmsg(result));
 			dataMap.put("addResult", false); // 放入registerResult
-			System.out.println(dataMap);
-			System.out.println("add Failed");
 			return "addFailed";
 		}
 
@@ -150,6 +148,29 @@ public class ReferdocAction extends ActionSupport {
 
 	public String getlistJson() throws Exception {
 		getlist();
+		return "json";
+	}
+
+	public String chkreferdoctype() throws Exception {
+		dataMap = new HashMap<String, Object>(); // 新建dataMap来储存JSON字符串
+		dataMap.clear(); // dataMap中的数据将会被Struts2转换成JSON字符串，所以这里要先清空其中的数据
+
+		int result = referdocServices.chkReferType(referdoc_type);
+
+		if (result == ResultCode.REFERDOC_TYPE_NOTEXIST) {
+			dataMap.put("resultcode", result); // 放入一个是否操作成功的标识
+			dataMap.put("errmsg", ResultCode.getErrmsg(result));
+			dataMap.put("chkreferdoctypeResult", true); // 放入checkUserNameResult
+		} else {
+			dataMap.put("resultcode", result); // 放入一个是否操作成功的标识
+			dataMap.put("errmsg", ResultCode.getErrmsg(result));
+			dataMap.put("chkreferdoctypeResult", false); // 放入checkUserNameResult
+		}
+		return SUCCESS;
+	}
+
+	public String chkreferdoctypeJson() throws Exception {
+		chkreferdoctype();
 		return "json";
 	}
 

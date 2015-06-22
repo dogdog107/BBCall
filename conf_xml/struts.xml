@@ -94,6 +94,7 @@
 		<!-- Referdoc Action -->
 		<action name="referdoc_*" method="{1}" class="referdocAction">
 			<result name="success">/page/referdoc.jsp</result>
+			<result name="addFailed">/page/addreferfailed.jsp</result>
 			<result type="json" name="json">
 				<param name="root">dataMap</param>
 			</result>
