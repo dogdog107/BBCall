@@ -26,6 +26,7 @@ public class ReferdocAction extends ActionSupport {
 	private int referdoc_id;
 	private String referdoc_type;
 	private double referdoc_price;
+	private List<String> order_type_list;
 
 	@Override
 	public String execute() throws Exception {
@@ -136,6 +137,7 @@ public class ReferdocAction extends ActionSupport {
 		int result = referdocServices.getReferdoclist();
 
 		if (result == ResultCode.SUCCESS) {
+			System.out.println("get list");
 			List<Referdoc> referdoclist = referdocServices.referdocinfos();
 			dataMap.put("referdoclist", referdoclist);
 			dataMap.put("resultcode", result);
@@ -174,6 +176,43 @@ public class ReferdocAction extends ActionSupport {
 		return "json";
 	}
 
+	public String referprice() throws Exception {
+		dataMap = new HashMap<String, Object>(); // 新建dataMap来储存JSON字符串
+		dataMap.clear(); // dataMap中的数据将会被Struts2转换成JSON字符串，所以这里要先清空其中的数据
+
+		int result = 1;
+		String type = null;
+		Referdoc referd = new Referdoc();
+		double referprice = 0;
+		
+		if (order_type_list == null) {
+			dataMap.put("referprice", 0);
+			dataMap.put("resultcode", result); // 放入一个是否操作成功的标识
+			dataMap.put("errmsg", ResultCode.getErrmsg(result));
+			dataMap.put("referpriceResult", false); // 放入chkreferdoctypeResult
+		} else {
+			for (int i=0;i<order_type_list.size();i++) {
+				type = order_type_list.get(i);
+				result = referdocServices.getReferdocByType(type);
+				referd = referdocServices.referdocinfo();
+				referprice = referprice + referd.getReferdoc_price();
+				
+				System.out.println(referprice);
+				dataMap.put("referprice", referprice);
+				dataMap.put("resultcode", result); // 放入一个是否操作成功的标识
+				dataMap.put("errmsg", ResultCode.getErrmsg(result));
+				dataMap.put("referpriceResult", false); // 放入chkreferdoctypeResult
+			}
+		}
+		
+		return SUCCESS;
+	}
+
+	public String referpriceJson() throws Exception {
+		referprice();
+		return "json";
+	}
+
 	public Map<String, Object> getDataMap() {
 		return dataMap;
 	}
@@ -208,6 +247,14 @@ public class ReferdocAction extends ActionSupport {
 
 	public void setReferdoc_price(double referdoc_price) {
 		this.referdoc_price = referdoc_price;
+	}
+
+	public List<String> getOrder_type_list() {
+		return order_type_list;
+	}
+
+	public void setOrder_type_list(List<String> order_type_list) {
+		this.order_type_list = order_type_list;
 	}
 
 }

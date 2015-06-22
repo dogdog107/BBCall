@@ -86,6 +86,7 @@
 
 			<result name="success">/page/viewwashorder.jsp</result>
 			<result name="getsuccess">/page/washorder.jsp</result>
+			<result name="addordersuccess">/page/orderlist.jsp</result>
 			<result type="json" name="json">
 				<param name="root">dataMap</param>
 			</result>

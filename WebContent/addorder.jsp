@@ -6,9 +6,18 @@
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<script type="text/javascript"
+	src="${pageContext.request.contextPath }/jquery/jquery-1.8.3.js"></script>
+<script type="text/javascript"
+	src="${pageContext.request.contextPath }/jquery/orderPage.js">
+</script>
+<script type="text/javascript"
+	src="${pageContext.request.contextPath }/jquery/addorderPage.js">
+</script>
 <title>add order</title>
 </head>
-<body>
+
+<body onload="addonload()">
 	<h1>Struts add order Page</h1>
 	<s:form action="orderlist_add" theme="simple" method="post" enctype="multipart/form-data">
 	order_book_year:<s:select list="#{'1990':'1990','2000':'2000','2010':'2010'}" name="order_book_year"></s:select>
@@ -39,8 +48,32 @@
 	<br>
 	user_account:<s:textfield name="user_account" size="20"></s:textfield>
 	<br>
-	order_type:<s:textfield name="order_type" size="20"></s:textfield>
+	order_type:
+	<div style="font-size: 12px; margin: 10px 5px;">
+		<table class="table_list" border="1" width="100%">
+			<tbody id="datas">
+			<tr id="template" style="display: none; font-size: 12px;">
+				<td>
+					<input type="checkbox" id="order_type_list" name="order_type_list">
+				</td>
+				
+				<td id="order_type_text"></td>
+			</tr>
+			</tbody>
+		</table>
+	</div>
 	<br>
+	<div style="font-size: 12px; margin: 10px 5px;">
+		<table class="table_list" border="1" width="100%">
+			<tr id="templa" style="font-size: 12px;">
+				<td>
+					参考价格: 
+				</td>
+				
+				<td id="referprice"></td>
+			</tr>
+		</table>
+	</div>
 		<s:submit label="submit"></s:submit>
 	</s:form>
 

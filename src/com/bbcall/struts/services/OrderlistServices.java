@@ -81,7 +81,6 @@ public class OrderlistServices {
 			String order_user_account, String order_type) {
 		// TODO Auto-generated method stub
 
-		System.out.println("Here is OrderlistServices.add method...");
 
 		// 创建订单对象，写入数据
 		Orderlist orderlist = new Orderlist();
@@ -119,7 +118,7 @@ public class OrderlistServices {
 
 		orderlistMapper.addOrder(orderlist);
 
-		orderlistinfo = orderlist;
+		orderlistinfos = orderlistMapper.getUnOrdersByUserAccount(order_user_account);
 
 		return ResultCode.SUCCESS;
 
