@@ -7,6 +7,8 @@
 		<id column="referdoc_id" property="referdoc_id" jdbcType="INTEGER" />
 		<result column="referdoc_type" property="referdoc_type"
 			jdbcType="VARCHAR" />
+		<result column="referdoc_parentno" property="referdoc_parentno" jdbcType="INTEGER" />
+		<result column="referdoc_level" property="referdoc_level" jdbcType="INTEGER" />
 		<result column="referdoc_price" property="referdoc_price" jdbcType="DECIMAL" />
 	</resultMap>
 
@@ -14,8 +16,12 @@
 		useGeneratedKeys="true" keyProperty="referdoc_id">
 		insert into referdoc
 		(referdoc_type,
+		referdoc_parentno,
+		referdoc_level,
 		referdoc_price) values
 		(#{referdoc_type},
+		#{referdoc_parentno},
+		#{referdoc_level},
 		#{referdoc_price})
 	</insert>
 	<select id="getReferdoc" parameterType="int"
@@ -30,12 +36,26 @@
 		where
 		referdoc_type=#{referdoc_type}
 	</select>
+	<select id="getReferdoclistByParent" parameterType="int"
+		resultType="com.bbcall.mybatis.table.Referdoc">
+		select * from referdoc
+		where
+		referdoc_parentno=#{referdoc_parentno}
+	</select>
+	<select id="getParentReferdoc" parameterType="int"
+		resultType="com.bbcall.mybatis.table.Referdoc">
+		select * from referdoc
+		where
+		referdoc_parentno = 0 and referdoc_level = 1
+	</select>
 	<select id="getReferdoclist" resultMap="ReferdocResultMap">
 		select * from referdoc order by referdoc_id
 	</select>
 	<update id="updateReferdoc" parameterType="com.bbcall.mybatis.table.Referdoc">
 		update referdoc set
 		referdoc_type=#{referdoc_type},
+		referdoc_parentno=#{referdoc_parentno},
+		referdoc_level=#{referdoc_level},
 		referdoc_price=#{referdoc_price}
 		where
 		referdoc_id=#{referdoc_id}
