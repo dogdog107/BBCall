@@ -31,7 +31,7 @@
 		referdoc_type=#{referdoc_type}
 	</select>
 	<select id="getReferdoclist" resultMap="ReferdocResultMap">
-		select * from referdoc
+		select * from referdoc order by referdoc_id
 	</select>
 	<update id="updateReferdoc" parameterType="com.bbcall.mybatis.table.Referdoc">
 		update referdoc set

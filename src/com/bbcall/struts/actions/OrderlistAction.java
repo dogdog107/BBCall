@@ -22,7 +22,9 @@ import com.bbcall.functions.RandomCode;
 import com.bbcall.functions.ResultCode;
 import com.bbcall.mybatis.table.AddressList;
 import com.bbcall.mybatis.table.Orderlist;
+import com.bbcall.mybatis.table.Referdoc;
 import com.bbcall.struts.services.OrderlistServices;
+import com.bbcall.struts.services.ReferdocServices;
 import com.opensymphony.xwork2.ActionSupport;
 
 @Scope("prototype")
@@ -32,6 +34,9 @@ public class OrderlistAction extends ActionSupport {
 
 	@Autowired
 	private OrderlistServices orderlistServices;
+
+	@Autowired
+	private ReferdocServices referdocServices;
 
 	private Map<String, Object> dataMap;
 
@@ -49,10 +54,14 @@ public class OrderlistAction extends ActionSupport {
 	private String order_description;
 	private double order_price;
 	private String user_account;
+	private String order_master_account;
+	private int order_status;
 	private String order_type;
 	private int addresscode;
 	private List<String> skilllist;
 	private List<String> locationlist;
+	private String sortparm;
+	private List<String> order_type_list;
 
 	private List<File> orderFile = new ArrayList<File>();
 	private List<String> orderFileContentType;
@@ -118,32 +127,36 @@ public class OrderlistAction extends ActionSupport {
 							+ imageFileName + ".jpg");
 
 			if (order_pic_url == null) {
-				order_pic_url = "../UploadImages/"
-						+ imageFileName + ".jpg" + ";";
+				order_pic_url = "../UploadImages/" + imageFileName + ".jpg"
+						+ ";";
 			} else {
-				order_pic_url = order_pic_url
-						+ "../UploadImages/"
+				order_pic_url = order_pic_url + "../UploadImages/"
 						+ imageFileName + ".jpg" + ";";
 			}
 
 			copy(orderFile.get(i), imageFile); // 把图片写入到上面设置的路径里
 		}
 
-		int result = orderlistServices.addOrder(order_book_time,
-				order_book_location, order_book_location_code,
-				order_contact_mobile, order_contact_name, order_urgent,
-				order_urgent_bonus, order_pic_url, order_description,
-				order_price, user_account, order_type);
+		int result = 1;
+
+		for (int i = 0; i < order_type_list.size(); i++) {
+			result = orderlistServices.addOrder(order_book_time,
+					order_book_location, order_book_location_code,
+					order_contact_mobile, order_contact_name, order_urgent,
+					order_urgent_bonus, order_pic_url, order_description,
+					order_price, user_account, order_type_list.get(i));
+		}
 
 		if (result == ResultCode.SUCCESS) {
-			Orderlist orderlist = orderlistServices.orderlistinfo();
+			List<Orderlist> orderlist = orderlistServices.orderlistinfos();
 			dataMap.put("orderlist", orderlist);
 			dataMap.put("resultcode", result);
 			dataMap.put("errmsg", ResultCode.getErrmsg(result));
 			dataMap.put("addResult", true);
+			return "addordersuccess";
+		} else {
+			return "addorderfailed";
 		}
-
-		return SUCCESS;
 
 	}
 
@@ -177,11 +190,10 @@ public class OrderlistAction extends ActionSupport {
 								+ imageFileName + ".jpg");
 
 				if (order_pic_url == null) {
-					order_pic_url = "../UploadImages/"
-							+ imageFileName + ".jpg" + ";";
+					order_pic_url = "../UploadImages/" + imageFileName + ".jpg"
+							+ ";";
 				} else {
-					order_pic_url = order_pic_url
-							+ "../UploadImages/"
+					order_pic_url = order_pic_url + "../UploadImages/"
 							+ imageFileName + ".jpg" + ";";
 				}
 
@@ -381,10 +393,33 @@ public class OrderlistAction extends ActionSupport {
 		return "json";
 	}
 
+	public String getwashorderlistasc() throws Exception {
+		dataMap = new HashMap<String, Object>(); // 新建dataMap来储存JSON字符串
+		dataMap.clear(); // dataMap中的数据将会被Struts2转换成JSON字符串，所以这里要先清空其中的数据
+
+		int result = orderlistServices.getWashOrderlist(sortparm);
+
+		if (result == ResultCode.SUCCESS) {
+			List<Orderlist> orderlist = orderlistServices.orderlistinfos();
+
+			dataMap.put("orderlist", orderlist);
+			dataMap.put("resultcode", result);
+			dataMap.put("errmsg", ResultCode.getErrmsg(result));
+			dataMap.put("getwashorderlistascResult", true);
+		}
+
+		return "getsuccess";
+	}
+
+	public String getwashorderlistascJson() throws Exception {
+		getwashorderlistasc();
+		return "json";
+	}
+
 	public String getwashorderlist() throws Exception {
 		dataMap = new HashMap<String, Object>(); // 新建dataMap来储存JSON字符串
 		dataMap.clear(); // dataMap中的数据将会被Struts2转换成JSON字符串，所以这里要先清空其中的数据
-		
+
 		int result = orderlistServices.getWashOrderlist();
 
 		if (result == ResultCode.SUCCESS) {
@@ -396,11 +431,35 @@ public class OrderlistAction extends ActionSupport {
 			dataMap.put("getwashorderlistResult", true);
 		}
 
-		return SUCCESS;
+		return "getsuccess";
 	}
 
 	public String getwashorderlistJson() throws Exception {
 		getwashorderlist();
+		return "json";
+	}
+
+	public String selectwashorderlist() throws Exception {
+		dataMap = new HashMap<String, Object>(); // 新建dataMap来储存JSON字符串
+		dataMap.clear(); // dataMap中的数据将会被Struts2转换成JSON字符串，所以这里要先清空其中的数据
+
+		int result = orderlistServices.selectWashOrderlist(order_status,
+				order_master_account);
+
+		if (result == ResultCode.SUCCESS) {
+			List<Orderlist> orderlist = orderlistServices.orderlistinfos();
+
+			dataMap.put("orderlist", orderlist);
+			dataMap.put("resultcode", result);
+			dataMap.put("errmsg", ResultCode.getErrmsg(result));
+			dataMap.put("selectwashorderlistResult", true);
+		}
+
+		return "getsuccess";
+	}
+
+	public String selectwashorderlistJson() throws Exception {
+		selectwashorderlist();
 		return "json";
 	}
 
@@ -418,6 +477,11 @@ public class OrderlistAction extends ActionSupport {
 		}
 
 		return SUCCESS;
+	}
+
+	public String deleteJson() throws Exception {
+		delete();
+		return "json";
 	}
 
 	// checkParentAdsList Action
@@ -474,8 +538,32 @@ public class OrderlistAction extends ActionSupport {
 		return "json";
 	}
 
-	public String deleteJson() throws Exception {
-		delete();
+	// 拿到所有的订单类型进行展示
+	public String gettypelist() throws Exception {
+		dataMap = new HashMap<String, Object>(); // 新建dataMap来储存JSON字符串
+		dataMap.clear(); // dataMap中的数据将会被Struts2转换成JSON字符串，所以这里要先清空其中的数据
+
+		int result = referdocServices.getReferdoclist();
+		if (result == ResultCode.SUCCESS) {
+			List<String> ordertypelist = new ArrayList<String>();
+
+			List<Referdoc> referdocs = referdocServices.referdocinfos();
+			for (int i = 0; i < referdocs.size(); i++) {
+				String type = referdocs.get(i).getReferdoc_type();
+				ordertypelist.add(type);
+
+			}
+			dataMap.put("ordertypelist", ordertypelist);
+			dataMap.put("resultcode", result);
+			dataMap.put("errmsg", ResultCode.getErrmsg(result));
+			dataMap.put("gettypelistResult", true);
+		}
+
+		return SUCCESS;
+	}
+
+	public String gettypelistJson() throws Exception {
+		gettypelist();
 		return "json";
 	}
 
@@ -658,6 +746,38 @@ public class OrderlistAction extends ActionSupport {
 
 	public void setAddresscode(int addresscode) {
 		this.addresscode = addresscode;
+	}
+
+	public String getSortparm() {
+		return sortparm;
+	}
+
+	public void setSortparm(String sortparm) {
+		this.sortparm = sortparm;
+	}
+
+	public String getOrder_master_account() {
+		return order_master_account;
+	}
+
+	public void setOrder_master_account(String order_master_account) {
+		this.order_master_account = order_master_account;
+	}
+
+	public int getOrder_status() {
+		return order_status;
+	}
+
+	public void setOrder_status(int order_status) {
+		this.order_status = order_status;
+	}
+
+	public List<String> getOrder_type_list() {
+		return order_type_list;
+	}
+
+	public void setOrder_type_list(List<String> order_type_list) {
+		this.order_type_list = order_type_list;
 	}
 
 }

@@ -60,6 +60,23 @@ public interface OrderlistMapper {
 	// 获取所有洗衣订单
 	public List<Orderlist> getWashOrderlist();
 
+	// 通过订单状态，师傅账号获取洗衣订单
+	public List<Orderlist> getWashOrders(
+			@Param("order_status") int order_status,
+			@Param("order_master_account") String order_master_account);
+
+	// 通过订单状态获取洗衣订单
+	public List<Orderlist> getWashOrderByStatus(int order_status);
+
+	// 通过订单状态，师傅账号获取洗衣订单
+	public List<Orderlist> getWashOrderByMaster(String order_master_account);
+
+	// 获取所有洗衣订单按照订单状态排序
+	public List<Orderlist> getWashOrderlistByStatus();
+
+	// 获取所有洗衣订单按照师傅账号排序
+	public List<Orderlist> getWashOrderlistByMaster();
+
 	// 更新订单详情
 	public void updateOrder(Orderlist order);
 

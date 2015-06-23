@@ -8,7 +8,7 @@ import com.bbcall.mybatis.table.Referdoc;
 public interface ReferdocMapper {
 
 	// 添加参考数据
-	public void addReference(Referdoc referdoc);
+	public void addReferdoc(Referdoc referdoc);
 
 	// 通过订单类ID得对应的参考数据
 	public Referdoc getReferdoc(int referdoc_id);

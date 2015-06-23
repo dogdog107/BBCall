@@ -81,7 +81,6 @@ public class OrderlistServices {
 			String order_user_account, String order_type) {
 		// TODO Auto-generated method stub
 
-		System.out.println("Here is OrderlistServices.add method...");
 
 		// 创建订单对象，写入数据
 		Orderlist orderlist = new Orderlist();
@@ -119,7 +118,7 @@ public class OrderlistServices {
 
 		orderlistMapper.addOrder(orderlist);
 
-		orderlistinfo = orderlist;
+		orderlistinfos = orderlistMapper.getUnOrdersByUserAccount(order_user_account);
 
 		return ResultCode.SUCCESS;
 
@@ -555,14 +554,13 @@ public class OrderlistServices {
 	}
 
 	// ################################################################################
-	// ## Get Completed Order services
-	// ## 查询完成订单列表
+	// ## Get wash Order services
+	// ## 查询洗衣订单列表
 	// ##==============================================================================
 	// ## Instructions
 	// ##
 	// ##------------------------------------------------------------------------------
 	// ## 1. Require parameters:
-	// ## (1) user_account
 	// ##
 	// ##------------------------------------------------------------------------------
 	// ## 2. Optional parameters: NONE
@@ -578,15 +576,85 @@ public class OrderlistServices {
 	// ################################################################################
 	public int getWashOrderlist() {
 
-		System.out.println("getWashOrderlist");
 		orderlistinfos = orderlistMapper.getWashOrderlist();
+
+		return ResultCode.SUCCESS;
+	}
+
+	// ################################################################################
+	// ## Select wash Order services
+	// ## 筛选洗衣订单列表
+	// ##==============================================================================
+	// ## Instructions
+	// ##
+	// ##------------------------------------------------------------------------------
+	// ## 1. Require parameters:
+	// ## (1) order_status
+	// ## (1) order_master_account
+	// ##------------------------------------------------------------------------------
+	// ## 2. Optional parameters: NONE
+	// ##
+	// ##------------------------------------------------------------------------------
+	// ## 3. Return parameters:
+	// ## (4) ResultCode.SUCCESS
+	// ##
+	// ##------------------------------------------------------------------------------
+	// ## 4. Return orderlistinfos:
+	// ## (1) orderlistinfos
+	// ##
+	// ################################################################################
+	public int selectWashOrderlist(int order_status, String order_master_account) {
+
 		
-		if (orderlistinfos == null) {
-			System.out.println("null");
+		if (order_status == 0) {
+			
+			if (order_master_account.equals("") ||  order_master_account == null) {
+				orderlistinfos = orderlistMapper.getWashOrderlist();
+			} else {
+				orderlistinfos = orderlistMapper.getWashOrderByMaster(order_master_account);
+			}
+			
+		} else {
+			if (order_master_account.equals("") || order_master_account == null) {
+				orderlistinfos = orderlistMapper.getWashOrderByStatus(order_status);
+				
+			} else {
+				orderlistinfos = orderlistMapper.getWashOrders(order_status, order_master_account);
+			}
 		}
-		
-		for (int i = 0; i< orderlistinfos.size(); i++) {
-			System.out.println(orderlistinfos.get(i).getOrder_book_location());
+
+		return ResultCode.SUCCESS;
+	}
+
+	// ################################################################################
+	// ## Get wash Order services
+	// ## 查询洗衣订单列表排序
+	// ##==============================================================================
+	// ## Instructions
+	// ##
+	// ##------------------------------------------------------------------------------
+	// ## 1. Require parameters:
+	// ## (1) sortparm
+	// ##
+	// ##------------------------------------------------------------------------------
+	// ## 2. Optional parameters: NONE
+	// ##
+	// ##------------------------------------------------------------------------------
+	// ## 3. Return parameters:
+	// ## (4) ResultCode.SUCCESS
+	// ##
+	// ##------------------------------------------------------------------------------
+	// ## 4. Return orderlistinfos:
+	// ## (1) orderlistinfos
+	// ##
+	// ################################################################################
+	public int getWashOrderlist(String sortparm) {
+
+
+		if (sortparm.equals("order_status")) {
+			orderlistinfos = orderlistMapper.getWashOrderlistByStatus();
+		} else {
+			orderlistinfos = orderlistMapper.getWashOrderlistByMaster();
 		}
 
 		return ResultCode.SUCCESS;

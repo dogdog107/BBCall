@@ -14,12 +14,13 @@
 		<result column="order_book_location" property="order_book_location"
 			jdbcType="VARCHAR" />
 		<result column="order_book_location_code" property="order_book_location_code"
-			jdbcType="INTEGER" />	
+			jdbcType="INTEGER" />
 		<result column="order_contact_mobile" property="order_contact_mobile"
 			jdbcType="INTEGER" />
 		<result column="order_contact_name" property="order_contact_name"
 			jdbcType="VARCHAR" />
-		<result column="order_pic_url" property="order_pic_url" jdbcType="VARCHAR" />
+		<result column="order_pic_url" property="order_pic_url"
+			jdbcType="VARCHAR" />
 		<result column="order_description" property="order_description"
 			jdbcType="VARCHAR" />
 		<result column="order_price" property="order_price" jdbcType="DECIMAL" />
@@ -78,7 +79,7 @@
 		where order_status="1" and
 		order_user_account=#{order_user_account} order by order_create_time
 	</select>
-		
+
 	<select id="getProOrdersByUserAccount" parameterType="String"
 		resultMap="OrderResultMap">
 		select * from orderlist
@@ -91,30 +92,38 @@
 		where order_status="3" and
 		order_user_account=#{order_user_account} order by order_create_time
 	</select>
-	
-	<select id="getUnOrdersByMasterSkill"
-		resultMap="OrderResultMap">
-		select * from orderlist where order_status="1" and order_type=#{order_type,jdbcType=VARCHAR} and 
+
+	<select id="getUnOrdersByMasterSkill" resultMap="OrderResultMap">
+		select * from
+		orderlist where order_status="1" and
+		order_type=#{order_type,jdbcType=VARCHAR} and
 		order_user_account not in (select blacklist_user_account from
 		blacklist where
-		blacklist_master_account=#{order_master_account,jdbcType=VARCHAR}) order by order_book_location_code, order_create_time
+		blacklist_master_account=#{order_master_account,jdbcType=VARCHAR})
+		order by order_book_location_code, order_create_time
 	</select>
-	
-	<select id="getUnOrdersByMasterLocation"
-		resultMap="OrderResultMap">
-		select * from orderlist where order_status="1" and order_type=#{order_type,jdbcType=VARCHAR} and 
+
+	<select id="getUnOrdersByMasterLocation" resultMap="OrderResultMap">
+		select * from
+		orderlist where order_status="1" and
+		order_type=#{order_type,jdbcType=VARCHAR} and
 		order_book_location like #{order_book_location,jdbcType=VARCHAR} and
-		order_user_account not in (select blacklist_user_account from
+		order_user_account
+		not in (select blacklist_user_account from
 		blacklist where
-		blacklist_master_account=#{order_master_account,jdbcType=VARCHAR}) order by order_create_time
+		blacklist_master_account=#{order_master_account,jdbcType=VARCHAR})
+		order by order_create_time
 	</select>
-	<select id="getUnOrdersByBookTime"
-		resultMap="OrderResultMap">
-		select * from orderlist where order_status="1" and order_type=#{order_type,jdbcType=VARCHAR} and 
+	<select id="getUnOrdersByBookTime" resultMap="OrderResultMap">
+		select * from
+		orderlist where order_status="1" and
+		order_type=#{order_type,jdbcType=VARCHAR} and
 		order_book_location like #{order_book_location,jdbcType=VARCHAR} and
-		order_user_account not in (select blacklist_user_account from
+		order_user_account
+		not in (select blacklist_user_account from
 		blacklist where
-		blacklist_master_account=#{order_master_account,jdbcType=VARCHAR}) order by order_book_time
+		blacklist_master_account=#{order_master_account,jdbcType=VARCHAR})
+		order by order_book_time
 	</select>
 	<select id="getComOrdersByMasterAccount" parameterType="String"
 		resultMap="OrderResultMap">
@@ -136,25 +145,64 @@
 		where
 		order_status="2"
 	</select>
-	
+
 	<select id="getComOrders" resultMap="OrderResultMap">
 		select * from orderlist
 		where
 		order_status="3"
 	</select>
-	
+
 	<select id="getWashOrderlist" resultMap="OrderResultMap">
 		select * from orderlist
 		where
 		order_type="wash" order by order_create_time desc
 	</select>
-	
-	<select id="getOrder" parameterType="int" resultMap="OrderResultMap">
+
+	<select id="getWashOrderlistByStatus" resultMap="OrderResultMap">
+		select * from
+		orderlist
+		where
+		order_type="wash" order by order_status asc
+	</select>
+
+	<select id="getWashOrderlistByMaster" resultMap="OrderResultMap">
+		select * from
+		orderlist
+		where
+		order_type="wash" order by order_master_account asc
+	</select>
+
+	<select id="getWashOrders" resultMap="OrderResultMap">
 		select * from orderlist
+		where
+		order_type="wash" and
+		order_master_account=#{order_master_account,jdbcType=VARCHAR} and
+		order_status=#{order_status,jdbcType=INTEGER} order by order_create_time
+		desc
+	</select>
+
+	<select id="getWashOrderByStatus" parameterType="int" resultMap="OrderResultMap">
+		select * from orderlist
+		where
+		order_type="wash" and
+		order_status=#{order_status} order by order_create_time desc
+	</select>
+
+	<select id="getWashOrderByMaster" parameterType="String"
+		resultMap="OrderResultMap">
+		select * from orderlist
+		where
+		order_type="wash" and
+		order_master_account=#{order_master_account} order by order_create_time desc
+	</select>
+
+	<select id="getOrder" parameterType="int" resultMap="OrderResultMap">
+		select *
+		from orderlist
 		where
 		order_id=#{order_id}
 	</select>
-	
+
 	<update id="updateOrder" parameterType="com.bbcall.mybatis.table.Orderlist">
 		update orderlist set
 		order_book_time=#{order_book_time},
@@ -180,10 +228,11 @@
 		where
 		order_id=#{order_id,jdbcType=INTEGER}
 	</update>
-	
+
 	<delete id="deleteOrder" parameterType="int">
-		delete from orderlist where
+		delete from orderlist
+		where
 		order_id=#{order_id}
 	</delete>
-	
+
 </mapper>  

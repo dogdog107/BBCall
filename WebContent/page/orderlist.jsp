@@ -8,17 +8,8 @@
 <link href="./css/mine.css" type="text/css" rel="stylesheet" />
 <script type="text/javascript"
 	src="${pageContext.request.contextPath }/jquery/jquery-1.8.3.js"></script>
-<script type="text/javascript"
-	src="${pageContext.request.contextPath }/jquery/washorderPage.js?token=${sessionScope.user.user_token}"></script>
-<script type="text/javascript">
-	var token = "${sessionScope.user.user_token}";
-	var link = "${pageContext.request.contextPath}";
-</script>
-<%
-	String path = request.getContextPath();
-%>
 </head>
-<body onload="onload()">
+<body>
 
 	<table cellspacing=0 cellpadding=0 width="100%" align=center border=0
 		style="font-size: 12px;">
@@ -35,38 +26,6 @@
 		</tr>
 	</table>
 	<div></div>
-
-	<div class="div_search">
-		<span>
-			<form action="orderlist_getwashorderlistasc"
-				id="orderlist_getwashorderlistasc" method="post">
-				排序：
-				<select name="sortparm" style="width: 100px;">
-					<option selected="selected" value="0">请选择</option>
-					<option value="order_status">订单状态</option>
-					<option value="order_master_account">负责师傅</option>
-				</select>
-				<input value="查询" type="submit" />
-			</form>
-		
-			<form action="orderlist_selectwashorderlist"
-				id="orderlist_selectwashorderlist" method="post">
-				订单状态：
-				<select name="order_status" style="width: 100px;">
-					<option selected="selected" value="0">请选择</option>
-					<option value="1">created</option>
-					<option value="2">in progress</option>
-					<option value="3">finished</option>
-				</select>
-				&nbsp;&nbsp;&nbsp;&nbsp;负责师傅：
-				<input type="text" name="order_master_account" />
-				<input value="筛选" type="submit" />
-			</form>
-		</span>
-	</div>
-	<div id="div_message" class="div_message" style="display: none">
-		<span id="message"> </span>
-	</div>
 	<div style="font-size: 13px; margin: 10px 5px;">
 		<table class="table_list" border="1" width="100%">
 			<tbody id="datas">

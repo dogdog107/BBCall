@@ -85,6 +85,17 @@
 			<interceptor-ref name="defaultStack" />
 
 			<result name="success">/page/viewwashorder.jsp</result>
+			<result name="getsuccess">/page/washorder.jsp</result>
+			<result name="addordersuccess">/page/orderlist.jsp</result>
+			<result type="json" name="json">
+				<param name="root">dataMap</param>
+			</result>
+		</action>
+		
+		<!-- Referdoc Action -->
+		<action name="referdoc_*" method="{1}" class="referdocAction">
+			<result name="success">/page/referdoc.jsp</result>
+			<result name="addFailed">/page/addreferfailed.jsp</result>
 			<result type="json" name="json">
 				<param name="root">dataMap</param>
 			</result>
