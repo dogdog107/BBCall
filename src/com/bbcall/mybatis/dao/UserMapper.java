@@ -3,6 +3,8 @@ package com.bbcall.mybatis.dao;
 import java.math.BigInteger;
 import java.util.List;
 
+import org.apache.ibatis.annotations.Param;
+
 import com.bbcall.mybatis.table.User;
 
 public interface UserMapper {
@@ -42,6 +44,12 @@ public interface UserMapper {
 	
 	// 查找全部user
 	public List<User> findAll();
+	
+	// 查找全部user
+	public List<User> listUserOrderBy(
+			@Param("col_name") String col_name, 
+			@Param("specify_value") String specify_value,
+			@Param("search_value") String search_value);
 
 	// 更新用户资料
 	public void updateUser(User user);

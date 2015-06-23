@@ -50,7 +50,7 @@
 
 		<!-- User Action -->
 		<action name="user_*" method="{1}" class="userAction">
-			
+
 			<result name="loginSuccess">
 				<param name="location">/page/index.jsp</param>
 			</result>

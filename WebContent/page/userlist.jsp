@@ -35,14 +35,27 @@
 	<div class="div_content">
 		<div class="div_search">
 			<span>
-				<form action="#" method="get">
+<!-- 				<form action="#" method="post"> -->
 					排序：
-					<select name="s_product_mark" style="width: 100px;">
-						<option selected="selected" value="0">请选择</option>
-						<option value="1">苹果apple</option>
+					<select name="col_name" id="col_name" onchange="col_name_change(this.value)">
+						<option value="user_id">默認排序(ID)</option>
+						<option value="user_account">按用戶帳號(Account)</option>
+						<option value="user_name">按用戶姓名(Name)</option>
+						<option value="user_type">按用戶類型(Type)</option>
+						<option value="user_status">按用戶狀態(Status)</option>
+						<option value="user_create_time">按註冊時間(CreateTime)</option>
+						<option value="user_login_time">按登錄時間(LoginTime)</option>
 					</select>
-					<input value="查询" type="submit" />
-				</form>
+					<select name="specify_value" id="specify_value" onchange="specify_value_change(this.value)">
+						<option value='ASC'>升序(ASC)</option>
+						<option value='DESC'>降序(DESC)</option>
+					</select>
+					<span id="search_value_span" style="display: none">
+						<font color=#1c94c4 id="search_value_message"></font>
+						<input name="search_value" id="search_value" type="text" style="width: 100px;"/>
+						<input value="查詢/Submit" type="submit" onclick="search_value()"/>
+					</span>
+<!-- 				</form> -->
 			</span>
 		</div>
 		<div id="div_message" class="div_message" style="display: none">
@@ -53,7 +66,7 @@
 				<tbody id="datas">
 					<tr style="font-weight: bold;">
 						<td>用戶序號<br/>User ID</td>
-						<td>頭像<br/>User ID</td>
+						<td>頭像<br/>User Pic</td>
 						<td>帳戶<br/>Account</td>
 						<td>姓名<br/>Name</td>
 						<td>類型<br/>Type</td>

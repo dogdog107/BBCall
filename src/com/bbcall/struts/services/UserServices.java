@@ -484,7 +484,7 @@ public class UserServices {
 	// ## 拉取User表
 	// ###################
 
-	public int checkUserList(String token) {
+	public int checkUserList(String token, String col_name, String specify_value, String search_value) {
 		System.out.println("Here is UserServices.checkUserList method...");
 
 		int checkTokenResult = checkToken(token);
@@ -492,7 +492,7 @@ public class UserServices {
 			if (userinfo.getUser_type() != 3) {
 				return ResultCode.ACCESS_REJECT;
 			}
-			List<User> userlist = userMapper.findAll();
+			List<User> userlist = userMapper.listUserOrderBy(col_name, specify_value, search_value);
 			if (userlist.size() > 0) {
 				this.userlist = userlist;
 				return ResultCode.SUCCESS;

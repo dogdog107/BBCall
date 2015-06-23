@@ -47,6 +47,9 @@ public class UserAction extends ActionSupport implements SessionAware{
 	private String accessgroup;
 	private Integer status;
 	private Integer userid;
+	private String col_name;
+	private String specify_value;
+	private String search_value;
 	
 //	private int test;
 	
@@ -258,7 +261,7 @@ public class UserAction extends ActionSupport implements SessionAware{
 	public String checkUserList() throws Exception {
 		System.out.println("Here is UserAction.checkUserList");
 		dataMap.clear(); // dataMap中的数据将会被Struts2转换成JSON字符串，所以这里要先清空其中的数据
-		int result = userServices.checkUserList(token);// 调用userServices.checkAddressList
+		int result = userServices.checkUserList(token, col_name, specify_value, search_value);// 调用userServices.checkAddressList
 		if (result == ResultCode.SUCCESS) {
 			List<User> userlist = userServices.getUserlist();
 			dataMap.put("userlist", userlist); // 把addresslist对象放入dataMap
@@ -505,5 +508,31 @@ public class UserAction extends ActionSupport implements SessionAware{
 
 	public void setUserid(Integer userid) {
 		this.userid = userid;
+	}
+
+	public String getCol_name() {
+		return col_name;
+	}
+
+	public void setCol_name(String col_name) {
+		this.col_name = col_name;
+	}
+
+	public String getSpecify_value() {
+		return specify_value;
+	}
+
+	public void setSpecify_value(String specify_value) {
+		this.specify_value = specify_value;
+	}
+
+
+	public String getSearch_value() {
+		return search_value;
+	}
+
+
+	public void setSearch_value(String search_value) {
+		this.search_value = search_value;
 	}
 }

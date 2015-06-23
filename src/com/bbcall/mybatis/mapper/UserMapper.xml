@@ -10,7 +10,7 @@
 
     <!--mybatis ehcache缓存配置 -->
     <!-- 以下两个<cache>标签二选一,第一个可以输出日志,第二个不输出日志 -->
-     <cache type="org.mybatis.caches.ehcache.LoggingEhcache" />
+<!-- <cache type="org.mybatis.caches.ehcache.LoggingEhcache" /> -->
 <!-- <cache type="org.mybatis.caches.ehcache.EhcacheCache"/>  -->
 
 <!-- 
@@ -163,6 +163,24 @@ CREATE TABLE USER (
 		user_address, user_skill, user_description, user_access_group,
 		user_status, user_login_time, user_create_time, user_token
 		from USER
+	</select>
+	<select id="listUserOrderBy" resultMap="UserResultMap">
+		select user_id, user_account, user_password, user_email, user_mobile,
+		user_type, user_name, user_gender, user_pic_url, user_language, user_address_code,
+		user_address, user_skill, user_description, user_access_group,
+		user_status, user_login_time, user_create_time, user_token
+		from USER
+		<where>
+			<if test="col_name!=null and search_value!=null and col_name!='' and search_value!=''">  
+            	${col_name}=#{search_value}
+        	</if>  
+		</where>
+		<if test="col_name!=null and specify_value!=null and col_name!='' and specify_value!=''">  
+            order by if(${col_name}=#{specify_value},0,1),${col_name}
+        </if>  
+		<if test="col_name!=null and col_name!='' and (specify_value==null or specify_value=='')">  
+            order by ${col_name}
+        </if>  
 	</select>
 	
 	<update id="updateUser" parameterType="User">
