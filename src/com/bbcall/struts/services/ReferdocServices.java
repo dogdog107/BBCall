@@ -47,7 +47,7 @@ public class ReferdocServices {
 			int referdoc_level, double referdoc_price) {
 		// TODO Auto-generated method stub
 
-		if (referdoc_type.equals("") || referdoc_price == 0) {
+		if (referdoc_type.equals("")) {
 			return ResultCode.REFERDOC_ADD_FAILED;
 		} else {
 			int checkResult = chkReferType(referdoc_type, referdoc_parentno);
@@ -193,6 +193,7 @@ public class ReferdocServices {
 	// ##------------------------------------------------------------------------------
 	// ## 1. Require parameters:
 	// ## (1) referdoc_type
+	// ## (2) referdoc_parentno
 	// ##
 	// ##------------------------------------------------------------------------------
 	// ## 2. Optional parameters: NONE
@@ -207,9 +208,10 @@ public class ReferdocServices {
 	// ##
 	// ################################################################################
 
-	public int getReferdocByType(String referdoc_type) {
+	public int getReferdocByType(String referdoc_type, int referdoc_parentno) {
 
-		referdocinfo = referdocMapper.getReferdocByType(referdoc_type);
+		referdocinfo = referdocMapper.getReferdocByType(referdoc_type,
+				referdoc_parentno);
 
 		return ResultCode.SUCCESS;
 	}
@@ -305,13 +307,10 @@ public class ReferdocServices {
 
 	public int chkReferType(String referdoc_type, int referdoc_parentno) {
 
-		if (referdoc_type.equals(""))
-			return ResultCode.REFERDOC_TYPE_EMPTY;
+		referdocinfo = referdocMapper.getReferdocByType(referdoc_type,
+				referdoc_parentno);
 
-		referdocinfo = referdocMapper.getReferdocByType(referdoc_type);
-
-		if (null != referdocinfo
-				&& referdocinfo.getReferdoc_parentno() == referdoc_parentno) {
+		if (null != referdocinfo) {
 			return ResultCode.REFERDOC_TYPE_TEXIST;
 		} else {
 			return ResultCode.REFERDOC_TYPE_NOTEXIST;

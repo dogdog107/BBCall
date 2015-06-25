@@ -30,11 +30,11 @@
 		where
 		referdoc_id=#{referdoc_id}
 	</select>
-	<select id="getReferdocByType" parameterType="String"
+	<select id="getReferdocByType"
 		resultType="com.bbcall.mybatis.table.Referdoc">
 		select * from referdoc
 		where
-		referdoc_type=#{referdoc_type}
+		referdoc_type=#{referdoc_type,jdbcType=VARCHAR} and referdoc_parentno=#{referdoc_parentno,jdbcType=INTEGER}
 	</select>
 	<select id="getReferdoclistByParent" parameterType="int"
 		resultType="com.bbcall.mybatis.table.Referdoc">
