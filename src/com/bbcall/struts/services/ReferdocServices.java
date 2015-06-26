@@ -43,18 +43,21 @@ public class ReferdocServices {
 	// ##
 	// ################################################################################
 
-	public int addReferdoc(String referdoc_type, double referdoc_price) {
+	public int addReferdoc(String referdoc_type, int referdoc_parentno,
+			int referdoc_level, double referdoc_price) {
 		// TODO Auto-generated method stub
 
-		if (referdoc_type.equals("") || referdoc_price == 0) {
+		if (referdoc_type.equals("")) {
 			return ResultCode.REFERDOC_ADD_FAILED;
 		} else {
-			int checkResult = chkReferType(referdoc_type);
+			int checkResult = chkReferType(referdoc_type, referdoc_parentno);
 
 			if (checkResult == ResultCode.REFERDOC_TYPE_NOTEXIST) {
 
 				Referdoc referdoc = new Referdoc();
 				referdoc.setReferdoc_type(referdoc_type);
+				referdoc.setReferdoc_parentno(referdoc_parentno);
+				referdoc.setReferdoc_level(referdoc_level);
 				referdoc.setReferdoc_price(referdoc_price);
 
 				referdocMapper.addReferdoc(referdoc);
@@ -94,11 +97,13 @@ public class ReferdocServices {
 	// ################################################################################
 
 	public int updateReferdoc(int referdoc_id, String referdoc_type,
-			double referdoc_price) {
+			int referdoc_parentno, int referdoc_level, double referdoc_price) {
 
 		Referdoc referdoc = referdocMapper.getReferdoc(referdoc_id);
 
 		referdoc.setReferdoc_type(referdoc_type);
+		referdoc.setReferdoc_parentno(referdoc_parentno);
+		referdoc.setReferdoc_level(referdoc_level);
 		referdoc.setReferdoc_price(referdoc_price);
 
 		referdocMapper.updateReferdoc(referdoc);
@@ -132,6 +137,15 @@ public class ReferdocServices {
 	// ################################################################################
 
 	public int deleteReferdoc(int referdoc_id) {
+
+		List<Referdoc> redocs = referdocMapper
+				.getReferdoclistByParent(referdoc_id);
+
+		if (redocs != null) {
+			for (int i = 0; i < redocs.size(); i++) {
+				referdocMapper.deleteReferdoc(redocs.get(i).getReferdoc_id());
+			}
+		}
 
 		referdocMapper.deleteReferdoc(referdoc_id);
 
@@ -179,6 +193,7 @@ public class ReferdocServices {
 	// ##------------------------------------------------------------------------------
 	// ## 1. Require parameters:
 	// ## (1) referdoc_type
+	// ## (2) referdoc_parentno
 	// ##
 	// ##------------------------------------------------------------------------------
 	// ## 2. Optional parameters: NONE
@@ -193,9 +208,10 @@ public class ReferdocServices {
 	// ##
 	// ################################################################################
 
-	public int getReferdocByType(String referdoc_type) {
+	public int getReferdocByType(String referdoc_type, int referdoc_parentno) {
 
-		referdocinfo = referdocMapper.getReferdocByType(referdoc_type);
+		referdocinfo = referdocMapper.getReferdocByType(referdoc_type,
+				referdoc_parentno);
 
 		return ResultCode.SUCCESS;
 	}
@@ -229,12 +245,70 @@ public class ReferdocServices {
 		return ResultCode.SUCCESS;
 	}
 
-	public int chkReferType(String referdoc_type) {
+	// ################################################################################
+	// ## Get Parent Referdoc listservices
+	// ## 取得一级选项参考数据列表
+	// ##==============================================================================
+	// ## Instructions
+	// ##
+	// ##------------------------------------------------------------------------------
+	// ## 1. Require parameters:
+	// ##
+	// ##------------------------------------------------------------------------------
+	// ## 2. Optional parameters: NONE
+	// ##
+	// ##------------------------------------------------------------------------------
+	// ## 3. Return parameters:
+	// ## (4) ResultCode.SUCCESS
+	// ##
+	// ##------------------------------------------------------------------------------
+	// ## 4. Return referdocinfos:
+	// ## (1) referdocinfos
+	// ##
+	// ################################################################################
 
-		if (referdoc_type.equals(""))
-			return ResultCode.REFERDOC_TYPE_EMPTY;
+	public int getParentReferdoclist() {
 
-		referdocinfo = referdocMapper.getReferdocByType(referdoc_type);
+		referdocinfos = referdocMapper.getParentReferdoc();
+
+		return ResultCode.SUCCESS;
+	}
+
+	// ################################################################################
+	// ## Get Child Referdoc listservices
+	// ## 取得二级选项参考数据列表
+	// ##==============================================================================
+	// ## Instructions
+	// ##
+	// ##------------------------------------------------------------------------------
+	// ## 1. Require parameters:
+	// ## (1) referdoc_parentno
+	// ##
+	// ##------------------------------------------------------------------------------
+	// ## 2. Optional parameters: NONE
+	// ##
+	// ##------------------------------------------------------------------------------
+	// ## 3. Return parameters:
+	// ## (4) ResultCode.SUCCESS
+	// ##
+	// ##------------------------------------------------------------------------------
+	// ## 4. Return referdocinfos:
+	// ## (1) referdocinfos
+	// ##
+	// ################################################################################
+
+	public int getChildReferdoclist(int referdoc_parentno) {
+
+		referdocinfos = referdocMapper
+				.getReferdoclistByParent(referdoc_parentno);
+
+		return ResultCode.SUCCESS;
+	}
+
+	public int chkReferType(String referdoc_type, int referdoc_parentno) {
+
+		referdocinfo = referdocMapper.getReferdocByType(referdoc_type,
+				referdoc_parentno);
 
 		if (null != referdocinfo) {
 			return ResultCode.REFERDOC_TYPE_TEXIST;
