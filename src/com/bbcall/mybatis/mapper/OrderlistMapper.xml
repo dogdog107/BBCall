@@ -22,7 +22,7 @@
 		<result column="order_pic_url" property="order_pic_url"
 			jdbcType="VARCHAR" />
 		<result column="order_description" property="order_description"
-			jdbcType="VARCHAR" />
+			jdbcType="TEXT" />
 		<result column="order_price" property="order_price" jdbcType="DECIMAL" />
 		<result column="order_urgent" property="order_urgent" jdbcType="BIT" />
 		<result column="order_urgent_bonus" property="order_urgent_bonus"
@@ -36,7 +36,7 @@
 		<result column="order_status" property="order_status" jdbcType="VARCHAR" />
 		<result column="order_score" property="order_score" jdbcType="INTEGER" />
 		<result column="order_evaluation" property="order_evaluation"
-			jdbcType="VARCHAR" />
+			jdbcType="TEXT" />
 	</resultMap>
 
 	<insert id="addOrder" parameterType="com.bbcall.mybatis.table.Orderlist"
@@ -241,6 +241,15 @@
 		order_master_account=#{order_master_account,jdbcType=VARCHAR},
 		order_price=#{order_price,jdbcType=DECIMAL},
 		order_status="2"
+		where
+		order_id=#{order_id,jdbcType=INTEGER}
+	</update>
+	
+	<update id="completeOrder">
+		update orderlist set
+		order_score=#{order_score,jdbcType=INTEGER},
+		order_evaluation=#{order_evaluation,jdbcType=TEXT},
+		order_status="3"
 		where
 		order_id=#{order_id,jdbcType=INTEGER}
 	</update>

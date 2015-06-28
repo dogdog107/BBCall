@@ -94,8 +94,12 @@ public interface OrderlistMapper {
 	public List<Orderlist> getOrdersByMaster(String order_master_account);
 
 	// 通过师傅账户和订单状态取得订单列表
-	public List<Orderlist> getOrders(
-			@Param("order_status") int order_status,
+	public List<Orderlist> getOrders(@Param("order_status") int order_status,
 			@Param("order_master_account") String order_master_account);
+
+	// 更改订单为完成状态
+	public void completeOrder(@Param("order_score") int order_score,
+			@Param("order_evaluation") String order_evaluation,
+			@Param("order_id") int order_id);
 
 }

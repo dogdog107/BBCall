@@ -57,6 +57,8 @@ public class OrderlistAction extends ActionSupport {
 	private String order_master_account;
 	private int order_status;
 	private String order_type_code;
+	private int order_score;
+	private String order_evaluation;
 	private int addresscode;
 	private List<String> skilllist;
 	private List<String> locationlist;
@@ -270,6 +272,36 @@ public class OrderlistAction extends ActionSupport {
 
 	public String dealJson() throws Exception {
 		deal();
+		return "json";
+	}
+
+	public String complete() throws Exception {
+		dataMap = new HashMap<String, Object>(); // 新建dataMap来储存JSON字符串
+		dataMap.clear(); // dataMap中的数据将会被Struts2转换成JSON字符串，所以这里要先清空其中的数据
+
+		int result = orderlistServices.completeOrder(order_score,
+				order_evaluation, order_id);
+		List<Referdoc> referdoclist = new ArrayList<Referdoc>();
+
+		if (result == ResultCode.SUCCESS) {
+			List<Orderlist> orderlist = orderlistServices.orderlistinfos();
+			for (int j = 0; j < orderlist.size(); j++) {
+				referdocServices.getReferdoc(orderlist.get(j)
+						.getOrder_type_code());
+				referdoclist.add(referdocServices.referdocinfo());
+			}
+			dataMap.put("orderlist", orderlist);
+			dataMap.put("referdoclist", referdoclist);
+			dataMap.put("resultcode", result);
+			dataMap.put("errmsg", ResultCode.getErrmsg(result));
+			dataMap.put("completeResult", true);
+		}
+
+		return SUCCESS;
+	}
+
+	public String completeJson() throws Exception {
+		complete();
 		return "json";
 	}
 
@@ -886,6 +918,30 @@ public class OrderlistAction extends ActionSupport {
 
 	public void setOrder_type_list(List<String> order_type_list) {
 		this.order_type_list = order_type_list;
+	}
+
+	public int getOrder_score() {
+		return order_score;
+	}
+
+	public void setOrder_score(int order_score) {
+		this.order_score = order_score;
+	}
+
+	public String getOrder_evaluation() {
+		return order_evaluation;
+	}
+
+	public void setOrder_evaluation(String order_evaluation) {
+		this.order_evaluation = order_evaluation;
+	}
+
+	public ReferdocServices getReferdocServices() {
+		return referdocServices;
+	}
+
+	public void setReferdocServices(ReferdocServices referdocServices) {
+		this.referdocServices = referdocServices;
 	}
 
 }
