@@ -122,8 +122,11 @@
 				</tr>
 				<tr>
 					<td>用户头像</td>
-					<td><input type="file" name="f_goods_image"
-						value="./img/2013-12-33.jpg" /></td>
+					<td>
+					<form action="userUpload" method="post" enctype="multipart/form-data">
+						<input type="file" name="upload" value="${sessionScope.user.user_pic_url}" />
+					</form>
+					</td>
 				</tr>
 				<tr>
 					<td>用户技能</td>
