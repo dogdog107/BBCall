@@ -56,7 +56,7 @@ public class OrderlistAction extends ActionSupport {
 	private String user_account;
 	private String order_master_account;
 	private int order_status;
-	private String order_type;
+	private String order_type_code;
 	private int addresscode;
 	private List<String> skilllist;
 	private List<String> locationlist;
@@ -138,18 +138,29 @@ public class OrderlistAction extends ActionSupport {
 		}
 
 		int result = 1;
+		int type_code = 0;
+		List<Referdoc> referdoclist = new ArrayList<Referdoc>();
 
 		for (int i = 0; i < order_type_list.size(); i++) {
+
+			type_code = Integer.parseInt(order_type_list.get(i));
+
 			result = orderlistServices.addOrder(order_book_time,
 					order_book_location, order_book_location_code,
 					order_contact_mobile, order_contact_name, order_urgent,
 					order_urgent_bonus, order_pic_url, order_description,
-					order_price, user_account, order_type_list.get(i));
+					order_price, user_account, type_code);
 		}
 
 		if (result == ResultCode.SUCCESS) {
 			List<Orderlist> orderlist = orderlistServices.orderlistinfos();
+			for (int j = 0; j < orderlist.size(); j++) {
+				referdocServices.getReferdoc(orderlist.get(j)
+						.getOrder_type_code());
+				referdoclist.add(referdocServices.referdocinfo());
+			}
 			dataMap.put("orderlist", orderlist);
+			dataMap.put("referdoclist", referdoclist);
 			dataMap.put("resultcode", result);
 			dataMap.put("errmsg", ResultCode.getErrmsg(result));
 			dataMap.put("addResult", true);
@@ -201,15 +212,23 @@ public class OrderlistAction extends ActionSupport {
 			}
 		}
 
+		int type_code = Integer.parseInt(order_type_code);
+		Referdoc referdoclist = new Referdoc();
+
 		int result = orderlistServices.updateOrder(order_id, order_book_time,
 				order_book_location, order_book_location_code,
 				order_contact_mobile, order_contact_name, order_urgent,
 				order_urgent_bonus, order_pic_url, order_description,
-				order_price, user_account, order_type);
+				order_price, user_account, type_code);
 
 		if (result == ResultCode.SUCCESS) {
 			Orderlist orderlist = orderlistServices.orderlistinfo();
+			referdocServices.getReferdoc(orderlist.getOrder_type_code());
+
+			referdoclist = referdocServices.referdocinfo();
+
 			dataMap.put("orderlist", orderlist);
+			dataMap.put("referdoclist", referdoclist);
 			dataMap.put("resultcode", result);
 			dataMap.put("errmsg", ResultCode.getErrmsg(result));
 			dataMap.put("updateResult", true);
@@ -230,10 +249,17 @@ public class OrderlistAction extends ActionSupport {
 
 		int result = orderlistServices
 				.ChangeOrderStatus(user_account, order_id);
+		List<Referdoc> referdoclist = new ArrayList<Referdoc>();
 
 		if (result == ResultCode.SUCCESS) {
 			List<Orderlist> orderlist = orderlistServices.orderlistinfos();
-			dataMap.put("orderlists", orderlist);
+			for (int j = 0; j < orderlist.size(); j++) {
+				referdocServices.getReferdoc(orderlist.get(j)
+						.getOrder_type_code());
+				referdoclist.add(referdocServices.referdocinfo());
+			}
+			dataMap.put("orderlist", orderlist);
+			dataMap.put("referdoclist", referdoclist);
 			dataMap.put("resultcode", result);
 			dataMap.put("errmsg", ResultCode.getErrmsg(result));
 			dataMap.put("dealResult", true);
@@ -252,10 +278,17 @@ public class OrderlistAction extends ActionSupport {
 		dataMap.clear(); // dataMap中的数据将会被Struts2转换成JSON字符串，所以这里要先清空其中的数据
 
 		int result = orderlistServices.getUnOrders(user_account);
+		List<Referdoc> referdoclist = new ArrayList<Referdoc>();
 
 		if (result == ResultCode.SUCCESS) {
 			List<Orderlist> orderlist = orderlistServices.orderlistinfos();
-			dataMap.put("orderlists", orderlist);
+			for (int j = 0; j < orderlist.size(); j++) {
+				referdocServices.getReferdoc(orderlist.get(j)
+						.getOrder_type_code());
+				referdoclist.add(referdocServices.referdocinfo());
+			}
+			dataMap.put("orderlist", orderlist);
+			dataMap.put("referdoclist", referdoclist);
 			dataMap.put("resultcode", result);
 			dataMap.put("errmsg", ResultCode.getErrmsg(result));
 			dataMap.put("unorderlistResult", true);
@@ -276,10 +309,17 @@ public class OrderlistAction extends ActionSupport {
 
 		int result = orderlistServices.getUnOrders(skilllist, locationlist,
 				user_account);
+		List<Referdoc> referdoclist = new ArrayList<Referdoc>();
 
 		if (result == ResultCode.SUCCESS) {
 			List<Orderlist> orderlist = orderlistServices.orderlistinfos();
-			dataMap.put("orderlists", orderlist);
+			for (int j = 0; j < orderlist.size(); j++) {
+				referdocServices.getReferdoc(orderlist.get(j)
+						.getOrder_type_code());
+				referdoclist.add(referdocServices.referdocinfo());
+			}
+			dataMap.put("orderlist", orderlist);
+			dataMap.put("referdoclist", referdoclist);
 			dataMap.put("resultcode", result);
 			dataMap.put("errmsg", ResultCode.getErrmsg(result));
 			dataMap.put("selectunorderlistResult", true);
@@ -300,11 +340,18 @@ public class OrderlistAction extends ActionSupport {
 
 		int result = orderlistServices.getUnOrdersByBookTime(user_account,
 				skilllist, locationlist);
+		List<Referdoc> referdoclist = new ArrayList<Referdoc>();
 
 		if (result == ResultCode.SUCCESS) {
 			List<Orderlist> orderlist = orderlistServices.orderlistinfos();
 
-			dataMap.put("orderlists", orderlist);
+			for (int j = 0; j < orderlist.size(); j++) {
+				referdocServices.getReferdoc(orderlist.get(j)
+						.getOrder_type_code());
+				referdoclist.add(referdocServices.referdocinfo());
+			}
+			dataMap.put("orderlist", orderlist);
+			dataMap.put("referdoclist", referdoclist);
 			dataMap.put("resultcode", result);
 			dataMap.put("errmsg", ResultCode.getErrmsg(result));
 			dataMap.put("selectunordersbybooktimeResult", true);
@@ -323,14 +370,21 @@ public class OrderlistAction extends ActionSupport {
 		dataMap.clear(); // dataMap中的数据将会被Struts2转换成JSON字符串，所以这里要先清空其中的数据
 
 		int result = orderlistServices.getProOrders(user_account);
+		List<Referdoc> referdoclist = new ArrayList<Referdoc>();
 
 		if (result == ResultCode.SUCCESS) {
 			List<Orderlist> orderlist = orderlistServices.orderlistinfos();
 
-			dataMap.put("orderlists", orderlist);
+			for (int j = 0; j < orderlist.size(); j++) {
+				referdocServices.getReferdoc(orderlist.get(j)
+						.getOrder_type_code());
+				referdoclist.add(referdocServices.referdocinfo());
+			}
+			dataMap.put("orderlist", orderlist);
+			dataMap.put("referdoclist", referdoclist);
 			dataMap.put("resultcode", result);
 			dataMap.put("errmsg", ResultCode.getErrmsg(result));
-			dataMap.put("selectProOrderlistResult", true);
+			dataMap.put("selectproorderlistResult", true);
 		}
 
 		return SUCCESS;
@@ -346,10 +400,17 @@ public class OrderlistAction extends ActionSupport {
 		dataMap.clear(); // dataMap中的数据将会被Struts2转换成JSON字符串，所以这里要先清空其中的数据
 
 		int result = orderlistServices.getComOrders(user_account);
+		List<Referdoc> referdoclist = new ArrayList<Referdoc>();
 
 		if (result == ResultCode.SUCCESS) {
 			List<Orderlist> orderlist = orderlistServices.orderlistinfos();
-			dataMap.put("orderlists", orderlist);
+			for (int j = 0; j < orderlist.size(); j++) {
+				referdocServices.getReferdoc(orderlist.get(j)
+						.getOrder_type_code());
+				referdoclist.add(referdocServices.referdocinfo());
+			}
+			dataMap.put("orderlist", orderlist);
+			dataMap.put("referdoclist", referdoclist);
 			dataMap.put("resultcode", result);
 			dataMap.put("errmsg", ResultCode.getErrmsg(result));
 			dataMap.put("selectComOrderlistResult", true);
@@ -368,9 +429,14 @@ public class OrderlistAction extends ActionSupport {
 		dataMap.clear(); // dataMap中的数据将会被Struts2转换成JSON字符串，所以这里要先清空其中的数据
 
 		int result = orderlistServices.getOrderById(order_id);
+		Referdoc referdoclist = new Referdoc();
 
 		if (result == ResultCode.SUCCESS) {
 			Orderlist orderlist = orderlistServices.orderlistinfo();
+
+			referdocServices.getReferdoc(orderlist.getOrder_type_code());
+
+			referdoclist = referdocServices.referdocinfo();
 
 			String[] url = orderlist.getOrder_pic_url().split(";");
 
@@ -379,6 +445,7 @@ public class OrderlistAction extends ActionSupport {
 			}
 
 			dataMap.put("orderlist", orderlist);
+			dataMap.put("referdoclist", referdoclist);
 			dataMap.put("orderFileFileName", orderFileFileName);
 			dataMap.put("resultcode", result);
 			dataMap.put("errmsg", ResultCode.getErrmsg(result));
@@ -463,14 +530,55 @@ public class OrderlistAction extends ActionSupport {
 		return "json";
 	}
 
+	public String selectorderlist() throws Exception {
+		dataMap = new HashMap<String, Object>(); // 新建dataMap来储存JSON字符串
+		dataMap.clear(); // dataMap中的数据将会被Struts2转换成JSON字符串，所以这里要先清空其中的数据
+
+		int type_code = Integer.parseInt(order_type_code);
+
+		int result = orderlistServices.selectOrderlist(order_status,
+				order_master_account, type_code);
+
+		List<Referdoc> referdoclist = new ArrayList<Referdoc>();
+
+		if (result == ResultCode.SUCCESS) {
+			List<Orderlist> orderlist = orderlistServices.orderlistinfos();
+
+			for (int j = 0; j < orderlist.size(); j++) {
+				referdocServices.getReferdoc(orderlist.get(j)
+						.getOrder_type_code());
+				referdoclist.add(referdocServices.referdocinfo());
+			}
+			dataMap.put("orderlist", orderlist);
+			dataMap.put("referdoclist", referdoclist);
+			dataMap.put("resultcode", result);
+			dataMap.put("errmsg", ResultCode.getErrmsg(result));
+			dataMap.put("selectorderlistResult", true);
+		}
+
+		return "getsuccess";
+	}
+
+	public String selectorderlistJson() throws Exception {
+		selectorderlist();
+		return "json";
+	}
+
 	public String delete() throws Exception {
 		dataMap = new HashMap<String, Object>(); // 新建dataMap来储存JSON字符串
 		dataMap.clear(); // dataMap中的数据将会被Struts2转换成JSON字符串，所以这里要先清空其中的数据
 
 		int result = orderlistServices.deleteOrder(order_id, user_account);
+		List<Referdoc> referdoclist = new ArrayList<Referdoc>();
 		if (result == ResultCode.SUCCESS) {
 			List<Orderlist> orderlist = orderlistServices.orderlistinfos();
-			dataMap.put("orderlists", orderlist);
+			for (int j = 0; j < orderlist.size(); j++) {
+				referdocServices.getReferdoc(orderlist.get(j)
+						.getOrder_type_code());
+				referdoclist.add(referdocServices.referdocinfo());
+			}
+			dataMap.put("orderlist", orderlist);
+			dataMap.put("referdoclist", referdoclist);
 			dataMap.put("resultcode", result);
 			dataMap.put("errmsg", ResultCode.getErrmsg(result));
 			dataMap.put("deleteResult", true);
@@ -612,8 +720,8 @@ public class OrderlistAction extends ActionSupport {
 		this.order_price = order_price;
 	}
 
-	public void setOrder_type(String order_type) {
-		this.order_type = order_type;
+	public void setOrder_type_code(String order_type_code) {
+		this.order_type_code = order_type_code;
 	}
 
 	public void setUser_account(String user_account) {
@@ -728,8 +836,8 @@ public class OrderlistAction extends ActionSupport {
 		return user_account;
 	}
 
-	public String getOrder_type() {
-		return order_type;
+	public String getOrder_type_code() {
+		return order_type_code;
 	}
 
 	public List<String> getSkilllist() {
