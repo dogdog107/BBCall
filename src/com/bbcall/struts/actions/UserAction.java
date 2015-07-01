@@ -87,11 +87,11 @@ public class UserAction extends ActionSupport implements SessionAware{
 			Object userinfo = userServices.getUserinfo(); // 调用userInfo对象
 //			dataMap.put("userinfo", userinfo); // 把userinfo对象放入dataMap
 			dataMap = obj2map.getValueMap(userinfo); //将对象转换成Map
+			session.putAll(dataMap);// 把用户信息放进session
 			dataMap.put("resultcode", result); // 放入一个是否操作成功的标识
 			dataMap.put("errmsg", ResultCode.getErrmsg(result));
 			dataMap.put("loginResult", true); // 放入loginResult
 			System.out.println(dataMap);
-			session.put("user", userinfo);// 把用户信息放进session
 			System.out.println(session);
 //			System.out.println((dataMap.get("userinfo")));
 			return "loginSuccess";
@@ -154,11 +154,11 @@ public class UserAction extends ActionSupport implements SessionAware{
 //			Object updateduserinfo = userServices.getUpdateduserinfo(); // 调用userInfo对象
 //			dataMap.put("userinfo", userinfo); // 把userinfo对象放入dataMap
 			dataMap = obj2map.getValueMap(userinfo); //将对象转换成Map
+			session.putAll(dataMap);// 把用户信息放进session
 			dataMap.put("resultcode", result); // 放入一个是否操作成功的标识
 			dataMap.put("errmsg", ResultCode.getErrmsg(result));
 			dataMap.put("updateResult", true); // 放入registerResult
 			System.out.println(dataMap);
-			session.put("user", userinfo);// 把用户信息放进session
 			return "updateSuccess";
 		} else {
 			dataMap.put("resultcode", result); // 放入一个是否操作成功的标识

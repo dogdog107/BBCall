@@ -16,7 +16,7 @@
 			<td width=260><img height=56 src="./img/header_left.jpg"
 				width=260></td>
 			<td style="font-weight: bold; color: #fff; padding-top: 20px"
-				align=middle>当前用户：${sessionScope.user.user_account}&nbsp;&nbsp;
+				align=middle>当前用户：${sessionScope.user_account}&nbsp;&nbsp;
 				<a style="color: #fff" href="" target=main>修改口令</a> &nbsp;&nbsp; <a
 				style="color: #fff"
 				onclick="if (confirm('确定要退出吗？')) return true; else return false;"

@@ -185,7 +185,7 @@ public class UserServices {
 		// 判断用户名的类型：
 		if (checkUserNameResult != ResultCode.USERNAME_NOTEXIST) {
 			User user = (User) userinfo; // 引用user对象
-			int checkUserStatusResult = checkUserStatus(user.getUser_status());
+			int checkUserStatusResult = checkUserStatusValue(user.getUser_status());
 			if (checkUserStatusResult == ResultCode.USERSTATUS_ACTIVE) { // 验证用户状态
 				if (password.equals(user.getUser_password())) {// 验证密码是否正确
 					RandomCode randomCode = new RandomCode();
@@ -580,6 +580,10 @@ public class UserServices {
 	}
 
 	// ###################
+	// ## 检测 token & userid
+	// ###################
+
+	// ###################
 	// ## 检测用户 token
 	// ###################
 
@@ -592,7 +596,7 @@ public class UserServices {
 		User user = userMapper.getUserByToken(token);
 
 		if (null != user) {
-			int checkUserStatusResult = checkUserStatus(user.getUser_status());
+			int checkUserStatusResult = checkUserStatusValue(user.getUser_status());
 			if (checkUserStatusResult == ResultCode.USERSTATUS_ACTIVE) {
 				long currenttime = new Date().getTime();
 				long logintime = user.getUser_login_time().getTime();
@@ -652,7 +656,7 @@ public class UserServices {
 	// ## 检测用户状态
 	// ###################
 
-	public int checkUserStatus(int status) {
+	public int checkUserStatusValue(int status) {
 		int checkUserResult;
 
 		switch (status) {// * 1=active, 2=pause, 3=pending, 4=locked
