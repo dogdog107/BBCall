@@ -574,6 +574,39 @@ public class OrderlistServices {
 	}
 
 	// ################################################################################
+	// ## Change Order status services
+	// ## 更改订单状态
+	// ##==============================================================================
+	// ## Instructions
+	// ##
+	// ##------------------------------------------------------------------------------
+	// ## 1. Require parameters:
+	// ## (1) order_id
+	// ## (2) order_status
+	// ## (2) order_description
+	// ##
+	// ##------------------------------------------------------------------------------
+	// ## 2. Optional parameters: NONE
+	// ##
+	// ##------------------------------------------------------------------------------
+	// ## 3. Return parameters:
+	// ## (4) ResultCode.SUCCESS
+	// ##
+	// ##------------------------------------------------------------------------------
+	// ## 4. Return orderlistinfos:
+	// ## (1) orderlistinfos
+	// ##
+	// ################################################################################
+	public int change(int order_id, int order_status, String order_description) {
+
+		orderlistMapper.change(order_id, order_status, order_description);
+
+		orderlistinfos = orderlistMapper.getWashOrderByStatus(order_status);
+
+		return ResultCode.SUCCESS;
+	}
+
+	// ################################################################################
 	// ## Complete Order services
 	// ## 更改订单状态为完成
 	// ##==============================================================================

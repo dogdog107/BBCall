@@ -158,27 +158,27 @@
 	<select id="getWashOrderlist" resultMap="OrderResultMap">
 		select * from orderlist
 		where
-		order_type_code=15000 order by order_create_time desc
+		order_type_code in (15000,15001,15002) order by order_create_time desc
 	</select>
 
 	<select id="getWashOrderlistByStatus" resultMap="OrderResultMap">
 		select * from
 		orderlist
 		where
-		order_type_code=15000 order by order_status asc
+		order_type_code in (15000,15001,15002) order by order_status asc
 	</select>
 
 	<select id="getWashOrderlistByMaster" resultMap="OrderResultMap">
 		select * from
 		orderlist
 		where
-		order_type_code=15000 order by order_master_account asc
+		order_type_code in (15000,15001,15002) order by order_master_account asc
 	</select>
 
 	<select id="getWashOrders" resultMap="OrderResultMap">
 		select * from orderlist
 		where
-		order_type_code=15000 and
+		order_type_code in (15000,15001,15002) and
 		order_master_account=#{order_master_account,jdbcType=VARCHAR} and
 		order_status=#{order_status,jdbcType=INTEGER} order by
 		order_create_time
@@ -188,7 +188,7 @@
 	<select id="getWashOrderByStatus" parameterType="int" resultMap="OrderResultMap">
 		select * from orderlist
 		where
-		order_type_code=15000 and
+		order_type_code in (15000,15001,15002) and
 		order_status=#{order_status} order by order_create_time desc
 	</select>
 
@@ -196,7 +196,7 @@
 		resultMap="OrderResultMap">
 		select * from orderlist
 		where
-		order_type_code=15000 and
+		order_type_code in (15000,15001,15002) and
 		order_master_account=#{order_master_account} order by
 		order_create_time desc
 	</select>
@@ -250,6 +250,14 @@
 		order_score=#{order_score,jdbcType=INTEGER},
 		order_evaluation=#{order_evaluation,jdbcType=LONGVARCHAR},
 		order_status="3"
+		where
+		order_id=#{order_id,jdbcType=INTEGER}
+	</update>
+	
+	<update id="change">
+		update orderlist set
+		order_status=#{order_status,jdbcType=INTEGER},
+		order_description=#{order_description,jdbcType=LONGVARCHAR}
 		where
 		order_id=#{order_id,jdbcType=INTEGER}
 	</update>
