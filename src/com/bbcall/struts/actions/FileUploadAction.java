@@ -71,7 +71,7 @@ public class FileUploadAction extends ActionSupport {
 		userUpload();
 		return "json";
 	}
-
+ 
 	public String orderUpload() throws Exception {
 		System.out.println("Here is FileUploadAction.orderUpload()");
 		savePath = "/OrderPhoto";
