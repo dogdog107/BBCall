@@ -106,14 +106,6 @@ public class Orderlist {
 		this.order_contact_name = order_contact_name;
 	}
 
-	public String getOrder_pic_url() {
-		return order_pic_url;
-	}
-
-	public void setOrder_pic_url(String order_pic_url) {
-		this.order_pic_url = order_pic_url;
-	}
-
 	public String getOrder_description() {
 		return order_description;
 	}
@@ -200,6 +192,14 @@ public class Orderlist {
 
 	public void setOrder_book_location_code(int order_book_location_code) {
 		this.order_book_location_code = order_book_location_code;
+	}
+
+	public String getOrder_pic_url() {
+		return order_pic_url;
+	}
+
+	public void setOrder_pic_url(String order_pic_url) {
+		this.order_pic_url = order_pic_url;
 	}
 
 }

@@ -38,6 +38,7 @@
 	<div></div>
 		<div style="font-size: 13px; margin: 10px 5px;">
 			<form id="referdoc_add" action="referdoc_add" method="post">
+			
 				<label for="referdoc_type">
 					<strong>訂單類型：</strong>
 				</label>

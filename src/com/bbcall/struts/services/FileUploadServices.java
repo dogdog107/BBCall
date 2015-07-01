@@ -17,10 +17,15 @@ public class FileUploadServices {
 			String storePath) throws Exception {
 		String uploadContentType = uploadFileName.substring(uploadFileName
 				.lastIndexOf(".") + 1); // 封装上传文件类型
+		String uploadName = uploadFileName.substring(uploadFileName.lastIndexOf("/")+1, uploadFileName.lastIndexOf("."));
 		String storeFileName = "";
 		switch (storePath.substring(storePath.lastIndexOf("/") + 1)) {
 		case "UserPhoto":
 			storeFileName = userid + "_photo." + uploadContentType; // 封装保存文件名
+			break;
+		case "OrderPhoto":
+			storeFileName = userid + "_photo_" + uploadName + "."
+					+ uploadContentType; // 封装保存文件名
 			break;
 		}
 		File destFile = new File(storePath + "//" + storeFileName);
@@ -43,8 +48,10 @@ public class FileUploadServices {
 		}
 		fos.close();
 		fis.close();
-		fileurl = "/BBCall/" + storePath.substring(storePath.lastIndexOf("/") + 1) + "/" + storeFileName;
-//		fileurl = destFile.toURI().toURL().toString();
+		fileurl = "/BBCall/"
+				+ storePath.substring(storePath.lastIndexOf("/") + 1) + "/"
+				+ storeFileName;
+		// fileurl = destFile.toURI().toURL().toString();
 		System.out.println(fileurl);
 		return ResultCode.SUCCESS;
 	}

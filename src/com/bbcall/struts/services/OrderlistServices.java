@@ -54,7 +54,9 @@ public class OrderlistServices {
 	// ## (5) order_contact_name
 	// ## (6) order_urgent
 	// ## (7) order_urgent_bonus
-	// ## (8) order_pic_url
+	// ## (8) order_pic_url1
+	// ## (8) order_pic_url2
+	// ## (8) order_pic_url3
 	// ## (9) order_description
 	// ## (10) order_price
 	// ## (11) order_user_account
@@ -84,7 +86,7 @@ public class OrderlistServices {
 		// 创建订单对象，写入数据
 		Orderlist orderlist = new Orderlist();
 
-		DateFormat format = new SimpleDateFormat("yyyy-MM-dd");
+		DateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 		format.setLenient(false);
 
 		Timestamp ts = new Timestamp(System.currentTimeMillis());
@@ -139,7 +141,9 @@ public class OrderlistServices {
 	// ## (5) order_contact_name
 	// ## (6) order_urgent
 	// ## (7) order_urgent_bonus
-	// ## (8) order_pic_url
+	// ## (8) order_pic_url1
+	// ## (8) order_pic_url2
+	// ## (8) order_pic_url3
 	// ## (9) order_description
 	// ## (10) order_price
 	// ## (11) order_user_account
@@ -162,12 +166,12 @@ public class OrderlistServices {
 			String order_book_location, int order_book_location_code,
 			BigInteger order_contact_mobile, String order_contact_name,
 			String order_urgent, double order_urgent_bonus,
-			String order_pic_url, String order_description, double order_price,
-			String order_user_account, int order_type_code) {
+			String order_pic_url, String order_description,
+			double order_price, String order_user_account, int order_type_code) {
 
 		Orderlist orderlist = orderlistMapper.getOrder(order_id);
 
-		DateFormat format = new SimpleDateFormat("yyyy-MM-dd");
+		DateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 		format.setLenient(false);
 
 		Timestamp ts = new Timestamp(System.currentTimeMillis());
