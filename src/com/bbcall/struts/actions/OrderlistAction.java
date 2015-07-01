@@ -1,12 +1,5 @@
 package com.bbcall.struts.actions;
 
-import java.io.BufferedInputStream;
-import java.io.BufferedOutputStream;
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
-import java.io.InputStream;
-import java.io.OutputStream;
 import java.math.BigInteger;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -18,7 +11,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Controller;
 
-import com.bbcall.functions.RandomCode;
 import com.bbcall.functions.ResultCode;
 import com.bbcall.mybatis.table.AddressList;
 import com.bbcall.mybatis.table.Orderlist;
@@ -40,63 +32,30 @@ public class OrderlistAction extends ActionSupport {
 
 	private Map<String, Object> dataMap;
 
-	private String order_book_year;
-	private String order_book_month;
-	private String order_book_day;
 	private int order_id;
+	private String order_book_time;
 	private String order_book_location;
 	private int order_book_location_code;
 	private BigInteger order_contact_mobile;
 	private String order_contact_name;
 	private String order_urgent;
 	private double order_urgent_bonus;
-	private String order_pic_url;
+	private String orderpicurl;
 	private String order_description;
 	private double order_price;
 	private String user_account;
 	private String order_master_account;
 	private int order_status;
-	private String order_type_code;
+	private int order_type_code;
 	private int order_score;
 	private String order_evaluation;
 	private int addresscode;
 	private List<String> skilllist;
 	private List<String> locationlist;
 	private String sortparm;
-	private List<String> order_type_list;
+	private List<Integer> order_type_list;
 
-	private List<File> orderFile = new ArrayList<File>();
-	private List<String> orderFileContentType;
 	private List<String> orderFileFileName = new ArrayList<String>(); // 文件名
-
-	private static final int BUFFER_SIZE = 16 * 1024;
-
-	private static void copy(File src, File dst) {
-		try {
-			InputStream in = null;
-			OutputStream out = null;
-
-			try {
-				in = new BufferedInputStream(new FileInputStream(src),
-						BUFFER_SIZE);
-				out = new BufferedOutputStream(new FileOutputStream(dst),
-						BUFFER_SIZE);
-				byte[] buffer = new byte[BUFFER_SIZE];
-				while (in.read(buffer) > 0) {
-					out.write(buffer);
-				}
-			} finally {
-				if (null != in) {
-					in.close();
-				}
-				if (null != out) {
-					out.close();
-				}
-			}
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-	}
 
 	@Override
 	public String execute() throws Exception {
@@ -109,49 +68,16 @@ public class OrderlistAction extends ActionSupport {
 		dataMap = new HashMap<String, Object>(); // 新建dataMap来储存JSON字符串
 		dataMap.clear(); // dataMap中的数据将会被Struts2转换成JSON字符串，所以这里要先清空其中的数据
 
-		String order_book_time = order_book_year + "-" + order_book_month + "-"
-				+ order_book_day;
-
-		if (orderFile == null)
-			return ERROR;
-
-		for (int i = 0; i < orderFile.size(); i++) {
-
-			RandomCode randomCode = new RandomCode();
-
-			String imageFileName = randomCode.getToken();
-
-			// imageFileName.add(new Date().getTime()
-			// + getExtention(this.getOrderFileFileName().get(i)));
-			// 得到图片保存的位置(根据root来得到图片保存的路径在tomcat下的该工程里)
-			File imageFile = new File(
-					"D:\\git\\BBCall\\WebContent\\UploadImages\\"
-							+ imageFileName + ".jpg");
-
-			if (order_pic_url == null) {
-				order_pic_url = "../UploadImages/" + imageFileName + ".jpg"
-						+ ";";
-			} else {
-				order_pic_url = order_pic_url + "../UploadImages/"
-						+ imageFileName + ".jpg" + ";";
-			}
-
-			copy(orderFile.get(i), imageFile); // 把图片写入到上面设置的路径里
-		}
-
 		int result = 1;
-		int type_code = 0;
 		List<Referdoc> referdoclist = new ArrayList<Referdoc>();
-
+		
 		for (int i = 0; i < order_type_list.size(); i++) {
-
-			type_code = Integer.parseInt(order_type_list.get(i));
 
 			result = orderlistServices.addOrder(order_book_time,
 					order_book_location, order_book_location_code,
 					order_contact_mobile, order_contact_name, order_urgent,
-					order_urgent_bonus, order_pic_url, order_description,
-					order_price, user_account, type_code);
+					order_urgent_bonus, orderpicurl, order_description,
+					order_price, user_account, order_type_list.get(i));
 		}
 
 		if (result == ResultCode.SUCCESS) {
@@ -182,46 +108,13 @@ public class OrderlistAction extends ActionSupport {
 		dataMap = new HashMap<String, Object>(); // 新建dataMap来储存JSON字符串
 		dataMap.clear(); // dataMap中的数据将会被Struts2转换成JSON字符串，所以这里要先清空其中的数据
 
-		String order_book_time = order_book_year + "-" + order_book_month + "-"
-				+ order_book_day;
-
-		if (orderFile == null) {
-			orderlistServices.getOrderById(order_id);
-			order_pic_url = orderlistServices.orderlistinfo.getOrder_pic_url();
-		} else {
-			for (int i = 0; i < orderFile.size(); i++) {
-
-				RandomCode randomCode = new RandomCode();
-
-				String imageFileName = randomCode.getToken();
-
-				// imageFileName.add(new Date().getTime()
-				// + getExtention(this.getOrderFileFileName().get(i)));
-				// 得到图片保存的位置(根据root来得到图片保存的路径在tomcat下的该工程里)
-				File imageFile = new File(
-						"D:\\git\\BBCall\\WebContent\\UploadImages\\"
-								+ imageFileName + ".jpg");
-
-				if (order_pic_url == null) {
-					order_pic_url = "../UploadImages/" + imageFileName + ".jpg"
-							+ ";";
-				} else {
-					order_pic_url = order_pic_url + "../UploadImages/"
-							+ imageFileName + ".jpg" + ";";
-				}
-
-				copy(orderFile.get(i), imageFile); // 把图片写入到上面设置的路径里
-			}
-		}
-
-		int type_code = Integer.parseInt(order_type_code);
 		Referdoc referdoclist = new Referdoc();
 
 		int result = orderlistServices.updateOrder(order_id, order_book_time,
 				order_book_location, order_book_location_code,
 				order_contact_mobile, order_contact_name, order_urgent,
-				order_urgent_bonus, order_pic_url, order_description,
-				order_price, user_account, type_code);
+				order_urgent_bonus, orderpicurl, order_description,
+				order_price, user_account, order_type_code);
 
 		if (result == ResultCode.SUCCESS) {
 			Orderlist orderlist = orderlistServices.orderlistinfo();
@@ -587,10 +480,8 @@ public class OrderlistAction extends ActionSupport {
 		dataMap = new HashMap<String, Object>(); // 新建dataMap来储存JSON字符串
 		dataMap.clear(); // dataMap中的数据将会被Struts2转换成JSON字符串，所以这里要先清空其中的数据
 
-		int type_code = Integer.parseInt(order_type_code);
-
 		int result = orderlistServices.selectOrderlist(order_status,
-				order_master_account, type_code);
+				order_master_account, order_type_code);
 
 		List<Referdoc> referdoclist = new ArrayList<Referdoc>();
 
@@ -727,13 +618,14 @@ public class OrderlistAction extends ActionSupport {
 		gettypelist();
 		return "json";
 	}
-	
+
 	public String change() throws Exception {
 		dataMap = new HashMap<String, Object>(); // 新建dataMap来储存JSON字符串
 		dataMap.clear(); // dataMap中的数据将会被Struts2转换成JSON字符串，所以这里要先清空其中的数据
 
-		int result = orderlistServices.change(order_id, order_status, order_description);
-		
+		int result = orderlistServices.change(order_id, order_status,
+				order_description);
+
 		List<Referdoc> referdoclist = new ArrayList<Referdoc>();
 
 		if (result == ResultCode.SUCCESS) {
@@ -757,7 +649,7 @@ public class OrderlistAction extends ActionSupport {
 		change();
 		return "json";
 	}
-	
+
 	@JSON(format = "yyyy-MM-dd HH:mm:ss")
 	public Map<String, Object> getDataMap() {
 		return dataMap;
@@ -791,10 +683,6 @@ public class OrderlistAction extends ActionSupport {
 		this.order_urgent_bonus = order_urgent_bonus;
 	}
 
-	public void setOrder_pic_url(String order_pic_url) {
-		this.order_pic_url = order_pic_url;
-	}
-
 	public void setOrder_description(String order_description) {
 		this.order_description = order_description;
 	}
@@ -803,24 +691,12 @@ public class OrderlistAction extends ActionSupport {
 		this.order_price = order_price;
 	}
 
-	public void setOrder_type_code(String order_type_code) {
+	public void setOrder_type_code(int order_type_code) {
 		this.order_type_code = order_type_code;
 	}
 
 	public void setUser_account(String user_account) {
 		this.user_account = user_account;
-	}
-
-	public void setOrder_book_year(String order_book_year) {
-		this.order_book_year = order_book_year;
-	}
-
-	public void setOrder_book_month(String order_book_month) {
-		this.order_book_month = order_book_month;
-	}
-
-	public void setOrder_book_day(String order_book_day) {
-		this.order_book_day = order_book_day;
 	}
 
 	public void setOrder_book_location_code(int order_book_location_code) {
@@ -835,44 +711,8 @@ public class OrderlistAction extends ActionSupport {
 		this.locationlist = locationlist;
 	}
 
-	public List<File> getOrderFile() {
-		return orderFile;
-	}
-
-	public void setOrderFile(List<File> orderFile) {
-		this.orderFile = orderFile;
-	}
-
-	public List<String> getOrderFileContentType() {
-		return orderFileContentType;
-	}
-
-	public void setOrderFileContentType(List<String> orderFileContentType) {
-		this.orderFileContentType = orderFileContentType;
-	}
-
-	public List<String> getOrderFileFileName() {
-		return orderFileFileName;
-	}
-
-	public void setOrderFileFileName(List<String> orderFileFileName) {
-		this.orderFileFileName = orderFileFileName;
-	}
-
 	public OrderlistServices getOrderlistServices() {
 		return orderlistServices;
-	}
-
-	public String getOrder_book_year() {
-		return order_book_year;
-	}
-
-	public String getOrder_book_month() {
-		return order_book_month;
-	}
-
-	public String getOrder_book_day() {
-		return order_book_day;
 	}
 
 	public int getOrder_id() {
@@ -903,10 +743,6 @@ public class OrderlistAction extends ActionSupport {
 		return order_urgent_bonus;
 	}
 
-	public String getOrder_pic_url() {
-		return order_pic_url;
-	}
-
 	public String getOrder_description() {
 		return order_description;
 	}
@@ -919,7 +755,7 @@ public class OrderlistAction extends ActionSupport {
 		return user_account;
 	}
 
-	public String getOrder_type_code() {
+	public int getOrder_type_code() {
 		return order_type_code;
 	}
 
@@ -963,11 +799,11 @@ public class OrderlistAction extends ActionSupport {
 		this.order_status = order_status;
 	}
 
-	public List<String> getOrder_type_list() {
+	public List<Integer> getOrder_type_list() {
 		return order_type_list;
 	}
 
-	public void setOrder_type_list(List<String> order_type_list) {
+	public void setOrder_type_list(List<Integer> order_type_list) {
 		this.order_type_list = order_type_list;
 	}
 
@@ -994,5 +830,31 @@ public class OrderlistAction extends ActionSupport {
 	public void setReferdocServices(ReferdocServices referdocServices) {
 		this.referdocServices = referdocServices;
 	}
+
+	public String getOrderpicurl() {
+		return orderpicurl;
+	}
+
+	public void setOrderpicurl(String orderpicurl) {
+		this.orderpicurl = orderpicurl;
+	}
+
+	public List<String> getOrderFileFileName() {
+		return orderFileFileName;
+	}
+
+	public void setOrderFileFileName(List<String> orderFileFileName) {
+		this.orderFileFileName = orderFileFileName;
+	}
+
+	public String getOrder_book_time() {
+		return order_book_time;
+	}
+
+	public void setOrder_book_time(String order_book_time) {
+		this.order_book_time = order_book_time;
+	}
+	
+	
 
 }

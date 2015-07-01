@@ -20,7 +20,7 @@
 		<result column="order_contact_name" property="order_contact_name"
 			jdbcType="VARCHAR" />
 		<result column="order_pic_url" property="order_pic_url"
-			jdbcType="VARCHAR" />
+			jdbcType="LONGVARCHAR" />
 		<result column="order_description" property="order_description"
 			jdbcType="LONGVARCHAR" />
 		<result column="order_price" property="order_price" jdbcType="DECIMAL" />
@@ -158,21 +158,24 @@
 	<select id="getWashOrderlist" resultMap="OrderResultMap">
 		select * from orderlist
 		where
-		order_type_code in (15000,15001,15002) order by order_create_time desc
+		order_type_code in (15000,15001,15002) order by order_create_time
+		desc
 	</select>
 
 	<select id="getWashOrderlistByStatus" resultMap="OrderResultMap">
 		select * from
 		orderlist
 		where
-		order_type_code in (15000,15001,15002) order by order_status asc
+		order_type_code in (15000,15001,15002) order by
+		order_status asc
 	</select>
 
 	<select id="getWashOrderlistByMaster" resultMap="OrderResultMap">
 		select * from
 		orderlist
 		where
-		order_type_code in (15000,15001,15002) order by order_master_account asc
+		order_type_code in (15000,15001,15002) order by
+		order_master_account asc
 	</select>
 
 	<select id="getWashOrders" resultMap="OrderResultMap">
@@ -196,8 +199,10 @@
 		resultMap="OrderResultMap">
 		select * from orderlist
 		where
-		order_type_code in (15000,15001,15002) and
-		order_master_account=#{order_master_account} order by
+		order_type_code in
+		(15000,15001,15002) and
+		order_master_account=#{order_master_account}
+		order by
 		order_create_time desc
 	</select>
 
@@ -226,7 +231,7 @@
 		order_book_location_code=#{order_book_location_code},
 		order_contact_mobile=#{order_contact_mobile},
 		order_contact_name=#{order_contact_name},
-		order_pic_url=#{order_pic_url},
+		order_pic_ur=#{order_pic_url},
 		order_description=#{order_description},
 		order_urgent=#{order_urgent},
 		order_urgent_bonus=#{order_urgent_bonus},
@@ -244,7 +249,7 @@
 		where
 		order_id=#{order_id,jdbcType=INTEGER}
 	</update>
-	
+
 	<update id="completeOrder">
 		update orderlist set
 		order_score=#{order_score,jdbcType=INTEGER},
@@ -253,7 +258,7 @@
 		where
 		order_id=#{order_id,jdbcType=INTEGER}
 	</update>
-	
+
 	<update id="change">
 		update orderlist set
 		order_status=#{order_status,jdbcType=INTEGER},
