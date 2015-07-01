@@ -256,7 +256,8 @@
 	
 	<update id="change">
 		update orderlist set
-		order_status=#{order_status,jdbcType=INTEGER}
+		order_status=#{order_status,jdbcType=INTEGER},
+		order_description=#{order_description,jdbcType=LONGVARCHAR}
 		where
 		order_id=#{order_id,jdbcType=INTEGER}
 	</update>

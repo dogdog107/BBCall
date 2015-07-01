@@ -58,7 +58,7 @@
 							<s:if test="%{#order.order_status == 5}">正在清洗</s:if> 
 							<s:if test="%{#order.order_status == 6}">正在配送</s:if>
 						</td>
-						<td id="order_type_code"><s:property value='#order.order_type_code' /></td>
+						<td id="order_type_code" style="display:none"><s:property value='#order.order_type_code' /></td>
 						<td id="order_href"><a
 							href="${pageContext.request.contextPath}/page/orderlist_select.action?order_id=<s:property value='#order.order_id'/>">查看</a>
 						</td>

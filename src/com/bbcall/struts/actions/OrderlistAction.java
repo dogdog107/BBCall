@@ -728,11 +728,11 @@ public class OrderlistAction extends ActionSupport {
 		return "json";
 	}
 	
-	public String receive() throws Exception {
+	public String change() throws Exception {
 		dataMap = new HashMap<String, Object>(); // 新建dataMap来储存JSON字符串
 		dataMap.clear(); // dataMap中的数据将会被Struts2转换成JSON字符串，所以这里要先清空其中的数据
 
-		int result = orderlistServices.change(order_id, 4);
+		int result = orderlistServices.change(order_id, order_status, order_description);
 		
 		List<Referdoc> referdoclist = new ArrayList<Referdoc>();
 
@@ -747,77 +747,17 @@ public class OrderlistAction extends ActionSupport {
 			dataMap.put("referdoclist", referdoclist);
 			dataMap.put("resultcode", result);
 			dataMap.put("errmsg", ResultCode.getErrmsg(result));
-			dataMap.put("receiveResult", true);
+			dataMap.put("changeResult", true);
 		}
 
 		return SUCCESS;
 	}
 
-	public String receiveJson() throws Exception {
-		receive();
+	public String changeJson() throws Exception {
+		change();
 		return "json";
 	}
 	
-	public String washing() throws Exception {
-		dataMap = new HashMap<String, Object>(); // 新建dataMap来储存JSON字符串
-		dataMap.clear(); // dataMap中的数据将会被Struts2转换成JSON字符串，所以这里要先清空其中的数据
-
-		int result = orderlistServices.change(order_id, 5);
-		
-		List<Referdoc> referdoclist = new ArrayList<Referdoc>();
-
-		if (result == ResultCode.SUCCESS) {
-			List<Orderlist> orderlist = orderlistServices.orderlistinfos();
-			for (int j = 0; j < orderlist.size(); j++) {
-				referdocServices.getReferdoc(orderlist.get(j)
-						.getOrder_type_code());
-				referdoclist.add(referdocServices.referdocinfo());
-			}
-			dataMap.put("orderlist", orderlist);
-			dataMap.put("referdoclist", referdoclist);
-			dataMap.put("resultcode", result);
-			dataMap.put("errmsg", ResultCode.getErrmsg(result));
-			dataMap.put("washingResult", true);
-		}
-
-		return SUCCESS;
-	}
-
-	public String washingJson() throws Exception {
-		washing();
-		return "json";
-	}
-	
-	public String delivery() throws Exception {
-		dataMap = new HashMap<String, Object>(); // 新建dataMap来储存JSON字符串
-		dataMap.clear(); // dataMap中的数据将会被Struts2转换成JSON字符串，所以这里要先清空其中的数据
-
-		int result = orderlistServices.change(order_id, 6);
-		
-		List<Referdoc> referdoclist = new ArrayList<Referdoc>();
-
-		if (result == ResultCode.SUCCESS) {
-			List<Orderlist> orderlist = orderlistServices.orderlistinfos();
-			for (int j = 0; j < orderlist.size(); j++) {
-				referdocServices.getReferdoc(orderlist.get(j)
-						.getOrder_type_code());
-				referdoclist.add(referdocServices.referdocinfo());
-			}
-			dataMap.put("orderlist", orderlist);
-			dataMap.put("referdoclist", referdoclist);
-			dataMap.put("resultcode", result);
-			dataMap.put("errmsg", ResultCode.getErrmsg(result));
-			dataMap.put("deliveryResult", true);
-		}
-
-		return SUCCESS;
-	}
-
-	public String deliveryJson() throws Exception {
-		delivery();
-		return "json";
-	}
-
 	@JSON(format = "yyyy-MM-dd HH:mm:ss")
 	public Map<String, Object> getDataMap() {
 		return dataMap;

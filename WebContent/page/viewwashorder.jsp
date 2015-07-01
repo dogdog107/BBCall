@@ -14,16 +14,19 @@
 	var token = "${sessionScope.user.user_token}";
 </script>
 <%
-String path = request.getContextPath();
-String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.getServerPort()+path+"/";
+	String path = request.getContextPath();
+	String basePath = request.getScheme() + "://"
+			+ request.getServerName() + ":" + request.getServerPort()
+			+ path + "/";
 %>
 </head>
 <body>
 
-	<table cellspacing=0 cellpadding=0 width="100%" align=center border=0 style="font-size: 12px;">
+	<table cellspacing=0 cellpadding=0 width="100%" align=center border=0
+		style="font-size: 12px;">
 		<tr height=28>
-			<td background=./img/title_bg1.jpg>当前位置:<a href="right.jsp" target=main>主页</a>
-				-> 洗衣订单列表
+			<td background=./img/title_bg1.jpg>当前位置:<a href="right.jsp"
+				target=main>主页</a> -> 洗衣订单列表
 			</td>
 		</tr>
 		<tr>
@@ -50,6 +53,20 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 		</tr>
 	</table>
 	<table cellspacing=0 cellpadding=2 width="95%" align=center border=0>
+		<tr style="display: none">
+			<td><input type="text" id="order_id" name="order_id"
+				value="<s:property value='dataMap.orderlist.order_id' />"></input></td>
+		</tr>
+		<tr>
+			<td align=right width=100>订单状态：</td>
+			<td style="color: #880000"><s:if
+					test="%{dataMap.orderlist.order_status == 1}">新建訂單</s:if> <s:if
+					test="%{dataMap.orderlist.order_status == 2}">待評價訂單</s:if> <s:if
+					test="%{dataMap.orderlist.order_status == 3}">已評價訂單</s:if> <s:if
+					test="%{dataMap.orderlist.order_status == 4}">收到貨物</s:if> <s:if
+					test="%{dataMap.orderlist.order_status == 5}">正在清洗</s:if> <s:if
+					test="%{dataMap.orderlist.order_status == 6}">正在配送</s:if></td>
+		</tr>
 		<tr>
 			<td align=right width=100>预约时间：</td>
 			<td style="color: #880000">${dataMap.orderlist.order_book_time}</td>
@@ -59,10 +76,10 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 			<td style="color: #880000">${dataMap.orderlist.order_book_location}</td>
 		</tr>
 		<tr>
-			<td align=right >照片：</td>
+			<td align=right>照片：</td>
 			<s:iterator value="dataMap.orderFileFileName" id="number">
-				<td style="color: #880000"><img src="<s:property value="number"/>" height='60' width='60'></img>
-				</td>
+				<td style="color: #880000"><img
+					src="<s:property value="number"/>" height='60' width='60'></img></td>
 			</s:iterator>
 		</tr>
 		<tr>
@@ -73,7 +90,17 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 			<td align=right>客户联系方式：</td>
 			<td style="color: #880000">${dataMap.orderlist.order_contact_mobile}</td>
 		</tr>
-	</table>	
-        
+
+	</table>
+
+	<div style="text-align: center;">
+		<input type="submit" value="修改"
+			Onclick="location='${pageContext.request.contextPath}/page/updatewashorder.jsp?order_id=${dataMap.orderlist.order_id}&order_status=${dataMap.orderlist.order_status}'"></input> <input
+			type="button" value="返回"
+			Onclick="location='${pageContext.request.contextPath}/orderlist_getwashorderlist.action'"></input>
+	</div>
+
+
+
 </body>
 </html>
