@@ -109,7 +109,6 @@
 	</table>
 	<div style="text-align: center;">
 		<p>
-			来源：<a href="" target="_blank">源码之家</a>
 		</p>
 	</div>
 </body>
