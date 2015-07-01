@@ -9,9 +9,9 @@
 <script type="text/javascript"
 	src="${pageContext.request.contextPath }/jquery/jquery-1.8.3.js"></script>
 <script type="text/javascript"
-	src="${pageContext.request.contextPath }/jquery/userlistPage.js?token=${sessionScope.user.user_token}"></script>
+	src="${pageContext.request.contextPath }/jquery/userlistPage.js?token=${sessionScope.user_token}"></script>
 <script type="text/javascript">
-	var token = "${sessionScope.user.user_token}";
+	var token = "${sessionScope.user_token}";
 	var link = "${pageContext.request.contextPath }";
 </script>
 </head>
@@ -20,8 +20,8 @@
 	<table cellspacing=0 cellpadding=0 width="100%" align=center border=0
 		style="font-size: 12px;">
 		<tr height=28>
-			<td background=./img/title_bg1.jpg>当前位置:<a href="defult.jsp"
-				target=main>主页</a> -> 用户列表
+			<td background=./img/title_bg1.jpg>當前位置:<a href="defult.jsp"
+				target=main>主頁</a> -> 用戶列表
 			</td>
 		</tr>
 		<tr>

@@ -4,7 +4,7 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html>
 <head>
-<title>修改用户信息</title>
+<title>修改用戶信息 Update User Information</title>
 <meta http-equiv="content-type" content="text/html;charset=utf-8" />
 <meta http-equiv="pragma" content="no-cache"/>
 <meta http-equiv="cache-control" content="no-cache"/>
@@ -14,25 +14,25 @@
 	type="text/css" rel="stylesheet" />
 
 <script type="text/javascript">
-	var photourl = "${sessionScope.user.user_pic_url}";
-	var usertype = "${sessionScope.user.user_type}";
-	var gender = "${sessionScope.user.user_gender}";
-	var addresscode = "${sessionScope.user.user_address_code}";
-	var language = "${sessionScope.user.user_language}";
-	var skill = "${sessionScope.user.user_skill}";
+	var photourl = "${sessionScope.user_pic_url}";
+	var usertype = "${sessionScope.user_type}";
+	var gender = "${sessionScope.user_gender}";
+	var addresscode = "${sessionScope.user_address_code}";
+	var language = "${sessionScope.user_language}";
+	var skill = "${sessionScope.user_skill}";
 </script>
 <script type="text/javascript"
 	src="${pageContext.request.contextPath }/jquery/jquery-1.8.3.js"></script>
 <script type="text/javascript"
-	src="${pageContext.request.contextPath }/jquery/updatePage.js?token=${sessionScope.user.user_token}"></script>
+	src="${pageContext.request.contextPath }/jquery/updatePage.js?token=${sessionScope.user_token}"></script>
 </head>
 
 <body onload="onload()">
 
 	<table cellspacing=0 cellpadding=0 width="100%" align=center border=0 style="font-size: 12px;">
 		<tr height=28>
-			<td background=./img/title_bg1.jpg>当前位置:<a href="${pageContext.request.contextPath }/page/defult.jsp" target=main>主页</a>
-				-> 修改用户信息
+			<td background=./img/title_bg1.jpg>當前位置:<a href="${pageContext.request.contextPath }/page/defult.jsp" target=main>主頁(Home)</a>
+				-> 修改用戶信息(Update user information)
 			</td>
 		</tr>
 		<tr>
@@ -51,121 +51,121 @@
 						<font color="green">修改成功！${ dataMap.errmsg}</font>
 					</s:if> <s:else>
 						<s:if test="!dataMap.updateResult || !dataMap.userUploadResult">
-							<font color="red">修改失败！${ dataMap.errmsg}</font>
+							<font color="red">修改失敗！${ dataMap.errmsg}</font>
 						</s:if>
 					</s:else>
 				</span>
 			</div>
 			<table border="1" width="100%" class="table_update">
 				<tr id="userid_tr" style="display: none">
-					<td>用户ID</td>
+					<td>用戶ID</td>
 					<td>
-					<input name="userid" id="userid" value="${sessionScope.user.user_id}" />
-					<input type="hidden" id="token" name="token" value="${sessionScope.user.user_token}" />
+					<input name="userid" id="userid" value="${sessionScope.user_id}" />
+					<input type="hidden" id="token" name="token" value="${sessionScope.user_token}" />
 					</td>
 				</tr>
 				<tr>
-					<td>用户头像</td>
+					<td>用戶頭像</td>
 					<td>
 						<img id="user_photo" src="" height="80" width="80" /><br/>
 						<input type="file" name="upload" id="upload" onchange="upload(this)" />
 					</td>
 				</tr>
 				<tr>
-					<td>用户类型</td>
+					<td>用戶類型</td>
 					<td><select name="usertype" id="usertype">
-							<option>请选择</option>
+							<option>請選擇</option>
 							<option value="1">Customer</option>
 							<option value="2">Master</option>
 							<option value="3">Admin</option>
 					</select></td>
 				</tr>
 				<tr>
-					<td>帐号名</td>
+					<td>帳號</td>
 					<td><input type="text" name="account" onfocus="this.value=''"
-						onblur="if(this.value==''){this.value='${sessionScope.user.user_account}'}"
-						value="${sessionScope.user.user_account}" /></td>
+						onblur="if(this.value==''){this.value='${sessionScope.user_account}'}"
+						value="${sessionScope.user_account}" /></td>
 				</tr>
 				<tr>
-					<td>修改密码</td>
+					<td>修改密碼</td>
 					<td><input type="password" id="prepassword"
 						onblur="if(this.value!=''){document.getElementById('repwd').style.display=''}" /></td>
 				</tr>
 				<tr id="repwd" style="display: none">
-					<td>再输一次</td>
+					<td>再輸一次</td>
 					<td><input type="password" name="password" id="password"
 						onblur="checkpwd('password')" /> <span id="pwdnotice"></span></td>
 				</tr>
 				<tr>
-					<td>用户姓名</td>
+					<td>用戶姓名</td>
 					<td><input type="text" name="name" onfocus="this.value=''"
-						onblur="if(this.value==''){this.value='${sessionScope.user.user_name}'}"
-						value="${sessionScope.user.user_name}" /></td>
+						onblur="if(this.value==''){this.value='${sessionScope.user_name}'}"
+						value="${sessionScope.user_name}" /></td>
 				</tr>
 				<tr>
-					<td>用户性别</td>
+					<td>用戶性別</td>
 					<td><select name="gender" id="gender">
-							<option>请选择</option>
+							<option>請選擇</option>
 							<option value="1">Male</option>
 							<option value="2">Female</option>
 					</select></td>
 				</tr>
 				<tr>
-					<td>手机号码</td>
+					<td>手機號碼</td>
 					<td><input type="text" name="mobile" onfocus="this.value=''"
-						onblur="if(this.value==''){this.value='${sessionScope.user.user_mobile}'}"
-						value="${sessionScope.user.user_mobile}" /></td>
+						onblur="if(this.value==''){this.value='${sessionScope.user_mobile}'}"
+						value="${sessionScope.user_mobile}" /></td>
 				</tr>
 				<tr>
-					<td>电子邮箱</td>
+					<td>電子郵箱</td>
 					<td><input type="text" name="email" onfocus="this.value=''"
-						onblur="if(this.value==''){this.value='${sessionScope.user.user_email}'}"
-						value="${sessionScope.user.user_email}" /></td>
+						onblur="if(this.value==''){this.value='${sessionScope.user_email}'}"
+						value="${sessionScope.user_email}" /></td>
 				</tr>
 				<tr>
-					<td>用户语言</td>
+					<td>用戶語言</td>
 					<td>
-					<input type="hidden" id="language" name="language" value="${sessionScope.user.user_language}"/>
+					<input type="hidden" id="language" name="language" value="${sessionScope.user_language}"/>
 					
 					<label><input name="languagepart" type="checkbox" id="English" value="English" />英文(English)</label>&nbsp;&nbsp;
-					<label><input name="languagepart" type="checkbox" id="Cantonese" value="Cantonese" />广东话(Cantonese)</label>&nbsp;&nbsp;
-					<label><input name="languagepart" type="checkbox" id="Chinese" value="Chinese" />普通话(Chinese)</label>&nbsp;&nbsp;
+					<label><input name="languagepart" type="checkbox" id="Cantonese" value="Cantonese" />廣東話(Cantonese)</label>&nbsp;&nbsp;
+					<label><input name="languagepart" type="checkbox" id="Chinese" value="Chinese" />普通話(Chinese)</label>&nbsp;&nbsp;
 					</td>
 				</tr>
 				<tr>
-					<td>用户技能</td>
+					<td>用戶技能</td>
 					<td>
 					<input type="text" name="skill" onfocus="this.value=''"
-						onblur="if(this.value==''){this.value='${sessionScope.user.user_skill}'}"
-						value="${sessionScope.user.user_skill}" /></td>
+						onblur="if(this.value==''){this.value='${sessionScope.user_skill}'}"
+						value="${sessionScope.user_skill}" /></td>
 				</tr>
 				<tr>
-					<td>默认地址</td>
+					<td>默認地址</td>
 					<td>
 					<select id="adscode_1" onchange="getaddresslist(this.options[selectedIndex].value,1)">
-							<option>--请选择省份--</option>
+							<option>--請選擇省份--</option>
 					</select>
 					<select id="adscode_2" onchange="getaddresslist(this.options[selectedIndex].value,2)">
-							<option>--请选择城市--</option>
+							<option>--請選擇城市--</option>
 					</select>
 					<select id="adscode_3" onchange="getaddresslist(this.options[selectedIndex].value,3)">
-							<option>--请选择镇区--</option>
+							<option>--請選擇鎮區--</option>
 					</select>
-					<input type="hidden" name="addresscode" id="addresscode" value="${sessionScope.user.user_address_code}"/>
+					<input type="hidden" name="addresscode" id="addresscode" value="${sessionScope.user_address_code}"/>
 					<input type="hidden" id="addresscodename" value=""/>
 					
-					<s:if test="%{#session.user.user_address!=null}">
-						<s:set name="lastadsset" value="%{#session.user.user_address.split(';')[#session.user.user_address.split(';').length-1]}"/>
+					<s:if test="%{#session.user_address!=null}">
+						<s:set name="lastadsset" value="%{#session.user_address.split(';')[#session.user_address.split(';').length-1]}"/>
 					</s:if>
 					<input type="text" onfocus="this.value=''" id="lastads"
 						onblur="if(this.value==''){this.value='${lastadsset}'}"
 						value="${lastadsset}" />
-					<input type="hidden" name="address" id="address" value="${sessionScope.user.user_address}"/>	
+					<input type="hidden" name="address" id="address" value="${sessionScope.user_address}"/>	
 					</td>
 				</tr>
 				<tr>
-					<td colspan="2" align="center"><input type="submit" value="修改" onclick="return validate();"/><input
-						type="button" value="取消" onclick="location.href='right.jsp'" /></td>
+					<td colspan="2" align="center"><input type="submit" value="修改(Submit)" onclick="return validate();"/><input
+						type="button" value="取消(Cancel)" onclick="location.href='right.jsp'" /></td>
 				</tr>
 			</table>
 		</form>

@@ -13,7 +13,6 @@ import org.springframework.stereotype.Controller;
 
 import com.bbcall.functions.ResultCode;
 import com.bbcall.struts.services.FileUploadServices;
-import com.bbcall.struts.services.UserServices;
 import com.opensymphony.xwork2.ActionSupport;
 
 @Scope("prototype")
@@ -23,8 +22,6 @@ public class FileUploadAction extends ActionSupport {
 
 	@Autowired
 	private FileUploadServices fileUploadServices;
-	@Autowired
-	private UserServices userServices;
 	private Map<String, Object> dataMap = new LinkedHashMap<String, Object>(); // 新建dataMap来储存JSON字符串
 
 	private String savePath; // 封装保存文件的路径目录
@@ -52,6 +49,7 @@ public class FileUploadAction extends ActionSupport {
 		dataMap.clear(); // dataMap中的数据将会被Struts2转换成JSON字符串，所以这里要先清空其中的数据
 
 		if (result == ResultCode.SUCCESS) {
+			dataMap.put("picurl", picurl); // 放入一个是否操作成功的标识
 			dataMap.put("resultcode", result); // 放入一个是否操作成功的标识
 			dataMap.put("errmsg", ResultCode.getErrmsg(result));
 			dataMap.put("userUploadResult", true); // 放入registerResult

@@ -7,14 +7,14 @@
 <meta http-equiv="content-type" content="text/html; charset=utf-8" />
 <link href="css/admin.css" type="text/css" rel="stylesheet" />
 <script type="text/javascript">
-	var photourl = "${sessionScope.user.user_pic_url}";
-	var usertype = "${sessionScope.user.user_type}";
-	var status = "${sessionScope.user.user_status}";
+	var photourl = "${sessionScope.user_pic_url}";
+	var usertype = "${sessionScope.user_type}";
+	var status = "${sessionScope.user_status}";
 </script>
 <script type="text/javascript"
 	src="${pageContext.request.contextPath }/jquery/jquery-1.8.3.js"></script>
 <script type="text/javascript"
-	src="${pageContext.request.contextPath }/jquery/defultPage.js?token=${sessionScope.user.user_token}"></script>
+	src="${pageContext.request.contextPath }/jquery/defultPage.js?token=${sessionScope.user_token}"></script>
 
 </head>
 <body onload="onload()">
@@ -42,7 +42,7 @@
 						<td>当前时间：<label id="showTime"></label></td>
 					</tr>
 					<tr>
-						<td style="font-weight: bold; font-size: 16px">${sessionScope.user.user_account}</td>
+						<td style="font-weight: bold; font-size: 16px">${sessionScope.user_account}</td>
 					</tr>
 					<tr>
 						<td>欢迎进入网站管理中心！</td>
@@ -72,19 +72,19 @@
 	<table cellspacing=0 cellpadding=2 width="95%" align=center border=0>
 		<tr>
 			<td align=right width=100>登陆帐号：</td>
-			<td style="color: #880000">${sessionScope.user.user_account}</td>
+			<td style="color: #880000">${sessionScope.user_account}</td>
 		</tr>
 		<tr>
 			<td align=right>电子邮箱：</td>
-			<td style="color: #880000">${sessionScope.user.user_email}</td>
+			<td style="color: #880000">${sessionScope.user_email}</td>
 		</tr>
 		<tr>
 			<td align=right>真实姓名：</td>
-			<td style="color: #880000">${sessionScope.user.user_name}</td>
+			<td style="color: #880000">${sessionScope.user_name}</td>
 		</tr>
 		<tr>
 			<td align=right>手机号：</td>
-			<td style="color: #880000">${sessionScope.user.user_mobile}</td>
+			<td style="color: #880000">${sessionScope.user_mobile}</td>
 		</tr>
 		<tr>
 			<td align=right>身份：</td>
@@ -96,20 +96,19 @@
 		</tr>
 		<tr>
 			<td align=right>登录标识：</td>
-			<td style="color: #880000">${sessionScope.user.user_token}</td>
+			<td style="color: #880000">${sessionScope.user_token}</td>
 		</tr>
 		<tr>
 			<td align=right>登录时间：</td>
-			<td style="color: #880000">${sessionScope.user.user_login_time}</td>
+			<td style="color: #880000">${sessionScope.user_login_time}</td>
 		</tr>
 		<tr>
 			<td align=right>注册时间：</td>
-			<td style="color: #880000">${sessionScope.user.user_create_time}</td>
+			<td style="color: #880000">${sessionScope.user_create_time}</td>
 		</tr>
 	</table>
 	<div style="text-align: center;">
 		<p>
-			来源：<a href="" target="_blank">源码之家</a>
 		</p>
 	</div>
 </body>
