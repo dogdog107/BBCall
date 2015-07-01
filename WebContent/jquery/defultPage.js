@@ -3,13 +3,13 @@
  */
 $(function() {
 	switch (usertype) {
-	case 1:
+	case "1":
 		$("#usertype").html("User");
 		break;
-	case 2:
+	case "2":
 		$("#usertype").html("Master");
 		break;
-	case 3:
+	case "3":
 		$("#usertype").html("Admin");
 		break;
 	}
@@ -46,4 +46,9 @@ function showTime() {
 	document.all.showTime.innerHTML = "" + string + ""
 	// 一秒刷新一次显示时间
 	var timeID = setTimeout(showTime, 1000);
+}
+
+function onload() {
+	showTime();
+	$("#user_photo").attr("src", photourl + "?" + Math.random());
 }

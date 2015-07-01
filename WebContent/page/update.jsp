@@ -6,27 +6,32 @@
 <head>
 <title>修改用户信息</title>
 <meta http-equiv="content-type" content="text/html;charset=utf-8" />
+<meta http-equiv="pragma" content="no-cache"/>
+<meta http-equiv="cache-control" content="no-cache"/>
+<meta http-equiv="expires" content="0"/>
+
 <link href="${pageContext.request.contextPath }/page/css/mine.css"
 	type="text/css" rel="stylesheet" />
 
-<script type="text/javascript"
-	src="${pageContext.request.contextPath }/jquery/jquery-1.8.3.js"></script>
-<script type="text/javascript"
-	src="${pageContext.request.contextPath }/jquery/updatePage.js?token=${sessionScope.user.user_token}"></script>
 <script type="text/javascript">
+	var photourl = "${sessionScope.user.user_pic_url}";
 	var usertype = "${sessionScope.user.user_type}";
 	var gender = "${sessionScope.user.user_gender}";
 	var addresscode = "${sessionScope.user.user_address_code}";
 	var language = "${sessionScope.user.user_language}";
 	var skill = "${sessionScope.user.user_skill}";
 </script>
+<script type="text/javascript"
+	src="${pageContext.request.contextPath }/jquery/jquery-1.8.3.js"></script>
+<script type="text/javascript"
+	src="${pageContext.request.contextPath }/jquery/updatePage.js?token=${sessionScope.user.user_token}"></script>
 </head>
 
 <body onload="onload()">
 
 	<table cellspacing=0 cellpadding=0 width="100%" align=center border=0 style="font-size: 12px;">
 		<tr height=28>
-			<td background=./img/title_bg1.jpg>当前位置:<a href="right.jsp" target=main>主页</a>
+			<td background=./img/title_bg1.jpg>当前位置:<a href="${pageContext.request.contextPath }/page/defult.jsp" target=main>主页</a>
 				-> 修改用户信息
 			</td>
 		</tr>
@@ -40,25 +45,32 @@
 	<div></div>
 
 	<div style="font-size: 13px; margin: 10px 5px">
-		<form action="user_update" method="post">
-			<table border="1" width="100%" class="table_update">
-				<div style="font-size: 13px; margin: 10px 5px">
-					<span> <s:if test="dataMap.updateResult">
-							<font color="green">修改成功！${ dataMap.errmsg}</font>
+		<form id="update_form" action="user_update" method="post" enctype="multipart/form-data">
+			<div style="font-size: 13px; margin: 10px 5px">
+				<span> <s:if test="dataMap.updateResult || dataMap.userUploadResult">
+						<font color="green">修改成功！${ dataMap.errmsg}</font>
+					</s:if> <s:else>
+						<s:if test="!dataMap.updateResult || !dataMap.userUploadResult">
+							<font color="red">修改失败！${ dataMap.errmsg}</font>
 						</s:if>
-						<s:else>
-							<s:if test="!dataMap.updateResult">
-								<font color="red">修改失败！${ dataMap.errmsg}</font>
-							</s:if>
-						</s:else>
-					</span>
-				</div>
-				<tr id="userid_tr">
+					</s:else>
+				</span>
+			</div>
+			<table border="1" width="100%" class="table_update">
+				<tr id="userid_tr" style="display: none">
 					<td>用户ID</td>
-					<td><input type="text" name="userid" id="userid"
-						value="${sessionScope.user.user_id}" disabled="disabled" /></td>
+					<td>
+					<input name="userid" id="userid" value="${sessionScope.user.user_id}" />
+					<input type="hidden" id="token" name="token" value="${sessionScope.user.user_token}" />
+					</td>
 				</tr>
-				<input type="hidden" id="token" name="token" value="${sessionScope.user.user_token}"/>
+				<tr>
+					<td>用户头像</td>
+					<td>
+						<img id="user_photo" src="" height="80" width="80" /><br/>
+						<input type="file" name="upload" id="upload" onchange="upload(this)" />
+					</td>
+				</tr>
 				<tr>
 					<td>用户类型</td>
 					<td><select name="usertype" id="usertype">
@@ -118,14 +130,6 @@
 					<label><input name="languagepart" type="checkbox" id="English" value="English" />英文(English)</label>&nbsp;&nbsp;
 					<label><input name="languagepart" type="checkbox" id="Cantonese" value="Cantonese" />广东话(Cantonese)</label>&nbsp;&nbsp;
 					<label><input name="languagepart" type="checkbox" id="Chinese" value="Chinese" />普通话(Chinese)</label>&nbsp;&nbsp;
-					</td>
-				</tr>
-				<tr>
-					<td>用户头像</td>
-					<td>
-					<form action="userUpload" method="post" enctype="multipart/form-data">
-						<input type="file" name="upload" value="${sessionScope.user.user_pic_url}" />
-					</form>
 					</td>
 				</tr>
 				<tr>

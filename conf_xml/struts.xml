@@ -13,7 +13,7 @@
 	<constant name="struts.multipart.maxSize" value="1024102400" />
 
 	<!-- 临时存放文件的路径 -->
-	<constant name="struts.multipart.saveDir" value="d:/test" />
+	<!-- <constant name="struts.multipart.saveDir" value="d:/test" /> -->
 
 
 	<package name="default" extends="struts-default,json-default">
@@ -119,14 +119,20 @@
 
 			<!-- 动态设置保存文件的路径 (Action的属性值) -->
 			<!-- <param name="savePath">/upload</param> -->
-			<param name="userid">${sessionScope.user.user_id}</param>
 
 			<!-- 配置struts2的默认视图 -->
 			<!-- <result>/WEB-INF/jsp/show.jsp</result> -->
 
 			<!-- 配置struts2的逻辑input视图 -->
 			<!-- <result name="input">/WEB-INF/jsp/upload.jsp</result> -->
-
+			
+			<result name="userUploadSuccess" type="redirectAction">
+				<param name="actionName">user_update</param>
+				<param name="picurl">${picurl}</param>
+				<param name="token">${token}</param>
+				<param name="userid">${userid}</param>
+			</result>
+			
 			<result type="json" name="json">
 				<param name="root">dataMap</param>
 			</result>

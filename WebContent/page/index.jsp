@@ -15,7 +15,7 @@
 	<frameset cols="170, *">
 		<frame name=left src="${pageContext.request.contextPath }/page/left.jsp" frameborder=0 noresize />
 
-		<frame name=main src="${pageContext.request.contextPath }/page/right.jsp" frameborder=0 noresize scrolling=yes />
+		<frame name=main src="${pageContext.request.contextPath }/page/defult.jsp" frameborder=0 noresize scrolling=yes />
 	</frameset>
 </frameset>
 <noframes>
