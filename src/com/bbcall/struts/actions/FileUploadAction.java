@@ -36,6 +36,7 @@ public class FileUploadAction extends ActionSupport{
 		System.out.println("Here is FileUploadAction.userUpload()");
 		savePath = "/UserPhoto";
 		String storePath = ServletActionContext.getServletContext().getRealPath(savePath);
+		System.out.println(storePath);
 		int result = fileUploadServices.uploadFile(upload, uploadFileName, userid, storePath);
 		picurl = fileUploadServices.getFileurl();
 		dataMap.clear(); // dataMap中的数据将会被Struts2转换成JSON字符串，所以这里要先清空其中的数据

@@ -16,11 +16,11 @@
 			<td width=260><img height=56 src="./img/header_left.jpg"
 				width=260></td>
 			<td style="font-weight: bold; color: #fff; padding-top: 20px"
-				align=middle>当前用户：${sessionScope.user_account}&nbsp;&nbsp;
-				<a style="color: #fff" href="" target=main>修改口令</a> &nbsp;&nbsp; <a
+				align=middle>當前用戶：${sessionScope.user_account}&nbsp;&nbsp;
+				<a style="color: #fff" href="${pageContext.request.contextPath }/page/update.jsp" target=main>修改個人信息</a> &nbsp;&nbsp; <a
 				style="color: #fff"
-				onclick="if (confirm('确定要退出吗？')) return true; else return false;"
-				href="login.jsp" target=_top>退出系统</a>
+				onclick="if (confirm('確定要登出嗎？')) return true; else return false;"
+				href="login.jsp" target=_top>登出系統</a>
 			</td>
 			<td align=right width=268><img height=56
 				src="./img/header_right.jpg" width=268></td>

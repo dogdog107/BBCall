@@ -20,7 +20,7 @@
 <body onload="onload()">
 	<table cellspacing=0 cellpadding=0 width="100%" align=center border=0>
 		<tr height=28>
-			<td background=./img/title_bg1.jpg>当前位置:主页</td>
+			<td background=./img/title_bg1.jpg>當前位置:主頁(Home)</td>
 		</tr>
 		<tr>
 			<td bgcolor=#b1ceef height=1></td>
@@ -39,13 +39,13 @@
 				<table height=100 cellspacing=0 cellpadding=0 width="100%" border=0>
 
 					<tr>
-						<td>当前时间：<label id="showTime"></label></td>
+						<td>當前時間：<label id="showTime"></label></td>
 					</tr>
 					<tr>
 						<td style="font-weight: bold; font-size: 16px">${sessionScope.user_account}</td>
 					</tr>
 					<tr>
-						<td>欢迎进入网站管理中心！</td>
+						<td>歡迎進入網站管理中心！</td>
 					</tr>
 				</table>
 			</td>
@@ -60,7 +60,7 @@
 		</tr>
 		<tr height=22>
 			<td style="padding-left: 20px; font-weight: bold; color: #ffffff"
-				align=middle background=./img/title_bg2.jpg>您的相关信息</td>
+				align=middle background=./img/title_bg2.jpg>您的相關信息</td>
 		</tr>
 		<tr bgcolor=#ecf4fc height=12>
 			<td></td>
@@ -71,39 +71,39 @@
 	</table>
 	<table cellspacing=0 cellpadding=2 width="95%" align=center border=0>
 		<tr>
-			<td align=right width=100>登陆帐号：</td>
+			<td align=right width=200>登入帳號 (Login Account):</td>
 			<td style="color: #880000">${sessionScope.user_account}</td>
 		</tr>
 		<tr>
-			<td align=right>电子邮箱：</td>
+			<td align=right>電子郵箱 (Email):</td>
 			<td style="color: #880000">${sessionScope.user_email}</td>
 		</tr>
 		<tr>
-			<td align=right>真实姓名：</td>
+			<td align=right>真實姓名 (User Name):</td>
 			<td style="color: #880000">${sessionScope.user_name}</td>
 		</tr>
 		<tr>
-			<td align=right>手机号：</td>
+			<td align=right>手機號碼 (Mobile):</td>
 			<td style="color: #880000">${sessionScope.user_mobile}</td>
 		</tr>
 		<tr>
-			<td align=right>身份：</td>
+			<td align=right>身份 (User Type):</td>
 			<td style="color: #880000"><span id="usertype"></span></td>
 		</tr>
 		<tr>
-			<td align=right>帐号状态：</td>
+			<td align=right>帳號狀態 (User Status):</td>
 			<td style="color: #880000"><span id="status"></span></td>
 		</tr>
 		<tr>
-			<td align=right>登录标识：</td>
+			<td align=right>登入標識 (Login Token):</td>
 			<td style="color: #880000">${sessionScope.user_token}</td>
 		</tr>
 		<tr>
-			<td align=right>登录时间：</td>
+			<td align=right>登入時間 (Login Time):</td>
 			<td style="color: #880000">${sessionScope.user_login_time}</td>
 		</tr>
 		<tr>
-			<td align=right>注册时间：</td>
+			<td align=right>登記時間 (Register Time):</td>
 			<td style="color: #880000">${sessionScope.user_create_time}</td>
 		</tr>
 	</table>

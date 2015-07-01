@@ -58,72 +58,72 @@
 			</div>
 			<table border="1" width="100%" class="table_update">
 				<tr id="userid_tr" style="display: none">
-					<td>用戶ID</td>
+					<td>用戶ID (UserID)</td>
 					<td>
 					<input name="userid" id="userid" value="${sessionScope.user_id}" />
 					<input type="hidden" id="token" name="token" value="${sessionScope.user_token}" />
 					</td>
 				</tr>
 				<tr>
-					<td>用戶頭像</td>
+					<td>用戶頭像 (UserPhoto)</td>
 					<td>
 						<img id="user_photo" src="" height="80" width="80" /><br/>
 						<input type="file" name="upload" id="upload" onchange="upload(this)" />
 					</td>
 				</tr>
 				<tr>
-					<td>用戶類型</td>
+					<td>用戶類型 (UserType)</td>
 					<td><select name="usertype" id="usertype">
-							<option>請選擇</option>
+							<option>請選擇(Choose)</option>
 							<option value="1">Customer</option>
 							<option value="2">Master</option>
 							<option value="3">Admin</option>
 					</select></td>
 				</tr>
 				<tr>
-					<td>帳號</td>
+					<td>帳號 (Account)</td>
 					<td><input type="text" name="account" onfocus="this.value=''"
 						onblur="if(this.value==''){this.value='${sessionScope.user_account}'}"
 						value="${sessionScope.user_account}" /></td>
 				</tr>
 				<tr>
-					<td>修改密碼</td>
+					<td>修改密碼 (Change Password)</td>
 					<td><input type="password" id="prepassword"
 						onblur="if(this.value!=''){document.getElementById('repwd').style.display=''}" /></td>
 				</tr>
 				<tr id="repwd" style="display: none">
-					<td>再輸一次</td>
+					<td>再輸一次 (Enter Password Again)</td>
 					<td><input type="password" name="password" id="password"
 						onblur="checkpwd('password')" /> <span id="pwdnotice"></span></td>
 				</tr>
 				<tr>
-					<td>用戶姓名</td>
+					<td>用戶姓名 (User Name)</td>
 					<td><input type="text" name="name" onfocus="this.value=''"
 						onblur="if(this.value==''){this.value='${sessionScope.user_name}'}"
 						value="${sessionScope.user_name}" /></td>
 				</tr>
 				<tr>
-					<td>用戶性別</td>
+					<td>用戶性別 (User Gender)</td>
 					<td><select name="gender" id="gender">
-							<option>請選擇</option>
+							<option>請選擇(Choose)</option>
 							<option value="1">Male</option>
 							<option value="2">Female</option>
 					</select></td>
 				</tr>
 				<tr>
-					<td>手機號碼</td>
+					<td>手機號碼 (User Mobile)</td>
 					<td><input type="text" name="mobile" onfocus="this.value=''"
 						onblur="if(this.value==''){this.value='${sessionScope.user_mobile}'}"
 						value="${sessionScope.user_mobile}" /></td>
 				</tr>
 				<tr>
-					<td>電子郵箱</td>
+					<td>電子郵箱 (User Email)</td>
 					<td><input type="text" name="email" onfocus="this.value=''"
 						onblur="if(this.value==''){this.value='${sessionScope.user_email}'}"
 						value="${sessionScope.user_email}" /></td>
 				</tr>
 				<tr>
-					<td>用戶語言</td>
+					<td>用戶語言 (User Language)</td>
 					<td>
 					<input type="hidden" id="language" name="language" value="${sessionScope.user_language}"/>
 					
@@ -133,14 +133,14 @@
 					</td>
 				</tr>
 				<tr>
-					<td>用戶技能</td>
+					<td>用戶技能 (User Skill)</td>
 					<td>
 					<input type="text" name="skill" onfocus="this.value=''"
 						onblur="if(this.value==''){this.value='${sessionScope.user_skill}'}"
 						value="${sessionScope.user_skill}" /></td>
 				</tr>
 				<tr>
-					<td>默認地址</td>
+					<td>默認地址 (User Address)</td>
 					<td>
 					<select id="adscode_1" onchange="getaddresslist(this.options[selectedIndex].value,1)">
 							<option>--請選擇省份--</option>

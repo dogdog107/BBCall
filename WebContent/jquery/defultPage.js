@@ -49,6 +49,7 @@ function showTime() {
 }
 
 function onload() {
+	var initializationTime = (new Date()).getTime();
 	showTime();
 	$("#user_photo").attr("src", photourl + "?" + Math.random());
 }

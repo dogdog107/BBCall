@@ -5,7 +5,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-<title>用户登录</title>
+<title>用戶登入(Login)</title>
 
 <link href="${pageContext.request.contextPath }/page/css/login.css"
 	type="text/css" rel="stylesheet" />
@@ -32,12 +32,12 @@
 
 							<div class="user_main_box">
 								<ul>
-									<li class="user_main_text">用户名：</li>
+									<li class="user_main_text">用戶名：</li>
 									<li class="user_main_input"><input name="username"
 										maxlength="18" id="username" class="txtusernamecssclass" /></li>
 								</ul>
 								<ul>
-									<li class="user_main_text">密 码：</li>
+									<li class="user_main_text">密 碼：</li>
 									<li class="user_main_input"><input type="password"
 										name="password" id="password" class="txtpasswordcssclass" /></li>
 								</ul>
