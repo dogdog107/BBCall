@@ -91,6 +91,7 @@ function updateStatus(idname, value) {
 			type : "post",
 			url : "${pageContext.request.contextPath}/user_updateStatusJson.action",
 			data : {
+				"token" : token,
 				"userid" : userid,
 				"status" : value
 			},

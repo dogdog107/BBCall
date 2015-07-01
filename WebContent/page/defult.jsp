@@ -6,17 +6,18 @@
 <head>
 <meta http-equiv="content-type" content="text/html; charset=utf-8" />
 <link href="css/admin.css" type="text/css" rel="stylesheet" />
-<script type="text/javascript"
-	src="${pageContext.request.contextPath }/jquery/jquery-1.8.3.js"></script>
 <script type="text/javascript">
-	var usertype = ${sessionScope.user.user_type};
-	var status = ${sessionScope.user.user_status};
+	var photourl = "${sessionScope.user.user_pic_url}";
+	var usertype = "${sessionScope.user.user_type}";
+	var status = "${sessionScope.user.user_status}";
 </script>
 <script type="text/javascript"
-	src="${pageContext.request.contextPath }/jquery/rightPage.js"></script>
+	src="${pageContext.request.contextPath }/jquery/jquery-1.8.3.js"></script>
+<script type="text/javascript"
+	src="${pageContext.request.contextPath }/jquery/defultPage.js?token=${sessionScope.user.user_token}"></script>
 
 </head>
-<body onload="showTime()">
+<body onload="onload()">
 	<table cellspacing=0 cellpadding=0 width="100%" align=center border=0>
 		<tr height=28>
 			<td background=./img/title_bg1.jpg>当前位置:主页</td>
@@ -30,8 +31,9 @@
 	</table>
 	<table cellspacing=0 cellpadding=0 width="90%" align=center border=0>
 		<tr height=100>
-			<td align=middle width=100><img height=100
-				src="./img/admin_p.gif" width=90></td>
+			<td align=middle width=100>
+			<img id="user_photo" height="100" src="" width="100" />
+			</td>
 			<td width=60>&nbsp;</td>
 			<td>
 				<table height=100 cellspacing=0 cellpadding=0 width="100%" border=0>

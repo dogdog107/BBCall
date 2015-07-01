@@ -26,6 +26,7 @@ public class UserServices {
 	private AddressListMapper addressListMapper;
 
 	private User userinfo = new User();
+	private User updateduserinfo = new User();
 	private List<AddressList> addresslist;
 	private List<User> userlist;
 
@@ -102,6 +103,20 @@ public class UserServices {
 				user.setUser_status(1);
 			}
 			user.setUser_name(name);
+			if(isEmpty(picurl)){
+				if (usertype == 3){
+					picurl = "/BBCall/UserPhoto/Admin_photo.png";
+				} else {
+					switch (gender) {
+					case 1:
+						picurl = "/BBCall/UserPhoto/Male_photo.png";
+						break;
+					case 2:
+						picurl = "/BBCall/UserPhoto/Female_photo.png";
+						break;
+					}
+				}
+			}
 			user.setUser_pic_url(picurl);
 			user.setUser_mobile(mobile);
 			user.setUser_gender(gender);
@@ -205,8 +220,8 @@ public class UserServices {
 	// ##
 	// ##------------------------------------------------------------------------------
 	// ## 1. Require parameters:
-	// ## (1) Update by user: 'token'
-	// ## (2) Update by admin: 'userid'
+	// ## (1) 'token'
+	// ## (2) Update by admin: 'token' & 'userid'
 	// ##
 	// ##------------------------------------------------------------------------------
 	// ## 2. Optional parameters: (leave blank will not change)
@@ -254,21 +269,29 @@ public class UserServices {
 		// ***** 检测 token & userid *****
 		if (isEmpty(token) && userid == null)// 检测必要参数是否为空、null
 			return ResultCode.REQUIREINFO_NOTENOUGH;
-
-		if ((!isEmpty(token)) && userid == null) {// 用户update模式
+		if (!isEmpty(token)) {
 			int checkResult = checkToken(token);
 			if (checkResult == ResultCode.SUCCESS) {
 				user = userinfo;
-				updatemode = 1;
+				if (userid != null) {
+					if (user.getUser_type().equals(3)) { // 管理员后台update模式
+						user = userMapper.getUserById(userid); // 根据userID读取用户数据
+						updatemode = 2;
+						if (null == user)
+							return ResultCode.USERID_ERROR;
+					} else if (userid.equals(user.getUser_id())) {
+						updatemode = 1; // 用户update模式
+					} else {
+						return ResultCode.ACCESS_REJECT;
+					}
+				} else {
+					updatemode = 1; // 用户update模式
+				}
 			} else
 				return checkResult;
-		} else if (isEmpty(token) && userid != null) {// 管理员后台update模式
-			user = userMapper.getUserById(userid);// 根据userID读取用户数据
-			updatemode = 2;
-			if (null == user)
-				return ResultCode.USERID_ERROR;
-		} else
-			return ResultCode.UNKNOWN_ERROR;
+		} else {
+			return ResultCode.REQUIREINFO_NOTENOUGH;
+		}
 
 		// ***** 检测 addresscode & address *****
 		if (addresscode != null && addresscode != 0 && (addresscode + "").length() != 6)// 判断地址码是否六位数
@@ -293,8 +316,8 @@ public class UserServices {
 		}
 
 		if ((addresscode != null && !isEmpty(address))
-				&& (!user.getUser_address_code().equals(addresscode) || !user
-						.getUser_address().equals(address))) {
+				&& (!addresscode.equals(user.getUser_address_code()) || !address.equals(user
+						.getUser_address()))) {
 
 			String addressname = checkAddresscodeName(addresscode);// 调用checkAddresscodeName方法，获取地址名
 			if (addressname == null)// 如果addressname 返回null, 表明addresscode错误
@@ -309,54 +332,73 @@ public class UserServices {
 		}
 
 		// ***** 检测其它变量 *****
-		if (!isEmpty(account) && !user.getUser_account().equals(account)) {
+		if (!isEmpty(account) && !account.equals(user.getUser_account())) {
 			user.setUser_account(account);
 			changecount++;
 			System.out.println("account changed!");
 		}
-		if (!isEmpty(password) && !user.getUser_password().equals(password)) {
+		if (!isEmpty(password) && !password.equals(user.getUser_password())) {
 			user.setUser_password(password);
 			changecount++;
 			System.out.println("password changed!");
 		}
-		if (!isEmpty(name) && !user.getUser_name().equals(name)) {
+		if (!isEmpty(name) && !name.equals(user.getUser_name())) {
 			user.setUser_name(name);
 			changecount++;
 			System.out.println("name changed!");
 		}
-		if (!isEmpty(picurl) && !user.getUser_pic_url().equals(picurl)) {
+		if (isEmpty(picurl)
+				&& (isEmpty(user.getUser_pic_url()) || !isNumeric(user.getUser_pic_url().substring(user.getUser_pic_url().lastIndexOf("/") + 1).split("_")[0]))) {
+			if (user.getUser_type().equals(3)) {
+				picurl = "/BBCall/UserPhoto/Admin_photo.png";
+			} else {
+				switch (user.getUser_gender()) {
+				case 1:
+					picurl = "/BBCall/UserPhoto/Male_photo.png";
+					break;
+				case 2:
+					picurl = "/BBCall/UserPhoto/Female_photo.png";
+					break;
+				}
+			}
+		}
+		if (!isEmpty(picurl) && !picurl.equals(user.getUser_pic_url())) {
 			user.setUser_pic_url(picurl);
 			changecount++;
 			System.out.println("picurl changed!");
+			if (updatemode == 1) {// 用户模式时，user状态转为pending 待审核
+				user.setUser_status(3);
+				System.out.println("status changed as user mode!(usertype)");
+			}
 		}
 		if (mobile != null && !mobile.equals(user.getUser_mobile())) {
 			user.setUser_mobile(mobile);
 			changecount++;
 			System.out.println("mobile changed!");
 		}
-		if (gender != null && !user.getUser_gender().equals(gender)) {
+		if (gender != null && !gender.equals(user.getUser_gender())) {
 			user.setUser_gender(gender);
 			changecount++;
 			System.out.println("gender changed!");
 		}
-		if (!isEmpty(email) && !user.getUser_email().equals(email)) {
+		if (!isEmpty(email) && !email.equals(user.getUser_email())) {
 			user.setUser_email(email);
 			changecount++;
 			System.out.println("email changed!");
 		}
-		if (!isEmpty(language) && !user.getUser_language().equals(language)) {
+		if (!isEmpty(language) && !language.equals(user.getUser_language())) {
 			user.setUser_language(language);
 			changecount++;
 			System.out.println("language changed!");
 		}
 		if (!isEmpty(description)
-				&& !user.getUser_description().equals(description)) {
+				&& !description.equals(user.getUser_description())) {
 			user.setUser_description(description);
 			changecount++;
 			System.out.println("description changed!");
 		}
 		if (!isEmpty(accessgroup)
-				&& !user.getUser_access_group().equals(accessgroup)) {
+				&& !accessgroup.equals(user.getUser_access_group())) {
 			user.setUser_access_group(accessgroup);
 			changecount++;
 			System.out.println("accessgroup changed!");
@@ -367,7 +409,7 @@ public class UserServices {
 			changecount++;
 			System.out.println("status changed!");
 		}
-		if (!isEmpty(skill) && !user.getUser_skill().equals(skill)) {
+		if (!isEmpty(skill) && !skill.equals(user.getUser_skill())) {
 			user.setUser_skill(skill);
 			changecount++;
 			System.out.println("skill changed!");
@@ -399,8 +441,19 @@ public class UserServices {
 
 		if (changecount > 0)
 			userMapper.updateUser(user);// 把用户信息插入数据表
-
-		userinfo = user;// 返回更新的user对象给userinfo
+		
+		switch (updatemode) {
+		case 1:
+			userinfo = user;// 返回更新后的user对象给userinfo
+			break;
+		case 2:
+			if (user.getUser_id().equals(userinfo.getUser_id())){
+				userinfo = user;// 返回更新的user对象给userinfo
+			} else {
+				updateduserinfo = user;// 返回更新后的user对象给updateduserinfo
+			}
+			break;
+		}
 		return ResultCode.SUCCESS;
 
 	}
@@ -498,6 +551,28 @@ public class UserServices {
 				return ResultCode.SUCCESS;
 			} else {
 				return ResultCode.USERLIST_NULL;
+			}
+		} else {
+			return checkTokenResult;
+		}
+	}
+
+	// ###################
+	// ## 检测用户权限
+	// ###################
+
+	public int checkUserAccess(String token, String requireAccess) {
+		System.out.println("Here is UserServices.checkUserAccess method...");
+
+		if (isEmpty(token) || isEmpty(requireAccess))
+			return ResultCode.REQUIREINFO_NOTENOUGH;
+
+		int checkTokenResult = checkToken(token);
+		if (checkTokenResult == ResultCode.SUCCESS) {
+			if (requireAccess.equals(userinfo.getUser_access_group())) {
+				return ResultCode.SUCCESS;
+			} else {
+				return ResultCode.ACCESS_REJECT;
 			}
 		} else {
 			return checkTokenResult;
@@ -630,8 +705,7 @@ public class UserServices {
 	// 返回用户信息, 用于json返回
 	// ###################
 
-	public Object userInfo() {
-
+	public Object getUserinfo() {
 		return userinfo;
 	}
 
@@ -641,6 +715,10 @@ public class UserServices {
 
 	public List<User> getUserlist() {
 		return userlist;
+	}
+
+	public User getUpdateduserinfo() {
+		return updateduserinfo;
 	}
 
 	// public List<UserSkill> test(int test){

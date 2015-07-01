@@ -51,6 +51,7 @@ public class UserAction extends ActionSupport implements SessionAware{
 	private String specify_value;
 	private String search_value;
 	
+	
 //	private int test;
 	
 //	private HttpServletRequest request;
@@ -83,7 +84,7 @@ public class UserAction extends ActionSupport implements SessionAware{
 		int result = userServices.login(username, password); // 调用userServices.login
 
 		if (result == ResultCode.SUCCESS) {
-			Object userinfo = userServices.userInfo(); // 调用userInfo对象
+			Object userinfo = userServices.getUserinfo(); // 调用userInfo对象
 //			dataMap.put("userinfo", userinfo); // 把userinfo对象放入dataMap
 			dataMap = obj2map.getValueMap(userinfo); //将对象转换成Map
 			dataMap.put("resultcode", result); // 放入一个是否操作成功的标识
@@ -149,7 +150,8 @@ public class UserAction extends ActionSupport implements SessionAware{
 		int result = userServices.update(account, password, usertype, name, picurl, mobile, gender, addresscode, address, email, language, skill, description, accessgroup, status, token, userid); // 调用userServices.login
 
 		if (result == ResultCode.SUCCESS) {
-			Object userinfo = userServices.userInfo(); // 调用userInfo对象
+			Object userinfo = userServices.getUserinfo(); // 调用userInfo对象
+//			Object updateduserinfo = userServices.getUpdateduserinfo(); // 调用userInfo对象
 //			dataMap.put("userinfo", userinfo); // 把userinfo对象放入dataMap
 			dataMap = obj2map.getValueMap(userinfo); //将对象转换成Map
 			dataMap.put("resultcode", result); // 放入一个是否操作成功的标识
@@ -157,7 +159,6 @@ public class UserAction extends ActionSupport implements SessionAware{
 			dataMap.put("updateResult", true); // 放入registerResult
 			System.out.println(dataMap);
 			session.put("user", userinfo);// 把用户信息放进session
-			System.out.println(session);
 			return "updateSuccess";
 		} else {
 			dataMap.put("resultcode", result); // 放入一个是否操作成功的标识
@@ -352,8 +353,8 @@ public class UserAction extends ActionSupport implements SessionAware{
 	@Override
 	public void setSession(Map<String, Object> session) {
 		this.session = session;
-		
 	}
+	
 	public void setDataMap(Map<String, Object> dataMap) {
 		this.dataMap = dataMap;
 	}

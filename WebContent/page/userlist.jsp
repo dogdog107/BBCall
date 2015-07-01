@@ -20,7 +20,7 @@
 	<table cellspacing=0 cellpadding=0 width="100%" align=center border=0
 		style="font-size: 12px;">
 		<tr height=28>
-			<td background=./img/title_bg1.jpg>当前位置:<a href="right.jsp"
+			<td background=./img/title_bg1.jpg>当前位置:<a href="defult.jsp"
 				target=main>主页</a> -> 用户列表
 			</td>
 		</tr>

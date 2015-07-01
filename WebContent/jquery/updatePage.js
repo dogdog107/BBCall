@@ -3,8 +3,7 @@ function showaddresslist(times, childcode, parentcode) {
 		return;
 	}
 	var idname = 'adscode_' + times;
-	$
-			.ajax({
+	$.ajax({
 				type : "post",
 				url : "${pageContext.request.contextPath}/user_checkChildAdsListJson.action",
 				data : {
@@ -56,8 +55,7 @@ function getaddresslist(parentcode, idno) {
 	} else {
 		document.getElementById(idname).options.length = 1;
 	}
-	$
-			.ajax({
+	$.ajax({
 				type : "post",
 				url : "${pageContext.request.contextPath}/user_checkChildAdsListJson.action",
 				data : {
@@ -94,15 +92,30 @@ function checkpwd(id) {
 	return;
 }
 
+$(document).ready(function() {
+	$('#upload').live('change', function() {
+		if (confirm('確定要修改頭像嗎？\n Confirm to change the photo?')) {
+			$('#update_form').attr('action', 'userUpload').submit();
+		} else {
+			$('#upload').val("");
+		}
+	});
+});  
+
 function onload() {
+	$("#user_photo").attr("src", photourl + "?" + Math.random());
+	
 	if (usertype == 1 || usertype == 2) {
 		document.getElementById('usertype').options[value = '3'].remove();
 	}
 
 	if (usertype == 3) {
-		document.getElementById('userid').disabled = "";
-		document.getElementById('token').value = "";
+		$("#userid_tr").show();
 	}
+//	if (usertype == 3) {
+//		document.getElementById('userid').disabled = "";
+//		document.getElementById('token').value = "";
+//	}
 
 	document.getElementById('usertype')[usertype].selected = true;
 	document.getElementById('gender')[gender].selected = true;
@@ -113,11 +126,9 @@ function onload() {
 			document.getElementById(lgestr[i]).checked = true;
 		}
 	}
-	
 	$(function() {
 		if (addresscode != '' && addresscode != 0) {
-			$
-					.post(
+			$.post(
 							"${pageContext.request.contextPath}/user_checkAdsListJson.action",
 							{
 								"addresscode" : addresscode
@@ -136,8 +147,7 @@ function onload() {
 								}
 							});
 		} else {
-			$
-					.post(
+			$.post(
 							"${pageContext.request.contextPath}/user_checkChildAdsListJson.action",
 							{
 								"addresscode" : 0
