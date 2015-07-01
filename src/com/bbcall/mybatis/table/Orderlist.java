@@ -21,7 +21,7 @@ import java.util.Date;
 //  order_urgent_bonus DECIMAL(10,2),
 //  order_user_account  VARCHAR (30),
 //  order_master_account VARCHAR (30),
-//  order_type VARCHAR (30),
+//  order_type_code INT,
 //  order_status INT,
 //  /* 1=created, 2=in progress, 3=finished */
 //  order_score INT,
@@ -45,7 +45,7 @@ public class Orderlist {
 	private double order_urgent_bonus;
 	private String order_user_account;
 	private String order_master_account;
-	private String order_type;
+	private int order_type_code;
 	private int order_status;
 	private int order_score;
 	private String order_evaluation;
@@ -162,12 +162,12 @@ public class Orderlist {
 		this.order_master_account = order_master_account;
 	}
 
-	public String getOrder_type() {
-		return order_type;
+	public int getOrder_type_code() {
+		return order_type_code;
 	}
 
-	public void setOrder_type(String order_type) {
-		this.order_type = order_type;
+	public void setOrder_type_code(int order_type_code) {
+		this.order_type_code = order_type_code;
 	}
 
 	public int getOrder_status() {

@@ -17,21 +17,22 @@ public interface OrderlistMapper {
 	// 通过用户账号取得已完成订单列表
 	public List<Orderlist> getComOrdersByUserAccount(String order_user_account);
 
-	// 通过师傅账号/技能类型取得未完成订单列表
-	public List<Orderlist> getUnOrdersByMasterSkill(
-			@Param("order_type") String order_type,
+	// 通过订单类型、师傅账号、技能类型取得未完成订单列表
+	public List<Orderlist> getOrdersByMasterSkill(
+			@Param("order_status") int order_status,
+			@Param("order_type_code") int order_type_code,
 			@Param("order_master_account") String order_master_account);
 
 	// 通过师傅账号/技能类型/订单地区取得未完成订单列表 (按发布时间排序)
 	public List<Orderlist> getUnOrdersByMasterLocation(
-			@Param("order_type") String order_type,
-			@Param("order_book_location") String order_book_location,
+			@Param("order_type_code") int order_type_code,
+			@Param("order_book_location_code") int order_book_location_code,
 			@Param("order_master_account") String order_master_account);
 
 	// 通过师傅账号/技能类型/订单地区取得未完成订单列表 (按工作截止时间排序)
 	public List<Orderlist> getUnOrdersByBookTime(
-			@Param("order_type") String order_type,
-			@Param("order_book_location") String order_book_location,
+			@Param("order_type_code") int order_type_code,
+			@Param("order_book_location_code") int order_book_location_code,
 			@Param("order_master_account") String order_master_account);
 
 	// 通过师傅账号取得已完成订单列表
@@ -88,5 +89,17 @@ public interface OrderlistMapper {
 
 	// 删除订单
 	public void deleteOrder(int order_id);
+
+	// 通过师傅账号取得订单列表
+	public List<Orderlist> getOrdersByMaster(String order_master_account);
+
+	// 通过师傅账户和订单状态取得订单列表
+	public List<Orderlist> getOrders(@Param("order_status") int order_status,
+			@Param("order_master_account") String order_master_account);
+
+	// 更改订单为完成状态
+	public void completeOrder(@Param("order_score") int order_score,
+			@Param("order_evaluation") String order_evaluation,
+			@Param("order_id") int order_id);
 
 }

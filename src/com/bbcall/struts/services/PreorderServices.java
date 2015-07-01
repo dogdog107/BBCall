@@ -82,10 +82,12 @@ public class PreorderServices {
 	// ## 4. Return: NONE
 	// ##
 	// ################################################################################
-	public int deletePreorder(int preorder_id) {
+	public int deletePreorder(int preorder_id, String preorder_master_account) {
 		System.out.println("Here is PreorderServices.delete method...");
 
 		preorderMapper.deletePreorder(preorder_id);
+		
+		preorderinfos = preorderMapper.getPreordersByAccount(preorder_master_account);
 
 		return ResultCode.SUCCESS;
 	}

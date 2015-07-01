@@ -45,7 +45,7 @@ public class ResultCode {
 
 	// 参数数据错误码16XXX
 	public static Integer REFERDOC_TYPE_EMPTY = 16001;// 参数订单类型为空
-	public static Integer REFERDOC_ADD_FAILED = 16002;// 参数订单类型为空
+	public static Integer REFERDOC_ADD_FAILED = 16002;// 添加订单失败
 
 	// 新闻错误码20XXX
 	public static Integer NEWSID_ERROR = 20001;// 新闻id不存在
