@@ -143,13 +143,13 @@
 					<td>默認地址 (User Address)</td>
 					<td>
 					<select id="adscode_1" onchange="getaddresslist(this.options[selectedIndex].value,1)">
-							<option>--請選擇省份--</option>
+							<option value="0">--請選擇省份--</option>
 					</select>
 					<select id="adscode_2" onchange="getaddresslist(this.options[selectedIndex].value,2)">
-							<option>--請選擇城市--</option>
+							<option value="0">--請選擇城市--</option>
 					</select>
 					<select id="adscode_3" onchange="getaddresslist(this.options[selectedIndex].value,3)">
-							<option>--請選擇鎮區--</option>
+							<option value="0">--請選擇鎮區--</option>
 					</select>
 					<input type="hidden" name="addresscode" id="addresscode" value="${sessionScope.user_address_code}"/>
 					<input type="hidden" id="addresscodename" value=""/>

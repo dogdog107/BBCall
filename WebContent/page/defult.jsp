@@ -103,7 +103,7 @@
 			<td style="color: #880000">${sessionScope.user_login_time}</td>
 		</tr>
 		<tr>
-			<td align=right>登記時間 (Register Time):</td>
+			<td align=right>註冊時間 (Register Time):</td>
 			<td style="color: #880000">${sessionScope.user_create_time}</td>
 		</tr>
 	</table>

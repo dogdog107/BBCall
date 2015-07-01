@@ -1,5 +1,10 @@
 function showaddresslist(times, childcode, parentcode) {
 	if (times < 1) {
+		if ($("#adscode_3").val() == "0") {
+			updateAddressCodeName(2);
+		} else {
+			updateAddressCodeName(3);
+		}
 		return;
 	}
 	var idname = 'adscode_' + times;
@@ -28,7 +33,7 @@ function showaddresslist(times, childcode, parentcode) {
 			});
 }
 
-function updateaddresscodename(idno) {
+function updateAddressCodeName(idno) {
 	var namevalue = "";
 	var idname = "";
 	for ( var i = idno; i >= 1; i--) {
@@ -41,7 +46,7 @@ function updateaddresscodename(idno) {
 }
 
 function getaddresslist(parentcode, idno) {
-	updateaddresscodename(idno);
+	updateAddressCodeName(idno);
 	document.getElementById("addresscode").value = parentcode;
 	if (idno == 3) {
 		return;

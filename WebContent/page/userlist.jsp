@@ -21,7 +21,7 @@
 		style="font-size: 12px;">
 		<tr height=28>
 			<td background=./img/title_bg1.jpg>當前位置:<a href="defult.jsp"
-				target=main>主頁</a> -> 用戶列表
+				target=main>主頁(Home)</a> -> 用戶列表(User List)
 			</td>
 		</tr>
 		<tr>
@@ -36,7 +36,7 @@
 		<div class="div_search">
 			<span>
 <!-- 				<form action="#" method="post"> -->
-					排序：
+					排序(Order By)：
 					<select name="col_name" id="col_name" onchange="col_name_change(this.value)">
 						<option value="user_id">默認排序(ID)</option>
 						<option value="user_account">按用戶帳號(Account)</option>
@@ -72,7 +72,7 @@
 						<td>類型<br/>Type</td>
 						<td>狀態<br/>Status</td>
 						<td>登陸時間<br/>Login Time</td>
-						<td>創建時間<br/>Create Time</td>
+						<td>註冊時間<br/>Create Time</td>
 						<td colspan="2" align="center">操作<br/>Operations</td>
 					</tr>
 					<tr id="template" style="display: none; font-size: 12px;">
