@@ -48,13 +48,17 @@
 								value='#order.order_book_time' /></td>
 						<td id="order_book_location"><s:property
 								value='#order.order_book_location' /></td>
-						<td id="order_master_account"><s:property value='#order.order_master_account' /></td>
+						<td id="order_master_account"><s:property
+								value='#order.order_master_account' /></td>
 						<td id="order_status">
-							<s:if test="%{#order.order_status == 1}">created</s:if>
-							<s:if test="%{#order.order_status == 2}">in progress</s:if>
-							<s:if test="%{#order.order_status == 3}">finished</s:if>
+							<s:if test="%{#order.order_status == 1}">新建訂單</s:if>
+							<s:if test="%{#order.order_status == 2}">待評價訂單</s:if>
+							<s:if test="%{#order.order_status == 3}">已評價訂單</s:if> 
+							<s:if test="%{#order.order_status == 4}">收到貨物</s:if> 
+							<s:if test="%{#order.order_status == 5}">正在清洗</s:if> 
+							<s:if test="%{#order.order_status == 6}">正在配送</s:if>
 						</td>
-						<td id="order_type"><s:property value='#order.order_type' /></td>
+						<td id="order_type_code"><s:property value='#order.order_type_code' /></td>
 						<td id="order_href"><a
 							href="${pageContext.request.contextPath}/page/orderlist_select.action?order_id=<s:property value='#order.order_id'/>">查看</a>
 						</td>
