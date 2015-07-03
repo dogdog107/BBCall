@@ -27,6 +27,8 @@ public class FileUploadServices {
 			storeFileName = userid + "_photo_" + uploadName + "."
 					+ uploadContentType; // 封装保存文件名
 			break;
+		default:
+			return ResultCode.UNKNOWN_ERROR;
 		}
 		File destFile = new File(storePath + "//" + storeFileName);
 

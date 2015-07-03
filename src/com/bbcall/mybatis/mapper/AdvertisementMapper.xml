@@ -12,6 +12,8 @@
     	<id column="advertisement_id" property="advertisement_id" jdbcType="INTEGER" />
     	<result column="advertisement_title" property="advertisement_title" jdbcType="VARCHAR" />
     	<result column="advertisement_type" property="advertisement_type" jdbcType="VARCHAR" />
+    	<result column="advertisement_bigphoto_url" property="advertisement_bigphoto_url" jdbcType="VARCHAR" />
+    	<result column="advertisement_smallphoto_url" property="advertisement_smallphoto_url" jdbcType="VARCHAR" />
     	<result column="advertisement_summary" property="advertisement_summary" jdbcType="VARCHAR" />
     	<result column="advertisement_content" property="advertisement_content" jdbcType="LONGVARCHAR" />
     	<result column="advertisement_create_time" property="advertisement_create_time" jdbcType="TIMESTAMP" />
@@ -20,10 +22,19 @@
 	<insert id="addAdvert" parameterType="Advertisement"
 		useGeneratedKeys="true" keyProperty="advertisement_id">
 		insert into
-		ADVERTISEMENT(advertisement_id, advertisement_title,
-		advertisement_type, advertisement_summary, advertisement_content)
-		values(#{advertisement_id}, #{advertisement_title},
-		#{advertisement_type}, #{advertisement_summary},
+		ADVERTISEMENT(advertisement_id, 
+		advertisement_title,
+		advertisement_type, 
+		advertisement_bigphoto_url,
+		advertisement_smallphoto_url, 
+		advertisement_summary,
+		advertisement_content)
+		values(#{advertisement_id},
+		#{advertisement_title},
+		#{advertisement_type},
+		#{advertisement_bigphoto_url},
+		#{advertisement_smallphoto_url},
+		#{advertisement_summary},
 		#{advertisement_content})
 	</insert>
 
@@ -34,16 +45,25 @@
 
 	<select id="getAllAdvert" resultMap="AdvertisementResultMap">
 		select advertisement_id,
-		advertisement_title, advertisement_type, advertisement_summary,
-		advertisement_content, advertisement_create_time from ADVERTISEMENT
+		advertisement_title,
+		advertisement_type, 
+		advertisement_bigphoto_url,
+		advertisement_smallphoto_url, 
+		advertisement_summary,
+		advertisement_content 
+		from ADVERTISEMENT
 	</select>
 
 	<select id="getAdvertById" parameterType="int"
 		resultMap="AdvertisementResultMap">
-		select advertisement_id, advertisement_title,
-		advertisement_type, advertisement_summary, advertisement_content,
-		advertisement_create_time from
-		ADVERTISEMENT
+		select advertisement_id, 
+		advertisement_title,
+		advertisement_type, 
+		advertisement_bigphoto_url,
+		advertisement_smallphoto_url, 
+		advertisement_summary,
+		advertisement_content 
+		from ADVERTISEMENT
 		where
 		advertisement_id=#{advertisement_id}
 	</select>

@@ -6,6 +6,8 @@ import java.sql.Timestamp;
 //CREATE TABLE ADVERTISEMENT (
 //	advertisement_id INT NOT NULL auto_increment PRIMARY KEY,
 //	advertisement_title VARCHAR (255),
+//	advertisement_bigphoto_url VARCHAR (255),
+//	advertisement_smallphoto_url VARCHAR (255),
 //	advertisement_type VARCHAR (30),
 //	advertisement_summary VARCHAR (255),
 //	advertisement_content text,
@@ -17,6 +19,8 @@ public class Advertisement {
 	private Integer advertisement_id;
 	private String advertisement_title;
 	private String advertisement_type;
+	private String advertisement_bigphoto_url;
+	private String advertisement_smallphoto_url;
 	private String advertisement_summary;
 	private String advertisement_content;
 	private Timestamp advertisement_create_time;
@@ -43,6 +47,23 @@ public class Advertisement {
 
 	public void setAdvertisement_type(String advertisement_type) {
 		this.advertisement_type = advertisement_type;
+	}
+
+	public String getAdvertisement_bigphoto_url() {
+		return advertisement_bigphoto_url;
+	}
+
+	public void setAdvertisement_bigphoto_url(String advertisement_bigphoto_url) {
+		this.advertisement_bigphoto_url = advertisement_bigphoto_url;
+	}
+
+	public String getAdvertisement_smallphoto_url() {
+		return advertisement_smallphoto_url;
+	}
+
+	public void setAdvertisement_smallphoto_url(
+			String advertisement_smallphoto_url) {
+		this.advertisement_smallphoto_url = advertisement_smallphoto_url;
 	}
 
 	public String getAdvertisement_summary() {
