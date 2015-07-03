@@ -59,4 +59,7 @@ public interface UserMapper {
 	
 	// 更新登录loginTime
 	public void updateLoginTime(User user);
+	
+	// 删除user
+	public void deleteUserById(Integer user_id);
 }

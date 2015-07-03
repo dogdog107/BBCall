@@ -1,71 +1,72 @@
 package com.bbcall.mybatis.table;
 
-import java.sql.Date;
+import java.sql.Timestamp;
+
+//* Table ADVERTISEMENT's sql command:
+//CREATE TABLE ADVERTISEMENT (
+//	advertisement_id INT NOT NULL auto_increment PRIMARY KEY,
+//	advertisement_title VARCHAR (255),
+//	advertisement_type VARCHAR (30),
+//	advertisement_summary VARCHAR (255),
+//	advertisement_content text,
+//	advertisement_create_time TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+//) DEFAULT CHARSET = utf8;
 
 public class Advertisement {
 
-	private int advertisement_Id;
-	private String advertisement_Title;
-	private Date advertisement_Create_Time;
-	private String advertisement_Type;
-	private String advertisement_Description;
-	private String advertisement_Photo;
-	private String advertisement_URL;
+	private Integer advertisement_id;
+	private String advertisement_title;
+	private String advertisement_type;
+	private String advertisement_summary;
+	private String advertisement_content;
+	private Timestamp advertisement_create_time;
 
-	public int getAdvertisement_Id() {
-		return advertisement_Id;
+	public Integer getAdvertisement_id() {
+		return advertisement_id;
 	}
 
-	public void setAdvertisement_Id(int advertisement_Id) {
-		this.advertisement_Id = advertisement_Id;
+	public void setAdvertisement_id(Integer advertisement_id) {
+		this.advertisement_id = advertisement_id;
 	}
 
-	public String getAdvertisement_Title() {
-		return advertisement_Title;
+	public String getAdvertisement_title() {
+		return advertisement_title;
 	}
 
-	public void setAdvertisement_Title(String advertisement_Title) {
-		this.advertisement_Title = advertisement_Title;
+	public void setAdvertisement_title(String advertisement_title) {
+		this.advertisement_title = advertisement_title;
 	}
 
-	public Date getAdvertisement_Create_Time() {
-		return advertisement_Create_Time;
+	public String getAdvertisement_type() {
+		return advertisement_type;
 	}
 
-	public void setAdvertisement_Create_Time(Date advertisement_Create_Time) {
-		this.advertisement_Create_Time = advertisement_Create_Time;
+	public void setAdvertisement_type(String advertisement_type) {
+		this.advertisement_type = advertisement_type;
 	}
 
-	public String getAdvertisement_Type() {
-		return advertisement_Type;
+	public String getAdvertisement_summary() {
+		return advertisement_summary;
 	}
 
-	public void setAdvertisement_Type(String advertisement_Type) {
-		this.advertisement_Type = advertisement_Type;
+	public void setAdvertisement_summary(String advertisement_summary) {
+		this.advertisement_summary = advertisement_summary;
 	}
 
-	public String getAdvertisement_Description() {
-		return advertisement_Description;
+	public String getAdvertisement_content() {
+		return advertisement_content;
 	}
 
-	public void setAdvertisement_Description(String advertisement_Description) {
-		this.advertisement_Description = advertisement_Description;
+	public void setAdvertisement_content(String advertisement_content) {
+		this.advertisement_content = advertisement_content;
 	}
 
-	public String getAdvertisement_Photo() {
-		return advertisement_Photo;
+	public Timestamp getAdvertisement_create_time() {
+		return advertisement_create_time;
 	}
 
-	public void setAdvertisement_Photo(String advertisement_Photo) {
-		this.advertisement_Photo = advertisement_Photo;
-	}
-
-	public String getAdvertisement_URL() {
-		return advertisement_URL;
-	}
-
-	public void setAdvertisement_URL(String advertisement_URL) {
-		this.advertisement_URL = advertisement_URL;
+	public void setAdvertisement_create_time(Timestamp advertisement_create_time) {
+		this.advertisement_create_time = advertisement_create_time;
 	}
 
 }

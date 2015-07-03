@@ -164,6 +164,7 @@ CREATE TABLE USER (
 		user_status, user_login_time, user_create_time, user_token
 		from USER
 	</select>
+	
 	<select id="listUserOrderBy" resultMap="UserResultMap">
 		select user_id, user_account, user_password, user_email, user_mobile,
 		user_type, user_name, user_gender, user_pic_url, user_language, user_address_code,
@@ -210,7 +211,10 @@ CREATE TABLE USER (
 		user_login_time=#{user_login_time}
 		where user_id=#{user_id}
 	</update>
-
+	
+	<delete id="deleteUserById" parameterType="int">
+		delete from USER where user_id=#{user_id}
+	</delete>
 <!-- 		
 		select U.user_id user_id, user_account, user_password, user_email, user_mobile,
 		user_type, user_name, user_gender, user_pic_url, user_language,

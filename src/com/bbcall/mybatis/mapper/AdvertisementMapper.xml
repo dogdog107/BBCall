@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper    PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<!-- 
+	这里namespace必须是UserMapper接口的全类名路径，
+	不然运行的时候要报错 "is not known to the MapperRegistry" 
+-->
+
+<mapper namespace="com.bbcall.mybatis.dao.AdvertisementMapper">
+
+	<resultMap id="AdvertisementResultMap" type="com.bbcall.mybatis.table.Advertisement" >
+    	<id column="advertisement_id" property="advertisement_id" jdbcType="INTEGER" />
+    	<result column="advertisement_title" property="advertisement_title" jdbcType="VARCHAR" />
+    	<result column="advertisement_type" property="advertisement_type" jdbcType="VARCHAR" />
+    	<result column="advertisement_summary" property="advertisement_summary" jdbcType="VARCHAR" />
+    	<result column="advertisement_content" property="advertisement_content" jdbcType="LONGVARCHAR" />
+    	<result column="advertisement_create_time" property="advertisement_create_time" jdbcType="TIMESTAMP" />
+	</resultMap>
+
+	<insert id="addAdvert" parameterType="Advertisement"
+		useGeneratedKeys="true" keyProperty="advertisement_id">
+		insert into
+		ADVERTISEMENT(advertisement_id, advertisement_title,
+		advertisement_type, advertisement_summary, advertisement_content)
+		values(#{advertisement_id}, #{advertisement_title},
+		#{advertisement_type}, #{advertisement_summary},
+		#{advertisement_content})
+	</insert>
+
+	<delete id="deleteAdvertById" parameterType="int">
+		delete from
+		ADVERTISEMENT where advertisement_id=#{advertisement_id}
+	</delete>
+
+	<select id="getAllAdvert" resultMap="AdvertisementResultMap">
+		select advertisement_id,
+		advertisement_title, advertisement_type, advertisement_summary,
+		advertisement_content, advertisement_create_time from ADVERTISEMENT
+	</select>
+
+	<select id="getAdvertById" parameterType="int"
+		resultMap="AdvertisementResultMap">
+		select advertisement_id, advertisement_title,
+		advertisement_type, advertisement_summary, advertisement_content,
+		advertisement_create_time from
+		ADVERTISEMENT
+		where
+		advertisement_id=#{advertisement_id}
+	</select>
+
+</mapper>    
