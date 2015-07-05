@@ -22,7 +22,10 @@
 	<!-- 配置Struts2 的 Filter -->
 	<filter>
 		<filter-name>struts2</filter-name>
-		<filter-class>org.apache.struts2.dispatcher.ng.filter.StrutsPrepareAndExecuteFilter</filter-class>
+		<filter-class>com.bbcall.struts.filter.MyStrutsFilter</filter-class>
+
+		<!-- Struts2 Defult Filter -->
+		<!-- <filter-class>org.apache.struts2.dispatcher.ng.filter.StrutsPrepareAndExecuteFilter</filter-class> -->
 	</filter>
 
 	<filter-mapping>

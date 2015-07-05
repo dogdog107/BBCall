@@ -31,7 +31,7 @@
 
 	<table cellspacing=0 cellpadding=0 width="100%" align=center border=0 style="font-size: 12px;">
 		<tr height=28>
-			<td background=./img/title_bg1.jpg>當前位置:<a href="${pageContext.request.contextPath }/page/defult.jsp" target=main>主頁(Home)</a>
+			<td background="${pageContext.request.contextPath }/page/img/title_bg1.jpg">當前位置:<a href="${pageContext.request.contextPath }/page/defult.jsp" target=main>主頁(Home)</a>
 				-> 修改用戶信息(Update user information)
 			</td>
 		</tr>
@@ -39,7 +39,7 @@
 			<td bgcolor=#b1ceef height=1></td>
 		</tr>
 		<tr height=20>
-			<td background=./img/shadow_bg.jpg></td>
+			<td background="${pageContext.request.contextPath }/page/img/shadow_bg.jpg"></td>
 		</tr>
 	</table>
 	<div></div>
@@ -164,8 +164,8 @@
 					</td>
 				</tr>
 				<tr>
-					<td colspan="2" align="center"><input type="submit" value="修改(Submit)" onclick="return validate();"/><input
-						type="button" value="取消(Cancel)" onclick="location.href='right.jsp'" /></td>
+					<td colspan="2" align="center"><input type="submit" value="修改(Submit)" onclick="return validate();" class="btn btn-default" /><input
+						type="button" value="取消(Cancel)" onclick="location.href='defult.jsp'" class="btn btn-default" /></td>
 				</tr>
 			</table>
 		</form>

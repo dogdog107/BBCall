@@ -77,7 +77,6 @@ public class UserAction extends ActionSupport implements SessionAware{
 	
 
 	// Login Action
-	@JSON(format="yyyy-MM-dd HH:mm:ss")
 	public String login() throws Exception {
 		System.out.println("Here is UserAction.login");
 		dataMap.clear(); // dataMap中的数据将会被Struts2转换成JSON字符串，所以这里要先清空其中的数据

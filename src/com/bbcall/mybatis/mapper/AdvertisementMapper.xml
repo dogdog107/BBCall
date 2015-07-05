@@ -22,15 +22,13 @@
 	<insert id="addAdvert" parameterType="Advertisement"
 		useGeneratedKeys="true" keyProperty="advertisement_id">
 		insert into
-		ADVERTISEMENT(advertisement_id, 
-		advertisement_title,
+		ADVERTISEMENT(advertisement_title,
 		advertisement_type, 
 		advertisement_bigphoto_url,
 		advertisement_smallphoto_url, 
 		advertisement_summary,
 		advertisement_content)
-		values(#{advertisement_id},
-		#{advertisement_title},
+		values(#{advertisement_title},
 		#{advertisement_type},
 		#{advertisement_bigphoto_url},
 		#{advertisement_smallphoto_url},

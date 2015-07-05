@@ -125,7 +125,6 @@ public class UserServices {
 			user.setUser_skill(skill);
 
 			userMapper.addUserByAccount(user);// 把用户信息插入数据表
-
 			// ** user_skill子表的逻辑部分
 			// if (!isEmpty(skill)) {
 			// UserSkill userskill = new UserSkill();
@@ -137,7 +136,7 @@ public class UserServices {
 			// }
 			// }
 
-			userinfo = user;// 返回更新的user对象给userinfo
+			userinfo = userMapper.getUserByAccount(account); // 返回更新的user对象给userinfo
 			registerResult = ResultCode.SUCCESS;
 		} else {
 			registerResult = ResultCode.USERNAME_EXIST;
