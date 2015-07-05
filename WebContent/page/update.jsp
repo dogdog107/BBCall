@@ -68,7 +68,7 @@
 					<td>用戶頭像 (UserPhoto)</td>
 					<td>
 						<img id="user_photo" src="" height="80" width="80" /><br/>
-						<input type="file" name="upload" id="upload" onchange="upload(this)" />
+						<input type="file" name="upload" id="upload" onchange="upload(this)" class="btn btn-default" />
 					</td>
 				</tr>
 				<tr>

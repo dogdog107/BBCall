@@ -1,6 +1,8 @@
 package com.bbcall.struts.actions;
 
 import java.io.File;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
@@ -11,6 +13,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Controller;
 
+import com.bbcall.functions.RandomCode;
 import com.bbcall.functions.ResultCode;
 import com.bbcall.struts.services.FileUploadServices;
 import com.opensymphony.xwork2.ActionSupport;
@@ -23,7 +26,8 @@ public class FileUploadAction extends ActionSupport {
 	@Autowired
 	private FileUploadServices fileUploadServices;
 	private Map<String, Object> dataMap = new LinkedHashMap<String, Object>(); // 新建dataMap来储存JSON字符串
-
+	RandomCode randomCode = new RandomCode();
+	
 	private String savePath; // 封装保存文件的路径目录
 	private String title; // 封装上传文件的标题
 	private File upload; // 封装上传文件的内容
@@ -40,15 +44,18 @@ public class FileUploadAction extends ActionSupport {
 
 	public String userUpload() throws Exception {
 		System.out.println("Here is FileUploadAction.userUpload()");
-		savePath = "/UserPhoto";
+		savePath = "UserPhoto";
 		String storePath = ServletActionContext.getServletContext()
-				.getRealPath(savePath);
-		int result = fileUploadServices.uploadFile(upload, uploadFileName,
-				userid, storePath);
-		picurl = fileUploadServices.getFileurl();
+				.getRealPath(savePath); // 得到保存文件的路径
+		String uploadFileType = uploadFileName.substring(uploadFileName
+				.lastIndexOf(".") + 1); // 封装上传文件后缀
+		String storeFileName = userid + "_photo." + uploadFileType; // 封装保存文件名
+		
+		int result = fileUploadServices.uploadFile(upload, uploadFileName, storePath, storeFileName);
 		dataMap.clear(); // dataMap中的数据将会被Struts2转换成JSON字符串，所以这里要先清空其中的数据
 
 		if (result == ResultCode.SUCCESS) {
+			picurl = fileUploadServices.getFileurl();
 			dataMap.put("picurl", picurl); // 放入一个是否操作成功的标识
 			dataMap.put("resultcode", result); // 放入一个是否操作成功的标识
 			dataMap.put("errmsg", ResultCode.getErrmsg(result));
@@ -74,17 +81,19 @@ public class FileUploadAction extends ActionSupport {
  
 	public String orderUpload() throws Exception {
 		System.out.println("Here is FileUploadAction.orderUpload()");
-		savePath = "/OrderPhoto";
+		savePath = "OrderPhoto";
 		String storePath = ServletActionContext.getServletContext()
-				.getRealPath(savePath);
+				.getRealPath(savePath); // 得到保存文件的路径
 
+		
 		System.out.println(storePath);
 		int result = 1;
 
 		System.out.println(uploadlist.size());
 		for (int i = 0; i < uploadlist.size(); i++) {
+			String storeFileName = orderid + "_photo_" + uploadlistFileName.get(i); // 封装保存文件名
 			result = fileUploadServices.uploadFile(uploadlist.get(i), uploadlistFileName.get(i),
-					orderid, storePath);
+					storePath, storeFileName);
 			System.out.println(result);
 			if (orderpicurl == null) {
 				orderpicurl = fileUploadServices.getFileurl();
@@ -122,15 +131,21 @@ public class FileUploadAction extends ActionSupport {
 
 	public String advertUpload() throws Exception {
 		System.out.println("Here is FileUploadAction.advertUpload()");
-		savePath = "/ADupload";
+		savePath = "ADupload";
 		String storePath = ServletActionContext.getServletContext()
-				.getRealPath(savePath);
-		int result = fileUploadServices.uploadFile(upload, uploadFileName,
-				userid, storePath);
-		picurl = fileUploadServices.getFileurl();
+				.getRealPath(savePath); // 得到保存文件的路径
+		String uploadFileType = uploadFileName.substring(uploadFileName
+				.lastIndexOf(".") + 1); // 封装上传文件后缀
+		
+		SimpleDateFormat df = new SimpleDateFormat("yyyyMMdd");//设置日期格式
+		String tempDate = df.format(new Date()); // new Date()为获取当前系统时间
+		String storeFileName = tempDate + randomCode.getNoncestr() + "." + uploadFileType; // 封装保存文件名
+		
+		int result = fileUploadServices.uploadFile(upload, uploadFileName, storePath, storeFileName);
 		dataMap.clear(); // dataMap中的数据将会被Struts2转换成JSON字符串，所以这里要先清空其中的数据
 
 		if (result == ResultCode.SUCCESS) {
+			picurl = fileUploadServices.getFileurl();
 			dataMap.put("picurl", picurl); // 放入一个是否操作成功的标识
 			dataMap.put("resultcode", result); // 放入一个是否操作成功的标识
 			dataMap.put("errmsg", ResultCode.getErrmsg(result));

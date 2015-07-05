@@ -17,36 +17,37 @@ public class FileUploadServices {
 	private static final int BUFFER_SIZE = 16 * 1024;
 	private String fileurl;
 
-	public int uploadFile(File srcFile, String uploadFileName, Integer userid,
-			String storePath) throws Exception {
-		if(srcFile == null || Tools.isEmpty(uploadFileName, storePath)){
+	public int uploadFile(File srcFile, String uploadFileName,
+			String storePath, String storeFileName) throws Exception {
+		
+		if(srcFile == null || Tools.isEmpty(uploadFileName, storePath, storeFileName)){
 			return ResultCode.REQUIREINFO_NOTENOUGH;
 		}
-		
-		String uploadContentType = uploadFileName.substring(uploadFileName
-				.lastIndexOf(".") + 1); // 封装上传文件类型
-		String uploadName = uploadFileName.substring(uploadFileName.lastIndexOf("/")+1, uploadFileName.lastIndexOf("."));
-		String storeFileName = "";
-		RandomCode randomCode = new RandomCode();
-		switch (storePath.substring(storePath.lastIndexOf("/") + 1)) {
-		
-		case "UserPhoto":
-			storeFileName = userid + "_photo." + uploadContentType; // 封装保存文件名
-			break;
-		case "ADupload":
-			SimpleDateFormat df = new SimpleDateFormat("yyyyMMdd");//设置日期格式
-			String tempDate = df.format(new Date()); // new Date()为获取当前系统时间
-			System.out.println(tempDate);
-			storeFileName = tempDate + randomCode.getNoncestr() + "." + uploadContentType; // 封装保存文件名
-			break;
-		case "OrderPhoto":
-			storeFileName = userid + "_photo_" + uploadName + "."
-					+ uploadContentType; // 封装保存文件名
-			break;
-		default:
-			return ResultCode.UNKNOWN_ERROR;
-		}
-		File destFile = new File(storePath + "//" + storeFileName);
+//		
+//		String uploadContentType = uploadFileName.substring(uploadFileName
+//				.lastIndexOf(".") + 1); // 封装上传文件类型
+//		String uploadName = uploadFileName.substring(uploadFileName.lastIndexOf("/")+1, uploadFileName.lastIndexOf("."));
+//		String storeFileName = "";
+//		RandomCode randomCode = new RandomCode();
+//		switch (storePath.substring(storePath.lastIndexOf("/") + 1)) {
+//		
+//		case "UserPhoto":
+//			storeFileName = userid + "_photo." + uploadContentType; // 封装保存文件名
+//			break;
+//		case "ADupload":
+//			SimpleDateFormat df = new SimpleDateFormat("yyyyMMdd");//设置日期格式
+//			String tempDate = df.format(new Date()); // new Date()为获取当前系统时间
+//			System.out.println(tempDate);
+//			storeFileName = tempDate + randomCode.getNoncestr() + "." + uploadContentType; // 封装保存文件名
+//			break;
+//		case "OrderPhoto":
+//			storeFileName = userid + "_photo_" + uploadName + "."
+//					+ uploadContentType; // 封装保存文件名
+//			break;
+//		default:
+//			return ResultCode.UNKNOWN_ERROR;
+//		}
+		File destFile = new File(storePath + File.separator + storeFileName);
 
 		if (destFile.exists()) {
 			destFile.delete();
@@ -66,9 +67,11 @@ public class FileUploadServices {
 		}
 		fos.close();
 		fis.close();
-		fileurl = "/BBCall/"
-				+ storePath.substring(storePath.lastIndexOf("/") + 1) + "/"
-				+ storeFileName;
+		String tempFileUrl = destFile.toURI().toURL().toString();
+		fileurl = tempFileUrl.substring(tempFileUrl.lastIndexOf("BBCall") - 1);
+//		fileurl = "/BBCall/"
+//				+ storePath.substring(storePath.lastIndexOf("/") + 1) + "/"
+//				+ storeFileName;
 		// fileurl = destFile.toURI().toURL().toString();
 		System.out.println(fileurl);
 		return ResultCode.SUCCESS;

@@ -112,7 +112,7 @@
 
 					<tr height=22>
 						<td style="padding-left: 30px" background=./img/menu_bt.jpg><a
-							class=menuparent onclick=expand(0) href="javascript:void(0);">个人管理</a></td>
+							class=menuparent onclick=expand(0) href="javascript:void(0);">個人管理</a></td>
 					</tr>
 					<tr height=4>
 						<td></td>
@@ -126,7 +126,7 @@
 							src="./img/menu_icon.gif" width=9></td>
 						<td><a class=menuchild
 							href="${pageContext.request.contextPath }/page/update.jsp"
-							target=main>修改个人信息</a></td>
+							target=main>修改個人信息</a></td>
 					</tr>
 					<tr height=20>
 						<td align=middle width=30><img height=9
