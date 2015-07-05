@@ -120,6 +120,40 @@ public class FileUploadAction extends ActionSupport {
 		return "json";
 	}
 
+	public String advertUpload() throws Exception {
+		System.out.println("Here is FileUploadAction.advertUpload()");
+		savePath = "/ADupload";
+		String storePath = ServletActionContext.getServletContext()
+				.getRealPath(savePath);
+		int result = fileUploadServices.uploadFile(upload, uploadFileName,
+				userid, storePath);
+		picurl = fileUploadServices.getFileurl();
+		dataMap.clear(); // dataMap中的数据将会被Struts2转换成JSON字符串，所以这里要先清空其中的数据
+
+		if (result == ResultCode.SUCCESS) {
+			dataMap.put("picurl", picurl); // 放入一个是否操作成功的标识
+			dataMap.put("resultcode", result); // 放入一个是否操作成功的标识
+			dataMap.put("errmsg", ResultCode.getErrmsg(result));
+			dataMap.put("advertUploadResult", true); // 放入registerResult
+			System.out.println(dataMap);
+			return "advertUploadSuccess";
+		} else {
+			fileUploadServices.deleteFile(storePath);
+			dataMap.put("resultcode", result); // 放入一个是否操作成功的标识
+			dataMap.put("errmsg", ResultCode.getErrmsg(result));
+			dataMap.put("advertUploadResult", false); // 放入registerResult
+			System.out.println(dataMap);
+			System.out.println("advertUpload Failed");
+			return "advertUploadFailed";
+		}
+	}
+	
+	public String advertUploadJson() throws Exception {
+		System.out.println("Here is FileUploadAction.advertUploadJson()");
+		advertUpload();
+		return "json";
+	}
+	
 	// public String uploadFile() throws Exception {
 	//
 	// // 保存文件的地址

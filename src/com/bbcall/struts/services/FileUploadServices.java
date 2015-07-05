@@ -3,10 +3,14 @@ package com.bbcall.struts.services;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
 import org.springframework.stereotype.Service;
 
+import com.bbcall.functions.RandomCode;
 import com.bbcall.functions.ResultCode;
+import com.bbcall.functions.Tools;
 
 @Service("fileUploadServices")
 public class FileUploadServices {
@@ -15,13 +19,25 @@ public class FileUploadServices {
 
 	public int uploadFile(File srcFile, String uploadFileName, Integer userid,
 			String storePath) throws Exception {
+		if(srcFile == null || Tools.isEmpty(uploadFileName, storePath)){
+			return ResultCode.REQUIREINFO_NOTENOUGH;
+		}
+		
 		String uploadContentType = uploadFileName.substring(uploadFileName
 				.lastIndexOf(".") + 1); // 封装上传文件类型
 		String uploadName = uploadFileName.substring(uploadFileName.lastIndexOf("/")+1, uploadFileName.lastIndexOf("."));
 		String storeFileName = "";
+		RandomCode randomCode = new RandomCode();
 		switch (storePath.substring(storePath.lastIndexOf("/") + 1)) {
+		
 		case "UserPhoto":
 			storeFileName = userid + "_photo." + uploadContentType; // 封装保存文件名
+			break;
+		case "ADupload":
+			SimpleDateFormat df = new SimpleDateFormat("yyyyMMdd");//设置日期格式
+			String tempDate = df.format(new Date()); // new Date()为获取当前系统时间
+			System.out.println(tempDate);
+			storeFileName = tempDate + randomCode.getNoncestr() + "." + uploadContentType; // 封装保存文件名
 			break;
 		case "OrderPhoto":
 			storeFileName = userid + "_photo_" + uploadName + "."
