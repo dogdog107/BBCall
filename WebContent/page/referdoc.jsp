@@ -36,13 +36,17 @@
 	<div></div>
 		<div class="div_search">
 			<span>
+			<form action="referdoc_getchildlist"
+					id="referdoc_getchildlist" method="post">
 				一級項 ：
-				<select name="col_name" id="col_name">
+				
+				<select name="referdoc_parentno" id="referdoc_parentno" onchange="referdoc_parentno_change()">
+					<option value="0">請選擇</option>
 				</select>
+				</form>
 				&nbsp;&nbsp;&nbsp;&nbsp;
 				<input type="button" value="添加參考價" Onclick="location='${pageContext.request.contextPath}/page/addreferdoc.jsp'" />
 			</span>
-			<br/>
 			
 		</div>
         
@@ -54,18 +58,26 @@
 		<table class="table_list" border="1" width="100%">
                 <tbody id="datas">
                 	<tr style="font-weight: bold;">
+                		
                         <td>序號</td>
                         <td>訂單類型</td>
                         <td>訂單參考價格</td>
-                        <td colspan="2" align="center">操作</td>
+                        
+                        <td colspan="4" align="center">操作</td>
                     </tr>
                     <s:iterator value="dataMap.referdoclist" id="referdoclist">
 					<tr id="template">
-						<td id="referdoc_id"><s:property value='#referdoclist.referdoc_id' /></td>
-						<td id="referdoc_type"><s:property
-								value='#referdoclist.referdoc_type' /></td>
-						<td id="referdoc_price"><s:property
-								value='#referdoclist.referdoc_price' /></td>
+						<form action="referdoc_update"
+							id='<s:property value='#referdoclist.referdoc_id'/>' method="post">
+						<td style="display:none"><input type="text" name="referdoc_parentno" id="referdoc_parentno" value='<s:property value='#referdoclist.referdoc_parentno'/>' ></input></td>
+						<td style="display:none"><input type="text" name="referdoc_level" id="referdoc_level" value='<s:property value='#referdoclist.referdoc_level'/>' ></input></td>
+						<td><input type="text" name="referdoc_id" readonly="true" id="referdoc_id" value='<s:property value='#referdoclist.referdoc_id'/>' ></input></td>
+						<td><input type="text" name="referdoc_type" id="referdoc_type" value='<s:property value='#referdoclist.referdoc_type'/>' ></input></td>
+						<td><input type="text" name="referdoc_price" id="referdoc_price" value='<s:property value='#referdoclist.referdoc_price'/>' ></input></td>
+						
+						</form>
+						<td><a href="" id="referdoc_updatelink" onclick="referdoclist_update('<s:property value='#referdoclist.referdoc_id'/>')">修改</a>
+						</td>	
 						<td id="referdoc_href"><a
 							href="${pageContext.request.contextPath}/page/referdoc_delete.action?referdoc_id=<s:property value='#referdoclist.referdoc_id'/>">刪除</a>
 						</td>

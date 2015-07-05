@@ -71,16 +71,23 @@ public class ReferdocAction extends ActionSupport {
 		int result = referdocServices.updateReferdoc(referdoc_id,
 				referdoc_type, referdoc_parentno, referdoc_level,
 				referdoc_price);
-
+		
+	    referdocServices.getChildReferdoclist(referdoc_parentno);
+		List<Referdoc> referdoclist = referdocServices.referdocinfos();
+		
 		if (result == ResultCode.SUCCESS) {
-			Referdoc referdoc = referdocServices.referdocinfo();
-			dataMap.put("orderlist", referdoc);
+			
+			
+			for (int i=0; i<referdoclist.size(); i++) {
+				System.out.println(referdoclist.get(i).getReferdoc_type());
+			}
+			dataMap.put("referdoclist", referdoclist);
 			dataMap.put("resultcode", result);
 			dataMap.put("errmsg", ResultCode.getErrmsg(result));
 			dataMap.put("updateResult", true);
 		}
 
-		return SUCCESS;
+		return "getsuccess";
 
 	}
 
@@ -191,7 +198,7 @@ public class ReferdocAction extends ActionSupport {
 			dataMap.put("getchildlistResult", true);
 		}
 
-		return SUCCESS;
+		return "getsuccess";
 	}
 
 	public String getchildlistJson() throws Exception {

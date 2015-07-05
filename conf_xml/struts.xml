@@ -49,21 +49,10 @@
 
 
 		<!-- Referdoc Action -->
-		<action name="referdoclist_*" method="{1}" class="referdocAction">
+		<action name="referdoc_*" method="{1}" class="referdocAction">
 
 			<result name="getsuccess">
 				<param name="location">/page/referdoc.jsp</param>
-			</result>
-
-			<result name="loginFailed">
-				<param name="location">/page/login.jsp</param>
-			</result>
-			<result name="updateSuccess">
-				<param name="location">/page/update.jsp</param>
-			</result>
-
-			<result name="updateFailed">
-				<param name="location">/page/update.jsp</param>
 			</result>
 
 			<result type="json" name="json">

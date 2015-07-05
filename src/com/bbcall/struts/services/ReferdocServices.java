@@ -108,8 +108,6 @@ public class ReferdocServices {
 
 		referdocMapper.updateReferdoc(referdoc);
 
-		referdocinfo = referdoc;
-
 		return ResultCode.SUCCESS;
 	}
 
@@ -298,7 +296,6 @@ public class ReferdocServices {
 	// ################################################################################
 
 	public int getChildReferdoclist(int referdoc_parentno) {
-
 		referdocinfos = referdocMapper
 				.getReferdoclistByParent(referdoc_parentno);
 
