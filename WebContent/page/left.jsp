@@ -52,7 +52,7 @@
 						<td align=middle width=30><img height=9
 							src="./img/menu_icon.gif" width=9></td>
 						<td><a class=menuchild
-							href="${pageContext.request.contextPath }/page/referdoc.jsp"
+							href="${pageContext.request.contextPath }/referdoc_getlist.action"
 							target=main>價格推薦</a></td>
 					</tr>
 					<tr height=4>

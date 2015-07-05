@@ -37,6 +37,8 @@
 		<result column="order_score" property="order_score" jdbcType="INTEGER" />
 		<result column="order_evaluation" property="order_evaluation"
 			jdbcType="LONGVARCHAR" />
+		<result column="order_remark" property="order_remark"
+			jdbcType="LONGVARCHAR" />
 	</resultMap>
 
 	<insert id="addOrder" parameterType="com.bbcall.mybatis.table.Orderlist"
@@ -158,8 +160,8 @@
 	<select id="getWashOrderlist" resultMap="OrderResultMap">
 		select * from orderlist
 		where
-		order_type_code in (15000,15001,15002) order by order_create_time
-		desc
+		order_type_code in (15000,15001,15002) order by order_book_time
+		asc
 	</select>
 
 	<select id="getWashOrderlistByStatus" resultMap="OrderResultMap">
@@ -183,16 +185,15 @@
 		where
 		order_type_code in (15000,15001,15002) and
 		order_master_account=#{order_master_account,jdbcType=VARCHAR} and
-		order_status=#{order_status,jdbcType=INTEGER} order by
-		order_create_time
-		desc
+		order_status=#{order_status,jdbcType=INTEGER} order by order_book_time
+		asc
 	</select>
 
 	<select id="getWashOrderByStatus" parameterType="int" resultMap="OrderResultMap">
 		select * from orderlist
 		where
 		order_type_code in (15000,15001,15002) and
-		order_status=#{order_status} order by order_create_time desc
+		order_status=#{order_status} order by order_book_time asc
 	</select>
 
 	<select id="getWashOrderByMaster" parameterType="String"
@@ -203,7 +204,7 @@
 		(15000,15001,15002) and
 		order_master_account=#{order_master_account}
 		order by
-		order_create_time desc
+		order_book_time asc
 	</select>
 
 	<select id="getOrder" parameterType="int" resultMap="OrderResultMap">
@@ -237,7 +238,8 @@
 		order_urgent_bonus=#{order_urgent_bonus},
 		order_user_account=#{order_user_account},
 		order_type_code=#{order_type_code},
-		order_status=#{order_status}
+		order_status=#{order_status},
+		order_remark=#{order_remark}
 		where
 		order_id=#{order_id}
 	</update>
@@ -262,7 +264,7 @@
 	<update id="change">
 		update orderlist set
 		order_status=#{order_status,jdbcType=INTEGER},
-		order_description=#{order_description,jdbcType=LONGVARCHAR}
+		order_remark=#{order_remark,jdbcType=LONGVARCHAR}
 		where
 		order_id=#{order_id,jdbcType=INTEGER}
 	</update>
