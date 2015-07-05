@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Controller;
 
+import com.bbcall.functions.ObjectToMap;
 import com.bbcall.functions.ResultCode;
 import com.bbcall.struts.services.AdvertisementServices;
 import com.bbcall.struts.services.UserServices;
@@ -28,6 +29,7 @@ public class AdvertisementAction extends ActionSupport{
 	@Autowired
 	private UserServices userServices;
 	private Map<String, Object> dataMap = new LinkedHashMap<String, Object>(); // 新建dataMap来储存JSON字符串
+	private ObjectToMap obj2map = new ObjectToMap();// 新建ObjectToMap对象
 	
 	// User-related parameters
 	private String token;
@@ -49,7 +51,7 @@ public class AdvertisementAction extends ActionSupport{
 	 * @throws Exception
 	 */
 	public String addAdvert() throws Exception {
-		System.out.println("Here is UserAction.login");
+		System.out.println("Here is advertisementAction.addAdvert");
 		System.out.println(advertisement_content);
 
 		int result = advertisementServices.addAdvert(advertisement_title,
@@ -79,12 +81,54 @@ public class AdvertisementAction extends ActionSupport{
 		return "json";
 	}
 	
+	/**
+	 * showAdvert Action
+	 * @author Roger Luo
+	 * @return 
+	 * @throws Exception
+	 */
+	public String showAdvert() throws Exception {
+		System.out.println("Here is advertisementAction.showAdvert");
+
+		int result = advertisementServices.listAdvert(advertisement_id);
+
+		dataMap.clear(); // dataMap中的数据将会被Struts2转换成JSON字符串，所以这里要先清空其中的数据
+		if (result == ResultCode.SUCCESS) {
+			advertisement_id = advertisementServices.getAdvertisement().getAdvertisement_id();
+			advertisement_title = advertisementServices.getAdvertisement().getAdvertisement_title();
+			advertisement_type = advertisementServices.getAdvertisement().getAdvertisement_type();
+			advertisement_bigphoto_url = advertisementServices.getAdvertisement().getAdvertisement_bigphoto_url();
+			advertisement_smallphoto_url = advertisementServices.getAdvertisement().getAdvertisement_smallphoto_url();
+			advertisement_summary = advertisementServices.getAdvertisement().getAdvertisement_summary();
+			advertisement_content = advertisementServices.getAdvertisement().getAdvertisement_content();
+			advertisement_create_time = advertisementServices.getAdvertisement().getAdvertisement_create_time();
+			System.out.println(advertisement_create_time);
+			dataMap = obj2map.getValueMap(advertisementServices.getAdvertisement());
+			dataMap.put("resultcode", result); // 放入一个是否操作成功的标识
+			dataMap.put("errmsg", ResultCode.getErrmsg(result));
+			dataMap.put("showAdvertResult", true); // 放入loginResult
+			System.out.println(dataMap);
+			return "showAdvertSuccess";
+		} else {
+			dataMap.put("resultcode", result); // 放入一个是否操作成功的标识
+			dataMap.put("errmsg", ResultCode.getErrmsg(result));
+			dataMap.put("showAdvertResult", false); // 放入loginResult
+			System.out.println(dataMap);
+			System.out.println("showAdvert Failed");
+			return "showAdvertFailed";
+		}
+	}
+	
+	public String showAdvertJson() throws Exception {
+		showAdvert();
+		return "json";
+	}
+	
 	// Json Format Return
 	public Map<String, Object> getDataMap() {
 		return dataMap;
 	}
 
-	
 	/**
 	 * Getter & Setter
 	 * @return
