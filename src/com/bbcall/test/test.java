@@ -1,5 +1,6 @@
 package com.bbcall.test;
 
+import java.math.BigInteger;
 import java.util.List;
 
 import org.springframework.context.ApplicationContext;
@@ -19,43 +20,13 @@ public class test {
 		
 //		List<AddressList> adlist = orderlistServices.getAddresslist();
 		
-		int result = orderlistServices.checkAdsList(110000);
+//		int result = orderlistServices.checkAdsList(110000);
 		
-		List<AddressList> adlist = orderlistServices.getAddresslist();
+		orderlistServices.getOrderById(2);
 		
-		System.out.println(result);	
+		System.out.println(orderlistServices.orderlistinfo.getOrder_book_time());
 		
-		for (int i=0;i<adlist.size();i++) {
-			System.out.println(adlist.get(i).getAreaname());
-		}
-		
-		
-//		UserMapper userMapper = (UserMapper) ctx.getBean("userMapper");
-//		
-//		User user = userMapper.getUserByAccount("hong");
-//		
-//		if (user == null) {
-//			System.out.print("null");
-//		}
-//		
-//		System.out.println(user.getUser_name());
-//		
-//		
-//		OrderlistServices orderlistServices = (OrderlistServices) ctx.getBean("orderlistServices");
-//		
-//		int result = orderlistServices.getUnOrders("hong");
-//		
-//		List<Orderlist> orderlists = orderlistServices.orderlistinfos();
-//		
-//		if (orderlists == null) {
-//			System.out.print("null");
-//		}
-//		
-//		for(int i=0; i < orderlists.size(); i++) {
-//			System.out.println(orderlists.get(i).getOrder_contact_name());
-//		}
-		
-//		int i = orderlistServices.addOrder("1992-10-19 23:52:18", "广东汕尾", new BigInteger("12332132122"), "Maple", "False", 0, "c:/", "ssssssss", 4.59, "maplehong", "washing");
+//		orderlistServices.addOrder("1992-10-19 23:52:18", "广东汕尾", 100010, new BigInteger("12332132122"), "Maple", "False", 0.00, "c:/", "ssssssss", 4.59, "maplehong", 15001);
 //		int i = orderlistServices.ChangeOrderStatus("abc", 1);
 	}
 }

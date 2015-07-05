@@ -23,8 +23,9 @@
 	<table cellspacing=0 cellpadding=0 width="100%" align=center border=0
 		style="font-size: 12px;">
 		<tr height=28>
-			<td background=./img/title_bg1.jpg>当前位置:<a href="right.jsp"
-				target=main>主页</a> -> 洗衣订单列表
+			<td background=./img/title_bg1.jpg>當前位置:<a
+				href="${pageContext.request.contextPath }/page/defult.jsp"
+				target=main>主頁(Home)</a> -> 洗衣訂單列表
 			</td>
 		</tr>
 		<tr>
@@ -40,30 +41,29 @@
 		<span>
 			<form action="orderlist_getwashorderlistasc"
 				id="orderlist_getwashorderlistasc" method="post">
-				排序：
+				按升序：
 				<select name="sortparm" style="width: 100px;">
-					<option selected="selected" value="0">请选择</option>
-					<option value="order_status">订单状态</option>
-					<option value="order_master_account">负责师傅</option>
+					<option selected="selected" value="0">請選擇</option>
+					<option value="order_status">訂單狀態</option>
+					<option value="order_master_account">負責師傅</option>
 				</select>
-				<input value="查询" type="submit" />
+				<input value="查詢" type="submit" />
 			</form>
-		
+
 			<form action="orderlist_selectwashorderlist"
 				id="orderlist_selectwashorderlist" method="post">
-				订单状态：
+				訂單狀態：
 				<select name="order_status" style="width: 100px;">
-					<option selected="selected" value="0">请选择</option>
+					<option selected="selected" value="0">請選擇</option>
 					<option value="1">新建訂單</option>
 					<option value="2">待評價訂單</option>
 					<option value="3">已評價訂單</option>
 					<option value="4">收到貨物</option>
 					<option value="5">正在清洗</option>
 					<option value="6">正在配送</option>
-				</select>
-				&nbsp;&nbsp;&nbsp;&nbsp;负责师傅：
+				</select> &nbsp;&nbsp;&nbsp;&nbsp;負責師傅：
 				<input type="text" name="order_master_account" />
-				<input value="筛选" type="submit" />
+				<input value="篩選" type="submit" />
 			</form>
 		</span>
 	</div>
@@ -74,7 +74,7 @@
 		<table class="table_list" border="1" width="100%">
 			<tbody id="datas">
 				<tr style="font-weight: bold;">
-					<td>序号</td>
+					<td>序號</td>
 					<td>訂單生成時間</td>
 					<td>預約時間</td>
 					<td>預約地點</td>
@@ -91,16 +91,17 @@
 								value='#order.order_book_time' /></td>
 						<td id="order_book_location"><s:property
 								value='#order.order_book_location' /></td>
-						<td id="order_master_account"><s:property value='#order.order_master_account' /></td>
-						<td id="order_status">
-							<s:if test="%{#order.order_status == 1}">新建訂單</s:if>
-							<s:if test="%{#order.order_status == 2}">待評價訂單</s:if>
-							<s:if test="%{#order.order_status == 3}">已評價訂單</s:if> 
-							<s:if test="%{#order.order_status == 4}">收到貨物</s:if> 
-							<s:if test="%{#order.order_status == 5}">正在清洗</s:if> 
-							<s:if test="%{#order.order_status == 6}">正在配送</s:if>
-						</td>
-						<td id="order_type_code" style="display:none"><s:property value='#order.order_type_code' /></td>
+						<td id="order_master_account"><s:property
+								value='#order.order_master_account' /></td>
+						<td id="order_status"><s:if
+								test="%{#order.order_status == 1}">新建訂單</s:if> <s:if
+								test="%{#order.order_status == 2}">待評價訂單</s:if> <s:if
+								test="%{#order.order_status == 3}">已評價訂單</s:if> <s:if
+								test="%{#order.order_status == 4}">收到貨物</s:if> <s:if
+								test="%{#order.order_status == 5}">正在清洗</s:if> <s:if
+								test="%{#order.order_status == 6}">正在配送</s:if></td>
+						<td id="order_type_code" style="display: none"><s:property
+								value='#order.order_type_code' /></td>
 						<td id="order_href"><a
 							href="${pageContext.request.contextPath}/page/orderlist_select.action?order_id=<s:property value='#order.order_id'/>">查看</a>
 						</td>

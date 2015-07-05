@@ -22,8 +22,8 @@
 
 	<table cellspacing=0 cellpadding=0 width="100%" align=center border=0 style="font-size: 12px;">
 		<tr height=28>
-			<td background=./img/title_bg1.jpg>当前位置:<a href="right.jsp" target=main>主页</a>
-				-> 订单价格推荐
+			<td background=./img/title_bg1.jpg>當前位置:<a href="${pageContext.request.contextPath }/page/defult.jsp" target=main>主頁(Home)</a>
+				-> 訂單價格推薦
 			</td>
 		</tr>
 		<tr>
@@ -36,8 +36,14 @@
 	<div></div>
 		<div class="div_search">
 			<span>
-				<input type="button" value="添加" Onclick="location='${pageContext.request.contextPath}/page/addreferdoc.jsp'" />
+				一級項 ：
+				<select name="col_name" id="col_name">
+				</select>
+				&nbsp;&nbsp;&nbsp;&nbsp;
+				<input type="button" value="添加參考價" Onclick="location='${pageContext.request.contextPath}/page/addreferdoc.jsp'" />
 			</span>
+			<br/>
+			
 		</div>
         
 		<div id="div_message" class="div_message" style="display: none">
@@ -53,12 +59,19 @@
                         <td>訂單參考價格</td>
                         <td colspan="2" align="center">操作</td>
                     </tr>
-                    <tr id="template" style="display: none">
-                        <td id="referdoc_id"></td>
-                        <td id="referdoc_type"></td>
-                        <td id="referdoc_price"></td>
-                        <td id="referdoc_href"></td>
-                    </tr>
+                    <s:iterator value="dataMap.referdoclist" id="referdoclist">
+					<tr id="template">
+						<td id="referdoc_id"><s:property value='#referdoclist.referdoc_id' /></td>
+						<td id="referdoc_type"><s:property
+								value='#referdoclist.referdoc_type' /></td>
+						<td id="referdoc_price"><s:property
+								value='#referdoclist.referdoc_price' /></td>
+						<td id="referdoc_href"><a
+							href="${pageContext.request.contextPath}/page/referdoc_delete.action?referdoc_id=<s:property value='#referdoclist.referdoc_id'/>">刪除</a>
+						</td>
+					</tr>
+					</s:iterator>
+                    
                 </tbody>
                     <tr>
                         <td colspan="20" style="text-align: center;">

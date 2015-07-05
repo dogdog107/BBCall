@@ -104,6 +104,6 @@ public interface OrderlistMapper {
 
 	public void change(@Param("order_id") int order_id,
 			@Param("order_status") int order_status,
-			@Param("order_description") String order_description);
+			@Param("order_remark") String order_remark);
 
 }

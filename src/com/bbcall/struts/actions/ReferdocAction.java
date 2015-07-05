@@ -147,7 +147,7 @@ public class ReferdocAction extends ActionSupport {
 			dataMap.put("getlistResult", true);
 		}
 
-		return SUCCESS;
+		return "getsuccess";
 	}
 
 	public String getlistJson() throws Exception {
@@ -162,8 +162,8 @@ public class ReferdocAction extends ActionSupport {
 		int result = referdocServices.getParentReferdoclist();
 
 		if (result == ResultCode.SUCCESS) {
-			List<Referdoc> referdoclist = referdocServices.referdocinfos();
-			dataMap.put("referdoclist", referdoclist);
+			List<Referdoc> parentreferdoclist = referdocServices.referdocinfos();
+			dataMap.put("parentreferdoclist", parentreferdoclist);
 			dataMap.put("resultcode", result);
 			dataMap.put("errmsg", ResultCode.getErrmsg(result));
 			dataMap.put("getparentlistResult", true);

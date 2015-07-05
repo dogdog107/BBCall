@@ -166,8 +166,8 @@ public class OrderlistServices {
 			String order_book_location, int order_book_location_code,
 			BigInteger order_contact_mobile, String order_contact_name,
 			String order_urgent, double order_urgent_bonus,
-			String order_pic_url, String order_description,
-			double order_price, String order_user_account, int order_type_code) {
+			String order_pic_url, String order_description, double order_price,
+			String order_user_account, int order_type_code, String order_remark) {
 
 		Orderlist orderlist = orderlistMapper.getOrder(order_id);
 
@@ -201,6 +201,7 @@ public class OrderlistServices {
 		orderlist.setOrder_urgent_bonus(order_urgent_bonus);
 		orderlist.setOrder_user_account(order_user_account);
 		orderlist.setOrder_type_code(order_type_code);
+		orderlist.setOrder_remark(order_remark);
 
 		orderlistMapper.updateOrder(orderlist);
 
@@ -601,11 +602,16 @@ public class OrderlistServices {
 	// ## (1) orderlistinfos
 	// ##
 	// ################################################################################
-	public int change(int order_id, int order_status, String order_description) {
+	public int change(int order_id, int order_status, String order_remark) {
 
-		orderlistMapper.change(order_id, order_status, order_description);
+		System.out.println(order_remark);
+		orderlistMapper.change(order_id, order_status, order_remark);
 
-		orderlistinfos = orderlistMapper.getWashOrderByStatus(order_status);
+		orderlistinfo = orderlistMapper.getOrder(order_id);
+		
+		if (orderlistinfos == null) {
+			System.out.println("null");
+		}
 
 		return ResultCode.SUCCESS;
 	}

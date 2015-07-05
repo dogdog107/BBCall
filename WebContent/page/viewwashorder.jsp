@@ -9,9 +9,16 @@
 <script type="text/javascript"
 	src="${pageContext.request.contextPath }/jquery/jquery-1.8.3.js"></script>
 <script type="text/javascript"
-	src="${pageContext.request.contextPath }/jquery/viewwashorderPage.js?order_id=${sessionScope.order_id}"></script>
+	src="${pageContext.request.contextPath }/jquery/viewwashorderPage.js"></script>
 <script type="text/javascript">
-	var token = "${sessionScope.user.user_token}";
+	var order_status = "${dataMap.orderlist.order_status}";
+	var order_id = "${dataMap.orderlist.order_id}";
+	var order_book_time = "${dataMap.orderlist.order_book_time}";
+	var order_book_location = "${dataMap.orderlist.order_book_location}";
+	var order_create_time = "${dataMap.orderlist.order_create_time}";
+	var order_contact_name = "${dataMap.orderlist.order_contact_name}";
+	var order_contact_mobile = "${dataMap.orderlist.order_contact_mobile}";
+	var order_remark = "${dataMap.orderlist.order_remark}";
 </script>
 <%
 	String path = request.getContextPath();
@@ -20,13 +27,13 @@
 			+ path + "/";
 %>
 </head>
-<body>
+<body onload="onload()">
 
 	<table cellspacing=0 cellpadding=0 width="100%" align=center border=0
 		style="font-size: 12px;">
 		<tr height=28>
-			<td background=./img/title_bg1.jpg>当前位置:<a href="right.jsp"
-				target=main>主页</a> -> 洗衣订单列表
+			<td background=./img/title_bg1.jpg>當前位置:<a href="${pageContext.request.contextPath }/page/defult.jsp" target=main>主頁(Home)</a>
+			 -> 洗衣訂單詳情
 			</td>
 		</tr>
 		<tr>
@@ -36,71 +43,87 @@
 			<td background=./img/shadow_bg.jpg></td>
 		</tr>
 	</table>
-	<div></div>
-	<table cellspacing=0 cellpadding=0 width="95%" align=center border=0>
-		<tr height=20>
-			<td></td>
-		</tr>
-		<tr height=22>
-			<td style="padding-left: 20px; font-weight: bold; color: #ffffff"
-				align=middle background=./img/title_bg2.jpg>订单相关信息</td>
-		</tr>
-		<tr bgcolor=#ecf4fc height=12>
-			<td></td>
-		</tr>
-		<tr height=20>
-			<td></td>
-		</tr>
-	</table>
-	<table cellspacing=0 cellpadding=2 width="95%" align=center border=0>
-		<tr style="display: none">
-			<td><input type="text" id="order_id" name="order_id"
-				value="<s:property value='dataMap.orderlist.order_id' />"></input></td>
-		</tr>
-		<tr>
-			<td align=right width=100>订单状态：</td>
-			<td style="color: #880000"><s:if
-					test="%{dataMap.orderlist.order_status == 1}">新建訂單</s:if> <s:if
-					test="%{dataMap.orderlist.order_status == 2}">待評價訂單</s:if> <s:if
-					test="%{dataMap.orderlist.order_status == 3}">已評價訂單</s:if> <s:if
-					test="%{dataMap.orderlist.order_status == 4}">收到貨物</s:if> <s:if
-					test="%{dataMap.orderlist.order_status == 5}">正在清洗</s:if> <s:if
-					test="%{dataMap.orderlist.order_status == 6}">正在配送</s:if></td>
-		</tr>
-		<tr>
-			<td align=right width=100>预约时间：</td>
-			<td style="color: #880000">${dataMap.orderlist.order_book_time}</td>
-		</tr>
-		<tr>
-			<td align=right>预约地点：</td>
-			<td style="color: #880000">${dataMap.orderlist.order_book_location}</td>
-		</tr>
-		<tr>
-			<td align=right>照片：</td>
-			<s:iterator value="dataMap.orderFileFileName" id="number">
-				<td style="color: #880000"><img
-					src="<s:property value="number"/>" height='60' width='60'></img></td>
-			</s:iterator>
-		</tr>
-		<tr>
-			<td align=right>客户姓名：</td>
-			<td style="color: #880000">${dataMap.orderlist.order_contact_name}</td>
-		</tr>
-		<tr>
-			<td align=right>客户联系方式：</td>
-			<td style="color: #880000">${dataMap.orderlist.order_contact_mobile}</td>
-		</tr>
-
-	</table>
-
-	<div style="text-align: center;">
-		<input type="submit" value="修改"
-			Onclick="location='${pageContext.request.contextPath}/page/updatewashorder.jsp?order_id=${dataMap.orderlist.order_id}&order_status=${dataMap.orderlist.order_status}'"></input> <input
-			type="button" value="返回"
-			Onclick="location='${pageContext.request.contextPath}/orderlist_getwashorderlist.action'"></input>
+	
+	<div style="font-size: 13px; margin: 10px 5px">
+		<form id="orderlist_change" action="orderlist_change" method="post">
+			<div style="font-size: 13px; margin: 10px 5px">
+				<span> <s:if test="dataMap.changeResult">
+						<font color="green">修改成功！${ dataMap.errmsg}</font>
+					</s:if> 
+				</span>
+			</div>
+			
+			<table border="1" width="100%" class="table_update">
+				<tr id="orderid_tr" style="display:none">
+					<td>訂單ID (OrderID)</td>
+					<td>
+					<input name="order_id" id="order_id" />
+					</td>
+				</tr>
+				<tr>
+					<td>訂單照片 (OrderPhoto)</td>
+					<td style="color: #880000">
+						<s:iterator value="dataMap.orderFileFileName" id="number">
+							<img
+								src="<s:property value="number"/>" height='60' width='60'></img>
+						</s:iterator>
+						</td>
+				</tr>
+				<tr>
+					<td>預約時間  (Order Book Time)</td>
+					<td>
+					<input id="order_book_time" />
+					</td>
+				</tr>
+				<tr>
+					<td>預約地點 (Order Book Location)</td>
+					<td>
+					<input id="order_book_location" />
+					</td>
+				</tr>
+				<tr>
+					<td>創建時間 (Order Create Time)</td>
+					<td>
+					<input id="order_create_time" />
+					</td>
+				</tr>
+				<tr>
+					<td>聯繫人 (Contact Point)</td>
+					<td>
+					<input id="order_contact_name" />
+					</td>
+				</tr>
+				<tr>
+					<td>聯繫電話 (Telephone Number)</td>
+					<td>
+					<input id="order_contact_mobile" />
+					</td>
+				</tr>
+				
+				<tr>
+					<td>訂單狀態 (OrderStatus)</td>
+					<td><select name="order_status" id="order_status">
+							<option id="option1" value=1>新建訂單</option>
+							<option id="option2" value=2>待評價訂單</option>
+							<option id="option3" value=3>已評價訂單</option>
+							<option id="option4" value=4>收到貨物</option>
+							<option id="option5" value=5>正在清洗</option>
+							<option id="option6" value=6>正在配送</option>
+					</select></td>
+				</tr>
+				
+				<tr>
+					<td>備註 (Remark)</td>
+					<td><input type="text" name="order_remark" id="order_remark"/></td>
+				</tr>
+				 
+				<tr>
+					<td colspan="2" align="center"><input type="submit" value="修改(Submit)"/><input
+						type="button" value="取消(Cancel)" Onclick="location='${pageContext.request.contextPath}/orderlist_getwashorderlist.action'" /></td>
+				</tr>
+			</table>
+		</form>
 	</div>
-
-
 
 </body>
 </html>

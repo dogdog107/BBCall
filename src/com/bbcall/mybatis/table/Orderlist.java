@@ -49,6 +49,7 @@ public class Orderlist {
 	private int order_status;
 	private int order_score;
 	private String order_evaluation;
+	private String order_remark;
 
 	public int getOrder_id() {
 		return order_id;
@@ -200,6 +201,14 @@ public class Orderlist {
 
 	public void setOrder_pic_url(String order_pic_url) {
 		this.order_pic_url = order_pic_url;
+	}
+
+	public String getOrder_remark() {
+		return order_remark;
+	}
+
+	public void setOrder_remark(String order_remark) {
+		this.order_remark = order_remark;
 	}
 
 }
