@@ -9,9 +9,7 @@
 <script type="text/javascript"
 	src="${pageContext.request.contextPath }/jquery/jquery-1.8.3.js"></script>
 <script type="text/javascript"
-	src="${pageContext.request.contextPath }/jquery/referdocPage.js?token=${sessionScope.user.user_token}"></script>
-<script type="text/javascript"
-	src="${pageContext.request.contextPath }/jquery/addreferdocPage.js"></script>
+	src="${pageContext.request.contextPath }/jquery/addrefPage.js"></script>
 <script type="text/javascript">
 	var token = "${sessionScope.user.user_token}";
 	var link = "${pageContext.request.contextPath}";
@@ -20,7 +18,7 @@
   String path=request.getContextPath();
 %>
 </head>
-<body onload="onload()">
+<body>
 
 	<table cellspacing=0 cellpadding=0 width="100%" align=center border=0 style="font-size: 12px;">
 		<tr height=28>
@@ -36,22 +34,48 @@
 		</tr>
 	</table>
 	<div></div>
+	
+		<div id="div_message" class="div_message" style="display: none">
+			<span id="message">
+			</span>
+		</div>
 		<div style="font-size: 13px; margin: 10px 5px;">
 			<form id="referdoc_add" action="referdoc_add" method="post">
 			
-				<label for="referdoc_type">
-					<strong>訂單類型：</strong>
-				</label>
-				<input id="referdoc_type" name="referdoc_type" type="text"><span>訂單類型不能為空</span><br /><br />
-				<td><span
-				id="chkReferdocType"></span></td>
+				<table class="table_list" border="1" width="100%">
+                <tbody id="datas">
+                	<tr>
+                		<td>
+                			添加 
+                			<select id="referdoc_level" name="referdoc_level" onchange="referdoc_level_change()">
+								<option value="1">一級項</option>
+								<option value="2">二級項</option>
+							</select>
+                		</td>
+                	</tr>
+					<tr>
+						<td>參考類型</td>
+						<td><input type="text" name="referdoc_type" id="referdoc_type"></input></td>
+					</tr>
+					<tr id="parentno_tr" style="display:none">
+						<td>參考類型歸屬</td>
+						<td>
+							<select name="referdoc_parentno" id="referdoc_parentno">
+							</select>
+						</td>
+					</tr>
+					<tr id="price_tr" style="display:none">
+						<td>參考價格</td>
+						<td><input type="text" name="referdoc_price" id="referdoc_price" value="0"></input></td>
+					</tr>
+                    <tr align="center">
+                    	<td><input type="submit" value="添加"></input></td>
+					    <td><input type="button" value="返回" Onclick="location='${pageContext.request.contextPath}/referdoc_getlist.action'"></input></td>
+					</tr>
+                </tbody>
+                
+            </table>
 				
-				<label for="referdoc_price">
-					<strong>訂單參考價位：</strong>
-				</label>
-				<input id="referdoc_price" name="referdoc_price" type="text"><span>訂單參考價格不能為空</span><br /><br />
-				<input type="submit" value="添加"></input>
-				<input type="button" value="返回" Onclick="location='${pageContext.request.contextPath}/page/referdoc.jsp'"></input>
 			</form>
 		</div>
 </body>

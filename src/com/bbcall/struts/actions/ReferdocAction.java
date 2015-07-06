@@ -49,7 +49,7 @@ public class ReferdocAction extends ActionSupport {
 			dataMap.put("resultcode", result);
 			dataMap.put("errmsg", ResultCode.getErrmsg(result));
 			dataMap.put("addResult", true);
-			return SUCCESS;
+			return "getsuccess";
 		} else {
 			dataMap.put("resultcode", result); // 放入一个是否操作成功的标识
 			dataMap.put("errmsg", ResultCode.getErrmsg(result));
@@ -110,7 +110,7 @@ public class ReferdocAction extends ActionSupport {
 			dataMap.put("deleteResult", true);
 		}
 
-		return SUCCESS;
+		return "getsuccess";
 	}
 
 	public String deleteJson() throws Exception {
