@@ -43,13 +43,31 @@ public class AdvertisementServices {
 	
 	// Delete advertisement service
 	public int deleteAdvert(Integer advertisement_id){
+		if (advertisement_id == null)
+			return ResultCode.REQUIREINFO_NOTENOUGH;
 		advertisementMapper.deleteAdvertById(advertisement_id);
 		return ResultCode.SUCCESS;
 	}
 	
 	// List advertisement service
-	public int listAdvert(){
+	public int listAdvert(Integer advertisement_id){
+		if (advertisement_id == null)
+			return ResultCode.REQUIREINFO_NOTENOUGH;
+		advertisement = advertisementMapper.getAdvertById(advertisement_id);
+		return ResultCode.SUCCESS;
+	}
+	
+	// ListAll advertisement service
+	public int listAllAdvert(){
 		advertList = advertisementMapper.getAllAdvert();
 		return ResultCode.SUCCESS;
+	}
+
+	public Advertisement getAdvertisement() {
+		return advertisement;
+	}
+
+	public List<Advertisement> getAdvertList() {
+		return advertList;
 	}
 }

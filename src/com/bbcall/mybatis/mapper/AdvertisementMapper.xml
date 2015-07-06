@@ -48,7 +48,8 @@
 		advertisement_bigphoto_url,
 		advertisement_smallphoto_url, 
 		advertisement_summary,
-		advertisement_content 
+		advertisement_content,
+		advertisement_create_time
 		from ADVERTISEMENT
 	</select>
 
@@ -60,7 +61,8 @@
 		advertisement_bigphoto_url,
 		advertisement_smallphoto_url, 
 		advertisement_summary,
-		advertisement_content 
+		advertisement_content,
+		advertisement_create_time
 		from ADVERTISEMENT
 		where
 		advertisement_id=#{advertisement_id}

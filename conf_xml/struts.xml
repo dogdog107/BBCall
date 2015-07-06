@@ -110,6 +110,7 @@
 		<action name="advert_*" method="{1}" class="advertisementAction">
 			<result name="addAdvertSuccess">/page/addAdvert.jsp</result>
 			<result name="addAdvertFailed">/page/addAdvert.jsp</result>
+			<result name="showAdvertSuccess">/page/showAdvert.jsp</result>
 			
 			<result type="json" name="json">
 				<param name="root">dataMap</param>

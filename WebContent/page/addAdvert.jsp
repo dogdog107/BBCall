@@ -77,7 +77,7 @@
 				<tr>
 					<td colspan="2">
 						<input type="hidden" id="advertisement_content" name="advertisement_content" value="" />
-						<script id="editor" type="text/plain" style="width:99%;height:500px;">在這裡輸入廣告內容 (Enter AD contents here)</script>
+						<script id="editor" type="text/plain" style="width:99%;height:400px;">在這裡輸入廣告內容 (Enter AD contents here)</script>
 					</td>
 				</tr>
 				<tr>
