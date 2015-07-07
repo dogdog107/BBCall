@@ -45,8 +45,43 @@
 						<td align=middle width=30><img height=9
 							src="./img/menu_icon.gif" width=9></td>
 						<td><a class=menuchild
-							href="${pageContext.request.contextPath }/orderlist_getwashorderlist.action"
-							target=main>洗衣訂單</a></td>
+							href="${pageContext.request.contextPath }/orderlist_getwashorderlist.action?order_section=1"
+							target=main>洗衣訂單(10-12)</a></td>
+					</tr>
+					<tr height=20>
+						<td align=middle width=30><img height=9
+							src="./img/menu_icon.gif" width=9></td>
+						<td><a class=menuchild
+							href="${pageContext.request.contextPath }/orderlist_getwashorderlist.action?order_section=2"
+							target=main>洗衣訂單(12-14)</a></td>
+					</tr>
+					<tr height=20>
+						<td align=middle width=30><img height=9
+							src="./img/menu_icon.gif" width=9></td>
+						<td><a class=menuchild
+							href="${pageContext.request.contextPath }/orderlist_getwashorderlist.action?order_section=3"
+							target=main>洗衣訂單(14-16)</a></td>
+					</tr>
+					<tr height=20>
+						<td align=middle width=30><img height=9
+							src="./img/menu_icon.gif" width=9></td>
+						<td><a class=menuchild
+							href="${pageContext.request.contextPath }/orderlist_getwashorderlist.action?order_section=4"
+							target=main>洗衣訂單(16-18)</a></td>
+					</tr>
+					<tr height=20>
+						<td align=middle width=30><img height=9
+							src="./img/menu_icon.gif" width=9></td>
+						<td><a class=menuchild
+							href="${pageContext.request.contextPath }/orderlist_getwashorderlist.action?order_section=5"
+							target=main>洗衣訂單(18-22)</a></td>
+					</tr>
+					<tr height=20>
+						<td align=middle width=30><img height=9
+							src="./img/menu_icon.gif" width=9></td>
+						<td><a class=menuchild
+							href="${pageContext.request.contextPath }/orderlist_getwashorderlist.action?"
+							target=main>洗衣訂單(10-12)</a></td>
 					</tr>
 					<tr height=20>
 						<td align=middle width=30><img height=9

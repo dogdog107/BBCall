@@ -39,6 +39,7 @@
 			jdbcType="LONGVARCHAR" />
 		<result column="order_remark" property="order_remark"
 			jdbcType="LONGVARCHAR" />
+		<result column="order_section" property="order_section" jdbcType="INTEGER" />
 	</resultMap>
 
 	<insert id="addOrder" parameterType="com.bbcall.mybatis.table.Orderlist"
@@ -58,7 +59,8 @@
 		order_urgent_bonus,
 		order_user_account,
 		order_type_code,
-		order_status) values
+		order_status,
+		order_section) values
 		(#{order_create_time},
 		#{order_end_time},
 		#{order_book_time},
@@ -73,7 +75,8 @@
 		#{order_urgent_bonus},
 		#{order_user_account},
 		#{order_type_code},
-		#{order_status})
+		#{order_status},
+		#{order_section})
 	</insert>
 
 	<select id="getUnOrdersByUserAccount" parameterType="String"

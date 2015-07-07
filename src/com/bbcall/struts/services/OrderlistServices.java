@@ -61,6 +61,7 @@ public class OrderlistServices {
 	// ## (10) order_price
 	// ## (11) order_user_account
 	// ## (12) order_type
+	// ## (13) order_section
 	// ##
 	// ##------------------------------------------------------------------------------
 	// ## 2. Optional parameters: NONE
@@ -80,7 +81,7 @@ public class OrderlistServices {
 			String order_contact_name, String order_urgent,
 			double order_urgent_bonus, String order_pic_url,
 			String order_description, double order_price,
-			String order_user_account, int order_type_code) {
+			String order_user_account, int order_type_code, int order_section) {
 		// TODO Auto-generated method stub
 
 		// 创建订单对象，写入数据
@@ -116,6 +117,7 @@ public class OrderlistServices {
 		orderlist.setOrder_user_account(order_user_account);
 		orderlist.setOrder_type_code(order_type_code);
 		orderlist.setOrder_status(1);
+		orderlist.setOrder_section(order_section);
 
 		orderlistMapper.addOrder(orderlist);
 
@@ -148,6 +150,7 @@ public class OrderlistServices {
 	// ## (10) order_price
 	// ## (11) order_user_account
 	// ## (12) order_type
+	// ## (13) order_section
 	// ##
 	// ##------------------------------------------------------------------------------
 	// ## 2. Optional parameters: NONE
@@ -167,7 +170,7 @@ public class OrderlistServices {
 			BigInteger order_contact_mobile, String order_contact_name,
 			String order_urgent, double order_urgent_bonus,
 			String order_pic_url, String order_description, double order_price,
-			String order_user_account, int order_type_code, String order_remark) {
+			String order_user_account, int order_type_code, String order_remark, int order_section) {
 
 		Orderlist orderlist = orderlistMapper.getOrder(order_id);
 
@@ -202,6 +205,7 @@ public class OrderlistServices {
 		orderlist.setOrder_user_account(order_user_account);
 		orderlist.setOrder_type_code(order_type_code);
 		orderlist.setOrder_remark(order_remark);
+		orderlist.setOrder_section(order_section);
 
 		orderlistMapper.updateOrder(orderlist);
 
@@ -608,7 +612,7 @@ public class OrderlistServices {
 		orderlistMapper.change(order_id, order_status, order_remark);
 
 		orderlistinfo = orderlistMapper.getOrder(order_id);
-		
+
 		if (orderlistinfos == null) {
 			System.out.println("null");
 		}

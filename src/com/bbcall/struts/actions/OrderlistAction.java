@@ -51,6 +51,7 @@ public class OrderlistAction extends ActionSupport {
 	private String order_evaluation;
 	private String order_remark;
 	private int addresscode;
+	private int order_section;
 	private List<String> skilllist;
 	private List<String> locationlist;
 	private String sortparm;
@@ -78,7 +79,7 @@ public class OrderlistAction extends ActionSupport {
 					order_book_location, order_book_location_code,
 					order_contact_mobile, order_contact_name, order_urgent,
 					order_urgent_bonus, orderpicurl, order_description,
-					order_price, user_account, order_type_list.get(i));
+					order_price, user_account, order_type_list.get(i),order_section);
 		}
 
 		if (result == ResultCode.SUCCESS) {
@@ -110,14 +111,14 @@ public class OrderlistAction extends ActionSupport {
 		dataMap.clear(); // dataMap中的数据将会被Struts2转换成JSON字符串，所以这里要先清空其中的数据
 
 		Referdoc referdoclist = new Referdoc();
-		
+
 		int orderid = Integer.parseInt(order_id);
 
 		int result = orderlistServices.updateOrder(orderid, order_book_time,
 				order_book_location, order_book_location_code,
 				order_contact_mobile, order_contact_name, order_urgent,
 				order_urgent_bonus, orderpicurl, order_description,
-				order_price, user_account, order_type_code, order_remark);
+				order_price, user_account, order_type_code, order_remark,order_section);
 
 		if (result == ResultCode.SUCCESS) {
 			Orderlist orderlist = orderlistServices.orderlistinfo();
@@ -141,37 +142,36 @@ public class OrderlistAction extends ActionSupport {
 		return "json";
 	}
 
-	 public String deal() throws Exception {
-	 dataMap = new HashMap<String, Object>(); // 新建dataMap来储存JSON字符串
-	 dataMap.clear(); // dataMap中的数据将会被Struts2转换成JSON字符串，所以这里要先清空其中的数据
-	
-	 int orderid = Integer.parseInt(order_id);
-	 
-	 int result = orderlistServices
-	 .ChangeOrderStatus(user_account, orderid);
-	 List<Referdoc> referdoclist = new ArrayList<Referdoc>();
-	
-	 if (result == ResultCode.SUCCESS) {
-	 List<Orderlist> orderlist = orderlistServices.orderlistinfos();
-	 for (int j = 0; j < orderlist.size(); j++) {
-	 referdocServices.getReferdoc(orderlist.get(j)
-	 .getOrder_type_code());
-	 referdoclist.add(referdocServices.referdocinfo());
-	 }
-	 dataMap.put("orderlist", orderlist);
-	 dataMap.put("referdoclist", referdoclist);
-	 dataMap.put("resultcode", result);
-	 dataMap.put("errmsg", ResultCode.getErrmsg(result));
-	 dataMap.put("dealResult", true);
-	 }
-	
-	 return SUCCESS;
-	 }
-	
-	 public String dealJson() throws Exception {
-	 deal();
-	 return "json";
-	 }
+	public String deal() throws Exception {
+		dataMap = new HashMap<String, Object>(); // 新建dataMap来储存JSON字符串
+		dataMap.clear(); // dataMap中的数据将会被Struts2转换成JSON字符串，所以这里要先清空其中的数据
+
+		int orderid = Integer.parseInt(order_id);
+
+		int result = orderlistServices.ChangeOrderStatus(user_account, orderid);
+		List<Referdoc> referdoclist = new ArrayList<Referdoc>();
+
+		if (result == ResultCode.SUCCESS) {
+			List<Orderlist> orderlist = orderlistServices.orderlistinfos();
+			for (int j = 0; j < orderlist.size(); j++) {
+				referdocServices.getReferdoc(orderlist.get(j)
+						.getOrder_type_code());
+				referdoclist.add(referdocServices.referdocinfo());
+			}
+			dataMap.put("orderlist", orderlist);
+			dataMap.put("referdoclist", referdoclist);
+			dataMap.put("resultcode", result);
+			dataMap.put("errmsg", ResultCode.getErrmsg(result));
+			dataMap.put("dealResult", true);
+		}
+
+		return SUCCESS;
+	}
+
+	public String dealJson() throws Exception {
+		deal();
+		return "json";
+	}
 
 	public String complete() throws Exception {
 		dataMap = new HashMap<String, Object>(); // 新建dataMap来储存JSON字符串
@@ -642,10 +642,10 @@ public class OrderlistAction extends ActionSupport {
 
 		if (result == ResultCode.SUCCESS) {
 			Orderlist orderlist = orderlistServices.orderlistinfo();
-			
+
 			referdocServices.getReferdoc(orderlist.getOrder_type_code());
 			referdoclist = referdocServices.referdocinfo();
-			
+
 			String[] url = orderlist.getOrder_pic_url().split(";");
 
 			for (int i = 0; i < url.length; i++) {
@@ -879,6 +879,14 @@ public class OrderlistAction extends ActionSupport {
 
 	public void setOrder_remark(String order_remark) {
 		this.order_remark = order_remark;
+	}
+
+	public int getOrder_section() {
+		return order_section;
+	}
+
+	public void setOrder_section(int order_section) {
+		this.order_section = order_section;
 	}
 
 }
