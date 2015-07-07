@@ -109,6 +109,7 @@ public class FileUploadAction extends ActionSupport {
 			dataMap.put("resultcode", result); // 放入一个是否操作成功的标识
 			dataMap.put("errmsg", ResultCode.getErrmsg(result));
 			dataMap.put("orderUploadResult", true); // 放入registerResult
+			dataMap.put("orderpicurl", orderpicurl);
 			System.out.println(dataMap);
 			System.out.println(orderpicurl);
 			return orderpicurl;

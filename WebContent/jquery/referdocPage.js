@@ -18,7 +18,15 @@ function onload() {
 }
 
 function referdoc_parentno_change() {
-	document.getElementById('referdoc_getchildlist').submit();
+	if (parentno == 0 || parentno == null){
+		document.getElementById('referdoc_getchildlist').submit();
+	} else {
+		
+		document.getElementById('referdoc_parentno').value = parentno;
+		document.getElementById('referdoc_getchildlist').submit();
+	}
+		
+	
 }
 
 function referdoclist_update(formnum) {

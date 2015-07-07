@@ -13,6 +13,7 @@
 <script type="text/javascript">
 	var token = "${sessionScope.user.user_token}";
 	var link = "${pageContext.request.contextPath}";
+	var parentno = "${dataMap.parentno}";
 </script>
 <%
   String path=request.getContextPath();
