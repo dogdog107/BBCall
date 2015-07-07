@@ -175,7 +175,7 @@ jQuery(function() {
     
     // 检测文件上传后服务器返回的数据。
     uploader.on( 'uploadAccept', function( file, response ) {
-        if ( !response.advertUploadResult ) {
+        if ( !response.result ) {
             // 通过return false来告诉组件，此文件上传有错。
             return false;
         }
@@ -296,7 +296,7 @@ jQuery(function() {
 	
 	// 检测文件上传后服务器返回的数据。
 	uploader.on( 'uploadAccept', function( file, response ) {
-		if ( !response.advertUploadResult ) {
+		if ( !response.result ) {
 			// 通过return false来告诉组件，此文件上传有错。
 			return false;
 		}

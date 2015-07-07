@@ -133,7 +133,7 @@
 							src="./img/menu_icon.gif" width=9></td>
 						<td><a class=menuchild
 							onclick="if (confirm('確定要登出系統嗎？')) return true; else return false;"
-							href="login.jsp" target=_top>登出系統</a></td>
+							href="user_logout.action" target=_top>登出系統</a></td>
 					</tr>
 				</table>
 			</td>

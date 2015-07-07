@@ -20,7 +20,7 @@
 				<a style="color: #fff" href="${pageContext.request.contextPath }/page/update.jsp" target=main>修改個人信息</a> &nbsp;&nbsp; <a
 				style="color: #fff"
 				onclick="if (confirm('確定要登出嗎？')) return true; else return false;"
-				href="login.jsp" target=_top>登出系統</a>
+				href="user_logout.action" target=_top>登出系統</a>
 			</td>
 			<td align=right width=268><img height=56
 				src="./img/header_right.jpg" width=268></td>

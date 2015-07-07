@@ -15,20 +15,26 @@ function showaddresslist(times, childcode, parentcode) {
 					"addresscode" : parentcode
 				},
 				success : function(data) {
-					for ( var j = 0; j < data.addresslist.length; j++) {
-						document.getElementById(idname).options.add(new Option(
-								data.addresslist[j].areaname,
-								data.addresslist[j].areano));
-					}
-					$("#" + idname).val(childcode);
-					times--;
-					childcode = parentcode;
-					if (times == 1) {
-						parentcode = 0;
+					if (data.result) {
+						for (var j = 0; j < data.addresslist.length; j++) {
+							document.getElementById(idname).options
+									.add(new Option(
+											data.addresslist[j].areaname,
+											data.addresslist[j].areano));
+						}
+						$("#" + idname).val(childcode);
+						times--;
+						childcode = parentcode;
+						if (times == 1) {
+							parentcode = 0;
+						} else {
+							parentcode = parseInt(parentcode / 10000) * 10000;
+						}
+						showaddresslist(times, childcode, parentcode);
 					} else {
-						parentcode = parseInt(parentcode / 10000) * 10000;
+						alert(data.errmsg);
+						document.getElementById(idname).style.display = "none";
 					}
-					showaddresslist(times, childcode, parentcode);
 				}
 			});
 }
@@ -76,6 +82,7 @@ function getaddresslist(parentcode, idno) {
 											data.addresslist[j].areano));
 						}
 					} else {
+						alert(data.errmsg);
 						document.getElementById(idname).style.display = "none";
 					}
 				}
@@ -148,7 +155,7 @@ function onload() {
 											addresscode,
 											data.addresslist[0].parentno);
 								} else {
-									alert("addresscode Error!");
+									alert(data.errmsg);
 								}
 							});
 		} else {
@@ -158,11 +165,15 @@ function onload() {
 								"addresscode" : 0
 							},
 							function(data) {
-								for ( var i = 0; i < data.addresslist.length; i++) {
-									document.getElementById('adscode_1').options
-											.add(new Option(
-													data.addresslist[i].areaname,
-													data.addresslist[i].areano));
+								if (data.result) {
+									for (var i = 0; i < data.addresslist.length; i++) {
+										document.getElementById('adscode_1').options
+												.add(new Option(
+														data.addresslist[i].areaname,
+														data.addresslist[i].areano));
+									}
+								} else {
+									alert(data.errmsg);
 								}
 							});
 		}
