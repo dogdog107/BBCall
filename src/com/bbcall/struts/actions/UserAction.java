@@ -13,6 +13,7 @@ import org.springframework.stereotype.Controller;
 
 import com.bbcall.functions.ResultCode;
 import com.bbcall.functions.ObjectToMap;
+import com.bbcall.functions.Tools;
 import com.bbcall.mybatis.table.AddressList;
 import com.bbcall.mybatis.table.User;
 import com.bbcall.struts.services.UserServices;
@@ -83,21 +84,24 @@ public class UserAction extends ActionSupport implements SessionAware{
 		int result = userServices.login(username, password); // 调用userServices.login
 
 		if (result == ResultCode.SUCCESS) {
-			Object userinfo = userServices.getUserinfo(); // 调用userInfo对象
+//			Object userinfo = userServices.getUserinfo(); // 调用userInfo对象
 //			dataMap.put("userinfo", userinfo); // 把userinfo对象放入dataMap
-			dataMap = obj2map.getValueMap(userinfo); //将对象转换成Map
+//			dataMap = obj2map.getValueMap(userinfo); //将对象转换成Map
+			dataMap = obj2map.getValueMap(userServices.getUserinfo()); //将对象转换成Map
 			session.putAll(dataMap);// 把用户信息放进session
-			dataMap.put("resultcode", result); // 放入一个是否操作成功的标识
-			dataMap.put("errmsg", ResultCode.getErrmsg(result));
-			dataMap.put("loginResult", true); // 放入loginResult
+			dataMap.putAll(Tools.JsonHeadMap(result, true));
+//			dataMap.put("resultcode", result); // 放入一个是否操作成功的标识
+//			dataMap.put("errmsg", ResultCode.getErrmsg(result));
+//			dataMap.put("loginResult", true); // 放入loginResult
 			System.out.println(dataMap);
 			System.out.println(session);
 //			System.out.println((dataMap.get("userinfo")));
 			return "loginSuccess";
 		} else {
-			dataMap.put("resultcode", result); // 放入一个是否操作成功的标识
-			dataMap.put("errmsg", ResultCode.getErrmsg(result));
-			dataMap.put("loginResult", false); // 放入loginResult
+			dataMap.putAll(Tools.JsonHeadMap(result, false));
+//			dataMap.put("resultcode", result); // 放入一个是否操作成功的标识
+//			dataMap.put("errmsg", ResultCode.getErrmsg(result));
+//			dataMap.put("loginResult", false); // 放入loginResult
 			System.out.println(dataMap);
 			System.out.println("login Failed");
 //			request.setAttribute("loginResult", false);
@@ -120,15 +124,11 @@ public class UserAction extends ActionSupport implements SessionAware{
 		int result = userServices.register(account, password, usertype, name, picurl, mobile, gender, email, language, skill, description); // 调用userServices.register
 
 		if (result == ResultCode.SUCCESS) {
-			dataMap.put("resultcode", result); // 放入一个是否操作成功的标识
-			dataMap.put("errmsg", ResultCode.getErrmsg(result));
-			dataMap.put("registerResult", true); // 放入registerResult
+			dataMap.putAll(Tools.JsonHeadMap(result, true));
 			System.out.println(dataMap);
 			return "registerSuccess";
 		} else {
-			dataMap.put("resultcode", result); // 放入一个是否操作成功的标识
-			dataMap.put("errmsg", ResultCode.getErrmsg(result));
-			dataMap.put("registerResult", false); // 放入registerResult
+			dataMap.putAll(Tools.JsonHeadMap(result, false));
 			System.out.println(dataMap);
 			System.out.println("register Failed");
 			return "registerFailed";
@@ -144,25 +144,43 @@ public class UserAction extends ActionSupport implements SessionAware{
 	// Update Action
 	public String update() throws Exception{
 		System.out.println("Here is UserAction.update");
-		
 		dataMap.clear(); // dataMap中的数据将会被Struts2转换成JSON字符串，所以这里要先清空其中的数据
+		String requireAccess = "UserUpdate";
+		/*
+		 * Token Validation
+		 */
+		int tokenResult = userServices.checkUserToken(token);
+		while (tokenResult != ResultCode.SUCCESS) {
+			dataMap.putAll(Tools.JsonHeadMap(tokenResult, false));
+			System.out.println(dataMap);
+			return INPUT;
+		}
+		
+		/*
+		 * access Validation
+		 */
+		int accessResult = userServices.checkUserAccess(userServices.getUserinfo().getUser_access_group(), requireAccess);
+		while (accessResult != ResultCode.SUCCESS) {
+			dataMap.putAll(Tools.JsonHeadMap(accessResult, false));
+			System.out.println(dataMap);
+			return INPUT;
+		}
+		
 		int result = userServices.update(account, password, usertype, name, picurl, mobile, gender, addresscode, address, email, language, skill, description, accessgroup, status, token, userid); // 调用userServices.login
 
 		if (result == ResultCode.SUCCESS) {
-			Object userinfo = userServices.getUserinfo(); // 调用userInfo对象
+//			Object userinfo = userServices.getUserinfo(); // 调用userInfo对象
+//			dataMap.put("userinfo", userinfo); // 把userinfo对象放入dataMap
+//			dataMap = obj2map.getValueMap(userinfo); //将对象转换成Map
 //			Object updateduserinfo = userServices.getUpdateduserinfo(); // 调用userInfo对象
 //			dataMap.put("userinfo", userinfo); // 把userinfo对象放入dataMap
-			dataMap = obj2map.getValueMap(userinfo); //将对象转换成Map
+			dataMap = obj2map.getValueMap(userServices.getUserinfo()); //将对象转换成Map
 			session.putAll(dataMap);// 把用户信息放进session
-			dataMap.put("resultcode", result); // 放入一个是否操作成功的标识
-			dataMap.put("errmsg", ResultCode.getErrmsg(result));
-			dataMap.put("updateResult", true); // 放入registerResult
+			dataMap.putAll(Tools.JsonHeadMap(result, true));
 			System.out.println(dataMap);
 			return "updateSuccess";
 		} else {
-			dataMap.put("resultcode", result); // 放入一个是否操作成功的标识
-			dataMap.put("errmsg", ResultCode.getErrmsg(result));
-			dataMap.put("updateResult", false); // 放入registerResult
+			dataMap.putAll(Tools.JsonHeadMap(result, false));
 			System.out.println(dataMap);
 			System.out.println("Update Failed");
 			return "updateFailed";
@@ -177,20 +195,36 @@ public class UserAction extends ActionSupport implements SessionAware{
 	// UpdateStatus Action
 	public String updateStatus() throws Exception{
 		System.out.println("Here is UserAction.updateStatus");
-		
 		dataMap.clear(); // dataMap中的数据将会被Struts2转换成JSON字符串，所以这里要先清空其中的数据
+		String requireAccess = "UserUpdate";
+		/*
+		 * Token Validation
+		 */
+		int tokenResult = userServices.checkUserToken(token);
+		while (tokenResult != ResultCode.SUCCESS) {
+			dataMap.putAll(Tools.JsonHeadMap(tokenResult, false));
+			System.out.println(dataMap);
+			return INPUT;
+		}
+		
+		/*
+		 * access Validation
+		 */
+		int accessResult = userServices.checkUserAccess(userServices.getUserinfo().getUser_access_group(), requireAccess);
+		while (accessResult != ResultCode.SUCCESS) {
+			dataMap.putAll(Tools.JsonHeadMap(accessResult, false));
+			System.out.println(dataMap);
+			return INPUT;
+		}
+		
 		int result = userServices.update(account, password, usertype, name, picurl, mobile, gender, addresscode, address, email, language, skill, description, accessgroup, status, token, userid); // 调用userServices.login
 		
 		if (result == ResultCode.SUCCESS) {
-			dataMap.put("resultcode", result); // 放入一个是否操作成功的标识
-			dataMap.put("errmsg", ResultCode.getErrmsg(result));
-			dataMap.put("updateStatusResult", true); // 放入registerResult
+			dataMap.putAll(Tools.JsonHeadMap(result, true));
 			System.out.println(dataMap);
 			return "updateStatusSuccess";
 		} else {
-			dataMap.put("resultcode", result); // 放入一个是否操作成功的标识
-			dataMap.put("errmsg", ResultCode.getErrmsg(result));
-			dataMap.put("updateStatusResult", false); // 放入registerResult
+			dataMap.putAll(Tools.JsonHeadMap(result, false));
 			System.out.println(dataMap);
 			System.out.println("updateStatus Failed");
 			return "updateStatusFailed";
@@ -212,13 +246,9 @@ public class UserAction extends ActionSupport implements SessionAware{
 		if (result == ResultCode.SUCCESS) {
 			List<AddressList> addresslist = userServices.getAddresslist();
 			dataMap.put("addresslist", addresslist); // 把addresslist对象放入dataMap
-			dataMap.put("resultcode", result); // 放入一个是否操作成功的标识
-			dataMap.put("errmsg", ResultCode.getErrmsg(result));
-			dataMap.put("checkChildAdsListResult", true); // 放入checkUserNameResult
+			dataMap.putAll(Tools.JsonHeadMap(result, true));
 		} else {
-			dataMap.put("resultcode", result); // 放入一个是否操作成功的标识
-			dataMap.put("errmsg", ResultCode.getErrmsg(result));
-			dataMap.put("checkChildAdsListResult", false); // 放入checkUserNameResult
+			dataMap.putAll(Tools.JsonHeadMap(result, false));
 			System.out.println(dataMap);
 		}
 		return SUCCESS;
@@ -239,13 +269,9 @@ public class UserAction extends ActionSupport implements SessionAware{
 		if (result == ResultCode.SUCCESS) {
 			List<AddressList> addresslist = userServices.getAddresslist();
 			dataMap.put("addresslist", addresslist); // 把addresslist对象放入dataMap
-			dataMap.put("resultcode", result); // 放入一个是否操作成功的标识
-			dataMap.put("errmsg", ResultCode.getErrmsg(result));
-			dataMap.put("checkAdsListResult", true); // 放入checkUserNameResult
+			dataMap.putAll(Tools.JsonHeadMap(result, true));
 		} else {
-			dataMap.put("resultcode", result); // 放入一个是否操作成功的标识
-			dataMap.put("errmsg", ResultCode.getErrmsg(result));
-			dataMap.put("checkAdsListResult", false); // 放入checkUserNameResult
+			dataMap.putAll(Tools.JsonHeadMap(result, false));
 			System.out.println(dataMap);
 		}
 		return SUCCESS;
@@ -261,20 +287,68 @@ public class UserAction extends ActionSupport implements SessionAware{
 	public String checkUserList() throws Exception {
 		System.out.println("Here is UserAction.checkUserList");
 		dataMap.clear(); // dataMap中的数据将会被Struts2转换成JSON字符串，所以这里要先清空其中的数据
-		int result = userServices.checkUserList(token, col_name, specify_value, search_value);// 调用userServices.checkAddressList
+		String requireAccess = "UserCheckList";
+
+		/*
+		 * Token Validation
+		 */
+		int tokenResult = userServices.checkUserToken(token);
+		while (tokenResult != ResultCode.SUCCESS) {
+			dataMap.putAll(Tools.JsonHeadMap(tokenResult, false));
+			System.out.println(dataMap);
+			return INPUT;
+		}
+		
+		/*
+		 * access Validation
+		 */
+		int accessResult = userServices.checkUserAccess(userServices.getUserinfo().getUser_access_group(), requireAccess);
+		while (accessResult != ResultCode.SUCCESS) {
+			dataMap.putAll(Tools.JsonHeadMap(accessResult, false));
+			System.out.println(dataMap);
+			return INPUT;
+		}
+		
+		int result = userServices.checkUserList(col_name, specify_value, search_value);// 调用userServices.checkAddressList
 		if (result == ResultCode.SUCCESS) {
 			List<User> userlist = userServices.getUserlist();
 			dataMap.put("userlist", userlist); // 把addresslist对象放入dataMap
-			dataMap.put("resultcode", result); // 放入一个是否操作成功的标识
-			dataMap.put("errmsg", ResultCode.getErrmsg(result));
-			dataMap.put("checkUserListResult", true); // 放入checkUserNameResult
+			dataMap.putAll(Tools.JsonHeadMap(result, true));
 		} else {
-			dataMap.put("resultcode", result); // 放入一个是否操作成功的标识
-			dataMap.put("errmsg", ResultCode.getErrmsg(result));
-			dataMap.put("checkUserListResult", false); // 放入checkUserNameResult
+			dataMap.putAll(Tools.JsonHeadMap(result, false));
 			System.out.println(dataMap);
 		}
+		
 		return SUCCESS;
+//		int tokenResult = userServices.checkUserToken(token);
+//		if (tokenResult == ResultCode.SUCCESS) {
+//			int accessResult = userServices.checkUserAccess(userServices.getUserinfo().getUser_access_group(), requireAccess);
+//			if (accessResult == ResultCode.SUCCESS) {
+//				int result = userServices.checkUserList(col_name, specify_value, search_value);// 调用userServices.checkAddressList
+//				if (result == ResultCode.SUCCESS) {
+//					List<User> userlist = userServices.getUserlist();
+//					dataMap.put("userlist", userlist); // 把addresslist对象放入dataMap
+//					dataMap.put("resultcode", result); // 放入一个是否操作成功的标识
+//					dataMap.put("errmsg", ResultCode.getErrmsg(result));
+//					dataMap.put("checkUserListResult", true); // 放入checkUserNameResult
+//				} else {
+//					dataMap.put("resultcode", result); // 放入一个是否操作成功的标识
+//					dataMap.put("errmsg", ResultCode.getErrmsg(result));
+//					dataMap.put("checkUserListResult", false); // 放入checkUserNameResult
+//					System.out.println(dataMap);
+//				}
+//			} else {
+//				dataMap.put("resultcode", accessResult); // 放入一个是否操作成功的标识
+//				dataMap.put("errmsg", ResultCode.getErrmsg(accessResult));
+//				dataMap.put("checkUserListResult", false); // 放入checkUserNameResult
+//				System.out.println(dataMap);
+//			}
+//		} else {
+//			dataMap.put("resultcode", tokenResult); // 放入一个是否操作成功的标识
+//			dataMap.put("errmsg", ResultCode.getErrmsg(tokenResult));
+//			dataMap.put("checkUserListResult", false); // 放入checkUserNameResult
+//			System.out.println(dataMap);
+//		}
 	}
 	
 	public String checkUserListJson() throws Exception {
@@ -289,14 +363,10 @@ public class UserAction extends ActionSupport implements SessionAware{
 		dataMap.clear(); // dataMap中的数据将会被Struts2转换成JSON字符串，所以这里要先清空其中的数据
 		int result = userServices.checkUserName(username);// 调用userServices.checkUserName
 		if (result == ResultCode.USERNAME_NOTEXIST) {
-			dataMap.put("resultcode", result); // 放入一个是否操作成功的标识
-			dataMap.put("errmsg", ResultCode.getErrmsg(result));
-			dataMap.put("checkUserNameResult", true); // 放入checkUserNameResult
+			dataMap.putAll(Tools.JsonHeadMap(result, true));
 			System.out.println(dataMap);
 		} else {
-			dataMap.put("resultcode", result); // 放入一个是否操作成功的标识
-			dataMap.put("errmsg", ResultCode.getErrmsg(result));
-			dataMap.put("checkUserNameResult", false); // 放入checkUserNameResult
+			dataMap.putAll(Tools.JsonHeadMap(result, false));
 			System.out.println(dataMap);
 		}
 		return SUCCESS;
@@ -313,18 +383,14 @@ public class UserAction extends ActionSupport implements SessionAware{
 		System.out.println("Here is UserAction.checkToken");
 
 		dataMap.clear(); // dataMap中的数据将会被Struts2转换成JSON字符串，所以这里要先清空其中的数据
-		int result = userServices.checkToken(token); // 调用userServices.login
+		int result = userServices.checkUserToken(token); // 调用userServices.login
 
 		if (result == ResultCode.SUCCESS) {
-			dataMap.put("resultcode", result); // 放入一个是否操作成功的标识
-			dataMap.put("errmsg", ResultCode.getErrmsg(result));
-			dataMap.put("checkTokenResult", true); // 放入registerResult
+			dataMap.putAll(Tools.JsonHeadMap(result, true));
 			System.out.println(dataMap);
 			return "checkTokenSuccess";
 		} else {
-			dataMap.put("resultcode", result); // 放入一个是否操作成功的标识
-			dataMap.put("errmsg", ResultCode.getErrmsg(result));
-			dataMap.put("checkTokenResult", false); // 放入registerResult
+			dataMap.putAll(Tools.JsonHeadMap(result, false));
 			System.out.println(dataMap);
 			System.out.println("Check Token Failed");
 			return "checkTokenFailed";

@@ -29,16 +29,16 @@
 
 <body onload="onload()">
 
-	<table cellspacing=0 cellpadding=0 width="100%" align=center border=0 style="font-size: 12px;">
-		<tr height=28>
-			<td background="${pageContext.request.contextPath }/page/img/title_bg1.jpg">當前位置:<a href="${pageContext.request.contextPath }/page/defult.jsp" target=main>主頁(Home)</a>
+	<table cellspacing="0" cellpadding="0" width="100%" align="center" border="0" style="font-size: 12px;">
+		<tr height="28">
+			<td background="${pageContext.request.contextPath }/page/img/title_bg1.jpg">當前位置:<a href="${pageContext.request.contextPath }/page/defult.jsp" target="main">主頁(Home)</a>
 				-> 修改用戶信息(Update user information)
 			</td>
 		</tr>
 		<tr>
-			<td bgcolor=#b1ceef height=1></td>
+			<td bgcolor="#b1ceef" height="1"></td>
 		</tr>
-		<tr height=20>
+		<tr height="20">
 			<td background="${pageContext.request.contextPath }/page/img/shadow_bg.jpg"></td>
 		</tr>
 	</table>
@@ -47,10 +47,10 @@
 	<div style="font-size: 13px; margin: 10px 5px">
 		<form id="update_form" action="user_update" method="post" enctype="multipart/form-data">
 			<div style="font-size: 13px; margin: 10px 5px">
-				<span> <s:if test="dataMap.updateResult || dataMap.userUploadResult">
+				<span> <s:if test="dataMap.result">
 						<font color="green">修改成功！${ dataMap.errmsg}</font>
 					</s:if> <s:else>
-						<s:if test="!dataMap.updateResult || !dataMap.userUploadResult">
+						<s:if test="!dataMap.result">
 							<font color="red">修改失敗！${ dataMap.errmsg}</font>
 						</s:if>
 					</s:else>

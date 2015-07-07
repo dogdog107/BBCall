@@ -12,7 +12,7 @@ import java.sql.Timestamp;
 //	user_email VARCHAR (30),
 //	user_mobile BIGINT,
 //	user_type INT,
-//	/* 1=customer, 2=master, 3=admin */
+//	/* 1=customer, 2=master, 3=admin, 4=superadmin*/
 //	user_name VARCHAR (20),
 //	user_gender INT,
 //  /* 1=male, 2=female */
@@ -22,7 +22,7 @@ import java.sql.Timestamp;
 //  user_address_code INT,
 //	user_address text,
 //	user_description text,
-//	user_access_group VARCHAR (30),
+//	user_access_group VARCHAR (100),
 //	user_status INT,
 //	/* 1=active, 2=pause, 3=pending, 4=locked */
 //	user_create_time TIMESTAMP DEFAULT CURRENT_TIMESTAMP,

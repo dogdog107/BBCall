@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper    PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<!-- 
+	这里namespace必须是UserMapper接口的全类名路径，
+	不然运行的时候要报错 "is not known to the MapperRegistry" 
+-->
+
+<mapper namespace="com.bbcall.mybatis.dao.AccessListMapper">
+
+	<resultMap id="AccessListResultMap" type="com.bbcall.mybatis.table.AccessList" >
+    	<id column="accesslist_id" property="accesslist_id" jdbcType="INTEGER" />
+    	<result column="accesslist_name" property="accesslist_name" jdbcType="VARCHAR" />
+	</resultMap>
+
+	<select id="getAll" resultMap="AccessListResultMap">
+		select accesslist_id, accesslist_name from ACCESSLIST
+	</select>
+
+	
+</mapper>

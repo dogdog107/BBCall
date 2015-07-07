@@ -81,7 +81,7 @@
 
 			<result type="json" name="json">
 				<param name="root">dataMap</param>
-				<param name="excludeProperties">userinfo.user_password</param>
+				<param name="excludeProperties">user_password</param>
 			</result>
 		</action>
 

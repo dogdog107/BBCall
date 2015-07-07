@@ -38,11 +38,11 @@
 
 				<tr>
 					<td style="width:250px">廣告標題 (AD Title)</td>
-					<td><input type="text" name="advertisement_title" /></td>
+					<td><input type="text" name="advertisement_title" style="width:400px;height:20px;"/></td>
 				</tr>
 				<tr>
 					<td>廣告概要 (AD Summary)</td>
-					<td><input type="text" name="advertisement_summary" /></td>
+					<td><textarea rows="3" name="advertisement_summary" style="width:400px;"></textarea></td>
 				</tr>
 				<tr>
 					<td>廣告類型 (AD Type)</td>
@@ -81,7 +81,7 @@
 					</td>
 				</tr>
 				<tr>
-					<td colspan="2" align="center">
+					<td colspan="2">
 						<input type="submit" value="提交(Submit)" onclick="return validate();" class="btn btn-default" />
 						<input type="button" value="重置(Reset)" onclick="location.href='addAdvert.jsp'" class="btn btn-default" />
 						<input type="button" value="取消(Cancel)" onclick="location.href='defult.jsp'" class="btn btn-default" />

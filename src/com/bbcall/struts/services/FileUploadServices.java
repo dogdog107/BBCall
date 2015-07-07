@@ -19,6 +19,7 @@ public class FileUploadServices {
 
 	public int uploadFile(File srcFile, String uploadFileName,
 			String storePath, String storeFileName) throws Exception {
+		System.out.println("Here is FileUploadServices.uploadFile()");
 		
 		if(srcFile == null || Tools.isEmpty(uploadFileName, storePath, storeFileName)){
 			return ResultCode.REQUIREINFO_NOTENOUGH;
@@ -48,7 +49,6 @@ public class FileUploadServices {
 //			return ResultCode.UNKNOWN_ERROR;
 //		}
 		File destFile = new File(storePath + File.separator + storeFileName);
-
 		if (destFile.exists()) {
 			destFile.delete();
 		}

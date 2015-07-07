@@ -1,5 +1,8 @@
 package com.bbcall.functions;
 
+import java.util.LinkedHashMap;
+import java.util.Map;
+
 public class Tools {
 
 	// ###################
@@ -26,6 +29,15 @@ public class Tools {
 			}
 		}
 		return false;
+	}
+	
+	public static Map<String, Object> JsonHeadMap(int resultcode, boolean result) {
+		Map<String, Object> dataMap = new LinkedHashMap<String, Object>();
+		dataMap.put("resultcode", resultcode); // 放入一个是否操作成功的标识
+		dataMap.put("errmsg", ResultCode.getErrmsg(resultcode));
+		dataMap.put("result", result); // 放入Result
+		
+		return dataMap;
 	}
 
 }
