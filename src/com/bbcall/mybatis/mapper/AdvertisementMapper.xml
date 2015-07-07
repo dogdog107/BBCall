@@ -68,4 +68,4 @@
 		advertisement_id=#{advertisement_id}
 	</select>
 
-</mapper>    
+</mapper>

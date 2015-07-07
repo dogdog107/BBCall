@@ -17,7 +17,7 @@ function checkUserList(col_name, specify_value, search_value){
 			"search_value" : search_value
 		},
 		success : function(data) {
-			if (data.checkUserListResult) {
+			if (data.result) {
 				var userlist = data.userlist;
 				$.each(userlist, function(i, n) {
 					var row = $("#template").clone();
@@ -96,7 +96,7 @@ function updateStatus(idname, value) {
 				"status" : value
 			},
 			success : function(data) {
-				if (data.updateStatusResult) {
+				if (data.result) {
 //					window.location.reload();
 					switch (value) {
 					case "1":

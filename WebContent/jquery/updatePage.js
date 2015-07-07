@@ -67,7 +67,7 @@ function getaddresslist(parentcode, idno) {
 					"addresscode" : parentcode
 				},
 				success : function(data) {
-					if (data.checkChildAdsListResult) {
+					if (data.result) {
 						document.getElementById(idname).style.display = "";
 						for ( var j = 0; j < data.addresslist.length; j++) {
 							document.getElementById(idname).options
@@ -139,7 +139,7 @@ function onload() {
 								"addresscode" : addresscode
 							},
 							function(data) {
-								if (data.checkAdsListResult) {
+								if (data.result) {
 									if (data.addresslist[0].arealevel < 3) {
 										document.getElementById('adscode_3').style.display = "none";
 									}

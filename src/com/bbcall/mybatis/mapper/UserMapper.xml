@@ -13,64 +13,6 @@
 <!-- <cache type="org.mybatis.caches.ehcache.LoggingEhcache" /> -->
 <!-- <cache type="org.mybatis.caches.ehcache.EhcacheCache"/>  -->
 
-<!-- 
-	## SQL Command ##
-CREATE TABLE USER (
-	user_id INT NOT NULL auto_increment PRIMARY KEY,
-	user_account VARCHAR (30),
-	user_password VARCHAR (30) NOT NULL,
-	user_email VARCHAR (30),
-	user_mobile BIGINT,
-	user_type INT,
-	/* 1=customer, 2=master, 3=admin */
-	user_name VARCHAR (20),
-	user_gender INT,
-	/* 1=male, 2=female */
-	user_pic_url VARCHAR (255),
-	user_language VARCHAR (255),
-  user_skill text,
-  user_address_code INT,
-	user_address text,
-	user_description text,
-	user_access_group VARCHAR (30),
-	user_status INT,
-	/* 1=active, 2=pause, 3=pending, 4=locked */
-	user_create_time TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-	user_login_time TIMESTAMP NULL DEFAULT NULL,
-	user_token VARCHAR (255)
-) DEFAULT CHARSET = utf8;
- 	
- 	## Value ##
-	private Integer user_id;
-	private String user_account;
-	private String user_password;
-	private String user_email;
-	private BigInteger user_mobile;
-	private Integer user_type;
-	private String user_name;
-	private Integer user_gender;
-	private String user_pic_url;
-	private String user_language;
-	private Integer user_address_code;
-	private String user_address;
-	private String user_skill;
-	private String user_description;
-	private String user_access_group;
-	private Integer user_status;
-	private Timestamp user_login_time;
-	private Timestamp user_create_time;
-	private String user_token;
- -->
-
-<!-- 
-	ID: 必须与对应接口的对应的方法名一致：
-	void save(User user);
-	void update(User user);
-	void delete(int id);
-	User findById(int id);
-	List<User> findAll();
- -->
-
 	<resultMap id="UserResultMap" type="com.bbcall.mybatis.table.User" >
     	<id column="user_id" property="user_id" jdbcType="INTEGER" />
     	<result column="user_account" property="user_account" jdbcType="VARCHAR" />

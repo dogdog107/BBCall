@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper    PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<!-- 
+	这里namespace必须是UserMapper接口的全类名路径，
+	不然运行的时候要报错 "is not known to the MapperRegistry" 
+-->
+
+<mapper namespace="com.bbcall.mybatis.dao.AccessGroupMapper">
+
+	<resultMap id="AccessGroupResultMap" type="com.bbcall.mybatis.table.AccessGroup" >
+    	<id column="accessgroup_id" property="accessgroup_id" jdbcType="INTEGER" />
+    	<result column="accessgroup_name" property="accessgroup_name" jdbcType="VARCHAR" />
+    	<result column="accessgroup_access" property="accessgroup_access" jdbcType="VARCHAR" />
+	</resultMap>
+
+	<insert id="addAccessGroup" parameterType="AccessGroup"
+		useGeneratedKeys="true" keyProperty="accessgroup_id">
+		insert into
+		ACCESSGROUP(accessgroup_name, accessgroup_access)
+		values(#{accessgroup_name}, #{accessgroup_access})
+	</insert>
+
+	<select id="getAccess" parameterType="String" resultMap="AccessGroupResultMap">
+		select accessgroup_id, accessgroup_name, accessgroup_access
+		from ACCESSGROUP
+		where accessgroup_access=#{accessgroup_access}
+	</select>
+
+	<select id="getAccessGroupName" resultType="String">
+		select accessgroup_name from ACCESSGROUP
+	</select>
+	
+	<select id="getAccessByAccessGroupName" parameterType="String" resultMap="AccessGroupResultMap">
+		select accessgroup_id, accessgroup_name, accessgroup_access
+		from ACCESSGROUP
+		where accessgroup_name=#{accessgroup_name}
+	</select>
+
+	<select id="getAll" resultMap="AccessGroupResultMap">
+		select accessgroup_id, accessgroup_name, accessgroup_access from ACCESSGROUP
+	</select>
+
+	
+	<delete id="deleteAccessGroupName" parameterType="String">
+		delete from
+		ACCESSGROUP where accessgroup_name=#{accessgroup_name}
+	</delete>
+	
+	<delete id="deleteAccess" parameterType="String">
+		delete from
+		ACCESSGROUP where accessgroup_access=#{accessgroup_access}
+	</delete>
+	
+	<delete id="deleteAccessByAccessGroupName">
+		delete from
+		ACCESSGROUP where accessgroup_name=#{accessgroup_name} and accessgroup_access=#{accessgroup_access}
+	</delete>
+</mapper>

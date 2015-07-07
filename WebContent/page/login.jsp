@@ -42,11 +42,11 @@
 										name="password" id="password" class="txtpasswordcssclass" /></li>
 								</ul>
 								<ul style="text-align: center">
-									<s:if test="dataMap.loginResult">
+									<s:if test="dataMap.result">
 											<font color="green">登陆成功！</font>
 									</s:if>
 									<s:else>
-										<s:if test="!dataMap.loginResult">
+										<s:if test="!dataMap.result">
 											<font color="red">登陆失败！<br />${ dataMap.errmsg}</font>
 										</s:if>
 									</s:else>

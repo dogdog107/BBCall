@@ -2,6 +2,7 @@ package com.bbcall.struts.services;
 
 import java.math.BigInteger;
 import java.util.Date;
+import java.util.Iterator;
 import java.util.List;
 import java.sql.Timestamp;
 
@@ -10,8 +11,11 @@ import org.springframework.stereotype.Service;
 
 import com.bbcall.functions.RandomCode;
 import com.bbcall.functions.ResultCode;
+import com.bbcall.functions.Tools;
+import com.bbcall.mybatis.dao.AccessGroupMapper;
 import com.bbcall.mybatis.dao.AddressListMapper;
 import com.bbcall.mybatis.dao.UserMapper;
+import com.bbcall.mybatis.table.AccessGroup;
 import com.bbcall.mybatis.table.AddressList;
 import com.bbcall.mybatis.table.User;
 
@@ -24,6 +28,8 @@ public class UserServices {
 	private UserMapper userMapper;
 	@Autowired
 	private AddressListMapper addressListMapper;
+	@Autowired
+	private AccessGroupMapper accessGroupMapper;
 
 	private User userinfo = new User();
 	private User updateduserinfo = new User();
@@ -76,14 +82,14 @@ public class UserServices {
 		}
 
 		if (usertype == 2) {// usertype=2时为师傅号，检测注册信息是否完整
-			if (isEmpty(account, password, name, picurl, email, language, skill)
+			if (Tools.isEmpty(account, password, name, picurl, email, language, skill)
 					|| mobile == null || gender == null) {
 				return ResultCode.REGISTERINFO_NOTENOUGH;
 			}
 		}
 
 		if (usertype == 1 || usertype == 3) {// usertype=1时为用户号，检测注册信息是否完整
-			if (isEmpty(account, password)) {
+			if (Tools.isEmpty(account, password)) {
 				return ResultCode.REGISTERINFO_NOTENOUGH;
 			}
 		}
@@ -103,7 +109,7 @@ public class UserServices {
 				user.setUser_status(1);
 			}
 			user.setUser_name(name);
-			if(isEmpty(picurl)){
+			if(Tools.isEmpty(picurl)){
 				if (usertype == 3){
 					picurl = "/BBCall/UserPhoto/Admin_photo.png";
 				} else {
@@ -176,7 +182,7 @@ public class UserServices {
 	public int login(String username, String password) {
 		System.out.println("Here is UserServices.login method...");
 
-		if (isEmpty(username, password))// 检测参数是否为空、null
+		if (Tools.isEmpty(username, password))// 检测参数是否为空、null
 			return ResultCode.REQUIREINFO_NOTENOUGH;
 
 		int checkUserNameResult = checkUserName(username);// 调用checkUserName方法并得到返回码
@@ -266,14 +272,14 @@ public class UserServices {
 		User user = new User();
 
 		// ***** 检测 token & userid *****
-		if (isEmpty(token) && userid == null)// 检测必要参数是否为空、null
+		if (Tools.isEmpty(token) && userid == null)// 检测必要参数是否为空、null
 			return ResultCode.REQUIREINFO_NOTENOUGH;
-		if (!isEmpty(token)) {
-			int checkResult = checkToken(token);
+		if (!Tools.isEmpty(token)) {
+			int checkResult = checkUserToken(token);
 			if (checkResult == ResultCode.SUCCESS) {
 				user = userinfo;
 				if (userid != null) {
-					if (user.getUser_type().equals(3)) { // 管理员后台update模式
+					if (user.getUser_type().equals(3) || user.getUser_type().equals(4)) { // 管理员后台update模式
 						user = userMapper.getUserById(userid); // 根据userID读取用户数据
 						updatemode = 2;
 						if (null == user)
@@ -296,10 +302,10 @@ public class UserServices {
 		if (addresscode != null && addresscode != 0 && (addresscode + "").length() != 6)// 判断地址码是否六位数
 			return ResultCode.ADDRESSCODE_ERROR;
 
-		if (addresscode != null && addresscode != 0 && isEmpty(address))
+		if (addresscode != null && addresscode != 0 && Tools.isEmpty(address))
 			return ResultCode.ADDRESS_NOTMATCH;
 
-		if (addresscode == null && !isEmpty(address)) {// 判断更改的地址名是否与原来的addresscode对应
+		if (addresscode == null && !Tools.isEmpty(address)) {// 判断更改的地址名是否与原来的addresscode对应
 			addresscode = user.getUser_address_code();// 读取数据库的addresscode
 
 			if (addresscode == null)
@@ -314,7 +320,7 @@ public class UserServices {
 				return ResultCode.ADDRESS_NOTMATCH;
 		}
 
-		if ((addresscode != null && !isEmpty(address))
+		if ((addresscode != null && !Tools.isEmpty(address))
 				&& (!addresscode.equals(user.getUser_address_code()) || !address.equals(user
 						.getUser_address()))) {
 
@@ -331,23 +337,23 @@ public class UserServices {
 		}
 
 		// ***** 检测其它变量 *****
-		if (!isEmpty(account) && !account.equals(user.getUser_account())) {
+		if (!Tools.isEmpty(account) && !account.equals(user.getUser_account())) {
 			user.setUser_account(account);
 			changecount++;
 			System.out.println("account changed!");
 		}
-		if (!isEmpty(password) && !password.equals(user.getUser_password())) {
+		if (!Tools.isEmpty(password) && !password.equals(user.getUser_password())) {
 			user.setUser_password(password);
 			changecount++;
 			System.out.println("password changed!");
 		}
-		if (!isEmpty(name) && !name.equals(user.getUser_name())) {
+		if (!Tools.isEmpty(name) && !name.equals(user.getUser_name())) {
 			user.setUser_name(name);
 			changecount++;
 			System.out.println("name changed!");
 		}
-		if (isEmpty(picurl)
-				&& (isEmpty(user.getUser_pic_url()) || !isNumeric(user.getUser_pic_url().substring(user.getUser_pic_url().lastIndexOf("/") + 1).split("_")[0]))) {
+		if (Tools.isEmpty(picurl)
+				&& (Tools.isEmpty(user.getUser_pic_url()) || !Tools.isNumeric(user.getUser_pic_url().substring(user.getUser_pic_url().lastIndexOf("/") + 1).split("_")[0]))) {
 			if (user.getUser_type().equals(3)) {
 				picurl = "/BBCall/UserPhoto/Admin_photo.png";
 			} else {
@@ -361,7 +367,7 @@ public class UserServices {
 				}
 			}
 		}
-		if (!isEmpty(picurl) && !picurl.equals(user.getUser_pic_url())) {
+		if (!Tools.isEmpty(picurl) && !picurl.equals(user.getUser_pic_url())) {
 			user.setUser_pic_url(picurl);
 			changecount++;
 			System.out.println("picurl changed!");
@@ -380,23 +386,23 @@ public class UserServices {
 			changecount++;
 			System.out.println("gender changed!");
 		}
-		if (!isEmpty(email) && !email.equals(user.getUser_email())) {
+		if (!Tools.isEmpty(email) && !email.equals(user.getUser_email())) {
 			user.setUser_email(email);
 			changecount++;
 			System.out.println("email changed!");
 		}
-		if (!isEmpty(language) && !language.equals(user.getUser_language())) {
+		if (!Tools.isEmpty(language) && !language.equals(user.getUser_language())) {
 			user.setUser_language(language);
 			changecount++;
 			System.out.println("language changed!");
 		}
-		if (!isEmpty(description)
+		if (!Tools.isEmpty(description)
 				&& !description.equals(user.getUser_description())) {
 			user.setUser_description(description);
 			changecount++;
 			System.out.println("description changed!");
 		}
-		if (!isEmpty(accessgroup)
+		if (!Tools.isEmpty(accessgroup)
 				&& !accessgroup.equals(user.getUser_access_group())) {
 			user.setUser_access_group(accessgroup);
 			changecount++;
@@ -408,7 +414,7 @@ public class UserServices {
 			changecount++;
 			System.out.println("status changed!");
 		}
-		if (!isEmpty(skill) && !skill.equals(user.getUser_skill())) {
+		if (!Tools.isEmpty(skill) && !skill.equals(user.getUser_skill())) {
 			user.setUser_skill(skill);
 			changecount++;
 			System.out.println("skill changed!");
@@ -455,6 +461,160 @@ public class UserServices {
 		}
 		return ResultCode.SUCCESS;
 
+	}
+
+	// ###################
+	// ## 拉取User表
+	// ###################
+
+	public int checkUserList(String col_name, String specify_value, String search_value) {
+		System.out.println("Here is UserServices.checkUserList method...");
+		
+		List<User> userlist = userMapper.listUserOrderBy(col_name, specify_value, search_value);
+		if (userlist.size() > 0) {
+			this.userlist = userlist;
+			return ResultCode.SUCCESS;
+		} else {
+			return ResultCode.USERLIST_NULL;
+		}
+		
+//		int checkTokenResult = checkUserToken(token);
+//		if (checkTokenResult == ResultCode.SUCCESS) {
+//			if (userinfo.getUser_type() != 3) {
+//				return ResultCode.ACCESS_REJECT;
+//			}
+//			List<User> userlist = userMapper.listUserOrderBy(col_name, specify_value, search_value);
+//			if (userlist.size() > 0) {
+//				this.userlist = userlist;
+//				return ResultCode.SUCCESS;
+//			} else {
+//				return ResultCode.USERLIST_NULL;
+//			}
+//		} else {
+//			return checkTokenResult;
+//		}
+	}
+
+	// ###################
+	// ## 检测用户权限
+	// ###################
+
+	public int checkUserAccess(String UserAccessGroup, String requireAccess) {
+		System.out.println("Here is UserServices.checkUserAccess method...");
+
+		if (Tools.isEmpty(UserAccessGroup, requireAccess))
+			return ResultCode.REQUIREINFO_NOTENOUGH;
+
+		List<AccessGroup> accessGroupAccess = accessGroupMapper
+				.getAccessByAccessGroupName(UserAccessGroup);
+		System.out.println(requireAccess);
+		if (accessGroupAccess.size() > 0) {
+			for (Iterator<AccessGroup> it = accessGroupAccess.iterator(); it
+					.hasNext();) {
+				if (it.next().getAccessgroup_access().equals(requireAccess)) {
+					return ResultCode.SUCCESS;	
+				}
+			}
+			return ResultCode.ACCESS_REJECT;
+		} else {
+			return ResultCode.ACCESSGROUP_ERROR;
+		}
+	}
+
+	// ###################
+	// ## 检测用户 token
+	// ###################
+
+	public int checkUserToken(String token) {
+		System.out.println("Here is UserServices.checkUserToken method...");
+
+		if (Tools.isEmpty(token))
+			return ResultCode.REQUIREINFO_NOTENOUGH;
+
+		User user = userMapper.getUserByToken(token);
+
+		if (null != user) {
+			int checkUserStatusResult = checkUserStatusValue(user.getUser_status());
+			if (checkUserStatusResult == ResultCode.USERSTATUS_ACTIVE) {
+				long currenttime = new Date().getTime();
+				long logintime = user.getUser_login_time().getTime();
+				long duringtime = currenttime - logintime;
+
+				if (duringtime > (7 * 24 * 60 * 60 * 1000)) { // Token 7天有效期
+					return ResultCode.USERTOKEN_EXPIRED;
+				} else {
+					userinfo = user;// 返回更新的user对象给userinfo
+					return ResultCode.SUCCESS;
+				}
+			} else {
+				return checkUserStatusResult;
+			}
+		} else {
+			return ResultCode.USERTOKEN_ERROR;
+		}
+	}
+
+	// ###################
+	// ## 检测用户名是否存在
+	// ###################
+
+	public int checkUserName(String username) {
+		System.out.println("Here is UserServices.checkUserName method...");
+
+		if (Tools.isEmpty(username))
+			return ResultCode.REQUIREINFO_NOTENOUGH;
+
+		// 判断用户名的类型：
+		if (Tools.isNumeric(username)) { // 判断登录名是否为手机号码
+
+			userinfo = userMapper.getUserByMobile(new BigInteger(username));
+			if (null != userinfo) {
+				System.out.println("Username_mobile exist");
+				return ResultCode.USERNAME_MOBILE;
+			}
+		}
+		if (username.contains("@")) { // 判断登录名是否为邮箱地址
+			userinfo = userMapper.getUserByEmail(username);
+			if (null != userinfo) {
+				System.out.println("Username_email exist");
+				return ResultCode.USERNAME_EMAIL;
+			}
+		}
+
+		userinfo = userMapper.getUserByAccount(username);
+		if (null != userinfo) { // 判断登录名是否为帐号
+			System.out.println("Username_account exist");
+			return ResultCode.USERNAME_ACCOUNT;
+		} else {
+			return ResultCode.USERNAME_NOTEXIST;
+		}
+	}
+
+	// ###################
+	// ## 检测用户状态
+	// ###################
+
+	public int checkUserStatusValue(int status) {
+		int checkUserResult;
+
+		switch (status) {// * 1=active, 2=pause, 3=pending, 4=locked
+		case 1:
+			checkUserResult = ResultCode.USERSTATUS_ACTIVE;
+			break;
+		case 2:
+			checkUserResult = ResultCode.USERSTATUS_PAUSE;
+			break;
+		case 3:
+			checkUserResult = ResultCode.USERSTATUS_PENDING;
+			break;
+		case 4:
+			checkUserResult = ResultCode.USERSTATUS_LOCKED;
+			break;
+		default:
+			checkUserResult = ResultCode.USERSTATUS_ERROR;
+			break;
+		}
+		return checkUserResult;
 	}
 
 	// ###################
@@ -532,183 +692,10 @@ public class UserServices {
 		}
 	}
 
-	// ###################
-	// ## 拉取User表
-	// ###################
-
-	public int checkUserList(String token, String col_name, String specify_value, String search_value) {
-		System.out.println("Here is UserServices.checkUserList method...");
-
-		int checkTokenResult = checkToken(token);
-		if (checkTokenResult == ResultCode.SUCCESS) {
-			if (userinfo.getUser_type() != 3) {
-				return ResultCode.ACCESS_REJECT;
-			}
-			List<User> userlist = userMapper.listUserOrderBy(col_name, specify_value, search_value);
-			if (userlist.size() > 0) {
-				this.userlist = userlist;
-				return ResultCode.SUCCESS;
-			} else {
-				return ResultCode.USERLIST_NULL;
-			}
-		} else {
-			return checkTokenResult;
-		}
-	}
-
-	// ###################
-	// ## 检测用户权限
-	// ###################
-
-	public int checkUserAccess(String token, String requireAccess) {
-		System.out.println("Here is UserServices.checkUserAccess method...");
-
-		if (isEmpty(token) || isEmpty(requireAccess))
-			return ResultCode.REQUIREINFO_NOTENOUGH;
-
-		int checkTokenResult = checkToken(token);
-		if (checkTokenResult == ResultCode.SUCCESS) {
-			if (requireAccess.equals(userinfo.getUser_access_group())) {
-				return ResultCode.SUCCESS;
-			} else {
-				return ResultCode.ACCESS_REJECT;
-			}
-		} else {
-			return checkTokenResult;
-		}
-	}
-
-	// ###################
-	// ## 检测 token & userid
-	// ###################
-
-	// ###################
-	// ## 检测用户 token
-	// ###################
-
-	public int checkToken(String token) {
-		System.out.println("Here is UserServices.checkToken method...");
-
-		if (isEmpty(token))
-			return ResultCode.REQUIREINFO_NOTENOUGH;
-
-		User user = userMapper.getUserByToken(token);
-
-		if (null != user) {
-			int checkUserStatusResult = checkUserStatusValue(user.getUser_status());
-			if (checkUserStatusResult == ResultCode.USERSTATUS_ACTIVE) {
-				long currenttime = new Date().getTime();
-				long logintime = user.getUser_login_time().getTime();
-				long duringtime = currenttime - logintime;
-
-				if (duringtime > (7 * 24 * 60 * 60 * 1000)) { // Token 7天有效期
-					return ResultCode.USERTOKEN_EXPIRED;
-				} else {
-					userinfo = user;// 返回更新的user对象给userinfo
-					return ResultCode.SUCCESS;
-				}
-			} else {
-				return checkUserStatusResult;
-			}
-		} else {
-			return ResultCode.USERTOKEN_ERROR;
-		}
-	}
-
-	// ###################
-	// ## 检测用户名是否存在
-	// ###################
-
-	public int checkUserName(String username) {
-		System.out.println("Here is UserServices.checkUserName method...");
-
-		if (isEmpty(username))
-			return ResultCode.REQUIREINFO_NOTENOUGH;
-
-		// 判断用户名的类型：
-		if (isNumeric(username)) { // 判断登录名是否为手机号码
-
-			userinfo = userMapper.getUserByMobile(new BigInteger(username));
-			if (null != userinfo) {
-				System.out.println("Username_mobile exist");
-				return ResultCode.USERNAME_MOBILE;
-			}
-		}
-		if (username.contains("@")) { // 判断登录名是否为邮箱地址
-			userinfo = userMapper.getUserByEmail(username);
-			if (null != userinfo) {
-				System.out.println("Username_email exist");
-				return ResultCode.USERNAME_EMAIL;
-			}
-		}
-
-		userinfo = userMapper.getUserByAccount(username);
-		if (null != userinfo) { // 判断登录名是否为帐号
-			System.out.println("Username_account exist");
-			return ResultCode.USERNAME_ACCOUNT;
-		} else {
-			return ResultCode.USERNAME_NOTEXIST;
-		}
-	}
-
-	// ###################
-	// ## 检测用户状态
-	// ###################
-
-	public int checkUserStatusValue(int status) {
-		int checkUserResult;
-
-		switch (status) {// * 1=active, 2=pause, 3=pending, 4=locked
-		case 1:
-			checkUserResult = ResultCode.USERSTATUS_ACTIVE;
-			break;
-		case 2:
-			checkUserResult = ResultCode.USERSTATUS_PAUSE;
-			break;
-		case 3:
-			checkUserResult = ResultCode.USERSTATUS_PENDING;
-			break;
-		case 4:
-			checkUserResult = ResultCode.USERSTATUS_LOCKED;
-			break;
-		default:
-			checkUserResult = ResultCode.USERSTATUS_ERROR;
-			break;
-		}
-		return checkUserResult;
-	}
-
-	// ###################
-	// 判断是否数字的方法
-	// ###################
-
-	public static boolean isNumeric(String str) {
-		for (int i = str.length(); --i >= 0;) {
-			if (!Character.isDigit(str.charAt(i))) {
-				return false;
-			}
-		}
-		return true;
-	}
-
-	// ###################
-	// 判断String参数是否为空 / null
-	// ###################
-
-	public static boolean isEmpty(String... strings) {
-		for (int i = 0; i < strings.length; i++) {
-			if (strings[i] == null || strings[i].isEmpty()) {
-				return true;
-			}
-		}
-		return false;
-	}
-
-	// ###################
-	// 返回用户信息, 用于json返回
-	// ###################
-
-	public Object getUserinfo() {
+	
+	//getter & setter
+	
+	public User getUserinfo() {
 		return userinfo;
 	}
 

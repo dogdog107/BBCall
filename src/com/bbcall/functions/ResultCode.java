@@ -38,6 +38,7 @@ public class ResultCode {
 
 	// 权限返回码14XXX
 	public static Integer ACCESS_REJECT = 14001;// 拒绝访问
+	public static Integer ACCESSGROUP_ERROR = 14002;// 权限组不存在
 
 	// 参数数据返回码15XXX
 	public static Integer REFERDOC_TYPE_NOTEXIST = 15001;// 参数订单类型不存在
@@ -150,6 +151,10 @@ public class ResultCode {
 
 		case 14001:
 			errmsg = "access reject";
+			break;
+			
+		case 14002:
+			errmsg = "accessgroup not exist";
 			break;
 
 		//参数表
