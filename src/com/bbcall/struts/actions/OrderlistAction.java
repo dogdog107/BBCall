@@ -12,6 +12,7 @@ import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Controller;
 
 import com.bbcall.functions.ResultCode;
+import com.bbcall.functions.Tools;
 import com.bbcall.mybatis.table.AddressList;
 import com.bbcall.mybatis.table.Orderlist;
 import com.bbcall.mybatis.table.Referdoc;
@@ -35,27 +36,27 @@ public class OrderlistAction extends ActionSupport {
 	private String order_id;
 	private String order_book_time;
 	private String order_book_location;
-	private int order_book_location_code;
-	private BigInteger order_contact_mobile;
+	private String order_book_location_code;
+	private String order_contact_mobile;
 	private String order_contact_name;
 	private String order_urgent;
-	private double order_urgent_bonus;
+	private String order_urgent_bonus;
 	private String orderpicurl;
 	private String order_description;
-	private double order_price;
+	private String order_price;
 	private String user_account;
 	private String order_master_account;
 	private String order_status;
-	private int order_type_code;
-	private int order_score;
+	private String order_type_code;
+	private String order_score;
 	private String order_evaluation;
 	private String order_remark;
 	private int addresscode;
-	private int order_section;
+	private String order_section;
 	private List<String> skilllist;
 	private List<String> locationlist;
 	private String sortparm;
-	private List<Integer> order_type_list;
+	private List<String> order_type_list;
 
 	private List<String> orderFileFileName = new ArrayList<String>(); // 文件名
 
@@ -72,14 +73,21 @@ public class OrderlistAction extends ActionSupport {
 
 		int result = 1;
 		List<Referdoc> referdoclist = new ArrayList<Referdoc>();
+		int book_location_code = Integer.parseInt(order_book_location_code);
+		BigInteger contact_mobile = new BigInteger(order_contact_mobile);
+		double urgent_bonus = Double.parseDouble(order_urgent_bonus);
+		double price = Double.parseDouble(order_price);
+		int section = Integer.parseInt(order_section);
 
 		for (int i = 0; i < order_type_list.size(); i++) {
 
+			int type_code = Integer.parseInt(order_type_list.get(i));
+
 			result = orderlistServices.addOrder(order_book_time,
-					order_book_location, order_book_location_code,
-					order_contact_mobile, order_contact_name, order_urgent,
-					order_urgent_bonus, orderpicurl, order_description,
-					order_price, user_account, order_type_list.get(i),order_section);
+					order_book_location, book_location_code, contact_mobile,
+					order_contact_name, order_urgent, urgent_bonus,
+					orderpicurl, order_description, price, user_account,
+					type_code, section);
 		}
 
 		if (result == ResultCode.SUCCESS) {
@@ -91,9 +99,10 @@ public class OrderlistAction extends ActionSupport {
 			}
 			dataMap.put("orderlist", orderlist);
 			dataMap.put("referdoclist", referdoclist);
-			dataMap.put("resultcode", result);
-			dataMap.put("errmsg", ResultCode.getErrmsg(result));
-			dataMap.put("addResult", true);
+			dataMap.putAll(Tools.JsonHeadMap(result, true));
+			// dataMap.put("resultcode", result);
+			// dataMap.put("errmsg", ResultCode.getErrmsg(result));
+			// dataMap.put("addResult", true);
 			return "addordersuccess";
 		} else {
 			return "addorderfailed";
@@ -113,12 +122,18 @@ public class OrderlistAction extends ActionSupport {
 		Referdoc referdoclist = new Referdoc();
 
 		int orderid = Integer.parseInt(order_id);
+		int book_location_code = Integer.parseInt(order_book_location_code);
+		BigInteger contact_mobile = new BigInteger(order_contact_mobile);
+		double urgent_bonus = Double.parseDouble(order_urgent_bonus);
+		double price = Double.parseDouble(order_price);
+		int section = Integer.parseInt(order_section);
+		int type_code = Integer.parseInt(order_type_code);
 
 		int result = orderlistServices.updateOrder(orderid, order_book_time,
-				order_book_location, order_book_location_code,
-				order_contact_mobile, order_contact_name, order_urgent,
-				order_urgent_bonus, orderpicurl, order_description,
-				order_price, user_account, order_type_code, order_remark,order_section);
+				order_book_location, book_location_code, contact_mobile,
+				order_contact_name, order_urgent, urgent_bonus, orderpicurl,
+				order_description, price, user_account, type_code,
+				order_remark, section);
 
 		if (result == ResultCode.SUCCESS) {
 			Orderlist orderlist = orderlistServices.orderlistinfo();
@@ -128,9 +143,10 @@ public class OrderlistAction extends ActionSupport {
 
 			dataMap.put("orderlist", orderlist);
 			dataMap.put("referdoclist", referdoclist);
-			dataMap.put("resultcode", result);
-			dataMap.put("errmsg", ResultCode.getErrmsg(result));
-			dataMap.put("updateResult", true);
+			dataMap.putAll(Tools.JsonHeadMap(result, true));
+			// dataMap.put("resultcode", result);
+			// dataMap.put("errmsg", ResultCode.getErrmsg(result));
+			// dataMap.put("updateResult", true);
 		}
 
 		return SUCCESS;
@@ -160,9 +176,10 @@ public class OrderlistAction extends ActionSupport {
 			}
 			dataMap.put("orderlist", orderlist);
 			dataMap.put("referdoclist", referdoclist);
-			dataMap.put("resultcode", result);
-			dataMap.put("errmsg", ResultCode.getErrmsg(result));
-			dataMap.put("dealResult", true);
+			dataMap.putAll(Tools.JsonHeadMap(result, true));
+			// dataMap.put("resultcode", result);
+			// dataMap.put("errmsg", ResultCode.getErrmsg(result));
+			// dataMap.put("dealResult", true);
 		}
 
 		return SUCCESS;
@@ -178,8 +195,10 @@ public class OrderlistAction extends ActionSupport {
 		dataMap.clear(); // dataMap中的数据将会被Struts2转换成JSON字符串，所以这里要先清空其中的数据
 
 		int orderid = Integer.parseInt(order_id);
-		int result = orderlistServices.completeOrder(order_score,
-				order_evaluation, orderid);
+		int score = Integer.parseInt(order_score);
+
+		int result = orderlistServices.completeOrder(score, order_evaluation,
+				orderid);
 		List<Referdoc> referdoclist = new ArrayList<Referdoc>();
 
 		if (result == ResultCode.SUCCESS) {
@@ -191,9 +210,10 @@ public class OrderlistAction extends ActionSupport {
 			}
 			dataMap.put("orderlist", orderlist);
 			dataMap.put("referdoclist", referdoclist);
-			dataMap.put("resultcode", result);
-			dataMap.put("errmsg", ResultCode.getErrmsg(result));
-			dataMap.put("completeResult", true);
+			dataMap.putAll(Tools.JsonHeadMap(result, true));
+			// dataMap.put("resultcode", result);
+			// dataMap.put("errmsg", ResultCode.getErrmsg(result));
+			// dataMap.put("completeResult", true);
 		}
 
 		return SUCCESS;
@@ -220,9 +240,10 @@ public class OrderlistAction extends ActionSupport {
 			}
 			dataMap.put("orderlist", orderlist);
 			dataMap.put("referdoclist", referdoclist);
-			dataMap.put("resultcode", result);
-			dataMap.put("errmsg", ResultCode.getErrmsg(result));
-			dataMap.put("unorderlistResult", true);
+			dataMap.putAll(Tools.JsonHeadMap(result, true));
+//			dataMap.put("resultcode", result);
+//			dataMap.put("errmsg", ResultCode.getErrmsg(result));
+//			dataMap.put("unorderlistResult", true);
 		}
 
 		return SUCCESS;
@@ -251,9 +272,10 @@ public class OrderlistAction extends ActionSupport {
 			}
 			dataMap.put("orderlist", orderlist);
 			dataMap.put("referdoclist", referdoclist);
-			dataMap.put("resultcode", result);
-			dataMap.put("errmsg", ResultCode.getErrmsg(result));
-			dataMap.put("selectunorderlistResult", true);
+			dataMap.putAll(Tools.JsonHeadMap(result, true));
+//			dataMap.put("resultcode", result);
+//			dataMap.put("errmsg", ResultCode.getErrmsg(result));
+//			dataMap.put("selectunorderlistResult", true);
 		}
 
 		return SUCCESS;
@@ -283,9 +305,10 @@ public class OrderlistAction extends ActionSupport {
 			}
 			dataMap.put("orderlist", orderlist);
 			dataMap.put("referdoclist", referdoclist);
-			dataMap.put("resultcode", result);
-			dataMap.put("errmsg", ResultCode.getErrmsg(result));
-			dataMap.put("selectunordersbybooktimeResult", true);
+			dataMap.putAll(Tools.JsonHeadMap(result, true));
+//			dataMap.put("resultcode", result);
+//			dataMap.put("errmsg", ResultCode.getErrmsg(result));
+//			dataMap.put("selectunordersbybooktimeResult", true);
 		}
 
 		return SUCCESS;
@@ -313,9 +336,10 @@ public class OrderlistAction extends ActionSupport {
 			}
 			dataMap.put("orderlist", orderlist);
 			dataMap.put("referdoclist", referdoclist);
-			dataMap.put("resultcode", result);
-			dataMap.put("errmsg", ResultCode.getErrmsg(result));
-			dataMap.put("selectproorderlistResult", true);
+			dataMap.putAll(Tools.JsonHeadMap(result, true));
+//			dataMap.put("resultcode", result);
+//			dataMap.put("errmsg", ResultCode.getErrmsg(result));
+//			dataMap.put("selectproorderlistResult", true);
 		}
 
 		return SUCCESS;
@@ -342,9 +366,10 @@ public class OrderlistAction extends ActionSupport {
 			}
 			dataMap.put("orderlist", orderlist);
 			dataMap.put("referdoclist", referdoclist);
-			dataMap.put("resultcode", result);
-			dataMap.put("errmsg", ResultCode.getErrmsg(result));
-			dataMap.put("selectComOrderlistResult", true);
+			dataMap.putAll(Tools.JsonHeadMap(result, true));
+//			dataMap.put("resultcode", result);
+//			dataMap.put("errmsg", ResultCode.getErrmsg(result));
+//			dataMap.put("selectComOrderlistResult", true);
 		}
 
 		return SUCCESS;
@@ -379,9 +404,10 @@ public class OrderlistAction extends ActionSupport {
 			dataMap.put("orderlist", orderlist);
 			dataMap.put("referdoclist", referdoclist);
 			dataMap.put("orderFileFileName", orderFileFileName);
-			dataMap.put("resultcode", result);
-			dataMap.put("errmsg", ResultCode.getErrmsg(result));
-			dataMap.put("selectResult", true);
+			dataMap.putAll(Tools.JsonHeadMap(result, true));
+//			dataMap.put("resultcode", result);
+//			dataMap.put("errmsg", ResultCode.getErrmsg(result));
+//			dataMap.put("selectResult", true);
 		}
 
 		return SUCCESS;
@@ -489,8 +515,9 @@ public class OrderlistAction extends ActionSupport {
 		dataMap.clear(); // dataMap中的数据将会被Struts2转换成JSON字符串，所以这里要先清空其中的数据
 
 		int orderstatus = Integer.parseInt(order_status);
+		int type_code = Integer.parseInt(order_type_code);
 		int result = orderlistServices.selectOrderlist(orderstatus,
-				order_master_account, order_type_code);
+				order_master_account, type_code);
 
 		List<Referdoc> referdoclist = new ArrayList<Referdoc>();
 
@@ -533,9 +560,10 @@ public class OrderlistAction extends ActionSupport {
 			}
 			dataMap.put("orderlist", orderlist);
 			dataMap.put("referdoclist", referdoclist);
-			dataMap.put("resultcode", result);
-			dataMap.put("errmsg", ResultCode.getErrmsg(result));
-			dataMap.put("deleteResult", true);
+			dataMap.putAll(Tools.JsonHeadMap(result, true));
+//			dataMap.put("resultcode", result);
+//			dataMap.put("errmsg", ResultCode.getErrmsg(result));
+//			dataMap.put("deleteResult", true);
 		}
 
 		return SUCCESS;
@@ -685,10 +713,6 @@ public class OrderlistAction extends ActionSupport {
 		this.order_book_location = order_book_location;
 	}
 
-	public void setOrder_contact_mobile(BigInteger order_contact_mobile) {
-		this.order_contact_mobile = order_contact_mobile;
-	}
-
 	public void setOrder_contact_name(String order_contact_name) {
 		this.order_contact_name = order_contact_name;
 	}
@@ -697,28 +721,12 @@ public class OrderlistAction extends ActionSupport {
 		this.order_urgent = order_urgent;
 	}
 
-	public void setOrder_urgent_bonus(double order_urgent_bonus) {
-		this.order_urgent_bonus = order_urgent_bonus;
-	}
-
 	public void setOrder_description(String order_description) {
 		this.order_description = order_description;
 	}
 
-	public void setOrder_price(double order_price) {
-		this.order_price = order_price;
-	}
-
-	public void setOrder_type_code(int order_type_code) {
-		this.order_type_code = order_type_code;
-	}
-
 	public void setUser_account(String user_account) {
 		this.user_account = user_account;
-	}
-
-	public void setOrder_book_location_code(int order_book_location_code) {
-		this.order_book_location_code = order_book_location_code;
 	}
 
 	public void setSkilllist(List<String> skilllist) {
@@ -741,14 +749,6 @@ public class OrderlistAction extends ActionSupport {
 		return order_book_location;
 	}
 
-	public int getOrder_book_location_code() {
-		return order_book_location_code;
-	}
-
-	public BigInteger getOrder_contact_mobile() {
-		return order_contact_mobile;
-	}
-
 	public String getOrder_contact_name() {
 		return order_contact_name;
 	}
@@ -757,24 +757,12 @@ public class OrderlistAction extends ActionSupport {
 		return order_urgent;
 	}
 
-	public double getOrder_urgent_bonus() {
-		return order_urgent_bonus;
-	}
-
 	public String getOrder_description() {
 		return order_description;
 	}
 
-	public double getOrder_price() {
-		return order_price;
-	}
-
 	public String getUser_account() {
 		return user_account;
-	}
-
-	public int getOrder_type_code() {
-		return order_type_code;
 	}
 
 	public List<String> getSkilllist() {
@@ -783,14 +771,6 @@ public class OrderlistAction extends ActionSupport {
 
 	public List<String> getLocationlist() {
 		return locationlist;
-	}
-
-	public int getAddresscode() {
-		return addresscode;
-	}
-
-	public void setAddresscode(int addresscode) {
-		this.addresscode = addresscode;
 	}
 
 	public String getSortparm() {
@@ -815,22 +795,6 @@ public class OrderlistAction extends ActionSupport {
 
 	public void setOrder_status(String order_status) {
 		this.order_status = order_status;
-	}
-
-	public List<Integer> getOrder_type_list() {
-		return order_type_list;
-	}
-
-	public void setOrder_type_list(List<Integer> order_type_list) {
-		this.order_type_list = order_type_list;
-	}
-
-	public int getOrder_score() {
-		return order_score;
-	}
-
-	public void setOrder_score(int order_score) {
-		this.order_score = order_score;
 	}
 
 	public String getOrder_evaluation() {
@@ -881,12 +845,76 @@ public class OrderlistAction extends ActionSupport {
 		this.order_remark = order_remark;
 	}
 
-	public int getOrder_section() {
+	public String getOrder_book_location_code() {
+		return order_book_location_code;
+	}
+
+	public void setOrder_book_location_code(String order_book_location_code) {
+		this.order_book_location_code = order_book_location_code;
+	}
+
+	public String getOrder_contact_mobile() {
+		return order_contact_mobile;
+	}
+
+	public void setOrder_contact_mobile(String order_contact_mobile) {
+		this.order_contact_mobile = order_contact_mobile;
+	}
+
+	public String getOrder_urgent_bonus() {
+		return order_urgent_bonus;
+	}
+
+	public void setOrder_urgent_bonus(String order_urgent_bonus) {
+		this.order_urgent_bonus = order_urgent_bonus;
+	}
+
+	public String getOrder_price() {
+		return order_price;
+	}
+
+	public void setOrder_price(String order_price) {
+		this.order_price = order_price;
+	}
+
+	public String getOrder_type_code() {
+		return order_type_code;
+	}
+
+	public void setOrder_type_code(String order_type_code) {
+		this.order_type_code = order_type_code;
+	}
+
+	public String getOrder_score() {
+		return order_score;
+	}
+
+	public void setOrder_score(String order_score) {
+		this.order_score = order_score;
+	}
+
+	public int getAddresscode() {
+		return addresscode;
+	}
+
+	public void setAddresscode(int addresscode) {
+		this.addresscode = addresscode;
+	}
+
+	public String getOrder_section() {
 		return order_section;
 	}
 
-	public void setOrder_section(int order_section) {
+	public void setOrder_section(String order_section) {
 		this.order_section = order_section;
+	}
+
+	public List<String> getOrder_type_list() {
+		return order_type_list;
+	}
+
+	public void setOrder_type_list(List<String> order_type_list) {
+		this.order_type_list = order_type_list;
 	}
 
 }

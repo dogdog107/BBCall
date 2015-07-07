@@ -99,10 +99,20 @@
 		order_user_account=#{order_user_account} order by order_create_time
 	</select>
 
-	<select id="getUnOrdersByMasterSkill" resultMap="OrderResultMap">
+	<select id="getOrdersByMasterSkill" resultMap="OrderResultMap">
 		select * from
 		orderlist where order_status=#{order_status,jdbcType=INTEGER} and
 		order_type_code=#{order_type_code,jdbcType=INTEGER} and
+		order_user_account not in (select blacklist_user_account from
+		blacklist where
+		blacklist_master_account=#{order_master_account,jdbcType=VARCHAR})
+		order by order_book_location_code, order_create_time
+	</select>
+	
+	<select id="getOrdersByMasterLocation" resultMap="OrderResultMap">
+		select * from
+		orderlist where order_status=#{order_status,jdbcType=INTEGER} and
+		order_book_location_code=#{order_book_location_code,jdbcType=INTEGER} and
 		order_user_account not in (select blacklist_user_account from
 		blacklist where
 		blacklist_master_account=#{order_master_account,jdbcType=VARCHAR})
