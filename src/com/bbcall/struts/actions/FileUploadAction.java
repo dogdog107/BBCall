@@ -15,6 +15,7 @@ import org.springframework.stereotype.Controller;
 
 import com.bbcall.functions.RandomCode;
 import com.bbcall.functions.ResultCode;
+import com.bbcall.functions.Tools;
 import com.bbcall.struts.services.FileUploadServices;
 import com.opensymphony.xwork2.ActionSupport;
 
@@ -57,16 +58,12 @@ public class FileUploadAction extends ActionSupport {
 		if (result == ResultCode.SUCCESS) {
 			picurl = fileUploadServices.getFileurl();
 			dataMap.put("picurl", picurl); // 放入一个是否操作成功的标识
-			dataMap.put("resultcode", result); // 放入一个是否操作成功的标识
-			dataMap.put("errmsg", ResultCode.getErrmsg(result));
-			dataMap.put("userUploadResult", true); // 放入registerResult
+			dataMap.putAll(Tools.JsonHeadMap(result, true));
 			System.out.println(dataMap);
 			return "userUploadSuccess";
 		} else {
 			fileUploadServices.deleteFile(storePath);
-			dataMap.put("resultcode", result); // 放入一个是否操作成功的标识
-			dataMap.put("errmsg", ResultCode.getErrmsg(result));
-			dataMap.put("userUploadResult", false); // 放入registerResult
+			dataMap.putAll(Tools.JsonHeadMap(result, false));
 			System.out.println(dataMap);
 			System.out.println("userUpload Failed");
 			return "userUploadFailed";
@@ -148,16 +145,12 @@ public class FileUploadAction extends ActionSupport {
 		if (result == ResultCode.SUCCESS) {
 			picurl = fileUploadServices.getFileurl();
 			dataMap.put("picurl", picurl); // 放入一个是否操作成功的标识
-			dataMap.put("resultcode", result); // 放入一个是否操作成功的标识
-			dataMap.put("errmsg", ResultCode.getErrmsg(result));
-			dataMap.put("advertUploadResult", true); // 放入registerResult
+			dataMap.putAll(Tools.JsonHeadMap(result, true));
 			System.out.println(dataMap);
 			return "advertUploadSuccess";
 		} else {
 			fileUploadServices.deleteFile(storePath);
-			dataMap.put("resultcode", result); // 放入一个是否操作成功的标识
-			dataMap.put("errmsg", ResultCode.getErrmsg(result));
-			dataMap.put("advertUploadResult", false); // 放入registerResult
+			dataMap.putAll(Tools.JsonHeadMap(result, false));
 			System.out.println(dataMap);
 			System.out.println("advertUpload Failed");
 			return "advertUploadFailed";

@@ -23,6 +23,8 @@
 		
 			<!-- 自定义 登录验证 拦截器 -->
 			<interceptor name="LoginInterceptor" class="com.bbcall.struts.interceptor.LoginInterceptor">
+				<!-- 停用(true)/启用(false) 登录验证拦截器 -->
+				<param name="disable">true</param>
 				<param name="excludeAction">user_login,user_register,user_loginJson,user_registerJson,user_logout</param>
 				<param name="sessionCheckName">user_token</param>
 			</interceptor>  
@@ -132,10 +134,17 @@
 			</result>
 		</action>
 
+		<!-- Address Action -->
+		<action name="address_*" method="{1}" class="addressAction">
+			
+			<result type="json" name="json">
+				<param name="root">dataMap</param>
+			</result>
+		</action>
 
 		<!-- FileUpload Action -->
 		<!-- Reference: http://blog.sina.com.cn/s/blog_77cb8363010177zb.html -->
-		<action name="*" method="{1}" class="fileUploadAction">
+		<action name="upload_*" method="{1}" class="fileUploadAction">
 			<!-- 配置名字为fileUpload的拦截器 -->
 			<interceptor-ref name="fileUpload">
 
@@ -170,6 +179,7 @@
 				<param name="root">dataMap</param>
 			</result>
 		</action>
+		
 	</package>
 
 	<!-- Add packages here -->

@@ -2,7 +2,6 @@ package com.bbcall.struts.services;
 
 import java.math.BigInteger;
 import java.util.Date;
-import java.util.Iterator;
 import java.util.List;
 import java.sql.Timestamp;
 
@@ -12,11 +11,7 @@ import org.springframework.stereotype.Service;
 import com.bbcall.functions.RandomCode;
 import com.bbcall.functions.ResultCode;
 import com.bbcall.functions.Tools;
-import com.bbcall.mybatis.dao.AccessGroupMapper;
-import com.bbcall.mybatis.dao.AddressListMapper;
 import com.bbcall.mybatis.dao.UserMapper;
-import com.bbcall.mybatis.table.AccessGroup;
-import com.bbcall.mybatis.table.AddressList;
 import com.bbcall.mybatis.table.User;
 
 @Service("userServices")
@@ -27,13 +22,10 @@ public class UserServices {
 	@Autowired
 	private UserMapper userMapper;
 	@Autowired
-	private AddressListMapper addressListMapper;
-	@Autowired
-	private AccessGroupMapper accessGroupMapper;
+	private AddressServices addressServices;
 
 	private User userinfo = new User();
 	private User updateduserinfo = new User();
-	private List<AddressList> addresslist;
 	private List<User> userlist;
 
 	// ################################################################################
@@ -311,7 +303,7 @@ public class UserServices {
 			if (addresscode == null)
 				return ResultCode.ADDRESSCODE_ERROR;
 
-			String addressname = checkAddresscodeName(addresscode);// 调用checkAddresscodeName方法，获取地址名
+			String addressname = addressServices.checkAddresscodeName(addresscode);// 调用checkAddresscodeName方法，获取地址名
 			if (address.replace(";", "").matches(addressname + "(.*)")) {// 判断地址名是否一致
 				user.setUser_address(address);// 放入新地址名
 				changecount++;
@@ -324,7 +316,7 @@ public class UserServices {
 				&& (!addresscode.equals(user.getUser_address_code()) || !address.equals(user
 						.getUser_address()))) {
 
-			String addressname = checkAddresscodeName(addresscode);// 调用checkAddresscodeName方法，获取地址名
+			String addressname = addressServices.checkAddresscodeName(addresscode);// 调用checkAddresscodeName方法，获取地址名
 			if (addressname == null)// 如果addressname 返回null, 表明addresscode错误
 				return ResultCode.ADDRESSCODE_ERROR;
 			if (address.replace(";", "").matches(addressname + "(.*)")) {// 判断地址名是否一致
@@ -496,32 +488,6 @@ public class UserServices {
 	}
 
 	// ###################
-	// ## 检测用户权限
-	// ###################
-
-	public int checkUserAccess(String UserAccessGroup, String requireAccess) {
-		System.out.println("Here is UserServices.checkUserAccess method...");
-
-		if (Tools.isEmpty(UserAccessGroup, requireAccess))
-			return ResultCode.REQUIREINFO_NOTENOUGH;
-
-		List<AccessGroup> accessGroupAccess = accessGroupMapper
-				.getAccessByAccessGroupName(UserAccessGroup);
-		System.out.println(requireAccess);
-		if (accessGroupAccess.size() > 0) {
-			for (Iterator<AccessGroup> it = accessGroupAccess.iterator(); it
-					.hasNext();) {
-				if (it.next().getAccessgroup_access().equals(requireAccess)) {
-					return ResultCode.SUCCESS;	
-				}
-			}
-			return ResultCode.ACCESS_REJECT;
-		} else {
-			return ResultCode.ACCESSGROUP_ERROR;
-		}
-	}
-
-	// ###################
 	// ## 检测用户 token
 	// ###################
 
@@ -616,91 +582,11 @@ public class UserServices {
 		}
 		return checkUserResult;
 	}
-
-	// ###################
-	// ## 根据addresscode读取省、市、区名
-	// ###################
-
-	public String checkAddresscodeName(Integer addresscode) {
-		List<AddressList> addresslist = addressListMapper
-				.getAddressByAreano(addresscode);// addressList 对象
-
-		if (addresslist.size() == 0)
-			return null;
-		int arealevel = addresslist.get(0).getArealevel();// 读取对应的地址level
-
-		String addressname = "";
-		if (arealevel > 1) {
-			for (int i = 1; i < arealevel; i++) {// 完整读取地址名（省、市、区）
-				switch (i) {
-				case 1:// 得到省级名字
-					int tempcode1 = addresscode / 10000;
-					addressname = addressListMapper
-							.getAddressByAreano(tempcode1 * 10000).get(0)
-							.getAreaname();
-					break;
-				case 2:// 得到市级名字
-					addressname = addressname
-							+ addressListMapper
-									.getAddressByAreano(
-											addresslist.get(0).getParentno())
-									.get(0).getAreaname();
-					break;
-				}
-			}
-		}
-
-		addressname = addressname + addresslist.get(0).getAreaname();// 得到原来addresscode的地址名
-		return addressname;
-	}
-
-	// ###################
-	// ## 读取Child省、市、区列表
-	// ###################
-
-	public int checkChildAdsList(Integer addresscode) {
-		System.out.println("Here is UserServices.checkChildAdsList method...");
-
-		List<AddressList> addresslist = addressListMapper
-				.getAddressByParentno(addresscode);
-		if (addresslist.size() > 0) {
-
-			this.addresslist = addresslist;
-
-			return ResultCode.SUCCESS;
-		} else {
-			return ResultCode.ADDRESS_NULL;
-		}
-	}
-
-	// ###################
-	// ## 读取省、市、区列表
-	// ###################
-
-	public int checkAdsList(Integer addresscode) {
-		System.out.println("Here is UserServices.checkAdsList method...");
-
-		List<AddressList> addresslist = addressListMapper
-				.getAddressByAreano(addresscode);
-		if (addresslist.size() > 0) {
-
-			this.addresslist = addresslist;
-
-			return ResultCode.SUCCESS;
-		} else {
-			return ResultCode.ADDRESS_NULL;
-		}
-	}
-
 	
 	//getter & setter
 	
 	public User getUserinfo() {
 		return userinfo;
-	}
-
-	public List<AddressList> getAddresslist() {
-		return addresslist;
 	}
 
 	public List<User> getUserlist() {

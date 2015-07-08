@@ -10,7 +10,7 @@ function showaddresslist(times, childcode, parentcode) {
 	var idname = 'adscode_' + times;
 	$.ajax({
 				type : "post",
-				url : "${pageContext.request.contextPath}/user_checkChildAdsListJson.action",
+				url : "${pageContext.request.contextPath}/address_checkChildAdsListJson.action",
 				data : {
 					"addresscode" : parentcode
 				},
@@ -68,7 +68,7 @@ function getaddresslist(parentcode, idno) {
 	}
 	$.ajax({
 				type : "post",
-				url : "${pageContext.request.contextPath}/user_checkChildAdsListJson.action",
+				url : "${pageContext.request.contextPath}/address_checkChildAdsListJson.action",
 				data : {
 					"addresscode" : parentcode
 				},
@@ -107,7 +107,7 @@ function checkpwd(id) {
 $(document).ready(function() {
 	$('#upload').live('change', function() {
 		if (confirm('確定要修改頭像嗎？\n Confirm to change the photo?')) {
-			$('#update_form').attr('action', 'userUpload').submit();
+			$('#update_form').attr('action', 'upload_userUpload').submit();
 		} else {
 			$('#upload').val("");
 		}
@@ -141,7 +141,7 @@ function onload() {
 	$(function() {
 		if (addresscode != '' && addresscode != 0) {
 			$.post(
-							"${pageContext.request.contextPath}/user_checkAdsListJson.action",
+							"${pageContext.request.contextPath}/address_checkAdsListJson.action",
 							{
 								"addresscode" : addresscode
 							},
@@ -160,7 +160,7 @@ function onload() {
 							});
 		} else {
 			$.post(
-							"${pageContext.request.contextPath}/user_checkChildAdsListJson.action",
+							"${pageContext.request.contextPath}/address_checkChildAdsListJson.action",
 							{
 								"addresscode" : 0
 							},

@@ -19,7 +19,7 @@
 
 <body >
 	<h1>Struts add order Page</h1>
-	<s:form action="orderUpload" theme="simple" method="post" enctype="multipart/form-data">
+	<s:form action="upload_orderUpload" theme="simple" method="post" enctype="multipart/form-data">
 	
 	orderid:<input id="orderid" name="orderid" value="6">
 	

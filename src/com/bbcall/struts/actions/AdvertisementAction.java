@@ -124,6 +124,21 @@ public class AdvertisementAction extends ActionSupport{
 		return "json";
 	}
 	
+	/**
+	 * deleteAdvert Action
+	 * @return
+	 * @throws Exception
+	 */
+	public String deleteAdvert() throws Exception {
+		return SUCCESS;
+	}
+	
+	public String deleteAdvertJson() throws Exception {
+		deleteAdvert();
+		return "json";
+	}
+	
+	
 	// Json Format Return
 	public Map<String, Object> getDataMap() {
 		return dataMap;

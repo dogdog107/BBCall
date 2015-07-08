@@ -113,10 +113,10 @@ function updateStatus(idname, value) {
 						break;
 					}
 					$("#message").html("<font color=green> (ID:"+ userid +") Status Update Success ! </font>");
-					$("#div_message").show(300).delay(10000).hide(300);
+					$("#div_message").show(300).delay(5000).hide(300);
 				} else {
 					$("#message").html("<font color=red> (ID:"+ userid +") Status Update Failed ! </font>");
-					$("#div_message").show(300).delay(10000).hide(300);
+					$("#div_message").show(300).delay(5000).hide(300);
 					alert("Update failed. " + data.errmsg);
 				}
 			}
@@ -182,10 +182,10 @@ function col_name_change(colname_value) {
 		$("tr[id^='userlist_']").remove();
 		checkUserList(colname_value);
 		$("#message").html("<font color=green> Sorting by " + colname_value + " </font>");
-		$("#div_message").show(300).delay(5000).hide(300);
+		$("#div_message").show(300).delay(3000).hide(300);
 	}else{
 		$("#message").html("<font color=red> Invalid value : " + colname_value + " </font>");
-		$("#div_message").show(300).delay(10000).hide(300);
+		$("#div_message").show(300).delay(5000).hide(300);
 	}
 	
 
@@ -223,11 +223,11 @@ function specify_value_change(specify_value) {
 			$("tr[id^='userlist_']").remove();
 			checkUserList(new_col_name, new_specify_value);
 			$("#message").html("<font color=green> Sorting by " + $("#col_name").val() + " with " + specify_value + " </font>");
-			$("#div_message").show(300).delay(5000).hide(300);
+			$("#div_message").show(300).delay(3000).hide(300);
 		}
 	}else{
 		$("#message").html("<font color=red> Invalid value : " + specify_value + " </font>");
-		$("#div_message").show(300).delay(10000).hide(300);
+		$("#div_message").show(300).delay(5000).hide(300);
 	}
 }
 

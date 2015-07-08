@@ -110,7 +110,7 @@ jQuery(function() {
         swf: BASE_URL + '/page/WebUploader/Uploader.swf',
 
         // 文件接收服务端。
-        server: BASE_URL + '/advertUploadJson.action',
+        server: BASE_URL + '/upload_advertUploadJson.action',
 
         // 选择文件的按钮。可选。
         // 内部根据当前运行是创建，可能是input元素，也可能是flash.
@@ -189,7 +189,7 @@ jQuery(function() {
     });
 
     // 文件上传失败，现实上传出错。
-    uploader.on( 'uploadError', function( file ) {
+    uploader.on( 'uploadError', function( file, reason ) {
         var $li = $( '#'+file.id ),
             $error = $li.find('div.error');
 
@@ -197,8 +197,7 @@ jQuery(function() {
         if ( !$error.length ) {
             $error = $('<div class="error"></div>').appendTo( $li );
         }
-
-        $error.text('Failed');
+        $error.text("Failed");
     });
 
     // 完成上传完了，成功或者失败，先删除进度条。
@@ -231,7 +230,7 @@ jQuery(function() {
 		swf: BASE_URL + '/page/WebUploader/Uploader.swf',
 		
 		// 文件接收服务端。
-		server: BASE_URL + '/advertUploadJson.action',
+		server: BASE_URL + '/upload_advertUploadJson.action',
 		
 		// 选择文件的按钮。可选。
 		// 内部根据当前运行是创建，可能是input元素，也可能是flash.
