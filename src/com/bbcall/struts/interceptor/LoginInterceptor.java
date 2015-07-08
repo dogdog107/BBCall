@@ -34,15 +34,14 @@ public class LoginInterceptor extends AbstractInterceptor {
 	@Override
 	public String intercept(ActionInvocation invocation) throws Exception {
 		System.out.println("Here is Login Validation Intercepter.");
-		
-		System.out.println(disable);
+		String actionName = invocation.getProxy().getActionName();
+		System.out.println("Requesting : " + actionName);
 		if (disable) {
 			System.out.println("Login Validation Intercepter is Disabled.");
-			// 被停用
+			// 被停用时，放行。
 			return invocation.invoke();
 		}
 		
-		String actionName = invocation.getProxy().getActionName();
 		if (list.contains(actionName)) {
 			// 请求的是合法
 			return invocation.invoke();
