@@ -22,11 +22,11 @@ public class PreorderAction extends ActionSupport {
 	@Autowired
 	PreorderServices preorderServices;
 
-	private int preorder_id;
+	private String preorder_id;
 	private String preorder_master_account;
 	private Timestamp preorder_create_time;
-	private double preorder_price;
-	private int preorder_order_id;
+	private String preorder_price;
+	private String preorder_order_id;
 
 	private Map<String, Object> dataMap;
 
@@ -34,7 +34,11 @@ public class PreorderAction extends ActionSupport {
 		dataMap = new HashMap<String, Object>(); // 新建dataMap来储存JSON字符串
 		dataMap.clear(); // dataMap中的数据将会被Struts2转换成JSON字符串，所以这里要先清空其中的数据
 		
-		int result = preorderServices.addPreorder(preorder_master_account, preorder_price, preorder_order_id);
+		double price = Double.parseDouble(preorder_price);
+		int preorderid = Integer.parseInt(preorder_order_id);
+		
+		
+		int result = preorderServices.addPreorder(preorder_master_account, price, preorderid);
 		
 		if (result == ResultCode.SUCCESS) {
 			List<Preorder> preorderlist = preorderServices.preorderinfos();
@@ -56,7 +60,9 @@ public class PreorderAction extends ActionSupport {
 		dataMap = new HashMap<String, Object>(); // 新建dataMap来储存JSON字符串
 		dataMap.clear(); // dataMap中的数据将会被Struts2转换成JSON字符串，所以这里要先清空其中的数据
 		
-		int result = preorderServices.getPreorderById(preorder_order_id);
+		int preorderid = Integer.parseInt(preorder_order_id);
+		
+		int result = preorderServices.getPreorderById(preorderid);
 		
 		if (result == ResultCode.SUCCESS) {
 			List<Preorder> preorderlist = preorderServices.preorderinfos();
@@ -100,7 +106,9 @@ public class PreorderAction extends ActionSupport {
 		dataMap = new HashMap<String, Object>(); // 新建dataMap来储存JSON字符串
 		dataMap.clear(); // dataMap中的数据将会被Struts2转换成JSON字符串，所以这里要先清空其中的数据
 		
-		int result = preorderServices.deletePreorder(preorder_id,preorder_master_account);
+		int preorderid = Integer.parseInt(preorder_id);
+		
+		int result = preorderServices.deletePreorder(preorderid,preorder_master_account);
 		
 		if (result == ResultCode.SUCCESS) {
 			List<Preorder> preorderlist = preorderServices.preorderinfos();
@@ -134,11 +142,11 @@ public class PreorderAction extends ActionSupport {
 		this.preorderServices = preorderServices;
 	}
 
-	public int getPreorder_id() {
+	public String getPreorder_id() {
 		return preorder_id;
 	}
 
-	public void setPreorder_id(int preorder_id) {
+	public void setPreorder_id(String preorder_id) {
 		this.preorder_id = preorder_id;
 	}
 
@@ -158,19 +166,19 @@ public class PreorderAction extends ActionSupport {
 		this.preorder_create_time = preorder_create_time;
 	}
 
-	public double getPreorder_price() {
+	public String getPreorder_price() {
 		return preorder_price;
 	}
 
-	public void setPreorder_price(double preorder_price) {
+	public void setPreorder_price(String preorder_price) {
 		this.preorder_price = preorder_price;
 	}
 
-	public int getPreorder_order_id() {
+	public String getPreorder_order_id() {
 		return preorder_order_id;
 	}
 
-	public void setPreorder_order_id(int preorder_order_id) {
+	public void setPreorder_order_id(String preorder_order_id) {
 		this.preorder_order_id = preorder_order_id;
 	}
 

@@ -9,6 +9,7 @@ import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Controller;
 
 import com.bbcall.functions.ResultCode;
+import com.bbcall.functions.Tools;
 import com.bbcall.mybatis.table.Referdoc;
 import com.bbcall.struts.services.ReferdocServices;
 import com.opensymphony.xwork2.ActionSupport;
@@ -23,9 +24,9 @@ public class ReferdocAction extends ActionSupport {
 
 	private Map<String, Object> dataMap;
 
-	private int referdoc_id;
+	private String referdoc_id;
 	private String referdoc_type;
-	private int referdoc_parentno;
+	private String referdoc_parentno;
 	private int referdoc_level;
 	private double referdoc_price;
 	private List<String> order_type_code_list;
@@ -40,8 +41,10 @@ public class ReferdocAction extends ActionSupport {
 		dataMap = new HashMap<String, Object>(); // 新建dataMap来储存JSON字符串
 		dataMap.clear(); // dataMap中的数据将会被Struts2转换成JSON字符串，所以这里要先清空其中的数据
 
+		int parentno = Integer.parseInt(referdoc_parentno);
+		
 		int result = referdocServices.addReferdoc(referdoc_type,
-				referdoc_parentno, referdoc_level, referdoc_price);
+				parentno, referdoc_level, referdoc_price);
 
 		if (result == ResultCode.SUCCESS) {
 			List<Referdoc> referdoclist = referdocServices.referdocinfos();
@@ -68,11 +71,14 @@ public class ReferdocAction extends ActionSupport {
 		dataMap = new HashMap<String, Object>(); // 新建dataMap来储存JSON字符串
 		dataMap.clear(); // dataMap中的数据将会被Struts2转换成JSON字符串，所以这里要先清空其中的数据
 
-		int result = referdocServices.updateReferdoc(referdoc_id,
-				referdoc_type, referdoc_parentno, referdoc_level,
+		int referdocid = Integer.parseInt(referdoc_id);
+		int parentno = Integer.parseInt(referdoc_parentno);
+		
+		int result = referdocServices.updateReferdoc(referdocid,
+				referdoc_type, parentno, referdoc_level,
 				referdoc_price);
 		
-	    referdocServices.getChildReferdoclist(referdoc_parentno);
+	    referdocServices.getChildReferdoclist(parentno);
 		List<Referdoc> referdoclist = referdocServices.referdocinfos();
 		
 		if (result == ResultCode.SUCCESS) {
@@ -100,7 +106,9 @@ public class ReferdocAction extends ActionSupport {
 		dataMap = new HashMap<String, Object>(); // 新建dataMap来储存JSON字符串
 		dataMap.clear(); // dataMap中的数据将会被Struts2转换成JSON字符串，所以这里要先清空其中的数据
 
-		int result = referdocServices.deleteReferdoc(referdoc_id);
+		int referdocid = Integer.parseInt(referdoc_id);
+		
+		int result = referdocServices.deleteReferdoc(referdocid);
 
 		if (result == ResultCode.SUCCESS) {
 			List<Referdoc> referdoclist = referdocServices.referdocinfos();
@@ -122,7 +130,8 @@ public class ReferdocAction extends ActionSupport {
 		dataMap = new HashMap<String, Object>(); // 新建dataMap来储存JSON字符串
 		dataMap.clear(); // dataMap中的数据将会被Struts2转换成JSON字符串，所以这里要先清空其中的数据
 
-		int result = referdocServices.getReferdoc(referdoc_id);
+		int referdocid = Integer.parseInt(referdoc_id);
+		int result = referdocServices.getReferdoc(referdocid);
 
 		if (result == ResultCode.SUCCESS) {
 			Referdoc referdoc = referdocServices.referdocinfo();
@@ -171,9 +180,10 @@ public class ReferdocAction extends ActionSupport {
 		if (result == ResultCode.SUCCESS) {
 			List<Referdoc> parentreferdoclist = referdocServices.referdocinfos();
 			dataMap.put("parentreferdoclist", parentreferdoclist);
-			dataMap.put("resultcode", result);
-			dataMap.put("errmsg", ResultCode.getErrmsg(result));
-			dataMap.put("getparentlistResult", true);
+			dataMap.putAll(Tools.JsonHeadMap(result, true));
+//			dataMap.put("resultcode", result);
+//			dataMap.put("errmsg", ResultCode.getErrmsg(result));
+//			dataMap.put("getparentlistResult", true);
 		}
 
 		return SUCCESS;
@@ -188,14 +198,17 @@ public class ReferdocAction extends ActionSupport {
 		dataMap = new HashMap<String, Object>(); // 新建dataMap来储存JSON字符串
 		dataMap.clear(); // dataMap中的数据将会被Struts2转换成JSON字符串，所以这里要先清空其中的数据
 
-		int result = referdocServices.getChildReferdoclist(referdoc_parentno);
+		int parentno = Integer.parseInt(referdoc_parentno);
+		
+		int result = referdocServices.getChildReferdoclist(parentno);
 
 		if (result == ResultCode.SUCCESS) {
 			List<Referdoc> referdoclist = referdocServices.referdocinfos();
 			dataMap.put("referdoclist", referdoclist);
-			dataMap.put("resultcode", result);
-			dataMap.put("errmsg", ResultCode.getErrmsg(result));
-			dataMap.put("getchildlistResult", true);
+			dataMap.putAll(Tools.JsonHeadMap(result, true));
+//			dataMap.put("resultcode", result);
+//			dataMap.put("errmsg", ResultCode.getErrmsg(result));
+//			dataMap.put("getchildlistResult", true);
 		}
 
 		return "getsuccess";
@@ -210,8 +223,10 @@ public class ReferdocAction extends ActionSupport {
 		dataMap = new HashMap<String, Object>(); // 新建dataMap来储存JSON字符串
 		dataMap.clear(); // dataMap中的数据将会被Struts2转换成JSON字符串，所以这里要先清空其中的数据
 
+		int parentno = Integer.parseInt(referdoc_parentno);
+		
 		int result = referdocServices.chkReferType(referdoc_type,
-				referdoc_parentno);
+				parentno);
 
 		if (result == ResultCode.REFERDOC_TYPE_NOTEXIST) {
 			dataMap.put("resultcode", result); // 放入一个是否操作成功的标识
@@ -279,11 +294,11 @@ public class ReferdocAction extends ActionSupport {
 		this.referdocServices = referdocServices;
 	}
 
-	public int getReferdoc_id() {
+	public String getReferdoc_id() {
 		return referdoc_id;
 	}
 
-	public void setReferdoc_id(int referdoc_id) {
+	public void setReferdoc_id(String referdoc_id) {
 		this.referdoc_id = referdoc_id;
 	}
 
@@ -311,11 +326,11 @@ public class ReferdocAction extends ActionSupport {
 		this.order_type_code_list = order_type_code_list;
 	}
 
-	public int getReferdoc_parentno() {
+	public String getReferdoc_parentno() {
 		return referdoc_parentno;
 	}
 
-	public void setReferdoc_parentno(int referdoc_parentno) {
+	public void setReferdoc_parentno(String referdoc_parentno) {
 		this.referdoc_parentno = referdoc_parentno;
 	}
 

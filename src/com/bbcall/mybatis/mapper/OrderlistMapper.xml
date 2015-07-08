@@ -39,6 +39,7 @@
 			jdbcType="LONGVARCHAR" />
 		<result column="order_remark" property="order_remark"
 			jdbcType="LONGVARCHAR" />
+		<result column="order_section" property="order_section" jdbcType="INTEGER" />
 	</resultMap>
 
 	<insert id="addOrder" parameterType="com.bbcall.mybatis.table.Orderlist"
@@ -58,7 +59,8 @@
 		order_urgent_bonus,
 		order_user_account,
 		order_type_code,
-		order_status) values
+		order_status,
+		order_section) values
 		(#{order_create_time},
 		#{order_end_time},
 		#{order_book_time},
@@ -73,7 +75,8 @@
 		#{order_urgent_bonus},
 		#{order_user_account},
 		#{order_type_code},
-		#{order_status})
+		#{order_status},
+		#{order_section})
 	</insert>
 
 	<select id="getUnOrdersByUserAccount" parameterType="String"
@@ -96,10 +99,20 @@
 		order_user_account=#{order_user_account} order by order_create_time
 	</select>
 
-	<select id="getUnOrdersByMasterSkill" resultMap="OrderResultMap">
+	<select id="getOrdersByMasterSkill" resultMap="OrderResultMap">
 		select * from
 		orderlist where order_status=#{order_status,jdbcType=INTEGER} and
 		order_type_code=#{order_type_code,jdbcType=INTEGER} and
+		order_user_account not in (select blacklist_user_account from
+		blacklist where
+		blacklist_master_account=#{order_master_account,jdbcType=VARCHAR})
+		order by order_book_location_code, order_create_time
+	</select>
+	
+	<select id="getOrdersByMasterLocation" resultMap="OrderResultMap">
+		select * from
+		orderlist where order_status=#{order_status,jdbcType=INTEGER} and
+		order_book_location_code=#{order_book_location_code,jdbcType=INTEGER} and
 		order_user_account not in (select blacklist_user_account from
 		blacklist where
 		blacklist_master_account=#{order_master_account,jdbcType=VARCHAR})

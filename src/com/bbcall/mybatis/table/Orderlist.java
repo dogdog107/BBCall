@@ -25,7 +25,8 @@ import java.util.Date;
 //  order_status INT,
 //  /* 1=created, 2=in progress, 3=finished */
 //  order_score INT,
-//  order_evaluation text
+//  order_evaluation text,
+//  order_section INT
 //) DEFAULT CHARSET = utf8;
 
 public class Orderlist {
@@ -50,6 +51,7 @@ public class Orderlist {
 	private int order_score;
 	private String order_evaluation;
 	private String order_remark;
+	private int order_section;
 
 	public int getOrder_id() {
 		return order_id;
@@ -209,6 +211,14 @@ public class Orderlist {
 
 	public void setOrder_remark(String order_remark) {
 		this.order_remark = order_remark;
+	}
+
+	public int getOrder_section() {
+		return order_section;
+	}
+
+	public void setOrder_section(int order_section) {
+		this.order_section = order_section;
 	}
 
 }
