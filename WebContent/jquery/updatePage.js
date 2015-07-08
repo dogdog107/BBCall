@@ -128,9 +128,13 @@ function onload() {
 //		document.getElementById('userid').disabled = "";
 //		document.getElementById('token').value = "";
 //	}
-
-	document.getElementById('usertype')[usertype].selected = true;
-	document.getElementById('gender')[gender].selected = true;
+	if (usertype != '') {
+		document.getElementById('usertype')[usertype].selected = true;
+	}
+	
+	if (gender != '') {
+		document.getElementById('gender')[gender].selected = true;
+	}
 
 	if (language != '') {
 		var lgestr = language.split(";");

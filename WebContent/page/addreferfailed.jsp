@@ -27,7 +27,7 @@
 	<table cellspacing=0 cellpadding=0 width="100%" align=center border=0
 		style="font-size: 12px;">
 		<tr height=28>
-			<td background=./img/title_bg1.jpg>當前位置:<a href="${pageContext.request.contextPath }/page/defult.jsp" target=main>主頁(Home)</a>
+			<td background="${pageContext.request.contextPath }/page/img/title_bg1.jpg">當前位置:<a href="${pageContext.request.contextPath }/page/defult.jsp" target=main>主頁(Home)</a>
 			 -> 修改用户信息失敗
 			</td>
 		</tr>
@@ -35,7 +35,7 @@
 			<td bgcolor=#b1ceef height=1></td>
 		</tr>
 		<tr height=20>
-			<td background=./img/shadow_bg.jpg></td>
+			<td background="${pageContext.request.contextPath }/page/img/shadow_bg.jpg"></td>
 		</tr>
 	</table>
 	<div></div>
