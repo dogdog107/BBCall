@@ -20,16 +20,23 @@
 
 		<!--注册拦截器 -->
 		<interceptors>
-
-			<!-- 自定义拦截器的名字 -->
-			<interceptor name="businessInterceptor"
-				class="com.bbcall.struts.interceptor.BusinessInterceptor" />
+		
+			<!-- 自定义 登录验证 拦截器 -->
+			<interceptor name="LoginInterceptor" class="com.bbcall.struts.interceptor.LoginInterceptor">
+				<!-- 停用(true)/启用(false) 登录验证拦截器 -->
+				<param name="disable">true</param>
+				<param name="excludeAction">user_login,user_register,user_loginJson,user_registerJson,user_logout</param>
+				<param name="sessionCheckName">user_token</param>
+			</interceptor>  
+        
+			<!-- 自定义 异常 拦截器 -->
+			<interceptor name="businessInterceptor" class="com.bbcall.struts.interceptor.BusinessInterceptor" />
 
 			<!-- 自定义拦截器堆栈 -->
 			<interceptor-stack name="mystack">
-
 				<!-- 引用默认的拦截器堆栈 -->
 				<interceptor-ref name="defaultStack" />
+				<interceptor-ref name="LoginInterceptor" />
 				<interceptor-ref name="businessInterceptor" />
 			</interceptor-stack>
 		</interceptors>
@@ -40,6 +47,15 @@
 		<!-- 全局跳转页面 -->
 		<global-results>
 			<result name="error">/error.jsp</result>
+			<result name="login" type="redirect">/page/login.jsp</result>
+			<result name="accessReject" type="redirect">
+				<param name="location">/error.jsp</param>
+				<param name="errmsg">${errmsg}</param>
+			</result>
+			<result name="interceptorjson" type="json">
+				<param name="root">dataMap</param>
+				<param name="excludeProperties">user_password</param>
+			</result>
 		</global-results>
 
 		<!-- 全局异常 -->
@@ -88,6 +104,7 @@
 		<!-- Order Action -->
 		<action name="orderlist_*" method="{1}" class="orderlistAction">
 			<!-- 限制图片的格式和图片的大小 -->
+			
 			<interceptor-ref name="fileUpload">
 				<param name="allowedTypes">
 					image/bmp,image/png,image/gif,image/jpeg,image/pjpeg
@@ -95,7 +112,7 @@
 			</interceptor-ref>
 
 			<!-- 默认的拦截器，必须要写 -->
-			<interceptor-ref name="defaultStack" />
+			<interceptor-ref name="mystack" />
 
 			<result name="success">/page/viewwashorder.jsp</result>
 			<result name="getsuccess">/page/washorder.jsp</result>
@@ -117,18 +134,26 @@
 			</result>
 		</action>
 
+		<!-- Address Action -->
+		<action name="address_*" method="{1}" class="addressAction">
+			
+			<result type="json" name="json">
+				<param name="root">dataMap</param>
+			</result>
+		</action>
 
 		<!-- FileUpload Action -->
 		<!-- Reference: http://blog.sina.com.cn/s/blog_77cb8363010177zb.html -->
-		<action name="*" method="{1}" class="fileUploadAction">
+		<action name="upload_*" method="{1}" class="fileUploadAction">
 			<!-- 配置名字为fileUpload的拦截器 -->
 			<interceptor-ref name="fileUpload">
 
 				<!-- 配置允许上传的文件类型 -->
+<!-- 				
 				<param name="allowedTypes">
 					image/bmp,image/png,image/gif,image/jpeg,image/pjpeg,image/x-png
 				</param>
-
+ -->
 				<!-- 配置允许上传文件的大小(单位字节) -->
 				<!-- <param name="maximumSize">80000</param> -->
 			</interceptor-ref>
@@ -154,6 +179,7 @@
 				<param name="root">dataMap</param>
 			</result>
 		</action>
+		
 	</package>
 
 	<!-- Add packages here -->

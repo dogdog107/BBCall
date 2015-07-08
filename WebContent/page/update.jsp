@@ -48,10 +48,10 @@
 		<form id="update_form" action="user_update" method="post" enctype="multipart/form-data">
 			<div style="font-size: 13px; margin: 10px 5px">
 				<span> <s:if test="dataMap.result">
-						<font color="green">修改成功！${ dataMap.errmsg}</font>
+							<p align="center" style="font-size: 15px;color: green"> ## 修改成功！${ dataMap.errmsg} ## </p>
 					</s:if> <s:else>
 						<s:if test="!dataMap.result">
-							<font color="red">修改失敗！${ dataMap.errmsg}</font>
+								<p align="center" style="font-size: 15px;color: red"> ## 修改失敗！${ dataMap.errmsg} ## </p>
 						</s:if>
 					</s:else>
 				</span>

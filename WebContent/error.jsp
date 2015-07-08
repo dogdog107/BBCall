@@ -9,8 +9,8 @@
 <title>Insert title here</title>
 </head>
 <s:property value="exception.message" />
-
 <body>
+${accessMsg }
 
 </body>
 </html>

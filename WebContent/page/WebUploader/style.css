@@ -58,7 +58,7 @@
     z-index: 10;
 }
 .upload-state-done:after {
-    content:"Success";
+    content:"Success!";
     font-family: FontAwesome;
     font-style: normal;
     font-weight: normal;

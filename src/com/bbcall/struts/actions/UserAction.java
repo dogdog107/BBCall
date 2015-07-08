@@ -14,7 +14,6 @@ import org.springframework.stereotype.Controller;
 import com.bbcall.functions.ResultCode;
 import com.bbcall.functions.ObjectToMap;
 import com.bbcall.functions.Tools;
-import com.bbcall.mybatis.table.AddressList;
 import com.bbcall.mybatis.table.User;
 import com.bbcall.struts.services.UserServices;
 import com.opensymphony.xwork2.ActionSupport;
@@ -114,7 +113,14 @@ public class UserAction extends ActionSupport implements SessionAware{
 		login();
 		return "json";
 	}
-
+	
+	// Logout Action
+	public String logout() throws Exception {
+		System.out.println("Here is UserAction.logout");
+		session.clear(); // 清空session
+		return "login";
+	}
+	
 	// Register Action
 	
 	public String register() throws Exception {
@@ -145,26 +151,27 @@ public class UserAction extends ActionSupport implements SessionAware{
 	public String update() throws Exception{
 		System.out.println("Here is UserAction.update");
 		dataMap.clear(); // dataMap中的数据将会被Struts2转换成JSON字符串，所以这里要先清空其中的数据
-		String requireAccess = "UserUpdate";
-		/*
-		 * Token Validation
-		 */
-		int tokenResult = userServices.checkUserToken(token);
-		while (tokenResult != ResultCode.SUCCESS) {
-			dataMap.putAll(Tools.JsonHeadMap(tokenResult, false));
-			System.out.println(dataMap);
-			return INPUT;
-		}
 		
-		/*
-		 * access Validation
-		 */
-		int accessResult = userServices.checkUserAccess(userServices.getUserinfo().getUser_access_group(), requireAccess);
-		while (accessResult != ResultCode.SUCCESS) {
-			dataMap.putAll(Tools.JsonHeadMap(accessResult, false));
-			System.out.println(dataMap);
-			return INPUT;
-		}
+//		String requireAccess = "UserUpdate";
+//		/*
+//		 * Token Validation
+//		 */
+//		int tokenResult = userServices.checkUserToken(token);
+//		while (tokenResult != ResultCode.SUCCESS) {
+//			dataMap.putAll(Tools.JsonHeadMap(tokenResult, false));
+//			System.out.println(dataMap);
+//			return INPUT;
+//		}
+//		
+//		/*
+//		 * access Validation
+//		 */
+//		int accessResult = userServices.checkUserAccess(userServices.getUserinfo().getUser_access_group(), requireAccess);
+//		while (accessResult != ResultCode.SUCCESS) {
+//			dataMap.putAll(Tools.JsonHeadMap(accessResult, false));
+//			System.out.println(dataMap);
+//			return INPUT;
+//		}
 		
 		int result = userServices.update(account, password, usertype, name, picurl, mobile, gender, addresscode, address, email, language, skill, description, accessgroup, status, token, userid); // 调用userServices.login
 
@@ -196,26 +203,27 @@ public class UserAction extends ActionSupport implements SessionAware{
 	public String updateStatus() throws Exception{
 		System.out.println("Here is UserAction.updateStatus");
 		dataMap.clear(); // dataMap中的数据将会被Struts2转换成JSON字符串，所以这里要先清空其中的数据
-		String requireAccess = "UserUpdate";
-		/*
-		 * Token Validation
-		 */
-		int tokenResult = userServices.checkUserToken(token);
-		while (tokenResult != ResultCode.SUCCESS) {
-			dataMap.putAll(Tools.JsonHeadMap(tokenResult, false));
-			System.out.println(dataMap);
-			return INPUT;
-		}
-		
-		/*
-		 * access Validation
-		 */
-		int accessResult = userServices.checkUserAccess(userServices.getUserinfo().getUser_access_group(), requireAccess);
-		while (accessResult != ResultCode.SUCCESS) {
-			dataMap.putAll(Tools.JsonHeadMap(accessResult, false));
-			System.out.println(dataMap);
-			return INPUT;
-		}
+
+//		String requireAccess = "UserUpdate";
+//		/*
+//		 * Token Validation
+//		 */
+//		int tokenResult = userServices.checkUserToken(token);
+//		while (tokenResult != ResultCode.SUCCESS) {
+//			dataMap.putAll(Tools.JsonHeadMap(tokenResult, false));
+//			System.out.println(dataMap);
+//			return INPUT;
+//		}
+//		
+//		/*
+//		 * access Validation
+//		 */
+//		int accessResult = userServices.checkUserAccess(userServices.getUserinfo().getUser_access_group(), requireAccess);
+//		while (accessResult != ResultCode.SUCCESS) {
+//			dataMap.putAll(Tools.JsonHeadMap(accessResult, false));
+//			System.out.println(dataMap);
+//			return INPUT;
+//		}
 		
 		int result = userServices.update(account, password, usertype, name, picurl, mobile, gender, addresscode, address, email, language, skill, description, accessgroup, status, token, userid); // 调用userServices.login
 		
@@ -236,78 +244,33 @@ public class UserAction extends ActionSupport implements SessionAware{
 		updateStatus();
 		return "json";
 	}
-	
-	// checkParentAdsList Action
-	public String checkChildAdsList() throws Exception {
-		System.out.println("Here is UserAction.checkChildAdsList");
-		dataMap.clear(); // dataMap中的数据将会被Struts2转换成JSON字符串，所以这里要先清空其中的数据
-		int result = userServices.checkChildAdsList(addresscode);// 调用userServices.checkParentAdsList
-		
-		if (result == ResultCode.SUCCESS) {
-			List<AddressList> addresslist = userServices.getAddresslist();
-			dataMap.put("addresslist", addresslist); // 把addresslist对象放入dataMap
-			dataMap.putAll(Tools.JsonHeadMap(result, true));
-		} else {
-			dataMap.putAll(Tools.JsonHeadMap(result, false));
-			System.out.println(dataMap);
-		}
-		return SUCCESS;
-	}
-	
-	public String checkChildAdsListJson() throws Exception {
-		System.out.println("Here is UserAction.checkChildAdsListJson");
-		checkChildAdsList();
-		return "json";
-	}
-	
-	// checkAdsList Action
-	public String checkAdsList() throws Exception {
-		System.out.println("Here is UserAction.checkAdsList");
-		dataMap.clear(); // dataMap中的数据将会被Struts2转换成JSON字符串，所以这里要先清空其中的数据
-		int result = userServices.checkAdsList(addresscode);// 调用userServices.checkAdsList
-		
-		if (result == ResultCode.SUCCESS) {
-			List<AddressList> addresslist = userServices.getAddresslist();
-			dataMap.put("addresslist", addresslist); // 把addresslist对象放入dataMap
-			dataMap.putAll(Tools.JsonHeadMap(result, true));
-		} else {
-			dataMap.putAll(Tools.JsonHeadMap(result, false));
-			System.out.println(dataMap);
-		}
-		return SUCCESS;
-	}
-	
-	public String checkAdsListJson() throws Exception {
-		System.out.println("Here is UserAction.checkAdsListJson");
-		checkAdsList();
-		return "json";
-	}
-	
+
 	// checkUserList Action
 	public String checkUserList() throws Exception {
 		System.out.println("Here is UserAction.checkUserList");
 		dataMap.clear(); // dataMap中的数据将会被Struts2转换成JSON字符串，所以这里要先清空其中的数据
-		String requireAccess = "UserCheckList";
-
-		/*
-		 * Token Validation
-		 */
-		int tokenResult = userServices.checkUserToken(token);
-		while (tokenResult != ResultCode.SUCCESS) {
-			dataMap.putAll(Tools.JsonHeadMap(tokenResult, false));
-			System.out.println(dataMap);
-			return INPUT;
-		}
 		
-		/*
-		 * access Validation
-		 */
-		int accessResult = userServices.checkUserAccess(userServices.getUserinfo().getUser_access_group(), requireAccess);
-		while (accessResult != ResultCode.SUCCESS) {
-			dataMap.putAll(Tools.JsonHeadMap(accessResult, false));
-			System.out.println(dataMap);
-			return INPUT;
-		}
+//		String requireAccess = "UserCheckList";
+//
+//		/*
+//		 * Token Validation
+//		 */
+//		int tokenResult = userServices.checkUserToken(token);
+//		while (tokenResult != ResultCode.SUCCESS) {
+//			dataMap.putAll(Tools.JsonHeadMap(tokenResult, false));
+//			System.out.println(dataMap);
+//			return INPUT;
+//		}
+//		
+//		/*
+//		 * access Validation
+//		 */
+//		int accessResult = userServices.checkUserAccess(userServices.getUserinfo().getUser_access_group(), requireAccess);
+//		while (accessResult != ResultCode.SUCCESS) {
+//			dataMap.putAll(Tools.JsonHeadMap(accessResult, false));
+//			System.out.println(dataMap);
+//			return INPUT;
+//		}
 		
 		int result = userServices.checkUserList(col_name, specify_value, search_value);// 调用userServices.checkAddressList
 		if (result == ResultCode.SUCCESS) {
