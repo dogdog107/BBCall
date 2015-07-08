@@ -24,7 +24,19 @@ public interface OrderlistMapper {
 			@Param("order_master_account") String order_master_account);
 
 	// 通过订单类型、师傅账号、技能类型取得未完成订单列表
+	public List<Orderlist> getOrdersByMasterLocation2(
+			@Param("order_status") int order_status,
+			@Param("order_book_location_code") int order_book_location_code,
+			@Param("order_master_account") String order_master_account);
+
+	// 通过订单类型、师傅账号、技能类型取得未完成订单列表
 	public List<Orderlist> getOrdersByMasterSkill(
+			@Param("order_status") int order_status,
+			@Param("order_type_code") int order_type_code,
+			@Param("order_master_account") String order_master_account);
+
+	// 通过订单类型、师傅账号、技能类型取得未完成订单列表
+	public List<Orderlist> getOrdersByMasterSkill2(
 			@Param("order_status") int order_status,
 			@Param("order_type_code") int order_type_code,
 			@Param("order_master_account") String order_master_account);

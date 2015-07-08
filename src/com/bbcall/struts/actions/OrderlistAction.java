@@ -53,10 +53,10 @@ public class OrderlistAction extends ActionSupport {
 	private String order_remark;
 	private int addresscode;
 	private String order_section;
-	private List<String> skilllist;
-	private List<String> locationlist;
+	private String skilllist;
+	private String locationlist;
 	private String sortparm;
-	private List<String> order_type_list;
+	private String order_type_list;
 
 	private List<String> orderFileFileName = new ArrayList<String>(); // 文件名
 
@@ -78,10 +78,12 @@ public class OrderlistAction extends ActionSupport {
 		double urgent_bonus = Double.parseDouble(order_urgent_bonus);
 		double price = Double.parseDouble(order_price);
 		int section = Integer.parseInt(order_section);
+		
+		String[] type_list = order_type_list.split(";");
 
-		for (int i = 0; i < order_type_list.size(); i++) {
+		for (int i = 0; i < type_list.length; i++) {
 
-			int type_code = Integer.parseInt(order_type_list.get(i));
+			int type_code = Integer.parseInt(type_list[i]);
 
 			result = orderlistServices.addOrder(order_book_time,
 					order_book_location, book_location_code, contact_mobile,
@@ -259,7 +261,7 @@ public class OrderlistAction extends ActionSupport {
 		dataMap = new HashMap<String, Object>(); // 新建dataMap来储存JSON字符串
 		dataMap.clear(); // dataMap中的数据将会被Struts2转换成JSON字符串，所以这里要先清空其中的数据
 
-		int result = orderlistServices.getUnOrders(skilllist, locationlist,
+		int result = orderlistServices.getUnOrderlist(skilllist, locationlist,
 				user_account);
 		List<Referdoc> referdoclist = new ArrayList<Referdoc>();
 
@@ -729,11 +731,11 @@ public class OrderlistAction extends ActionSupport {
 		this.user_account = user_account;
 	}
 
-	public void setSkilllist(List<String> skilllist) {
+	public void setSkilllist(String skilllist) {
 		this.skilllist = skilllist;
 	}
 
-	public void setLocationlist(List<String> locationlist) {
+	public void setLocationlist(String locationlist) {
 		this.locationlist = locationlist;
 	}
 
@@ -765,11 +767,11 @@ public class OrderlistAction extends ActionSupport {
 		return user_account;
 	}
 
-	public List<String> getSkilllist() {
+	public String getSkilllist() {
 		return skilllist;
 	}
 
-	public List<String> getLocationlist() {
+	public String getLocationlist() {
 		return locationlist;
 	}
 
@@ -909,11 +911,11 @@ public class OrderlistAction extends ActionSupport {
 		this.order_section = order_section;
 	}
 
-	public List<String> getOrder_type_list() {
+	public String getOrder_type_list() {
 		return order_type_list;
 	}
 
-	public void setOrder_type_list(List<String> order_type_list) {
+	public void setOrder_type_list(String order_type_list) {
 		this.order_type_list = order_type_list;
 	}
 
