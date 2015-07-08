@@ -12,12 +12,17 @@ public class ResultCode {
 	public static Integer USERTOKEN_EXPIRED = 10004;// 用户token过期
 	public static Integer USERID_ERROR = 10005;// 用户id不存在
 	public static Integer USERNAME_EXIST = 10006;// 用户名已被使用
-	public static Integer REGISTERINFO_NOTENOUGH = 10007;// 注册信息不全
-	public static Integer REGISTERINFO_TYPEERROR = 10008;// 注册的用户类型错误
-	public static Integer REQUIREINFO_NOTENOUGH = 10009;// 请求的参数不全
-	public static Integer REQUIREINFO_ERROR = 10010;// 请求的参数错误
-	public static Integer USERSTATUS_ERROR = 10011;// 用户状态错误
-	public static Integer USERLIST_NULL = 10012;// 用户表不存在
+	public static Integer REQUIREINFO_NOTENOUGH = 10007;// 请求的参数不全
+	public static Integer REQUIREINFO_ERROR = 10008;// 请求的参数错误
+	public static Integer USERSTATUS_ERROR = 10009;// 用户状态错误
+	public static Integer USERLIST_NULL = 10010;// 用户表不存在
+	public static Integer REGISTERINFO_NOTENOUGH = 10011;// 注册信息不全
+	public static Integer USERTYPE_ERROR = 10012;// 注册的用户类型错误
+	public static Integer USERACCOUNT_ERROR = 10013;// 请求注册的帐号长度少于6位
+	public static Integer USERPASSWORD_ERROR = 10014;// 请求注册的密码长度少于6位
+	public static Integer USERMOBILE_ERROR = 10015;// 请求注册的手机号有误
+	public static Integer USERGENDER_ERROR = 10016;// 请求注册的性别有误
+	public static Integer USEREMAIL_ERROR = 10017;// 请求注册的邮箱地址有误
 
 	// 用户返回码11XXX
 	public static Integer USERNAME_NOTEXIST = 11001;// 用户名可以使用
@@ -95,22 +100,37 @@ public class ResultCode {
 			errmsg = "username exist";
 			break;
 		case 10007:
-			errmsg = "register info not enough";
-			break;
-		case 10008:
-			errmsg = "register user type error";
-			break;
-		case 10009:
 			errmsg = "require info not enough";
 			break;
-		case 10010:
+		case 10008:
 			errmsg = "require info error";
 			break;
-		case 10011:
+		case 10009:
 			errmsg = "user status error";
 			break;
-		case 10012:
+		case 10010:
 			errmsg = "user list null";
+			break;
+		case 10011:
+			errmsg = "register info not enough";
+			break;
+		case 10012:
+			errmsg = "user type error";
+			break;
+		case 10013:
+			errmsg = "account length smaller than 6 chars";
+			break;
+		case 10014:
+			errmsg = "password length smaller than 6 chars";
+			break;
+		case 10015:
+			errmsg = "mobile error";
+			break;
+		case 10016:
+			errmsg = "gender error";
+			break;
+		case 10017:
+			errmsg = "email error";
 			break;
 
 		case 11001:
