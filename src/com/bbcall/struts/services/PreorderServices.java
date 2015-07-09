@@ -8,13 +8,18 @@ import org.springframework.stereotype.Service;
 
 import com.bbcall.functions.ResultCode;
 import com.bbcall.mybatis.dao.PreorderMapper;
+import com.bbcall.mybatis.dao.UserMapper;
 import com.bbcall.mybatis.table.Preorder;
+import com.bbcall.mybatis.table.User;
 
 @Service("preorderServices")
 public class PreorderServices {
 
 	@Autowired
 	private PreorderMapper preorderMapper;
+
+	@Autowired
+	private UserMapper userMapper;
 
 	public Preorder preorderinfo;
 	public List<Preorder> preorderinfos;
@@ -42,22 +47,35 @@ public class PreorderServices {
 	// ## (1) preorderinfos
 	// ##
 	// ################################################################################
-	public int addPreorder(String preorder_master_account,
-			double preorder_price, int preorder_order_id) {
+	public int addPreorder(int preorder_master_id, double preorder_price,
+			int preorder_order_id) {
 		System.out.println("Here is PreorderServices.add method...");
 
 		Preorder preorder = new Preorder();
+		User user = userMapper.getUserById(preorder_master_id);
 
-		preorder.setPreorder_master_account(preorder_master_account);
+		String[] skilllist = user.getUser_skill().split(";");
+		String userskill = "";
+
+		for (int i = 0; i < skilllist.length; i++) {
+			userskill = userskill + skilllist[i] + " ";
+		}
+
+		preorder.setPreorder_master_id(preorder_master_id);
+		preorder.setPreorder_master_account(user.getUser_account());
 		preorder.setPreorder_create_time(new Timestamp(System
 				.currentTimeMillis()));
+		preorder.setPreorder_master_name(user.getUser_name());
+		// preorder.setPreorder_master_grade(user.getUser_grade());
+		preorder.setPreorder_master_pic(user.getUser_pic_url());
 		preorder.setPreorder_price(preorder_price);
+		preorder.setPreorder_master_skill(userskill);
 		preorder.setPreorder_order_id(preorder_order_id);
 
 		preorderMapper.addPreorder(preorder);
 
 		preorderinfos = preorderMapper
-				.getPreordersByAccount(preorder_master_account);
+				.getPreordersByAccount(preorder_master_id);
 
 		return ResultCode.SUCCESS;
 	}
@@ -82,12 +100,13 @@ public class PreorderServices {
 	// ## 4. Return: NONE
 	// ##
 	// ################################################################################
-	public int deletePreorder(int preorder_id, String preorder_master_account) {
+	public int deletePreorder(int preorder_id, int preorder_master_id) {
 		System.out.println("Here is PreorderServices.delete method...");
 
 		preorderMapper.deletePreorder(preorder_id);
-		
-		preorderinfos = preorderMapper.getPreordersByAccount(preorder_master_account);
+
+		preorderinfos = preorderMapper
+				.getPreordersByAccount(preorder_master_id);
 
 		return ResultCode.SUCCESS;
 	}
@@ -113,11 +132,11 @@ public class PreorderServices {
 	// ## (1) preorderinfos
 	// ##
 	// ################################################################################
-	public int getPreorderByAccount(String preorder_master_account) {
+	public int getPreorderByAccount(int preorder_master_id) {
 		System.out.println("Here is PreorderServices.get method...");
 
 		preorderinfos = preorderMapper
-				.getPreordersByAccount(preorder_master_account);
+				.getPreordersByAccount(preorder_master_id);
 
 		return ResultCode.SUCCESS;
 	}
@@ -143,10 +162,39 @@ public class PreorderServices {
 	// ## (1) preorderinfos
 	// ##
 	// ################################################################################
-	public int getPreorderById(int preorder_order_id) {
+	public int getPreorderDesc(int preorder_order_id) {
 		System.out.println("Here is PreorderServices.get method...");
 
 		preorderinfos = preorderMapper.getPreodersByOrderId(preorder_order_id);
+
+		return ResultCode.SUCCESS;
+	}
+
+	// ################################################################################
+	// ## Get Preorder services
+	// ## 通过订单编号取得预处理订单
+	// ##==============================================================================
+	// ## Instructions
+	// ##
+	// ##------------------------------------------------------------------------------
+	// ## 1. Require parameters:
+	// ## (1) preorder_order_id
+	// ##------------------------------------------------------------------------------
+	// ## 2. Optional parameters: NONE
+	// ##
+	// ##------------------------------------------------------------------------------
+	// ## 3. Return parameters:
+	// ## (4) ResultCode.SUCCESS
+	// ##
+	// ##------------------------------------------------------------------------------
+	// ## 4. Return preorderinfos:
+	// ## (1) preorderinfos
+	// ##
+	// ################################################################################
+	public int getPreorderAsc(int preorder_order_id) {
+		System.out.println("Here is PreorderServices.get method...");
+
+		preorderinfos = preorderMapper.getPreodersByOrder(preorder_order_id);
 
 		return ResultCode.SUCCESS;
 	}

@@ -18,16 +18,19 @@ public interface PreorderMapper {
 	public void deletePreorderByOrderId(int preorder_order_id);
 
 	// 通过师傅账户取得所有预处理订单
-	public List<Preorder> getPreordersByAccount(String preorder_master_account);
+	public List<Preorder> getPreordersByAccount(int preorder_master_id);
 
-	// 通过订单编号取得预处理订单
+	// 通过订单编号取得预处理订单 评分降序
 	public List<Preorder> getPreodersByOrderId(int preorder_order_id);
+
+	// 通过订单编号取得预处理订单 价格升序
+	public List<Preorder> getPreodersByOrder(int preorder_order_id);
 
 	// 通过预处理订单编号取得预处理订单
 	public Preorder getPreorderById(int preorder_id);
 
 	// 通过师傅账户和订单编号取得特定的预处理订单
 	public Preorder getPreoder(
-			@Param("preorder_master_account") String preorder_master_account,
+			@Param("preorder_master_id") String preorder_master_id,
 			@Param("preorder_order_id") int preorder_order_id);
 }

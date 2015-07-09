@@ -13,10 +13,12 @@ import com.bbcall.functions.ResultCode;
 import com.bbcall.mybatis.dao.AddressListMapper;
 import com.bbcall.mybatis.dao.OrderlistMapper;
 import com.bbcall.mybatis.dao.PreorderMapper;
+import com.bbcall.mybatis.dao.ReferdocMapper;
 import com.bbcall.mybatis.dao.UserMapper;
 import com.bbcall.mybatis.table.AddressList;
 import com.bbcall.mybatis.table.Orderlist;
 import com.bbcall.mybatis.table.Preorder;
+import com.bbcall.mybatis.table.Referdoc;
 import com.bbcall.mybatis.table.User;
 
 @Service("orderlistServices")
@@ -33,11 +35,12 @@ public class OrderlistServices {
 
 	@Autowired
 	private AddressListMapper addressListMapper;
+	
+	@Autowired
+	private ReferdocMapper referdocMapper;
 
 	public Orderlist orderlistinfo;
 	public List<Orderlist> orderlistinfos;
-	public String master_skill;
-	public List<String> master_skills;
 	private List<AddressList> addresslist;
 
 	// ################################################################################
@@ -55,14 +58,14 @@ public class OrderlistServices {
 	// ## (5) order_contact_name
 	// ## (6) order_urgent
 	// ## (7) order_urgent_bonus
-	// ## (8) order_pic_url1
-	// ## (8) order_pic_url2
-	// ## (8) order_pic_url3
+	// ## (8) order_pic_url
 	// ## (9) order_description
 	// ## (10) order_price
 	// ## (11) order_user_account
 	// ## (12) order_type
-	// ## (13) order_section
+	// ## (13) order_type_code
+	// ## (14) order_refer_price
+	// ## (15) order_section
 	// ##
 	// ##------------------------------------------------------------------------------
 	// ## 2. Optional parameters: NONE
@@ -87,6 +90,7 @@ public class OrderlistServices {
 
 		// 创建订单对象，写入数据
 		Orderlist orderlist = new Orderlist();
+		Referdoc referdoc = referdocMapper.getReferdoc(order_type_code);
 
 		DateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 		format.setLenient(false);
@@ -119,6 +123,8 @@ public class OrderlistServices {
 		orderlist.setOrder_type_code(order_type_code);
 		orderlist.setOrder_status(1);
 		orderlist.setOrder_section(order_section);
+		orderlist.setOrder_type(referdoc.getReferdoc_type());
+		orderlist.setOrder_refer_price(referdoc.getReferdoc_price());
 
 		orderlistMapper.addOrder(orderlist);
 
@@ -175,6 +181,7 @@ public class OrderlistServices {
 			String order_remark, int order_section) {
 
 		Orderlist orderlist = orderlistMapper.getOrder(order_id);
+		Referdoc referdoc = referdocMapper.getReferdoc(order_type_code);
 
 		DateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 		format.setLenient(false);
@@ -208,6 +215,8 @@ public class OrderlistServices {
 		orderlist.setOrder_type_code(order_type_code);
 		orderlist.setOrder_remark(order_remark);
 		orderlist.setOrder_section(order_section);
+		orderlist.setOrder_type(referdoc.getReferdoc_type());
+		orderlist.setOrder_refer_price(referdoc.getReferdoc_price());
 
 		orderlistMapper.updateOrder(orderlist);
 
@@ -977,4 +986,5 @@ public class OrderlistServices {
 		this.addresslist = addresslist;
 	}
 
+	
 }

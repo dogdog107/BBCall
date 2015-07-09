@@ -133,6 +133,15 @@
 				<param name="root">dataMap</param>
 			</result>
 		</action>
+		
+		<!-- Preorder Action -->
+		<action name="preorder_*" method="{1}" class="preorderAction">
+			<result name="success">/page/preorder.jsp</result>
+			
+			<result type="json" name="json">
+				<param name="root">dataMap</param>
+			</result>
+		</action>
 
 		<!-- Address Action -->
 		<action name="address_*" method="{1}" class="addressAction">

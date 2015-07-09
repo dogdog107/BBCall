@@ -22,6 +22,7 @@ import java.util.Date;
 //  order_user_account  VARCHAR (30),
 //  order_master_account VARCHAR (30),
 //  order_type_code INT,
+//  order_type VARCHAR (30),
 //  order_status INT,
 //  /* 1=created, 2=in progress, 3=finished */
 //  order_score INT,
@@ -47,6 +48,8 @@ public class Orderlist {
 	private String order_user_account;
 	private String order_master_account;
 	private int order_type_code;
+	private String order_type;
+	private double order_refer_price;
 	private int order_status;
 	private int order_score;
 	private String order_evaluation;
@@ -219,6 +222,22 @@ public class Orderlist {
 
 	public void setOrder_section(int order_section) {
 		this.order_section = order_section;
+	}
+
+	public String getOrder_type() {
+		return order_type;
+	}
+
+	public void setOrder_type(String order_type) {
+		this.order_type = order_type;
+	}
+
+	public double getOrder_refer_price() {
+		return order_refer_price;
+	}
+
+	public void setOrder_refer_price(double order_refer_price) {
+		this.order_refer_price = order_refer_price;
 	}
 
 }
