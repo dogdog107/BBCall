@@ -12,18 +12,35 @@
 			jdbcType="DECIMAL" />
 		<result column="preorder_order_id" property="preorder_order_id"
 			jdbcType="INTEGER" />
+		<result column="preorder_master_id" property="preorder_master_id"
+			jdbcType="INTEGER" />
+		<result column="preorder_master_name" property="preorder_master_name"
+			jdbcType="VARCHAR" />
+		<result column="preorder_master_skill" property="preorder_master_skill"
+			jdbcType="LONGVARCHAR" />
+		<result column="preorder_master_pic" property="preorder_master_pic"
+			jdbcType="LONGVARCHAR" />
+		<result column="preorder_master_grade" property="preorder_master_grade"
+			jdbcType="DECIMAL" />
 	</resultMap>
 	<select id="getPreordersByAccount" parameterType="String"
 		resultMap="PreorderResultMap">
 		select *
 		from preorder where
-		preorder_master_account=#{preorder_master_account}
+		preorder_master_id=#{preorder_master_id}
 	</select>
 	<select id="getPreodersByOrderId" parameterType="int"
 		resultMap="PreorderResultMap">
 		select *
 		from preorder where
-		preorder_order_id=#{preorder_order_id}
+		preorder_order_id=#{preorder_order_id} order by preorder_master_grade desc, preorder_price asc
+	</select>
+	
+	<select id="getPreodersByOrder" parameterType="int"
+		resultMap="PreorderResultMap">
+		select *
+		from preorder where
+		preorder_order_id=#{preorder_order_id} order by preorder_price asc, preorder_master_grade desc
 	</select>
 	<select id="getPreorderById" parameterType="int" resultMap="PreorderResultMap">
 		select *
@@ -34,7 +51,7 @@
 		select *
 		from preorder where
 		preorder_order_id=#{preorder_order_id,jdbcType=INTEGER} and
-		preorder_master_account=#{preorder_master_account,jdbcType=VARCHAR}
+		preorder_master_id=#{preorder_master_id,jdbcType=INTEGER}
 	</select>
 	<insert id="addPreorder" parameterType="com.bbcall.mybatis.table.Preorder"
 		useGeneratedKeys="true" keyProperty="preorder_id">
@@ -42,12 +59,22 @@
 		(preorder_master_account,
 		preorder_create_time,
 		preorder_price,
-		preorder_order_id)
+		preorder_order_id,
+		preorder_master_id,
+		preorder_master_name,
+		preorder_master_skill,
+		preorder_master_grade,
+		preorder_master_pic)
 		values
 		(#{preorder_master_account},
 		#{preorder_create_time},
 		#{preorder_price},
-		#{preorder_order_id})
+		#{preorder_order_id},
+		#{preorder_master_id},
+		#{preorder_master_name},
+		#{preorder_master_skill},
+		#{preorder_master_grade},
+		#{preorder_master_pic},)
 	</insert>
 	<delete id="deletePreorder" parameterType="int">
 		delete from
