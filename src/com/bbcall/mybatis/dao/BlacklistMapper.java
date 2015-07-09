@@ -16,10 +16,10 @@ public interface BlacklistMapper {
 	public Blacklist getBlacklistById(int blacklist_id);
 
 	// 获取用户的黑名单列表
-	public List<Blacklist> getBlacklistByUser(String blacklist_user_account);
+	public List<Blacklist> getBlacklistByUser(int blacklist_user_id);
 
 	// 获取关于师傅的黑名单列表
-	public List<Blacklist> getBlacklistByMaster(String blacklist_master_account);
+	public List<Blacklist> getBlacklistByMaster(int blacklist_master_id);
 
 	// 获取所有的黑名单列表
 	public List<Blacklist> getBlacklist();

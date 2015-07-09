@@ -3,16 +3,16 @@ package com.bbcall.mybatis.table;
 //* Table Blacklist's sql command:
 //CREATE TABLE Blacklist (
 //	blacklist_id INT NOT NULL auto_increment PRIMARY KEY,
-//blacklist_user_account  VARCHAR (30),
-//blacklist_master_account  VARCHAR (30),
+//blacklist_user_id  INT NOT NULL,
+//blacklist_master_id  INT NOT NULL,
 //blacklist_order_id INT NOT NULL
 //) DEFAULT CHARSET = utf8;	
 
 public class Blacklist {
 
 	private int blacklist_id;
-	private String blacklist_user_account;
-	private String blacklist_master_account;
+	private int blacklist_user_id;
+	private int blacklist_master_id;
 	private int blacklist_order_id;
 
 	public int getBlacklist_id() {
@@ -23,20 +23,20 @@ public class Blacklist {
 		this.blacklist_id = blacklist_id;
 	}
 
-	public String getBlacklist_user_account() {
-		return blacklist_user_account;
+	public int getBlacklist_user_id() {
+		return blacklist_user_id;
 	}
 
-	public void setBlacklist_user_account(String blacklist_user_account) {
-		this.blacklist_user_account = blacklist_user_account;
+	public void setBlacklist_user_id(int blacklist_user_id) {
+		this.blacklist_user_id = blacklist_user_id;
 	}
 
-	public String getBlacklist_master_account() {
-		return blacklist_master_account;
+	public int getBlacklist_master_id() {
+		return blacklist_master_id;
 	}
 
-	public void setBlacklist_master_account(String blacklist_master_account) {
-		this.blacklist_master_account = blacklist_master_account;
+	public void setBlacklist_master_id(int blacklist_master_id) {
+		this.blacklist_master_id = blacklist_master_id;
 	}
 
 	public int getBlacklist_order_id() {

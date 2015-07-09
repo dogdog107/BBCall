@@ -31,6 +31,6 @@ public interface PreorderMapper {
 
 	// 通过师傅账户和订单编号取得特定的预处理订单
 	public Preorder getPreoder(
-			@Param("preorder_master_id") String preorder_master_id,
+			@Param("preorder_master_id") int preorder_master_id,
 			@Param("preorder_order_id") int preorder_order_id);
 }

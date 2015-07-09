@@ -45,8 +45,8 @@ public class Orderlist {
 	private double order_price;
 	private boolean order_urgent;
 	private double order_urgent_bonus;
-	private String order_user_account;
-	private String order_master_account;
+	private int order_user_id;
+	private int order_master_id;
 	private int order_type_code;
 	private String order_type;
 	private double order_refer_price;
@@ -144,22 +144,6 @@ public class Orderlist {
 		this.order_urgent_bonus = order_urgent_bonus;
 	}
 
-	public String getOrder_user_account() {
-		return order_user_account;
-	}
-
-	public void setOrder_user_account(String order_user_account) {
-		this.order_user_account = order_user_account;
-	}
-
-	public String getOrder_master_account() {
-		return order_master_account;
-	}
-
-	public void setOrder_master_account(String order_master_account) {
-		this.order_master_account = order_master_account;
-	}
-
 	public int getOrder_type_code() {
 		return order_type_code;
 	}
@@ -238,6 +222,22 @@ public class Orderlist {
 
 	public void setOrder_refer_price(double order_refer_price) {
 		this.order_refer_price = order_refer_price;
+	}
+
+	public int getOrder_user_id() {
+		return order_user_id;
+	}
+
+	public void setOrder_user_id(int order_user_id) {
+		this.order_user_id = order_user_id;
+	}
+
+	public int getOrder_master_id() {
+		return order_master_id;
+	}
+
+	public void setOrder_master_id(int order_master_id) {
+		this.order_master_id = order_master_id;
 	}
 
 }

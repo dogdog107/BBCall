@@ -47,41 +47,41 @@ public class BlacklistServices {
 	// ## (1) blacklistinfos
 	// ##
 	// ################################################################################
-	public int addBlacklist(String blacklist_user_account,
-			String blacklist_master_account, int blacklist_order_id) {
+	public int addBlacklist(int blacklist_user_id,
+			int blacklist_master_id, int blacklist_order_id) {
 
 		System.out.println("Here is BlacklistServices.add method...");
 		Blacklist blacklist = new Blacklist();
-		blacklist.setBlacklist_user_account(blacklist_user_account);
-		blacklist.setBlacklist_master_account(blacklist_master_account);
+		blacklist.setBlacklist_user_id(blacklist_user_id);
+		blacklist.setBlacklist_master_id(blacklist_master_id);
 		blacklist.setBlacklist_order_id(blacklist_order_id);
 
 		blacklistMapper.addBlacklist(blacklist);
 
 		blacklistinfos = blacklistMapper
-				.getBlacklistByUser(blacklist_user_account);
+				.getBlacklistByUser(blacklist_user_id);
 
 		return ResultCode.SUCCESS;
 	}
 
-	public int deleteBlacklist(int blacklist_id, String blacklist_user_account) {
+	public int deleteBlacklist(int blacklist_id, int blacklist_user_id) {
 
 		System.out.println("Here is BlacklistServices.delete method...");
 
 		blacklistMapper.deleteBlacklistById(blacklist_id);
 
 		blacklistinfos = blacklistMapper
-				.getBlacklistByUser(blacklist_user_account);
+				.getBlacklistByUser(blacklist_user_id);
 
 		return ResultCode.SUCCESS;
 	}
 
-	public int getBlacklist(String user_account) {
+	public int getBlacklist(int user_id) {
 
-		if (userMapper.getUserByAccount(user_account).getUser_type() == 1) {
-			blacklistinfos = blacklistMapper.getBlacklistByUser(user_account);
-		} else if (userMapper.getUserByAccount(user_account).getUser_type() == 2) {
-			blacklistinfos = blacklistMapper.getBlacklistByMaster(user_account);
+		if (userMapper.getUserById(user_id).getUser_type() == 1) {
+			blacklistinfos = blacklistMapper.getBlacklistByUser(user_id);
+		} else if (userMapper.getUserById(user_id).getUser_type() == 2) {
+			blacklistinfos = blacklistMapper.getBlacklistByMaster(user_id);
 		} else {
 			blacklistinfos = blacklistMapper.getBlacklist();
 		}
