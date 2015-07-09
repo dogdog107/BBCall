@@ -7,10 +7,10 @@ import java.sql.Timestamp;
 //* Table USER's sql command:
 //CREATE TABLE USER (
 //	user_id INT NOT NULL auto_increment PRIMARY KEY,
-//	user_account VARCHAR (30),
-//	user_password VARCHAR (30) NOT NULL,
-//	user_email VARCHAR (30),
-//	user_mobile BIGINT,
+//	user_account VARCHAR (30) UNIQUE,
+//	user_password VARCHAR (255) NOT NULL,
+//	user_email VARCHAR (30) UNIQUE,
+//	user_mobile BIGINT UNIQUE,
 //	user_type INT,
 //	/* 1=customer, 2=master, 3=admin, 4=superadmin*/
 //	user_name VARCHAR (20),
@@ -18,11 +18,12 @@ import java.sql.Timestamp;
 //  /* 1=male, 2=female */
 //	user_pic_url VARCHAR (255),
 //	user_language VARCHAR (255),
-//  user_skill text,
-//  user_address_code INT,
+//	user_skill text,
+//	user_address_code INT,
 //	user_address text,
 //	user_description text,
 //	user_access_group VARCHAR (100),
+//	user_grade DOUBLE,
 //	user_status INT,
 //	/* 1=active, 2=pause, 3=pending, 4=locked */
 //	user_create_time TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
@@ -47,6 +48,7 @@ public class User {
 	private String user_description;
 	private String user_access_group;
 	private Integer user_status;
+	private Double user_grade;
 	private Timestamp user_login_time;
 	private Timestamp user_create_time;
 	private String user_token;
@@ -202,4 +204,13 @@ public class User {
 	public void setUser_create_time(Timestamp user_create_time) {
 		this.user_create_time = user_create_time;
 	}
+
+	public Double getUser_grade() {
+		return user_grade;
+	}
+
+	public void setUser_grade(Double user_grade) {
+		this.user_grade = user_grade;
+	}
+
 }

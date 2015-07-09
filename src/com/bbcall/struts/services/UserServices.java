@@ -10,6 +10,7 @@ import org.springframework.stereotype.Service;
 
 import com.bbcall.functions.RandomCode;
 import com.bbcall.functions.ResultCode;
+import com.bbcall.functions.SHA1_Encode;
 import com.bbcall.functions.Tools;
 import com.bbcall.mybatis.dao.UserMapper;
 import com.bbcall.mybatis.table.User;
@@ -23,7 +24,8 @@ public class UserServices {
 	private UserMapper userMapper;
 	@Autowired
 	private AddressServices addressServices;
-
+	
+	private SHA1_Encode encrypt = new SHA1_Encode();
 	private User userinfo = new User();
 	private User updateduserinfo = new User();
 	private List<User> userlist;
@@ -122,9 +124,11 @@ public class UserServices {
 		if (checkUserNameResult == ResultCode.USERNAME_NOTEXIST) {// 检测用户名是否存在
 			User user = new User(); // 实例化用户对象
 			
-			// ***** 添加account & password *****
+			// ***** 添加account *****
 			user.setUser_account(account);
-			user.setUser_password(password);
+			
+			// ***** 添加加密的password *****
+			user.setUser_password(encrypt.getDigestOfString(password.getBytes()));
 			
 			// ***** 添加 usertype *****
 			user.setUser_type(usertype);
@@ -272,7 +276,7 @@ public class UserServices {
 			User user = (User) userinfo; // 引用user对象
 			int checkUserStatusResult = checkUserStatusValue(user.getUser_status());
 			if (checkUserStatusResult == ResultCode.USERSTATUS_ACTIVE) { // 验证用户状态
-				if (password.equals(user.getUser_password())) {// 验证密码是否正确
+				if (encrypt.getDigestOfString(password.getBytes()).equals(user.getUser_password())) {// 验证加密的密码是否正确
 					RandomCode randomCode = new RandomCode();
 					String token = randomCode.getToken();// 正确则创建新token，并更新数据库
 					while (null != userMapper.getUserByToken(token)) {// 确保token唯一
@@ -426,9 +430,9 @@ public class UserServices {
 				return ResultCode.USERACCOUNT_ERROR;
 			}
 		}
-		if (!Tools.isEmpty(password) && !password.equals(user.getUser_password())) {
+		if (!Tools.isEmpty(password) && !encrypt.getDigestOfString(password.getBytes()).equals(user.getUser_password())) {
 			if (password.length() >= 6) {
-				user.setUser_password(password);
+				user.setUser_password(encrypt.getDigestOfString(password.getBytes()));
 				changecount++;
 				System.out.println("password changed!");
 			} else {
@@ -770,6 +774,24 @@ public class UserServices {
 		}
 	}
 
+	
+	// ###################
+	// ##  更新用户评分
+	// ###################
+	public int updateUserGrade (Integer userid, Double usergrade) {
+		System.out.println("Here is UserServices.updateUserGrade method...");
+		if (userid == null)
+			return ResultCode.REQUIREINFO_NOTENOUGH;
+		User tempUser = userMapper.getUserById(userid);
+		if (tempUser != null) {
+			tempUser.setUser_grade(usergrade);
+			userMapper.updateUser(tempUser);
+			return ResultCode.SUCCESS;
+		} else {
+			return ResultCode.USERID_ERROR;
+		}
+	}
+	
 	//getter & setter
 	
 	public User getUserinfo() {

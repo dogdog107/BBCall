@@ -20,9 +20,12 @@ public class ObjectToMap {
 				fields[i].setAccessible(true);
 				// 获取在对象f中属性fields[i]对应的对象中的变量
 				Object o = fields[i].get(obj);
-				if (o != null)
-					map.put(varName, o);
-//					map.put(varName, o.toString());
+				map.put(varName, o);
+//				if (o != null) {
+//					map.put(varName, o);
+//				} else {
+//					map.put(varName, null); // 变量为空时返回""
+//				}
 				// System.out.println("传入的对象中包含一个如下的变量：" + varName + " = " + o);
 				// 恢复访问控制权限
 				fields[i].setAccessible(accessFlag);
