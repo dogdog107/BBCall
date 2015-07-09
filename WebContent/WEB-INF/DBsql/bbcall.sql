@@ -11,7 +11,7 @@
  Target Server Version : 50624
  File Encoding         : utf-8
 
- Date: 07/10/2015 00:30:26 AM
+ Date: 07/10/2015 00:39:07 AM
 */
 
 SET NAMES utf8;
@@ -139,12 +139,14 @@ CREATE TABLE `orderlist` (
   `order_urgent_bonus` decimal(10,2) DEFAULT NULL,
   `order_user_account` varchar(30) DEFAULT NULL,
   `order_master_account` varchar(30) DEFAULT NULL,
-  `order_type_code` int(11) DEFAULT NULL,
+  `order_type_code` int(11) NOT NULL,
+  `order_type` varchar(30) NOT NULL,
   `order_status` int(11) DEFAULT NULL,
   `order_score` int(11) DEFAULT NULL,
   `order_evaluation` text,
   `order_remark` text,
   `order_section` int(11) NOT NULL,
+  `order_refer_price` decimal(10,2) DEFAULT NULL,
   PRIMARY KEY (`order_id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=12 DEFAULT CHARSET=utf8;
 
@@ -152,7 +154,7 @@ CREATE TABLE `orderlist` (
 --  Records of `orderlist`
 -- ----------------------------
 BEGIN;
-INSERT INTO `orderlist` VALUES ('2', '2015-06-09 20:59:38', '2015-06-09 20:59:39', '1990-01-10 11:00:00', 'yyy', '0', '321', '4321', 'D:\\git\\BBCall\\WebContent\\UploadImages\\zpAmqLgiRKOWlXFzrSy4ZELUjkwcC6KpIPuLG6n0A47ZkgMYsi.jpg;D:\\git\\BBCall\\WebContent\\UploadImages\\kELbfPWOqrTMjepRNioKoQ6BQbCdJ41ZZTDt6cqXidgnILu3yj.jpg;D:\\git\\BBCall\\WebContent\\UploadImages\\cqJHzjq4o3gElzmXfnJQyOfIjEPSYuSxMKJuhkWXCQgqAnStea.jpg;', null, '30.00', b'0', '312.00', 'keng', 'hong', '15000', '1', null, null, 'yyy', '1'), ('3', '2015-06-09 21:01:48', '2015-06-09 21:01:49', '1991-01-13 12:00:00', 'xxx', '0', '312', '312', 'D:\\git\\BBCall\\WebContent\\UploadImages\\tijYohUPfPIeuSBSxibskcwdHeH5kiB2RnYXCoq8KR8ndxSHDY.jpg;D:\\git\\BBCall\\WebContent\\UploadImages\\NGTrIx68peh0ydvHgQFDHcEOw8w2bvTgx9BpijsfNjnpCXcuzF.jpg;D:\\git\\BBCall\\WebContent\\UploadImages\\2GXYFZaG5iUain2mGF3WeJor9kFjUoeBKLTgyNwjDarAcLZyPP.jpg;', null, '10.00', b'0', '213.00', 'aaa', 'aaa', '15000', '5', null, null, null, '1'), ('4', '2015-06-09 21:03:45', '2015-06-09 21:03:45', '1990-01-10 10:00:00', 'ccc', '0', '222', '222', 'D:\\git\\BBCall\\WebContent\\UploadImages\\wrZGzOMjXioYwJiZ22TWgCMALFAloPasUrREFG4uVhI9qt0U57.jpg;D:\\git\\BBCall\\WebContent\\UploadImages\\vBPeh1lqz4VQnlbQ2Rx45aZ0xsZrGcU86FHoDIHmJQWLTPjQaP.jpg;D:\\git\\BBCall\\WebContent\\UploadImages\\6AJnAHz7B8TDjFJQ0034ubOHPa4rpX1plVHv9I5FEzpAj7uOmm.jpg;', null, '7588.00', b'0', '222.00', 'aaa', '', '15000', '6', null, null, 'ssss', '1'), ('5', '2015-06-19 02:05:01', '2015-06-19 02:05:01', '2015-06-19 12:05:01', '555', '0', '222', '555', '../UploadImages/po0IC59ff8vuzk80RVytW76wa6MPoO2Pr26RguxbbYiC5ceTdu.jpg;../UploadImages/FOJyxsRiSI8fJaKtYpT3se0u3cHW52aOAiKhpUffXXYJX2uQgT.jpg;../UploadImages/OUvx6xFiwWJsHmS5BWiaG8katpoYg7pJYfWAiHCMKpB8gqzG2K.jpg;', null, '333.00', b'0', '12.00', 'y66446', 'hong', '15000', '3', null, null, null, '2'), ('6', '2015-06-19 02:10:45', '2015-06-19 02:10:46', '2010-03-30 13:00:00', 'afd', '0', '13124', 'af', '../UploadImages/ZpPe4FsQ4XxFkc0GdCjLV8NQW5EeKt69i91MOA7DVvvgkso9kU.jpg;../UploadImages/KoPjKxrJsLk8PLkVQwbEEDcLUZqZ8eWTlDuLyxiqoHSxD7Xh6g.jpg;../UploadImages/YOhos8Jg3bqTr6e2iXA9UM5owAYhrUJgoR5OlhYaMqoDnNgkF9.jpg;', null, '123.00', b'0', '213.00', '123', null, '15000', '3', null, null, 'xiao k', '2'), ('7', '2015-06-22 14:33:22', '2015-06-22 14:33:23', '1990-01-10 15:00:00', 'yoxi', '0', '777', 'tioy', '../UploadImages/UdpXEEVqdGzT875pwGWoyNJwVN9hcG7E1I9qK1mVDqvqw3Ynqi.jpg;', 'da', '444.00', b'1', '333.00', 'ewf', null, '11001', '1', null, null, null, '3'), ('8', '2015-06-22 14:33:23', '2015-06-22 14:33:23', '1990-01-10 16:00:00', 'yoxi', '0', '777', 'tioy', '../UploadImages/UdpXEEVqdGzT875pwGWoyNJwVN9hcG7E1I9qK1mVDqvqw3Ynqi.jpg;', 'da', '444.00', b'1', '333.00', 'ewf', null, '16001', '1', null, null, null, '3'), ('9', '2015-07-01 23:23:48', '2015-07-01 23:23:49', '1992-10-19 21:52:18', '广东汕尾', '100010', '12332132122', 'Maple', 'c:/', null, '4.59', b'0', '0.00', 'maplehong', null, '15001', '4', null, null, 'ooo', '4'), ('10', '2015-07-01 23:38:19', '2015-07-01 23:38:19', '1992-10-19 21:52:18', '9999', '999', '999', '999', 'sdaf', '666', '10.00', b'0', '999.00', '888', '001', '13213', '3', '90', 'good', null, '5'), ('11', '2015-07-01 23:38:19', '2015-07-01 23:38:19', '1992-10-19 22:52:18', '9999', '999', '999', '999', 'sdaf', '666', '777.00', b'0', '999.00', '889', null, '3123', '1', null, null, null, '5');
+INSERT INTO `orderlist` VALUES ('2', '2015-06-09 20:59:38', '2015-06-09 20:59:39', '1990-01-10 11:00:00', 'yyy', '0', '321', '4321', 'D:\\git\\BBCall\\WebContent\\UploadImages\\zpAmqLgiRKOWlXFzrSy4ZELUjkwcC6KpIPuLG6n0A47ZkgMYsi.jpg;D:\\git\\BBCall\\WebContent\\UploadImages\\kELbfPWOqrTMjepRNioKoQ6BQbCdJ41ZZTDt6cqXidgnILu3yj.jpg;D:\\git\\BBCall\\WebContent\\UploadImages\\cqJHzjq4o3gElzmXfnJQyOfIjEPSYuSxMKJuhkWXCQgqAnStea.jpg;', null, '30.00', b'0', '312.00', 'keng', 'hong', '15000', '', '1', null, null, 'yyy', '1', null), ('3', '2015-06-09 21:01:48', '2015-06-09 21:01:49', '1991-01-13 12:00:00', 'xxx', '0', '312', '312', 'D:\\git\\BBCall\\WebContent\\UploadImages\\tijYohUPfPIeuSBSxibskcwdHeH5kiB2RnYXCoq8KR8ndxSHDY.jpg;D:\\git\\BBCall\\WebContent\\UploadImages\\NGTrIx68peh0ydvHgQFDHcEOw8w2bvTgx9BpijsfNjnpCXcuzF.jpg;D:\\git\\BBCall\\WebContent\\UploadImages\\2GXYFZaG5iUain2mGF3WeJor9kFjUoeBKLTgyNwjDarAcLZyPP.jpg;', null, '10.00', b'0', '213.00', 'aaa', 'aaa', '15000', '', '5', null, null, null, '1', null), ('4', '2015-06-09 21:03:45', '2015-06-09 21:03:45', '1990-01-10 10:00:00', 'ccc', '0', '222', '222', 'D:\\git\\BBCall\\WebContent\\UploadImages\\wrZGzOMjXioYwJiZ22TWgCMALFAloPasUrREFG4uVhI9qt0U57.jpg;D:\\git\\BBCall\\WebContent\\UploadImages\\vBPeh1lqz4VQnlbQ2Rx45aZ0xsZrGcU86FHoDIHmJQWLTPjQaP.jpg;D:\\git\\BBCall\\WebContent\\UploadImages\\6AJnAHz7B8TDjFJQ0034ubOHPa4rpX1plVHv9I5FEzpAj7uOmm.jpg;', null, '7588.00', b'0', '222.00', 'aaa', '', '15000', '', '6', null, null, 'ssss', '1', null), ('5', '2015-06-19 02:05:01', '2015-06-19 02:05:01', '2015-06-19 12:05:01', '555', '0', '222', '555', '../UploadImages/po0IC59ff8vuzk80RVytW76wa6MPoO2Pr26RguxbbYiC5ceTdu.jpg;../UploadImages/FOJyxsRiSI8fJaKtYpT3se0u3cHW52aOAiKhpUffXXYJX2uQgT.jpg;../UploadImages/OUvx6xFiwWJsHmS5BWiaG8katpoYg7pJYfWAiHCMKpB8gqzG2K.jpg;', null, '333.00', b'0', '12.00', 'y66446', 'hong', '15000', '', '3', null, null, null, '2', null), ('6', '2015-06-19 02:10:45', '2015-06-19 02:10:46', '2010-03-30 13:00:00', 'afd', '0', '13124', 'af', '../UploadImages/ZpPe4FsQ4XxFkc0GdCjLV8NQW5EeKt69i91MOA7DVvvgkso9kU.jpg;../UploadImages/KoPjKxrJsLk8PLkVQwbEEDcLUZqZ8eWTlDuLyxiqoHSxD7Xh6g.jpg;../UploadImages/YOhos8Jg3bqTr6e2iXA9UM5owAYhrUJgoR5OlhYaMqoDnNgkF9.jpg;', null, '123.00', b'0', '213.00', '123', null, '15000', '', '3', null, null, 'xiao k', '2', null), ('7', '2015-06-22 14:33:22', '2015-06-22 14:33:23', '1990-01-10 15:00:00', 'yoxi', '0', '777', 'tioy', '../UploadImages/UdpXEEVqdGzT875pwGWoyNJwVN9hcG7E1I9qK1mVDqvqw3Ynqi.jpg;', 'da', '444.00', b'1', '333.00', 'ewf', null, '11001', '', '1', null, null, null, '3', null), ('8', '2015-06-22 14:33:23', '2015-06-22 14:33:23', '1990-01-10 16:00:00', 'yoxi', '0', '777', 'tioy', '../UploadImages/UdpXEEVqdGzT875pwGWoyNJwVN9hcG7E1I9qK1mVDqvqw3Ynqi.jpg;', 'da', '444.00', b'1', '333.00', 'ewf', null, '16001', '', '1', null, null, null, '3', null), ('9', '2015-07-01 23:23:48', '2015-07-01 23:23:49', '1992-10-19 21:52:18', '广东汕尾', '100010', '12332132122', 'Maple', 'c:/', null, '4.59', b'0', '0.00', 'maplehong', null, '15001', '', '4', null, null, 'ooo', '4', null), ('10', '2015-07-01 23:38:19', '2015-07-01 23:38:19', '1992-10-19 21:52:18', '9999', '999', '999', '999', 'sdaf', '666', '10.00', b'0', '999.00', '888', '001', '13213', '', '3', '90', 'good', null, '5', null), ('11', '2015-07-01 23:38:19', '2015-07-01 23:38:19', '1992-10-19 22:52:18', '9999', '999', '999', '999', 'sdaf', '666', '777.00', b'0', '999.00', '889', null, '3123', '', '1', null, null, null, '5', null);
 COMMIT;
 
 -- ----------------------------
@@ -161,12 +163,23 @@ COMMIT;
 DROP TABLE IF EXISTS `preorder`;
 CREATE TABLE `preorder` (
   `preorder_id` int(11) NOT NULL AUTO_INCREMENT,
-  `preorder_master_account` varchar(30) DEFAULT NULL,
+  `preorder_master_account` varchar(30) NOT NULL,
   `preorder_create_time` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
   `preorder_price` decimal(10,2) DEFAULT NULL,
   `preorder_order_id` int(11) NOT NULL,
+  `preorder_master_id` int(11) NOT NULL,
+  `preorder_master_name` varchar(30) DEFAULT NULL,
+  `preorder_master_skill` text,
+  `preorder_master_grade` decimal(10,2) DEFAULT NULL,
   PRIMARY KEY (`preorder_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8;
+
+-- ----------------------------
+--  Records of `preorder`
+-- ----------------------------
+BEGIN;
+INSERT INTO `preorder` VALUES ('1', 'fan', '2015-07-09 22:48:01', '20.00', '1', '12', 'hong', 'xx yy zz', '5.00'), ('2', 'yoda', '2015-07-09 22:48:25', '10.00', '1', '10', 'llll', 'uu ii oo', '4.00');
+COMMIT;
 
 -- ----------------------------
 --  Table structure for `referdoc`
