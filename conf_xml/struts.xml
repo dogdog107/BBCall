@@ -22,7 +22,7 @@
 		<interceptors>
 		
 			<!-- 自定义 登录验证 拦截器 -->
-			<interceptor name="LoginInterceptor" class="com.bbcall.struts.interceptor.LoginInterceptor">
+			<interceptor name="loginInterceptor" class="com.bbcall.struts.interceptor.LoginInterceptor">
 				<!-- 停用(true)/启用(false) 登录验证拦截器 -->
 				<param name="disable">true</param>
 				<param name="excludeAction">user_login,user_register,user_loginJson,user_registerJson,user_logout</param>
@@ -36,7 +36,7 @@
 			<interceptor-stack name="mystack">
 				<!-- 引用默认的拦截器堆栈 -->
 				<interceptor-ref name="defaultStack" />
-				<interceptor-ref name="LoginInterceptor" />
+				<interceptor-ref name="loginInterceptor" />
 				<interceptor-ref name="businessInterceptor" />
 			</interceptor-stack>
 		</interceptors>
@@ -46,7 +46,7 @@
 
 		<!-- 全局跳转页面 -->
 		<global-results>
-			<result name="error">/error.jsp</result>
+			<result name="exception">/error.jsp</result>
 			<result name="login" type="redirect">/page/login.jsp</result>
 			<result name="accessReject" type="redirect">
 				<param name="location">/error.jsp</param>
@@ -56,11 +56,15 @@
 				<param name="root">dataMap</param>
 				<param name="excludeProperties">user_password</param>
 			</result>
+			<result name="exceptionjson" type="json">
+				<param name="root">dataMap</param>
+			</result>
 		</global-results>
 
 		<!-- 全局异常 -->
 		<global-exception-mappings>
-			<exception-mapping result="error" exception="java.lang.Exception" />
+			<!-- <exception-mapping result="error" exception="com.bbcall.struts.exception.BusinessException" /> -->
+			<exception-mapping result="exception" exception="java.lang.Exception" />
 		</global-exception-mappings>
 
 

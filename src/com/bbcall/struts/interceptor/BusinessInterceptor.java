@@ -2,13 +2,15 @@ package com.bbcall.struts.interceptor;
 
 import java.io.IOException;
 import java.sql.SQLException;
+import java.util.LinkedHashMap;
+import java.util.Map;
 
 import org.springframework.dao.DataAccessException;
 
 import com.bbcall.struts.exception.BusinessException;
 import com.opensymphony.xwork2.ActionInvocation;
 import com.opensymphony.xwork2.interceptor.AbstractInterceptor;
-
+import com.opensymphony.xwork2.util.ValueStack;
 
 public class BusinessInterceptor extends AbstractInterceptor {
 	/**
@@ -18,6 +20,8 @@ public class BusinessInterceptor extends AbstractInterceptor {
 
 	@Override
 	public String intercept(ActionInvocation invocation) throws Exception {
+		String actionName = invocation.getProxy().getActionName();
+		String frdMsg;
 
 		before(invocation);
 
@@ -26,31 +30,96 @@ public class BusinessInterceptor extends AbstractInterceptor {
 		try {
 			result = invocation.invoke();
 		} catch (DataAccessException ex) {
-			throw new BusinessException("数据库操作失败！");
+			frdMsg = " Database operation fail!";
+			if (actionName.contains("Json")) {
+				jsonException(invocation, frdMsg);
+				return "exceptionjson";
+			}
+			throw new BusinessException(frdMsg, actionName);
 		} catch (NullPointerException ex) {
-			throw new BusinessException("调用了未经初始化的对象或者是不存在的对象！");
+			frdMsg = " Calling the object that is not initialized or the object does not exist!";
+			if (actionName.contains("Json")) {
+				jsonException(invocation, frdMsg);
+				return "exceptionjson";
+			}
+			throw new BusinessException(frdMsg, actionName);
 		} catch (IOException ex) {
-			throw new BusinessException("IO异常！");
+			frdMsg = " I/O Exception happened!";
+			if (actionName.contains("Json")) {
+				jsonException(invocation, frdMsg);
+				return "exceptionjson";
+			}
+			throw new BusinessException(frdMsg, actionName);
 		} catch (ClassNotFoundException ex) {
-			throw new BusinessException("指定的类不存在！");
+			frdMsg = " The specified class does not exist!";
+			if (actionName.contains("Json")) {
+				jsonException(invocation, frdMsg);
+				return "exceptionjson";
+			}
+			throw new BusinessException(frdMsg, actionName);
 		} catch (ArithmeticException ex) {
-			throw new BusinessException("数学运算异常！");
+			frdMsg = " Abnormal mathematical operation!";
+			if (actionName.contains("Json")) {
+				jsonException(invocation, frdMsg);
+				return "exceptionjson";
+			}
+			throw new BusinessException(frdMsg, actionName);
 		} catch (ArrayIndexOutOfBoundsException ex) {
-			throw new BusinessException("数组下标越界!");
+			frdMsg = " Array index out of bounds!";
+			if (actionName.contains("Json")) {
+				jsonException(invocation, frdMsg);
+				return "exceptionjson";
+			}
+			throw new BusinessException(frdMsg, actionName);
 		} catch (IllegalArgumentException ex) {
-			throw new BusinessException("方法的参数错误！");
+			frdMsg = " Parameter error on the method!";
+			if (actionName.contains("Json")) {
+				jsonException(invocation, frdMsg);
+				return "exceptionjson";
+			}
+			throw new BusinessException(frdMsg, actionName);
 		} catch (ClassCastException ex) {
-			throw new BusinessException("类型强制转换错误！");
+			frdMsg = " Type forced conversion error!";
+			if (actionName.contains("Json")) {
+				jsonException(invocation, frdMsg);
+				return "exceptionjson";
+			}
+			throw new BusinessException(frdMsg, actionName);
 		} catch (SecurityException ex) {
-			throw new BusinessException("违背安全原则异常！");
+			frdMsg = " Security principle exception!";
+			if (actionName.contains("Json")) {
+				jsonException(invocation, frdMsg);
+				return "exceptionjson";
+			}
+			throw new BusinessException(frdMsg, actionName);
 		} catch (SQLException ex) {
-			throw new BusinessException("操作数据库异常！");
+			frdMsg = " Operating database exception!";
+			if (actionName.contains("Json")) {
+				jsonException(invocation, frdMsg);
+				return "exceptionjson";
+			}
+			throw new BusinessException(frdMsg, actionName);
 		} catch (NoSuchMethodError ex) {
-			throw new BusinessException("方法末找到异常！");
+			frdMsg = " Method not found exception!";
+			if (actionName.contains("Json")) {
+				jsonException(invocation, frdMsg);
+				return "exceptionjson";
+			}
+			throw new BusinessException(frdMsg, actionName);
 		} catch (InternalError ex) {
-			throw new BusinessException("Java虚拟机发生了内部错误");
+			frdMsg = " Java virtual machine has an internal error!";
+			if (actionName.contains("Json")) {
+				jsonException(invocation, frdMsg);
+				return "exceptionjson";
+			}
+			throw new BusinessException(frdMsg, actionName);
 		} catch (Exception ex) {
-			throw new BusinessException("程序内部错误，操作失败！");
+			frdMsg = " Internal error, operation failure!";
+			if (actionName.contains("Json")) {
+				jsonException(invocation, frdMsg);
+				return "exceptionjson";
+			}
+			throw new BusinessException(frdMsg, actionName);
 		}
 
 		after(invocation, result);
@@ -80,4 +149,21 @@ public class BusinessInterceptor extends AbstractInterceptor {
 		// ...
 	}
 
+	/**
+	 * Return Json format method
+	 * @param invocation
+	 * @param frdMessage
+	 * @throws Exception
+	 */
+	public void jsonException(ActionInvocation invocation, String frdMessage)
+			throws Exception {
+		Map<String, Object> dataMap = new LinkedHashMap<String, Object>(); // 新建dataMap来储存JSON字符串
+		dataMap.clear(); // dataMap中的数据将会被Struts2转换成JSON字符串，所以这里要先清空其中的数据
+
+		ValueStack stack = invocation.getStack();
+		stack.set("dataMap", dataMap);
+		dataMap.put("resultcode", -1); // 放入一个是否操作成功的标识
+		dataMap.put("errmsg", frdMessage);
+		dataMap.put("result", false); // 放入loginResult
+	}
 }

@@ -60,17 +60,16 @@ public class UserAction extends ActionSupport implements SessionAware{
 //     this.request = request;
 //    }
 	
-	@Override
-	public String execute() throws Exception {
-		return super.execute();
-	}
-
-	
+//	@Override
+//	public String execute() throws Exception {
+//		return super.execute();
+//	}
+//
+//	
 //	public String test() throws Exception{
-//		dataMap = new HashMap<String, Object>(); // 新建dataMap来储存JSON字符串
+//		String a = shaEncode.getDigestOfString(password.getBytes());
 //		dataMap.clear(); // dataMap中的数据将会被Struts2转换成JSON字符串，所以这里要先清空其中的数据
-//		List<UserSkill> result = userServices.test(test);
-//		dataMap.put("test list", result);
+//		dataMap.put("SHA", a);
 //		return "json";
 //	}
 	
@@ -319,6 +318,33 @@ public class UserAction extends ActionSupport implements SessionAware{
 		checkUserList();
 		return "json";
 	}
+	
+	// checkUserById
+	public String getUserById() throws Exception {
+		System.out.println("Here is UserAction.getUserById");
+		dataMap.clear(); // dataMap中的数据将会被Struts2转换成JSON字符串，所以这里要先清空其中的数据
+		if (userid == null) {
+			dataMap.putAll(Tools.JsonHeadMap(ResultCode.REQUIREINFO_NOTENOUGH, false));
+			return INPUT;
+		}
+		
+		int result = userServices.checkUserList("user_id", "", userid.toString());// 调用userServices.checkAddressList
+		if (result == ResultCode.SUCCESS) {
+			List<User> userlist = userServices.getUserlist();
+			dataMap.put("userlist", userlist); // 把addresslist对象放入dataMap
+			dataMap.putAll(Tools.JsonHeadMap(result, true));
+		} else {
+			dataMap.putAll(Tools.JsonHeadMap(result, false));
+			System.out.println(dataMap);
+		}
+		return SUCCESS;
+	}
+	public String getUserByIdJson() throws Exception {
+		System.out.println("Here is UserAction.getUserByIdJson");
+		getUserById();
+		return "json";
+	}
+	
 	
 	// checkUserName Action
 	public String checkUserName() throws Exception {
