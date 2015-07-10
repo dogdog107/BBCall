@@ -128,8 +128,10 @@
 		
 		<!-- Advertisement Action -->
 		<action name="advert_*" method="{1}" class="advertisementAction">
-			<result name="addAdvertSuccess">/page/addAdvert.jsp</result>
+			<result name="addAdvertSuccess">/page/advertList.jsp</result>
 			<result name="addAdvertFailed">/page/addAdvert.jsp</result>
+			<result name="deleteAdvertSuccess">/page/advertList.jsp</result>
+			<result name="deleteAdvertFailed">/page/advertList.jsp</result>
 			<result name="showAdvertSuccess">/page/showAdvert.jsp</result>
 			
 			<result type="json" name="json">
