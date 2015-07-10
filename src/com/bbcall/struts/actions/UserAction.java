@@ -50,6 +50,10 @@ public class UserAction extends ActionSupport implements SessionAware{
 	private String col_name;
 	private String specify_value;
 	private String search_value;
+	private String order_col;
+	private String order_value;
+	private String where_col;
+	private String where_value;
 	
 	
 //	private int test;
@@ -244,6 +248,27 @@ public class UserAction extends ActionSupport implements SessionAware{
 		return "json";
 	}
 
+	public String checkUserListWhereOrderBy() throws Exception {
+		System.out.println("Here is UserAction.checkUserListWhereOrderBy");
+		dataMap.clear(); // dataMap中的数据将会被Struts2转换成JSON字符串，所以这里要先清空其中的数据
+		int result = userServices.checkUserListWhereOrderBy(order_col, order_value, where_col, where_value);// 调用userServices.checkAddressList
+		if (result == ResultCode.SUCCESS) {
+			List<User> userlist = userServices.getUserlist();
+			dataMap.put("userlist", userlist); // 把addresslist对象放入dataMap
+			dataMap.putAll(Tools.JsonHeadMap(result, true));
+		} else {
+			dataMap.putAll(Tools.JsonHeadMap(result, false));
+			System.out.println(dataMap);
+		}
+
+		return SUCCESS;
+	}
+	public String checkUserListWhereOrderByJson() throws Exception {
+		System.out.println("Here is UserAction.checkUserListWhereOrderByJson");
+		checkUserListWhereOrderBy();
+		return "json";
+	}
+	
 	// checkUserList Action
 	public String checkUserList() throws Exception {
 		System.out.println("Here is UserAction.checkUserList");
@@ -589,5 +614,37 @@ public class UserAction extends ActionSupport implements SessionAware{
 
 	public void setSearch_value(String search_value) {
 		this.search_value = search_value;
+	}
+
+	public String getOrder_col() {
+		return order_col;
+	}
+
+	public void setOrder_col(String order_col) {
+		this.order_col = order_col;
+	}
+
+	public String getOrder_value() {
+		return order_value;
+	}
+
+	public void setOrder_value(String order_value) {
+		this.order_value = order_value;
+	}
+
+	public String getWhere_col() {
+		return where_col;
+	}
+
+	public void setWhere_col(String where_col) {
+		this.where_col = where_col;
+	}
+
+	public String getWhere_value() {
+		return where_value;
+	}
+
+	public void setWhere_value(String where_value) {
+		this.where_value = where_value;
 	}
 }

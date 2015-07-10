@@ -590,6 +590,18 @@ public class UserServices {
 
 	}
 
+	public int checkUserListWhereOrderBy(String order_col, String order_value,String where_col, String where_value) {
+		System.out.println("Here is UserServices.checkUserListWhereOrderBy method...");
+		
+		List<User> userlist = userMapper.listUserWhereOrderBy(where_col, order_col, where_value, order_value);
+		if (userlist.size() > 0) {
+			this.userlist = userlist;
+			return ResultCode.SUCCESS;
+		} else {
+			return ResultCode.USERLIST_NULL;
+		}
+	}
+	
 	// ###################
 	// ## 拉取User表
 	// ###################
