@@ -92,7 +92,7 @@ public class OrderlistServices {
 		Orderlist orderlist = new Orderlist();
 		Referdoc referdoc = referdocMapper.getReferdoc(order_type_code);
 
-		DateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+		DateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm");
 		format.setLenient(false);
 
 		Timestamp ts = new Timestamp(System.currentTimeMillis());
@@ -183,7 +183,7 @@ public class OrderlistServices {
 		Orderlist orderlist = orderlistMapper.getOrder(order_id);
 		Referdoc referdoc = referdocMapper.getReferdoc(order_type_code);
 
-		DateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+		DateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm");
 		format.setLenient(false);
 
 		Timestamp ts = new Timestamp(System.currentTimeMillis());
