@@ -111,7 +111,21 @@
 							src="./img/menu_icon.gif" width=9></td>
 						<td><a class=menuchild
 							href="${pageContext.request.contextPath }/page/userlist.jsp"
-							target=main>用戶列表</a></td>
+							target=main>全部帳號列表</a></td>
+					</tr>
+					<tr height=20>
+						<td align=middle width=30><img height=9
+							src="./img/menu_icon.gif" width=9></td>
+						<td><a class=menuchild
+							href="${pageContext.request.contextPath }/page/masterlist.jsp"
+							target=main>師傅列表</a></td>
+					</tr>
+					<tr height=20>
+						<td align=middle width=30><img height=9
+							src="./img/menu_icon.gif" width=9></td>
+						<td><a class=menuchild
+							href="${pageContext.request.contextPath }/page/customerlist.jsp"
+							target=main>顧客列表</a></td>
 					</tr>
 					<tr height=4>
 						<td colspan=2></td>

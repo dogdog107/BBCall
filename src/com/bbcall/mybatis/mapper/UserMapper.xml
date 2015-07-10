@@ -108,6 +108,22 @@
 		from USER
 	</select>
 	
+	<select id="listUserWhereOrderBy" resultMap="UserResultMap">
+		select user_id, user_account, user_password, user_email, user_mobile,
+		user_type, user_name, user_gender, user_pic_url, user_language, user_address_code,
+		user_address, user_skill, user_description, user_access_group, user_grade,
+		user_status, user_login_time, user_create_time, user_token
+		from USER
+		<where>
+			<if test="where_col!=null and where_value!=null and where_col!='' and where_value!=''">  
+            	${where_col}=#{where_value}
+        	</if>  
+		</where>
+		<if test="order_col!=null and order_value!=null and order_col!='' and order_value!=''">  
+            order by if(${order_col}=#{order_value},0,1),${order_col}
+        </if>  
+	</select>
+	
 	<select id="listUserOrderBy" resultMap="UserResultMap">
 		select user_id, user_account, user_password, user_email, user_mobile,
 		user_type, user_name, user_gender, user_pic_url, user_language, user_address_code,

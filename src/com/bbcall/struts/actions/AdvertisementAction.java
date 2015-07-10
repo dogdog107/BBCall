@@ -65,15 +65,11 @@ public class AdvertisementAction extends ActionSupport{
 
 		dataMap.clear(); // dataMap中的数据将会被Struts2转换成JSON字符串，所以这里要先清空其中的数据
 		if (result == ResultCode.SUCCESS) {
-			dataMap.put("resultcode", result); // 放入一个是否操作成功的标识
-			dataMap.put("errmsg", ResultCode.getErrmsg(result));
-			dataMap.put("addAdvertResult", true); // 放入loginResult
+			dataMap.putAll(Tools.JsonHeadMap(result, true));
 			System.out.println(dataMap);
 			return "addAdvertSuccess";
 		} else {
-			dataMap.put("resultcode", result); // 放入一个是否操作成功的标识
-			dataMap.put("errmsg", ResultCode.getErrmsg(result));
-			dataMap.put("addAdvertResult", false); // 放入loginResult
+			dataMap.putAll(Tools.JsonHeadMap(result, false));
 			System.out.println(dataMap);
 			System.out.println("addAdvert Failed");
 			return "addAdvertFailed";
@@ -108,15 +104,11 @@ public class AdvertisementAction extends ActionSupport{
 			advertisement_create_time = advertisementServices.getAdvertisement().getAdvertisement_create_time();
 			System.out.println(advertisement_create_time);
 			dataMap = obj2map.getValueMap(advertisementServices.getAdvertisement());
-			dataMap.put("resultcode", result); // 放入一个是否操作成功的标识
-			dataMap.put("errmsg", ResultCode.getErrmsg(result));
-			dataMap.put("showAdvertResult", true); // 放入loginResult
+			dataMap.putAll(Tools.JsonHeadMap(result, true));
 			System.out.println(dataMap);
 			return "showAdvertSuccess";
 		} else {
-			dataMap.put("resultcode", result); // 放入一个是否操作成功的标识
-			dataMap.put("errmsg", ResultCode.getErrmsg(result));
-			dataMap.put("showAdvertResult", false); // 放入loginResult
+			dataMap.putAll(Tools.JsonHeadMap(result, false));
 			System.out.println(dataMap);
 			System.out.println("showAdvert Failed");
 			return "showAdvertFailed";
