@@ -7,7 +7,7 @@
 <meta http-equiv=pragma content=no-cache />
 <meta http-equiv=cache-control content=no-cache />
 <meta http-equiv=expires content=-1000 />
-
+<link rel="shortcut icon" href="${pageContext.request.contextPath }/page/img/BBCallicon_32X32.ico" type="image/x-icon" />
 <title>管理中心 v1.0</title>
 </head>
 <frameset border=0 framespacing=0 rows="60, *" frameborder=0>

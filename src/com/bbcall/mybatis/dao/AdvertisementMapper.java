@@ -15,6 +15,9 @@ public interface AdvertisementMapper {
 	// 显示全部广告 get all advertisements
 	public List<Advertisement> getAllAdvert();
 	
+	// 显示全部广告de的概要 get all advertisements Summary
+	public List<Advertisement> getAllAdvertSummary();
+	
 	// 按ID得到广告内容
 	public Advertisement getAdvertById(Integer advertisement_id);
 }

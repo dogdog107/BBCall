@@ -50,7 +50,6 @@
 			<result name="login" type="redirect">/page/login.jsp</result>
 			<result name="accessReject" type="redirect">
 				<param name="location">/error.jsp</param>
-				<param name="errmsg">${errmsg}</param>
 			</result>
 			<result name="interceptorjson" type="json">
 				<param name="root">dataMap</param>
@@ -149,6 +148,15 @@
 
 		<!-- Address Action -->
 		<action name="address_*" method="{1}" class="addressAction">
+			
+			<result type="json" name="json">
+				<param name="root">dataMap</param>
+			</result>
+		</action>
+
+
+		<!-- Access Action -->
+		<action name="access_*" method="{1}" class="accessAction">
 			
 			<result type="json" name="json">
 				<param name="root">dataMap</param>

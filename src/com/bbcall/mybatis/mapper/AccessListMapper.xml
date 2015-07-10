@@ -16,6 +16,10 @@
 	<select id="getAll" resultMap="AccessListResultMap">
 		select accesslist_id, accesslist_name from ACCESSLIST
 	</select>
+	
+	<select id="getAllAccessName" resultMap="AccessListResultMap">
+		select accesslist_name from ACCESSLIST
+	</select>
 
 	
 </mapper>

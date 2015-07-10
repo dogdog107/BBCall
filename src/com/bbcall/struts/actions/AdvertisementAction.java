@@ -2,6 +2,7 @@ package com.bbcall.struts.actions;
 
 import java.sql.Timestamp;
 import java.util.LinkedHashMap;
+import java.util.List;
 import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -10,6 +11,8 @@ import org.springframework.stereotype.Controller;
 
 import com.bbcall.functions.ObjectToMap;
 import com.bbcall.functions.ResultCode;
+import com.bbcall.functions.Tools;
+import com.bbcall.mybatis.table.Advertisement;
 import com.bbcall.struts.services.AdvertisementServices;
 import com.bbcall.struts.services.UserServices;
 import com.opensymphony.xwork2.ActionSupport;
@@ -43,6 +46,7 @@ public class AdvertisementAction extends ActionSupport{
 	private String advertisement_summary;
 	private String advertisement_content;
 	private Timestamp advertisement_create_time;
+	private List<Advertisement> advertList;
 
 	/**
 	 * addAdvert Action
@@ -123,6 +127,43 @@ public class AdvertisementAction extends ActionSupport{
 		showAdvert();
 		return "json";
 	}
+	
+	/**
+	 * showAdvertList Action
+	 * @author Roger Luo
+	 * @return
+	 * @throws Exception
+	 */
+	public String showAdvertList() throws Exception {
+		advertList = advertisementServices.getAllAdvertList();
+		dataMap.clear(); // dataMap中的数据将会被Struts2转换成JSON字符串，所以这里要先清空其中的数据
+		dataMap.put("advertList", advertList);
+		dataMap.putAll(Tools.JsonHeadMap(ResultCode.SUCCESS, true));
+		return SUCCESS;
+	}
+	public String showAdvertListJson() throws Exception {
+		showAdvertList();
+		return "json";
+	}
+	
+	/**
+	 * showAdvertSummaryList Action
+	 * @author Roger Luo
+	 * @return
+	 * @throws Exception
+	 */
+	public String showAdvertSummaryList() throws Exception {
+		advertList = advertisementServices.getAllAdvertSummaryList();
+		dataMap.clear(); // dataMap中的数据将会被Struts2转换成JSON字符串，所以这里要先清空其中的数据
+		dataMap.put("advertList", advertList);
+		dataMap.putAll(Tools.JsonHeadMap(ResultCode.SUCCESS, true));
+		return SUCCESS;
+	}
+	public String showAdvertSummaryListJson() throws Exception {
+		showAdvertSummaryList();
+		return "json";
+	}
+	
 	
 	/**
 	 * deleteAdvert Action
@@ -226,5 +267,13 @@ public class AdvertisementAction extends ActionSupport{
 
 	public void setAdvertisement_create_time(Timestamp advertisement_create_time) {
 		this.advertisement_create_time = advertisement_create_time;
+	}
+
+	public List<Advertisement> getAdvertList() {
+		return advertList;
+	}
+
+	public void setAdvertList(List<Advertisement> advertList) {
+		this.advertList = advertList;
 	}
 }

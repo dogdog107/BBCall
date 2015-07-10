@@ -58,9 +58,15 @@ public class AdvertisementServices {
 	}
 	
 	// ListAll advertisement service
-	public int listAllAdvert(){
+	public List<Advertisement> getAllAdvertList(){
 		advertList = advertisementMapper.getAllAdvert();
-		return ResultCode.SUCCESS;
+		return advertList;
+	}
+	
+	// ListAll advertisement summary service
+	public List<Advertisement> getAllAdvertSummaryList(){
+		advertList = advertisementMapper.getAllAdvertSummary();
+		return advertList;
 	}
 
 	public Advertisement getAdvertisement() {
