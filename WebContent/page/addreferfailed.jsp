@@ -6,6 +6,7 @@
 <head>
 <title>修改用户信息</title>
 <meta http-equiv="content-type" content="text/html;charset=utf-8" />
+<link rel="shortcut icon" href="${pageContext.request.contextPath }/page/img/BBCallicon_32X32.ico" type="image/x-icon" />
 <link href="${pageContext.request.contextPath }/page/css/mine.css"
 	type="text/css" rel="stylesheet" />
 

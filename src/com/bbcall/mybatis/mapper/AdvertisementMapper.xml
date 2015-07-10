@@ -52,6 +52,17 @@
 		advertisement_create_time
 		from ADVERTISEMENT
 	</select>
+	
+	<select id="getAllAdvertSummary" resultMap="AdvertisementResultMap">
+		select advertisement_id,
+		advertisement_title,
+		advertisement_type, 
+		advertisement_bigphoto_url,
+		advertisement_smallphoto_url, 
+		advertisement_summary,
+		advertisement_create_time
+		from ADVERTISEMENT
+	</select>
 
 	<select id="getAdvertById" parameterType="int"
 		resultMap="AdvertisementResultMap">
