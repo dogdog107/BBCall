@@ -925,6 +925,37 @@ public class OrderlistServices {
 
 		return ResultCode.SUCCESS;
 	}
+	
+	public int getOrderlist(int user_id,String order_status, int offset) {
+
+		switch (order_status) {
+		case "2":
+			orderlistinfos = orderlistMapper.getProOrders(offset);
+			break;
+		
+		case "3":
+			orderlistinfos = orderlistMapper.getComOrders(offset);
+			break;
+		
+		case "4":
+			orderlistinfos = orderlistMapper.getRecOrders(offset);
+			break;
+			
+		case "5":
+			orderlistinfos = orderlistMapper.getWasOrders(offset);
+			break;
+	
+		case "6":
+			orderlistinfos = orderlistMapper.getDelOrders(offset);
+			break;
+
+		default:
+			orderlistinfos = orderlistMapper.getUnOrders(offset);
+			break;
+		}
+
+		return ResultCode.SUCCESS;
+	}
 
 	// ###################
 	// ## 读取省、市、区列表
