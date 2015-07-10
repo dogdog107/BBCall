@@ -13,6 +13,7 @@
 	src="${pageContext.request.contextPath }/jquery/viewwashorderPage.js"></script>
 <script type="text/javascript">
 	var order_status = "${dataMap.orderlist.order_status}";
+	alert(order_status);
 	var order_id = "${dataMap.orderlist.order_id}";
 	var order_book_time = "${dataMap.orderlist.order_book_time}";
 	var order_book_location = "${dataMap.orderlist.order_book_location}";
@@ -73,31 +74,31 @@
 				<tr>
 					<td>預約時間  (Order Book Time)</td>
 					<td>
-					<input id="order_book_time" />
+					<input readonly="true" id="order_book_time" />
 					</td>
 				</tr>
 				<tr>
 					<td>預約地點 (Order Book Location)</td>
 					<td>
-					<input id="order_book_location" />
+					<input readonly="true" id="order_book_location" />
 					</td>
 				</tr>
 				<tr>
 					<td>創建時間 (Order Create Time)</td>
 					<td>
-					<input id="order_create_time" />
+					<input readonly="true" id="order_create_time" />
 					</td>
 				</tr>
 				<tr>
 					<td>聯繫人 (Contact Point)</td>
 					<td>
-					<input id="order_contact_name" />
+					<input readonly="true" id="order_contact_name" />
 					</td>
 				</tr>
 				<tr>
 					<td>聯繫電話 (Telephone Number)</td>
 					<td>
-					<input id="order_contact_mobile" />
+					<input readonly="true" id="order_contact_mobile" />
 					</td>
 				</tr>
 				

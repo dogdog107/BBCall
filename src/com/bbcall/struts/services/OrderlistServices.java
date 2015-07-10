@@ -705,10 +705,7 @@ public class OrderlistServices {
 		orderlistMapper.change(order_id, order_status, order_remark);
 
 		orderlistinfo = orderlistMapper.getOrder(order_id);
-
-		if (orderlistinfos == null) {
-			System.out.println("null");
-		}
+		System.out.println("orderlistinfo "+ orderlistinfo.getOrder_status());
 
 		return ResultCode.SUCCESS;
 	}

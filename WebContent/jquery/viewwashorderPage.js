@@ -1,5 +1,5 @@
 function onload() {
-	document.getElementById('order_status')[order_status].selected = true;
+	document.getElementById('order_status').options[value = order_status-1].selected = true;
 	document.getElementById('order_id').value = order_id;
 	document.getElementById('order_book_time').value = order_book_time;
 	document.getElementById('order_book_location').value = order_book_location;
