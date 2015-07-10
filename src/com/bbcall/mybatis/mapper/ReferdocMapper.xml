@@ -14,7 +14,7 @@
 
 	<insert id="addReferdoc" parameterType="com.bbcall.mybatis.table.Referdoc"
 		useGeneratedKeys="true" keyProperty="referdoc_id">
-		insert into REFERDOC
+		insert into REFERDOC 
 		(referdoc_type,
 		referdoc_parentno,
 		referdoc_level,
@@ -26,25 +26,25 @@
 	</insert>
 	<select id="getReferdoc" parameterType="int"
 		resultType="com.bbcall.mybatis.table.Referdoc">
-		select * from REFERDOC
+		select * from REFERDOC 
 		where
 		referdoc_id=#{referdoc_id}
 	</select>
 	<select id="getReferdocByType"
 		resultType="com.bbcall.mybatis.table.Referdoc">
-		select * from REFERDOC
+		select * from REFERDOC 
 		where
 		referdoc_type=#{referdoc_type,jdbcType=VARCHAR} and referdoc_parentno=#{referdoc_parentno,jdbcType=INTEGER}
 	</select>
 	<select id="getReferdoclistByParent" parameterType="int"
 		resultType="com.bbcall.mybatis.table.Referdoc">
-		select * from REFERDOC
+		select * from REFERDOC 
 		where
 		referdoc_parentno=#{referdoc_parentno}
 	</select>
 	<select id="getParentReferdoc" parameterType="int"
 		resultType="com.bbcall.mybatis.table.Referdoc">
-		select * from REFERDOC
+		select * from REFERDOC 
 		where
 		referdoc_parentno = 0 and referdoc_level = 1
 	</select>
@@ -61,7 +61,7 @@
 		referdoc_id=#{referdoc_id}
 	</update>
 	<delete id="deleteReferdoc" parameterType="int">
-		delete from REFERDOC
+		delete from REFERDOC 
 		where
 		referdoc_id=#{referdoc_id}
 	</delete>
