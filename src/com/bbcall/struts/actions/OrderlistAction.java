@@ -241,7 +241,7 @@ public class OrderlistAction extends ActionSupport {
 		int order_user_id = Integer.parseInt(user_id);
 		int order_offset = Integer.parseInt(offset);
 
-		int result = orderlistServices.getUnOrders(order_user_id,order_offset);
+		int result = orderlistServices.getUnOrders(order_user_id, order_offset);
 		// List<Referdoc> referdoclist = new ArrayList<Referdoc>();
 
 		if (result == ResultCode.SUCCESS) {
@@ -267,6 +267,45 @@ public class OrderlistAction extends ActionSupport {
 		return "json";
 	}
 
+	public String getorderlist() throws Exception {
+		dataMap = new HashMap<String, Object>(); // 新建dataMap来储存JSON字符串
+		dataMap.clear(); // dataMap中的数据将会被Struts2转换成JSON字符串，所以这里要先清空其中的数据
+
+		int order_user_id = Integer.parseInt(user_id);
+
+		int order_offset = 0;
+
+		if (offset != null) {
+			order_offset = Integer.parseInt(offset);
+		}
+
+		int result = orderlistServices.getOrderlist(order_user_id, order_status,
+				order_offset);
+		// List<Referdoc> referdoclist = new ArrayList<Referdoc>();
+
+		if (result == ResultCode.SUCCESS) {
+			List<Orderlist> orderlist = orderlistServices.orderlistinfos();
+			// for (int j = 0; j < orderlist.size(); j++) {
+			// referdocServices.getReferdoc(orderlist.get(j)
+			// .getOrder_type_code());
+			// referdoclist.add(referdocServices.referdocinfo());
+			// }
+			dataMap.put("orderlist", orderlist);
+			// dataMap.put("referdoclist", referdoclist);
+			dataMap.putAll(Tools.JsonHeadMap(result, true));
+			// dataMap.put("resultcode", result);
+			// dataMap.put("errmsg", ResultCode.getErrmsg(result));
+			// dataMap.put("unorderlistResult", true);
+		}
+
+		return SUCCESS;
+	}
+
+	public String getorderlistJson() throws Exception {
+		getorderlist();
+		return "json";
+	}
+
 	// 按照发布日期排序
 	public String selectunorderlist() throws Exception {
 		dataMap = new HashMap<String, Object>(); // 新建dataMap来储存JSON字符串
@@ -276,7 +315,7 @@ public class OrderlistAction extends ActionSupport {
 
 		int order_offset = Integer.parseInt(offset);
 		int result = orderlistServices.getUnOrderlist(skilllist, locationlist,
-				order_user_id,order_offset);
+				order_user_id, order_offset);
 		// List<Referdoc> referdoclist = new ArrayList<Referdoc>();
 
 		if (result == ResultCode.SUCCESS) {
@@ -311,7 +350,7 @@ public class OrderlistAction extends ActionSupport {
 
 		int order_offset = Integer.parseInt(offset);
 		int result = orderlistServices.getUnOrdersByBookTime(order_user_id,
-				skilllist, locationlist,order_offset);
+				skilllist, locationlist, order_offset);
 		// List<Referdoc> referdoclist = new ArrayList<Referdoc>();
 
 		if (result == ResultCode.SUCCESS) {
@@ -345,7 +384,8 @@ public class OrderlistAction extends ActionSupport {
 		int order_user_id = Integer.parseInt(user_id);
 
 		int order_offset = Integer.parseInt(offset);
-		int result = orderlistServices.getProOrders(order_user_id,order_offset);
+		int result = orderlistServices
+				.getProOrders(order_user_id, order_offset);
 		// List<Referdoc> referdoclist = new ArrayList<Referdoc>();
 
 		if (result == ResultCode.SUCCESS) {
@@ -379,7 +419,8 @@ public class OrderlistAction extends ActionSupport {
 		int order_user_id = Integer.parseInt(user_id);
 		int order_offset = Integer.parseInt(offset);
 
-		int result = orderlistServices.getComOrders(order_user_id,order_offset);
+		int result = orderlistServices
+				.getComOrders(order_user_id, order_offset);
 		// List<Referdoc> referdoclist = new ArrayList<Referdoc>();
 
 		if (result == ResultCode.SUCCESS) {
@@ -435,11 +476,49 @@ public class OrderlistAction extends ActionSupport {
 			// dataMap.put("selectResult", true);
 		}
 
-		return SUCCESS;
+		return "selectsuccess";
 	}
 
 	public String selectJson() throws Exception {
 		select();
+		return "json";
+	}
+
+	public String selectother() throws Exception {
+		dataMap = new HashMap<String, Object>(); // 新建dataMap来储存JSON字符串
+		dataMap.clear(); // dataMap中的数据将会被Struts2转换成JSON字符串，所以这里要先清空其中的数据
+
+		int orderid = Integer.parseInt(order_id);
+		int result = orderlistServices.getOrderById(orderid);
+		// Referdoc referdoclist = new Referdoc();
+
+		if (result == ResultCode.SUCCESS) {
+			Orderlist orderlist = orderlistServices.orderlistinfo();
+
+			// referdocServices.getReferdoc(orderlist.getOrder_type_code());
+
+			// referdoclist = referdocServices.referdocinfo();
+
+			String[] url = orderlist.getOrder_pic_url().split(";");
+
+			for (int i = 0; i < url.length; i++) {
+				orderFileFileName.add(url[i]);
+			}
+
+			dataMap.put("orderlist", orderlist);
+			// dataMap.put("referdoclist", referdoclist);
+			dataMap.put("orderFileFileName", orderFileFileName);
+			dataMap.putAll(Tools.JsonHeadMap(result, true));
+			// dataMap.put("resultcode", result);
+			// dataMap.put("errmsg", ResultCode.getErrmsg(result));
+			// dataMap.put("selectResult", true);
+		}
+
+		return "selectother";
+	}
+
+	public String selectotherJson() throws Exception {
+		selectother();
 		return "json";
 	}
 
@@ -550,7 +629,7 @@ public class OrderlistAction extends ActionSupport {
 		int order_offset = Integer.parseInt(offset);
 
 		int result = orderlistServices.selectOrderlist(orderstatus,
-				order_user_id, type_code,order_offset);
+				order_user_id, type_code, order_offset);
 
 		// List<Referdoc> referdoclist = new ArrayList<Referdoc>();
 
@@ -585,7 +664,8 @@ public class OrderlistAction extends ActionSupport {
 		int orderid = Integer.parseInt(order_id);
 		int order_user_id = Integer.parseInt(user_id);
 		int order_offset = Integer.parseInt(offset);
-		int result = orderlistServices.deleteOrder(orderid, order_user_id,order_offset);
+		int result = orderlistServices.deleteOrder(orderid, order_user_id,
+				order_offset);
 		// List<Referdoc> referdoclist = new ArrayList<Referdoc>();
 		if (result == ResultCode.SUCCESS) {
 			List<Orderlist> orderlist = orderlistServices.orderlistinfos();
@@ -732,7 +812,7 @@ public class OrderlistAction extends ActionSupport {
 			// dataMap.put("changeResult", true);
 		}
 
-		return SUCCESS;
+		return "selectsuccess";
 	}
 
 	public String changeJson() throws Exception {

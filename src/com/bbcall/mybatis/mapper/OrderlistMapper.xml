@@ -205,6 +205,24 @@
 		where
 		order_status="3" LIMIT #{offset},10
 	</select>
+	
+	<select id="getRecOrders" resultMap="OrderResultMap">
+		select * from ORDERLIST
+		where
+		order_status="4" LIMIT #{offset},10
+	</select>
+	
+	<select id="getWasOrders" resultMap="OrderResultMap">
+		select * from ORDERLIST
+		where
+		order_status="5" LIMIT #{offset},10
+	</select>
+	
+	<select id="getDelOrders" resultMap="OrderResultMap">
+		select * from ORDERLIST
+		where
+		order_status="6" LIMIT #{offset},10
+	</select>
 
 	<select id="getWashOrderlist" resultMap="OrderResultMap">
 		select * from ORDERLIST

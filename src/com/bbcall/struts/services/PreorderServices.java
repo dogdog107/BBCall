@@ -74,11 +74,9 @@ public class PreorderServices {
 
 		preorderMapper.addPreorder(preorder);
 
-		System.out.println("add suc");
 		preorderinfos = preorderMapper
 				.getPreordersByAccount(preorder_master_id);
 
-		System.out.println("get suc");
 		return ResultCode.SUCCESS;
 	}
 

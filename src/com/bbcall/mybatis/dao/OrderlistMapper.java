@@ -87,6 +87,15 @@ public interface OrderlistMapper {
 	// 获取所有已完成订单列表
 	public List<Orderlist> getComOrders(int offset);
 
+	// 获取所有已接收订单列表
+	public List<Orderlist> getRecOrders(int offset);
+
+	// 获取所有正在清洗订单列表
+	public List<Orderlist> getWasOrders(int offset);
+
+	// 获取所有正在配送订单列表
+	public List<Orderlist> getDelOrders(int offset);
+
 	// 获取所有正在处理订单列表
 	public List<Orderlist> getProOrders(int offset);
 

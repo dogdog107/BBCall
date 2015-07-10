@@ -26,7 +26,7 @@
 		<tr height=28>
 			<td background="${pageContext.request.contextPath }/page/img/title_bg1.jpg">當前位置:<a
 				href="${pageContext.request.contextPath }/page/defult.jsp"
-				target=main>主頁(Home)</a> -> 洗衣訂單列表
+				target=main>主頁(Home)</a> -> 訂單列表
 			</td>
 		</tr>
 		<tr>
@@ -40,17 +40,36 @@
 
 	<div class="div_search">
 		<span>
-			<form action="orderlist_getwashorderlistasc"
-				id="orderlist_getwashorderlistasc" method="post">
-				按升序：
-				<select name="sortparm" style="width: 100px;">
-					<option selected="selected" value="0">請選擇</option>
-					<option value="order_status">訂單狀態</option>
-					<option value="order_master_account">負責師傅</option>
+			<form action="orderlist_getorderlist"
+				id="orderlist_getorderlist" method="post">
+				訂單狀態：
+				<select name="order_status" style="width: 100px;">
+					<option value="1">新建訂單</option>
+					<option value="2">待評價訂單</option>
+					<option value="3">已評價訂單</option>
+					<option value="4">收到貨物</option>
+					<option value="5">正在清洗</option>
+					<option value="6">正在配送</option>
 				</select>
+				<input type="text" name="user_id" value="${sessionScope.user_id}" style="display:none"></input>
 				<input value="查詢" type="submit" />
 			</form>
 
+			<form action="orderlist_selectwashorderlist"
+				id="orderlist_selectwashorderlist" method="post">
+				訂單狀態：
+				<select name="order_status2" style="width: 100px;">
+					<option selected="selected" value="0">請選擇</option>
+					<option value="1">新建訂單</option>
+					<option value="2">待評價訂單</option>
+					<option value="3">已評價訂單</option>
+					<option value="4">收到貨物</option>
+					<option value="5">正在清洗</option>
+					<option value="6">正在配送</option>
+				</select> &nbsp;&nbsp;&nbsp;&nbsp;負責師傅：
+				<input type="text" name="order_master_account" />
+				<input value="篩選" type="submit" />
+			</form>
 		</span>
 	</div>
 	<div id="div_message" class="div_message" style="display: none">
@@ -89,7 +108,7 @@
 						<td id="order_type_code" style="display: none"><s:property
 								value='#order.order_type_code' /></td>
 						<td id="order_href"><a
-							href="${pageContext.request.contextPath}/page/orderlist_select.action?order_id=<s:property value='#order.order_id'/>">查看</a>
+							href="${pageContext.request.contextPath}/page/orderlist_selectother.action?order_id=<s:property value='#order.order_id'/>">查看</a>
 						</td>
 					</tr>
 				</s:iterator>

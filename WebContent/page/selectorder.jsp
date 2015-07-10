@@ -10,7 +10,7 @@
 <script type="text/javascript"
 	src="${pageContext.request.contextPath }/jquery/jquery-1.8.3.js"></script>
 <script type="text/javascript"
-	src="${pageContext.request.contextPath }/jquery/viewwashorderPage.js"></script>
+	src="${pageContext.request.contextPath }/jquery/selectorderPage.js"></script>
 <script type="text/javascript">
 	var order_status = "${dataMap.orderlist.order_status}";
 	var order_id = "${dataMap.orderlist.order_id}";
@@ -34,7 +34,7 @@
 		style="font-size: 12px;">
 		<tr height=28>
 			<td background="${pageContext.request.contextPath }/page/img/title_bg1.jpg">當前位置:<a href="${pageContext.request.contextPath }/page/defult.jsp" target=main>主頁(Home)</a>
-			 -> 洗衣訂單詳情
+			 -> 訂單詳情
 			</td>
 		</tr>
 		<tr>
@@ -103,24 +103,19 @@
 				
 				<tr>
 					<td>訂單狀態 (OrderStatus)</td>
-					<td><select name="order_status" id="order_status">
-							<option id="option1" value=1>新建訂單</option>
-							<option id="option2" value=2>待評價訂單</option>
-							<option id="option3" value=3>已評價訂單</option>
-							<option id="option4" value=4>收到貨物</option>
-							<option id="option5" value=5>正在清洗</option>
-							<option id="option6" value=6>正在配送</option>
-					</select></td>
+					<td>
+						<input readonly="true" id="order_status" />
+						</td>
 				</tr>
 				
 				<tr>
 					<td>備註 (Remark)</td>
-					<td><input type="text" name="order_remark" id="order_remark"/></td>
+					<td><input type="text" name="order_remark" id="order_remark" readonly="true" /></td>
 				</tr>
 				 
 				<tr>
-					<td colspan="2" align="center"><input type="submit" value="修改(Submit)"/><input
-						type="button" value="取消(Cancel)" Onclick="location='${pageContext.request.contextPath}/orderlist_getwashorderlist.action'" /></td>
+					<td colspan="2" align="center">
+					<input type="button" value="取消(Cancel)" Onclick="location='${pageContext.request.contextPath}/orderlist_unorderlist.action?user_id=${sessionScope.user_id}&offset=0'" /></td>
 				</tr>
 			</table>
 		</form>

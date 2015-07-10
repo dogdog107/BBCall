@@ -56,6 +56,13 @@
 							href="${pageContext.request.contextPath }/referdoc_getlist.action"
 							target=main>價格推薦</a></td>
 					</tr>
+					<tr height=20>
+						<td align=middle width=30><img height=9
+							src="./img/menu_icon.gif" width=9></td>
+						<td><a class=menuchild
+							href="${pageContext.request.contextPath }/orderlist_unorderlist.action?user_id=${sessionScope.user_id}&offset=0"
+							target=main>訂單浏览</a></td>
+					</tr>
 					<tr height=4>
 						<td colspan=2></td>
 					</tr>

@@ -117,7 +117,9 @@
 			<!-- 默认的拦截器，必须要写 -->
 			<interceptor-ref name="mystack" />
 
-			<result name="success">/page/viewwashorder.jsp</result>
+			<result name="success">/page/order.jsp</result>
+			<result name="selectother">/page/selectorder.jsp</result>
+			<result name="selectsuccess">/page/viewwashorder.jsp</result>
 			<result name="getsuccess">/page/washorder.jsp</result>
 			<result name="addordersuccess">/page/orderlist.jsp</result>
 			<result type="json" name="json">
