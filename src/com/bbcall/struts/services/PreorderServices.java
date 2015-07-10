@@ -66,7 +66,7 @@ public class PreorderServices {
 		preorder.setPreorder_create_time(new Timestamp(System
 				.currentTimeMillis()));
 		preorder.setPreorder_master_name(user.getUser_name());
-		// preorder.setPreorder_master_grade(user.getUser_grade());
+		preorder.setPreorder_master_grade(user.getUser_grade());
 		preorder.setPreorder_master_pic(user.getUser_pic_url());
 		preorder.setPreorder_price(preorder_price);
 		preorder.setPreorder_master_skill(userskill);
