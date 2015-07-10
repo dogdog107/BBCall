@@ -68,10 +68,11 @@ public class UserServices {
 
 	public int register(String token, String account, String password, Integer usertype,
 			String name, String picurl, BigInteger mobile, Integer gender,
-			String email, String language, String skill, String description) {
+			String email, String language, String skill, String description, String accessgroup) {
 		System.out.println("Here is UserServices.register method...");
 
 		int registermode = 0; // 记录register的模式: 1=user,2=admin
+		String defaultaccess = "";
 		
 		// ***** 检测 account & password 是否符合格式 *****
 		if (!Tools.isEmpty(account, password)) {
@@ -90,8 +91,8 @@ public class UserServices {
 		}
 
 		if (usertype == 1) { // usertype=1时为用户号，检测注册信息是否完整
-			registermode = checkRegisterMode(token); // 判断register的模式:
-														// 1=user,2=admin
+			registermode = checkRegisterMode(token); // 判断register的模式:1=user,2=admin
+			defaultaccess = "user_default"; // 分配user_default权限
 		}
 
 		if (usertype == 2) { // usertype=2时为师傅号，检测注册信息是否完整
@@ -99,23 +100,25 @@ public class UserServices {
 					|| mobile == null || gender == null) {
 				return ResultCode.REGISTERINFO_NOTENOUGH;
 			}
-			registermode = checkRegisterMode(token); // 判断register的模式:
-														// 1=user,2=admin
+			registermode = checkRegisterMode(token); // 判断register的模式:1=user,2=admin
+			defaultaccess = "master_default"; // 分配master_default权限
 		}
 
 		if (usertype == 3 || usertype == 4) {// usertype=3 / 4 时为管理员号，检测注册信息是否完整
 			if (Tools.isEmpty(token)) {
 				return ResultCode.REGISTERINFO_NOTENOUGH;
 			}
-			registermode = checkRegisterMode(token); // 判断register的模式:
-														// 1=user,2=admin
+			registermode = checkRegisterMode(token); // 判断register的模式:1=user,2=admin
 			if (registermode == 2) {
 				if (userinfo.getUser_type().equals(3)) {
 					return ResultCode.ACCESS_REJECT; // register的模式为用户模式模式时，拒绝注册。
 				}
+				defaultaccess = "admin_default"; // 当权限组参数为空时，分配admin_default权限
 			} else {
 				return ResultCode.ACCESS_REJECT; // register的模式为用户模式模式时，拒绝注册。
 			}
+			
+			
 		}
 		
 		int registerResult;// 新建返回值
@@ -214,6 +217,18 @@ public class UserServices {
 			if (!Tools.isEmpty(description)) {
 				user.setUser_description(description);
 			}
+			
+			// ***** 添加权限组 *****
+			if (registermode == 2) { // 判断register的模式:1=user,2=admin
+				if(Tools.isEmpty(accessgroup)) {
+					user.setUser_access_group(defaultaccess);
+				} else {
+					user.setUser_access_group(accessgroup);
+				}
+			} else {
+				user.setUser_access_group(defaultaccess);
+			}
+			
 			userMapper.addUserByAccount(user);// 把用户信息插入数据表
 			// ** user_skill子表的逻辑部分
 			// if (!isEmpty(skill)) {

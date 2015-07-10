@@ -28,7 +28,7 @@
 	</select>
 
 	<select id="getAccessGroupName" resultType="String">
-		select accessgroup_name from ACCESSGROUP
+		select distinct(accessgroup_name) from ACCESSGROUP
 	</select>
 	
 	<select id="getAccessByAccessGroupName" parameterType="String" resultMap="AccessGroupResultMap">

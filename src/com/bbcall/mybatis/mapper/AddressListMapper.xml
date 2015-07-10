@@ -7,7 +7,7 @@
 -->
 
 <!-- 
-CREATE TABLE `ADDRESS_LIST` (
+CREATE TABLE `ADDRESSLIST` (
 		  `areano` mediumint(6) unsigned NOT NULL,
 		  `areaname` varchar(45) DEFAULT NULL,
 		  `parentno` mediumint(6) unsigned DEFAULT NULL,
@@ -29,13 +29,13 @@ CREATE TABLE `ADDRESS_LIST` (
 	</resultMap>
 
 	<select id="getAddressByAreano" parameterType="int" resultMap="AddressListResultMap">
-		select areano, areaname, parentno, areacode, arealevel, typename from ADDRESS_LIST
+		select areano, areaname, parentno, areacode, arealevel, typename from ADDRESSLIST
 		where
 		areano=#{areano}
 	</select>
 	
 	<select id="getAddressByParentno" parameterType="int" resultMap="AddressListResultMap">
-		select areano, areaname, parentno, areacode, arealevel, typename from ADDRESS_LIST
+		select areano, areaname, parentno, areacode, arealevel, typename from ADDRESSLIST
 		where
 		parentno=#{parentno}
 	</select>

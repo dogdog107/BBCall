@@ -33,7 +33,6 @@
 	<div class="div_content">
 		<div class="div_search">
 			<span>
-<!-- 				<form action="#" method="post"> -->
 					排序(Order By)：
 					<select name="col_name" id="col_name" onchange="col_name_change(this.value)">
 						<option value="user_id">默認排序(ID)</option>
@@ -53,7 +52,6 @@
 						<input name="search_value" id="search_value" type="text" style="width: 100px;"/>
 						<input value="查詢/Submit" type="submit" onclick="search_value()"/>
 					</span>
-<!-- 				</form> -->
 			</span>
 		</div>
 		<div id="div_message" class="div_message" style="display: none">

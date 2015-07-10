@@ -9,19 +9,29 @@ import org.springframework.stereotype.Service;
 import com.bbcall.functions.ResultCode;
 import com.bbcall.functions.Tools;
 import com.bbcall.mybatis.dao.AccessGroupMapper;
+import com.bbcall.mybatis.dao.AccessListMapper;
 import com.bbcall.mybatis.table.AccessGroup;
+import com.bbcall.mybatis.table.AccessList;
 
 @Service("accessServices")
 public class AccessServices {
 	
 	@Autowired
 	private AccessGroupMapper accessGroupMapper;
+	@Autowired
+	private AccessListMapper accessListMapper;
 	
+	private List<AccessGroup> AGAccessList;
 	
-	// ###################
-	// ## 检测用户权限
-	// ###################
 
+	/**
+	 * checkUserAccess
+	 * 检测用户权限
+	 * 
+	 * @param UserAccessGroup
+	 * @param requireAccess
+	 * @return
+	 */
 	public int checkUserAccess(String UserAccessGroup, String requireAccess) {
 		System.out.println("Here is UserServices.checkUserAccess method...");
 
@@ -42,5 +52,52 @@ public class AccessServices {
 		} else {
 			return ResultCode.ACCESSGROUP_ERROR;
 		}
+	}
+
+	/**
+	 * getAccessByAccessGroup
+	 * 根据给定的accessgroup查询权限列表
+	 * 
+	 * @param accessgroup
+	 * @return ResultCode
+	 */
+	public int getAccessByAccessGroup(String accessgroup) {
+		if (Tools.isEmpty(accessgroup))
+			return ResultCode.REQUIREINFO_NOTENOUGH;
+		AGAccessList = accessGroupMapper
+				.getAccessByAccessGroupName(accessgroup);
+		if (AGAccessList.size() > 0) {
+			return ResultCode.SUCCESS;
+		} else {
+			return ResultCode.ACCESSGROUP_ERROR;
+		}
+	}
+
+	/**
+	 * getAccessGroupName
+	 * 得到权限组列表
+	 * 
+	 * @return List<String>
+	 */
+	public List<String> getAccessGroupName() {
+		return accessGroupMapper.getAccessGroupName();
+	}
+
+	/**
+	 * getAccessList
+	 * 得到权限列表
+	 * 
+	 * @return List<String>
+	 */
+	public List<String> getAccessList() {
+		return accessListMapper.getAllAccessName();
+	}
+
+	/**
+	 * getter & setter
+	 * @return
+	 */
+	public List<AccessGroup> getAGAccessList() {
+		return AGAccessList;
 	}
 }
