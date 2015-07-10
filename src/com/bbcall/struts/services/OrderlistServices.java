@@ -85,7 +85,7 @@ public class OrderlistServices {
 			String order_contact_name, String order_urgent,
 			double order_urgent_bonus, String order_pic_url,
 			String order_description, double order_price, int order_user_id,
-			int order_type_code, int order_section, int offset) {
+			int order_type_code, int order_section) {
 		// TODO Auto-generated method stub
 
 		// 创建订单对象，写入数据
@@ -131,7 +131,7 @@ public class OrderlistServices {
 		orderlistMapper.addOrder(orderlist);
 
 		orderlistinfos = orderlistMapper
-				.getUnOrdersByUserAccount(order_user_id,offset);
+				.getUnOrdersByUserAccount(order_user_id,0);
 
 		return ResultCode.SUCCESS;
 
@@ -734,10 +734,30 @@ public class OrderlistServices {
 			int order_id) {
 
 		orderlistMapper.completeOrder(order_score, order_evaluation, order_id);
+		
+		Orderlist orderlist = orderlistMapper.getOrder(order_id);
+		
+		int master_id = orderlist.getOrder_master_id();
+		int user_id = orderlist.getOrder_user_id();
 
+		List<Orderlist> ors = orderlistMapper.getOrdersByMId(master_id);
+		User tempuser = userMapper.getUserById(user_id);
+		
+		if (order_score != 0) {
+			int scores = 0;
+			double finalscore = 0;
+			for (int i=0; i<ors.size(); i++) {
+				scores = scores + ors.get(i).getOrder_score();
+			}
+			
+			finalscore = scores / ors.size();
+			
+			tempuser.setUser_grade(finalscore);
+			userMapper.updateUser(tempuser);
+		}
+		
 		orderlistinfos = orderlistMapper
-				.getComOrdersByUserAccount(orderlistMapper.getOrder(order_id)
-						.getOrder_user_id(),0);
+				.getComOrdersByUserAccount(user_id,0);
 
 		return ResultCode.SUCCESS;
 	}

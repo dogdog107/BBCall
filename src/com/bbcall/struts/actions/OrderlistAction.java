@@ -79,7 +79,6 @@ public class OrderlistAction extends ActionSupport {
 		double price = Double.parseDouble(order_price);
 		int section = Integer.parseInt(order_section);
 		int order_user_id = Integer.parseInt(user_id);
-		int order_offset = Integer.parseInt(offset);
 
 		String[] type_list = order_type_list.split(";");
 
@@ -91,7 +90,7 @@ public class OrderlistAction extends ActionSupport {
 					order_book_location, book_location_code, contact_mobile,
 					order_contact_name, order_urgent, urgent_bonus,
 					orderpicurl, order_description, price, order_user_id,
-					type_code, section,order_offset);
+					type_code, section);
 		}
 
 		if (result == ResultCode.SUCCESS) {
@@ -203,7 +202,10 @@ public class OrderlistAction extends ActionSupport {
 		dataMap.clear(); // dataMap中的数据将会被Struts2转换成JSON字符串，所以这里要先清空其中的数据
 
 		int orderid = Integer.parseInt(order_id);
-		int score = Integer.parseInt(order_score);
+		int score = 0;
+		if (order_score != null) {
+			score = Integer.parseInt(order_score);
+		}
 
 		int result = orderlistServices.completeOrder(score, order_evaluation,
 				orderid);

@@ -58,7 +58,7 @@ public class test {
 		
 //		System.out.println(orderlistServices.orderlistinfo.getOrder_book_time());
 		
-		orderlistServices.addOrder("2015-07-10 12:52", "香港;香港島;中西區;西區999號", 810101, new BigInteger("13144445555"), "nameaaa", "False", 0.00, "", "啊啊啊吧测的", 111, 1, 15001,1,0);
+//		orderlistServices.addOrder("2015-07-10 12:52", "香港;香港島;中西區;西區999號", 810101, new BigInteger("13144445555"), "nameaaa", "False", 0.00, "", "啊啊啊吧测的", 111, 1, 15001,1,0);
 //		orderlistServices.addOrder("1992-10-19 23:52", "香港;香港島;中西區;西區999號", 810101, new BigInteger("13144445555"), "nameaaa", "False", 0.00, "", "hi倪敏", 1111, 1, 15001,1,0);
 //		orderlistServices.addOrder("1992-10-19 23:52", "香港;香港島;中西區;西區999號", 810101, new BigInteger("13144445555"), "nameaaa", "False", 0.00, "", "hi倪敏", 1111, 1, 15001,1,0);
 //		orderlistServices.addOrder("1992-10-19 23:52", "香港;香港島;中西區;西區999號", 810101, new BigInteger("13144445555"), "nameaaa", "False", 0.00, "", "hi倪敏", 1111, 1, 15001,1,0);

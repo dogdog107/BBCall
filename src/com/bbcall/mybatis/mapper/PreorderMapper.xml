@@ -26,36 +26,36 @@
 	<select id="getPreordersByAccount" parameterType="String"
 		resultMap="PreorderResultMap">
 		select *
-		from preorder where
+		from PREORDER where
 		preorder_master_id=#{preorder_master_id}
 	</select>
 	<select id="getPreodersByOrderId" parameterType="int"
 		resultMap="PreorderResultMap">
 		select *
-		from preorder where
+		from PREORDER where
 		preorder_order_id=#{preorder_order_id} order by preorder_master_grade desc, preorder_price asc
 	</select>
 	
 	<select id="getPreodersByOrder" parameterType="int"
 		resultMap="PreorderResultMap">
 		select *
-		from preorder where
+		from PREORDER where
 		preorder_order_id=#{preorder_order_id} order by preorder_price asc, preorder_master_grade desc
 	</select>
 	<select id="getPreorderById" parameterType="int" resultMap="PreorderResultMap">
 		select *
-		from preorder where
+		from PREORDER where
 		preorder_id=#{preorder_id}
 	</select>
 	<select id="getPreoder" resultMap="PreorderResultMap">
 		select *
-		from preorder where
+		from PREORDER where
 		preorder_order_id=#{preorder_order_id,jdbcType=INTEGER} and
 		preorder_master_id=#{preorder_master_id,jdbcType=INTEGER}
 	</select>
 	<insert id="addPreorder" parameterType="com.bbcall.mybatis.table.Preorder"
 		useGeneratedKeys="true" keyProperty="preorder_id">
-		insert into preorder
+		insert into PREORDER
 		(preorder_master_account,
 		preorder_create_time,
 		preorder_price,
@@ -78,13 +78,13 @@
 	</insert>
 	<delete id="deletePreorder" parameterType="int">
 		delete from
-		preorder
+		PREORDER
 		where
 		preorder_id=#{preorder_id}
 	</delete>
 	<delete id="deletePreorderByOrderId" parameterType="int">
 		delete from
-		preorder
+		PREORDER
 		where
 		preorder_order_id=#{preorder_order_id}
 	</delete>

@@ -14,28 +14,28 @@
 	<select id="getBlacklistByUser" parameterType="String"
 		resultMap="BlacklistResultMap">
 		select *
-		from blacklist where
+		from BLACKLIST where
 		blacklist_user_id=#{blacklist_user_id}
 	</select>
 	<select id="getBlacklistById" parameterType="int"
 		resultMap="BlacklistResultMap">
 		select *
-		from blacklist where
+		from BLACKLIST where
 		blacklist_id=#{blacklist_id}
 	</select>
 	<select id="getBlacklistByMaster" parameterType="int"
 		resultMap="BlacklistResultMap">
 		select *
-		from blacklist where
+		from BLACKLIST where
 		blacklist_master_id=#{blacklist_master_id}
 	</select>
 	<select id="getBlacklist" resultMap="BlacklistResultMap">
 		select *
-		from blacklist order by blacklist_user_id
+		from BLACKLIST order by blacklist_user_id
 	</select>
 	<insert id="addBlacklist" parameterType="com.bbcall.mybatis.table.Blacklist"
 		useGeneratedKeys="true" keyProperty="blacklist_id">
-		insert into blacklist
+		insert into BLACKLIST
 		(blacklist_user_id,
 		blacklist_master_id,
 		blacklist_order_id)
@@ -46,7 +46,7 @@
 	</insert>
 	<delete id="deleteBlacklistById" parameterType="int">
 		delete from
-		blacklist where
+		BLACKLIST where
 		blacklist_id=#{blacklist_id}
 	</delete>
 </mapper>  

@@ -12,10 +12,14 @@ public interface OrderlistMapper {
 	public void addOrder(Orderlist order);
 
 	// 通过用户账号取得未完成订单列表
-	public List<Orderlist> getUnOrdersByUserAccount(@Param("order_user_id") int order_user_id,@Param("offset") int offset);
+	public List<Orderlist> getUnOrdersByUserAccount(
+			@Param("order_user_id") int order_user_id,
+			@Param("offset") int offset);
 
 	// 通过用户账号取得已完成订单列表
-	public List<Orderlist> getComOrdersByUserAccount(@Param("order_user_id") int order_user_id,@Param("offset") int offset);
+	public List<Orderlist> getComOrdersByUserAccount(
+			@Param("order_user_id") int order_user_id,
+			@Param("offset") int offset);
 
 	// 通过订单类型、师傅账号、技能类型取得未完成订单列表
 	public List<Orderlist> getOrdersByMasterLocation(
@@ -61,14 +65,18 @@ public interface OrderlistMapper {
 
 	// 通过师傅账号取得已完成订单列表
 	public List<Orderlist> getComOrdersByMasterAccount(
-			@Param("order_master_id") int order_master_id,@Param("offset") int offset);
+			@Param("order_master_id") int order_master_id,
+			@Param("offset") int offset);
 
 	// 通过用户账号取得正在处理中的订单
-	public List<Orderlist> getProOrdersByUserAccount(@Param("order_user_id") int order_user_id,@Param("offset") int offset);
+	public List<Orderlist> getProOrdersByUserAccount(
+			@Param("order_user_id") int order_user_id,
+			@Param("offset") int offset);
 
 	// 通过师傅账号取得正在处理订单列表
 	public List<Orderlist> getProOrdersByMasterAccount(
-			@Param("order_master_id") int order_master_id,@Param("offset") int offset);
+			@Param("order_master_id") int order_master_id,
+			@Param("offset") int offset);
 
 	// 通过id取得特定订单
 	public Orderlist getOrder(int order_id);
@@ -115,7 +123,12 @@ public interface OrderlistMapper {
 	public void deleteOrder(int order_id);
 
 	// 通过师傅账号取得订单列表
-	public List<Orderlist> getOrdersByMaster(@Param("order_master_id") int order_master_id,@Param("offset") int offset);
+	public List<Orderlist> getOrdersByMaster(
+			@Param("order_master_id") int order_master_id,
+			@Param("offset") int offset);
+
+	// 通过师傅账号取得订单列表
+	public List<Orderlist> getOrdersByMId(int order_master_id);
 
 	// 通过师傅账户和订单状态取得订单列表
 	public List<Orderlist> getOrders(@Param("order_status") int order_status,
