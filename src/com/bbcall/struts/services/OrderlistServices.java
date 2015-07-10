@@ -579,7 +579,7 @@ public class OrderlistServices {
 			orderlistinfos = orderlistMapper
 					.getComOrdersByMasterAccount(user_id,offset);
 		} else { // 如果是管理员的account,取出所有已完成的订单
-			orderlistinfos = orderlistMapper.getComOrders();
+			orderlistinfos = orderlistMapper.getComOrders(offset);
 		}
 
 		return ResultCode.SUCCESS;
@@ -610,16 +610,23 @@ public class OrderlistServices {
 	public int getProOrders(int user_id,int offset) {
 
 		User user = userMapper.getUserById(user_id);
+		System.out.println(user.getUser_account());
 
 		orderlistinfos = null;
 
 		if (user.getUser_type().equals(1)) { // 如果是用户的account
+			System.out.println("1");
 			orderlistinfos = orderlistMapper.getProOrdersByUserAccount(user_id,offset);
+			
 		} else if (user.getUser_type().equals(2)) { // 如果是师傅的account
+			System.out.println("2");
 			orderlistinfos = orderlistMapper
 					.getProOrdersByMasterAccount(user_id,offset);
+					
 		} else { // 如果是管理员的account,取出所有已完成的订单
-			orderlistinfos = orderlistMapper.getProOrders();
+			System.out.println("3");
+			orderlistinfos = orderlistMapper.getProOrders(offset);
+			
 		}
 
 		return ResultCode.SUCCESS;

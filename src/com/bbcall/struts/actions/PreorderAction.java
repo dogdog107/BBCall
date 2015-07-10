@@ -40,7 +40,9 @@ public class PreorderAction extends ActionSupport {
 		dataMap = new HashMap<String, Object>(); // 新建dataMap来储存JSON字符串
 		dataMap.clear(); // dataMap中的数据将会被Struts2转换成JSON字符串，所以这里要先清空其中的数据
 
+		System.out.println("inin");
 		double price = Double.parseDouble(preorder_price);
+		System.out.println("preorder_price " + preorder_price);
 		int preorderid = Integer.parseInt(preorder_order_id);
 
 		int result = preorderServices.addPreorder(preorder_master_id, price,

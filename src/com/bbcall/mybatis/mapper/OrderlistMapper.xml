@@ -35,14 +35,14 @@
 			jdbcType="INTEGER" />
 		<result column="order_type" property="order_type" jdbcType="VARCHAR" />
 		<result column="order_refer_price" property="order_refer_price"
-			jdbcType="DECIMAL" />	
+			jdbcType="DECIMAL" />
 		<result column="order_status" property="order_status" jdbcType="VARCHAR" />
 		<result column="order_score" property="order_score" jdbcType="INTEGER" />
 		<result column="order_evaluation" property="order_evaluation"
 			jdbcType="LONGVARCHAR" />
-		<result column="order_remark" property="order_remark"
-			jdbcType="LONGVARCHAR" />
-		<result column="order_section" property="order_section" jdbcType="INTEGER" />
+		<result column="order_remark" property="order_remark" jdbcType="LONGVARCHAR" />
+		<result column="order_section" property="order_section"
+			jdbcType="INTEGER" />
 	</resultMap>
 
 	<insert id="addOrder" parameterType="com.bbcall.mybatis.table.Orderlist"
@@ -115,35 +115,41 @@
 		blacklist_master_id=#{order_master_id,jdbcType=INTEGER})
 		order by order_book_location_code, order_create_time LIMIT #{offset},10
 	</select>
-	
+
 	<select id="getOrdersByMasterSkill2" resultMap="OrderResultMap">
 		select * from
 		ORDERLIST where order_status=#{order_status,jdbcType=INTEGER} and
 		order_type_code=#{order_type_code,jdbcType=INTEGER} and
-		order_user_id not in (select blacklist_user_id from
+		order_user_id
+		not in (select blacklist_user_id from
 		BLACKLIST where
 		blacklist_master_id=#{order_master_id,jdbcType=INTEGER})
-		order by order_book_location_code, order_book_time LIMIT #{offset},10
+		order by
+		order_book_location_code, order_book_time LIMIT #{offset},10
 	</select>
-	
+
 	<select id="getOrdersByMasterLocation" resultMap="OrderResultMap">
 		select * from
 		ORDERLIST where order_status=#{order_status,jdbcType=INTEGER} and
-		order_book_location_code=#{order_book_location_code,jdbcType=INTEGER} and
+		order_book_location_code=#{order_book_location_code,jdbcType=INTEGER}
+		and
 		order_user_id not in (select blacklist_user_id from
 		BLACKLIST where
 		blacklist_master_id=#{order_master_id,jdbcType=INTEGER})
-		order by order_book_location_code, order_create_time LIMIT #{offset},10
+		order by
+		order_book_location_code, order_create_time LIMIT #{offset},10
 	</select>
-	
+
 	<select id="getOrdersByMasterLocation2" resultMap="OrderResultMap">
 		select * from
 		ORDERLIST where order_status=#{order_status,jdbcType=INTEGER} and
-		order_book_location_code=#{order_book_location_code,jdbcType=INTEGER} and
+		order_book_location_code=#{order_book_location_code,jdbcType=INTEGER}
+		and
 		order_user_id not in (select blacklist_user_id from
 		BLACKLIST where
 		blacklist_master_id=#{order_master_id,jdbcType=INTEGER})
-		order by order_book_location_code, order_book_time LIMIT #{offset},10
+		order by
+		order_book_location_code, order_book_time LIMIT #{offset},10
 	</select>
 
 	<select id="getUnOrdersByMasterLocation" resultMap="OrderResultMap">
@@ -156,7 +162,8 @@
 		not in (select blacklist_user_id from
 		BLACKLIST where
 		blacklist_master_id=#{order_master_id,jdbcType=INTEGER})
-		order by order_create_time LIMIT #{offset},10
+		order by
+		order_create_time LIMIT #{offset},10
 	</select>
 	<select id="getUnOrdersByBookTime" resultMap="OrderResultMap">
 		select * from
@@ -168,12 +175,14 @@
 		not in (select blacklist_user_id from
 		BLACKLIST where
 		blacklist_master_id=#{order_master_id,jdbcType=INTEGER})
-		order by order_book_time LIMIT #{offset},10
+		order by
+		order_book_time LIMIT #{offset},10
 	</select>
 	<select id="getComOrdersByMasterAccount" parameterType="String"
 		resultMap="OrderResultMap">
 		select * from ORDERLIST where order_status="3" and
-		order_master_id=#{order_master_id} order by order_end_time LIMIT #{offset},10
+		order_master_id=#{order_master_id} order by order_end_time LIMIT
+		#{offset},10
 	</select>
 	<select id="getProOrdersByMasterAccount" parameterType="String"
 		resultMap="OrderResultMap">
@@ -255,10 +264,11 @@
 	</select>
 
 	<select id="getOrdersByMaster" resultMap="OrderResultMap">
-		select * from ORDERLIST where
+		select * from ORDERLIST
+		where
 		order_master_id=#{order_master_id} LIMIT #{offset},10
 	</select>
-	
+
 	<select id="getOrdersByMId" parameterType="int" resultMap="OrderResultMap">
 		select * from ORDERLIST where
 		order_master_id=#{order_master_id}

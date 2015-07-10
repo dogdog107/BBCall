@@ -85,10 +85,10 @@ public interface OrderlistMapper {
 	public List<Orderlist> getUnOrders(int offset);
 
 	// 获取所有已完成订单列表
-	public List<Orderlist> getComOrders();
+	public List<Orderlist> getComOrders(int offset);
 
 	// 获取所有正在处理订单列表
-	public List<Orderlist> getProOrders();
+	public List<Orderlist> getProOrders(int offset);
 
 	// 获取所有洗衣订单
 	public List<Orderlist> getWashOrderlist();
