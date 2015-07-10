@@ -10,7 +10,7 @@
 <script type="text/javascript"
 	src="${pageContext.request.contextPath }/jquery/jquery-1.8.3.js"></script>
 <script type="text/javascript"
-	src="${pageContext.request.contextPath }/jquery/userlistPage.js?token=${sessionScope.user_token}"></script>
+	src="${pageContext.request.contextPath }/jquery/advertlistPage.js?token=${sessionScope.user_token}"></script>
 <script type="text/javascript">
 	var token = "${sessionScope.user_token}";
 	var link = "${pageContext.request.contextPath }";
@@ -22,7 +22,7 @@
 		style="font-size: 12px;">
 		<tr height="28">
 			<td background="${pageContext.request.contextPath }/page/img/title_bg1.jpg">當前位置:<a href="defult.jsp"
-				target="main">主頁(Home)</a> -> 用戶列表(User List)
+				target="main">主頁(Home)</a> -> 廣告列表(Advertisement List)
 			</td>
 		</tr>
 		<tr>
@@ -33,10 +33,22 @@
 		</tr>
 	</table>
 	<div></div>
+		<div style="font-size: 13px; margin: 10px 5px">
+		<span> <s:if test="dataMap.result">
+				<p align="center" style="font-size: 15px; color: green">##
+					成功！${ dataMap.errmsg} ##</p>
+			</s:if> <s:else>
+				<s:if test="!dataMap.result">
+					<p align="center" style="font-size: 15px; color: red">##
+						失敗！${ dataMap.errmsg} ##</p>
+				</s:if>
+			</s:else>
+		</span>
+	</div>
 	<div class="div_content">
 		<div class="div_search">
 			<span>
-<!-- 				<form action="#" method="post"> -->
+			<input id="btnNew" type="submit" value="增加廣告/New AD" onclick="location.href='addAdvert.jsp'"/>
 					排序(Order By)：
 					<select name="col_name" id="col_name" onchange="col_name_change(this.value)">
 						<option value="user_id">默認排序(ID)</option>
@@ -56,43 +68,46 @@
 						<input name="search_value" id="search_value" type="text" style="width: 100px;"/>
 						<input value="查詢/Submit" type="submit" onclick="search_value()"/>
 					</span>
-<!-- 				</form> -->
 			</span>
 		</div>
 		<div id="div_message" class="div_message" style="display: none">
 			<span id="message"> </span>
+			<div style="font-size: 13px; margin: 10px 5px">
+				<span> <s:if test="dataMap.result">
+						<p align="center" style="font-size: 15px; color: green">##
+							成功！${ dataMap.errmsg} ##</p>
+					</s:if> <s:else>
+						<s:if test="!dataMap.result">
+							<p align="center" style="font-size: 15px; color: red">##
+								失敗！${ dataMap.errmsg} ##</p>
+						</s:if>
+					</s:else>
+				</span>
+			</div>
 		</div>
 		<div style="font-size: 12px; margin: 10px 5px;">
 			<table class="table_list" border="1" width="100%">
 				<tbody id="datas">
 					<tr style="font-weight: bold;">
-						<td>用戶序號<br/>User ID</td>
-						<td>頭像<br/>User Pic</td>
-						<td>帳戶<br/>Account</td>
-						<td>姓名<br/>Name</td>
-						<td>身份<br/>Type</td>
-						<td>狀態<br/>Status</td>
-						<td>登陸時間<br/>Login Time</td>
-						<td>註冊時間<br/>Create Time</td>
+						<td>廣告序號<br/>AD ID</td>
+						<td>小圖像<br/>AD Small Pic</td>
+						<td width="300px">標題<br/>Title</td>
+						<td width="300px">概要<br/>Summary</td>
+						<td>廣告類別<br/>Type</td>
+						<td>創建時間<br/>Create Time</td>
 						<td colspan="2" align="center">操作<br/>Operations</td>
 					</tr>
 					<tr id="template" style="display: none; font-size: 12px;">
-						<td id="userid"></td>
-						<td id="picurl"></td>
-						<td id="account"></td>
-						<td id="name"></td>
-						<td id="usertype"></td>
-						<td id="status"></td>
-						<td id="logintime"></td>
+						<td id="advertid"></td>
+						<td id="smallpicurl"></td>
+						<td id="adverttitle"></td>
+						<td id="advertsummary"></td>
+						<td id="adverttype"></td>
 						<td id="createtime"></td>
 						<td id="status_operation">
-							<select id="statusOpr" onchange="updateStatus(this.id, this.value)">
-								<option value="1">Active</option>
-								<option value="2">Pause</option>
-								<option value="3">Pending</option>
-								<option value="4">Locked</option>
-							</select><br/>
-							<input type="submit" value="刪除/Delete" onclick=""/>
+
+							<input id="btnDetail" type="submit" value="詳情/Detail" onclick=""/>
+							<input id="btnDelete" type="submit" value="刪除/Delete" onclick=""/>
 						</td>
 					</tr>
 				</tbody>

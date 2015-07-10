@@ -34,25 +34,7 @@
 	<div class="div_content">
 		<div class="div_search">
 			<span>
-					排序(Order By)：
-					<select name="col_name" id="col_name" onchange="col_name_change(this.value)">
-						<option value="user_id">默認排序(ID)</option>
-						<option value="user_account">按用戶帳號(Account)</option>
-						<option value="user_name">按用戶姓名(Name)</option>
-						<option value="user_type">按用戶身份(Type)</option>
-						<option value="user_status">按用戶狀態(Status)</option>
-						<option value="user_create_time">按註冊時間(CreateTime)</option>
-						<option value="user_login_time">按登錄時間(LoginTime)</option>
-					</select>
-					<select name="specify_value" id="specify_value" onchange="specify_value_change(this.value)">
-						<option value='ASC'>升序(ASC)</option>
-						<option value='DESC'>降序(DESC)</option>
-					</select>
-					<span id="search_value_span" style="display: none">
-						<font color=#1c94c4 id="search_value_message"></font>
-						<input name="search_value" id="search_value" type="text" style="width: 100px;"/>
-						<input value="查詢/Submit" type="submit" onclick="search_value()"/>
-					</span>
+				<input id="btnBack" type="submit" value="返回廣告列表/Go Back" onclick="location.href='advertList.jsp'"/>
 			</span>
 		</div>
 		<div id="div_message" class="div_message" style="display: none">
@@ -68,7 +50,7 @@
 			<div width="100%" align="center">
 				<img src="${advertisement_bigphoto_url }" height="200" width="400" />
 			</div>
-			<h2 align="center">${advertisement_summary }</h2>
+			<h3 align="center">${advertisement_summary }</h3>
 			<div class="advert_content">${advertisement_content }</div>
 		</div>
 	</div>

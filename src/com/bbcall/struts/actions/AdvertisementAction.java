@@ -171,7 +171,18 @@ public class AdvertisementAction extends ActionSupport{
 	 * @throws Exception
 	 */
 	public String deleteAdvert() throws Exception {
-		return SUCCESS;
+		int result = advertisementServices.deleteAdvert(advertisement_id);
+		dataMap.clear(); // dataMap中的数据将会被Struts2转换成JSON字符串，所以这里要先清空其中的数据
+		if (result == ResultCode.SUCCESS) {
+			dataMap.putAll(Tools.JsonHeadMap(result, true));
+			System.out.println(dataMap);
+			return "deleteAdvertSuccess";
+		} else {
+			dataMap.putAll(Tools.JsonHeadMap(result, false));
+			System.out.println(dataMap);
+			System.out.println("deleteAdvert Failed");
+			return "deleteAdvertFailed";
+		}
 	}
 	
 	public String deleteAdvertJson() throws Exception {
