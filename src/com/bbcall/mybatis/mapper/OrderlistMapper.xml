@@ -90,20 +90,20 @@
 		resultMap="OrderResultMap">
 		select * from orderlist
 		where order_status="1" and
-		order_user_id=#{order_user_id} order by order_create_time
+		order_user_id=#{order_user_id} order by order_create_time LIMIT #{offset},10
 	</select>
 
 	<select id="getProOrdersByUserAccount" parameterType="int"
 		resultMap="OrderResultMap">
 		select * from orderlist
 		where order_status="2" and
-		order_user_id=#{order_user_id} order by order_create_time
+		order_user_id=#{order_user_id} order by order_create_time LIMIT #{offset},10
 	</select>
 	<select id="getComOrdersByUserAccount" parameterType="int"
 		resultMap="OrderResultMap">
 		select * from orderlist
 		where order_status="3" and
-		order_user_id=#{order_user_id} order by order_create_time
+		order_user_id=#{order_user_id} order by order_create_time LIMIT #{offset},10
 	</select>
 
 	<select id="getOrdersByMasterSkill" resultMap="OrderResultMap">
@@ -113,7 +113,7 @@
 		order_user_id not in (select blacklist_user_id from
 		blacklist where
 		blacklist_master_id=#{order_master_id,jdbcType=INTEGER})
-		order by order_book_location_code, order_create_time
+		order by order_book_location_code, order_create_time LIMIT #{offset},10
 	</select>
 	
 	<select id="getOrdersByMasterSkill2" resultMap="OrderResultMap">
@@ -123,7 +123,7 @@
 		order_user_id not in (select blacklist_user_id from
 		blacklist where
 		blacklist_master_id=#{order_master_id,jdbcType=INTEGER})
-		order by order_book_location_code, order_book_time
+		order by order_book_location_code, order_book_time LIMIT #{offset},10
 	</select>
 	
 	<select id="getOrdersByMasterLocation" resultMap="OrderResultMap">
@@ -133,7 +133,7 @@
 		order_user_id not in (select blacklist_user_id from
 		blacklist where
 		blacklist_master_id=#{order_master_id,jdbcType=INTEGER})
-		order by order_book_location_code, order_create_time
+		order by order_book_location_code, order_create_time LIMIT #{offset},10
 	</select>
 	
 	<select id="getOrdersByMasterLocation2" resultMap="OrderResultMap">
@@ -143,7 +143,7 @@
 		order_user_id not in (select blacklist_user_id from
 		blacklist where
 		blacklist_master_id=#{order_master_id,jdbcType=INTEGER})
-		order by order_book_location_code, order_book_time
+		order by order_book_location_code, order_book_time LIMIT #{offset},10
 	</select>
 
 	<select id="getUnOrdersByMasterLocation" resultMap="OrderResultMap">
@@ -156,7 +156,7 @@
 		not in (select blacklist_user_id from
 		blacklist where
 		blacklist_master_id=#{order_master_id,jdbcType=INTEGER})
-		order by order_create_time
+		order by order_create_time LIMIT #{offset},10
 	</select>
 	<select id="getUnOrdersByBookTime" resultMap="OrderResultMap">
 		select * from
@@ -168,33 +168,33 @@
 		not in (select blacklist_user_id from
 		blacklist where
 		blacklist_master_id=#{order_master_id,jdbcType=INTEGER})
-		order by order_book_time
+		order by order_book_time LIMIT #{offset},10
 	</select>
 	<select id="getComOrdersByMasterAccount" parameterType="String"
 		resultMap="OrderResultMap">
 		select * from orderlist where order_status="3" and
-		order_master_id=#{order_master_id} order by order_end_time
+		order_master_id=#{order_master_id} order by order_end_time LIMIT #{offset},10
 	</select>
 	<select id="getProOrdersByMasterAccount" parameterType="String"
 		resultMap="OrderResultMap">
 		select * from orderlist where order_status="2" and
-		order_master_id=#{order_master_id}
+		order_master_id=#{order_master_id} LIMIT #{offset},10
 	</select>
 	<select id="getUnOrders" resultMap="OrderResultMap">
 		select * from orderlist
 		where
-		order_status="1"
+		order_status="1" order by order_book_time LIMIT #{offset},10
 	</select>
 	<select id="getProOrders" resultMap="OrderResultMap">
 		select * from orderlist
 		where
-		order_status="2"
+		order_status="2" LIMIT #{offset},10
 	</select>
 
 	<select id="getComOrders" resultMap="OrderResultMap">
 		select * from orderlist
 		where
-		order_status="3"
+		order_status="3" LIMIT #{offset},10
 	</select>
 
 	<select id="getWashOrderlist" resultMap="OrderResultMap">
@@ -256,13 +256,13 @@
 
 	<select id="getOrdersByMaster" parameterType="String" resultMap="OrderResultMap">
 		select * from orderlist where
-		order_master_id=#{order_master_id}
+		order_master_id=#{order_master_id} LIMIT #{offset},10
 	</select>
 
 	<select id="getOrders" resultMap="OrderResultMap">
 		select * from orderlist where
 		order_status=#{order_status,jdbcType=INTEGER} and
-		order_master_id=#{order_master_id,jdbcType=INTEGER}
+		order_master_id=#{order_master_id,jdbcType=INTEGER} LIMIT #{offset},10
 	</select>
 
 	<update id="updateOrder" parameterType="com.bbcall.mybatis.table.Orderlist">
