@@ -92,7 +92,8 @@
 								<option value="3">Pending</option>
 								<option value="4">Locked</option>
 							</select><br/>
-							<input type="submit" value="刪除/Delete" onclick=""/>
+							<input id="btnDetail" type="submit" value="詳情/Detail" onclick=""/>
+							<input id="btnDelete" type="submit" value="刪除/Delete" onclick=""/>
 						</td>
 					</tr>
 				</tbody>

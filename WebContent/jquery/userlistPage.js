@@ -63,6 +63,8 @@ function checkUserList(col_name, specify_value, search_value){
 					var createtime = n.user_create_time;
 					row.find("#logintime").text(logintime.replace("T", " "));
 					row.find("#createtime").text(createtime.replace("T", " "));
+					row.find("#btnDetail").attr("onclick", "location.href='user_getUserById.action?userid=" + n.user_id + "'");
+					row.find("#btnDelete").attr("onclick", "location.href=''");
 					// row.find("#OrderDate").text(ChangeDate(n.订购日期));
 					// if(n.发货日期!== undefined)
 					// row.find("#ShippedDate").text(ChangeDate(n.发货日期));

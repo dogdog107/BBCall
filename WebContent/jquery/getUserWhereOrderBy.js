@@ -69,6 +69,8 @@ function checkUserList(order_col, order_value, where_col, where_value){
 					// row.find("#more").html("<a
 					// href=OrderInfo.aspx?id=" + n.订单ID +
 					// "&pageindex="+pageIndex+">&nbsp;More</a>");
+					row.find("#btnDetail").attr("onclick", "location.href='user_getUserById.action?userid=" + n.user_id + "'");
+					row.find("#btnDelete").attr("onclick", "location.href=''");
 					row.attr("id", "userlist_" + n.user_id);// 改变绑定好数据的行的id
 					row.appendTo("#datas");// 添加到模板的容器中
 					row.toggle();

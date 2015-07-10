@@ -97,6 +97,14 @@
 			<result name="updateFailed">
 				<param name="location">/page/update.jsp</param>
 			</result>
+			
+			<result name="getUserByIdSuccess">
+				<param name="location">/page/showUser.jsp</param>
+			</result>
+			
+			<result name="getUserByIdFailed">
+				<param name="location">/page/userlist.jsp</param>
+			</result>
 
 			<result type="json" name="json">
 				<param name="root">dataMap</param>

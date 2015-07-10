@@ -802,6 +802,19 @@ public class UserServices {
 	}
 
 	
+	public int getUserById (Integer userid){
+		System.out.println("Here is UserServices.getUserById method...");
+		if (userid == null)
+			return ResultCode.REQUIREINFO_NOTENOUGH;
+		User tempUser = userMapper.getUserById(userid);
+		if (tempUser != null) {
+			userinfo = tempUser;
+			return ResultCode.SUCCESS;
+		} else {
+			return ResultCode.USERID_ERROR;
+		}
+	}
+	
 	// ###################
 	// ##  更新用户评分
 	// ###################
