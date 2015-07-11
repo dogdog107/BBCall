@@ -60,22 +60,30 @@ public class PreorderServices {
 		for (int i = 0; i < skilllist.length; i++) {
 			userskill = userskill + skilllist[i] + " ";
 		}
+		
+		System.out.println("userskill" + userskill);
 
 		preorder.setPreorder_master_id(preorder_master_id);
 		preorder.setPreorder_master_account(user.getUser_account());
 		preorder.setPreorder_create_time(new Timestamp(System
 				.currentTimeMillis()));
 		preorder.setPreorder_master_name(user.getUser_name());
+		System.out.println("user.getUser_name()" + user.getUser_name());
 		preorder.setPreorder_master_grade(user.getUser_grade());
+		System.out.println("user.getUser_grade()" + user.getUser_grade());
 		preorder.setPreorder_master_pic(user.getUser_pic_url());
+		System.out.println("user.getUser_pic_url()" + user.getUser_pic_url());
 		preorder.setPreorder_price(preorder_price);
 		preorder.setPreorder_master_skill(userskill);
 		preorder.setPreorder_order_id(preorder_order_id);
 
+		System.out.println("preorder_order_id" + preorder_order_id);
 		preorderMapper.addPreorder(preorder);
+		System.out.println("addsuccess");
 
 		preorderinfos = preorderMapper
 				.getPreordersByAccount(preorder_master_id);
+		System.out.println("getsuccess");
 
 		return ResultCode.SUCCESS;
 	}

@@ -21,7 +21,6 @@ function referdoc_parentno_change() {
 	if (parentno == 0 || parentno == null){
 		document.getElementById('referdoc_getchildlist').submit();
 	} else {
-		
 		document.getElementById('referdoc_parentno').value = parentno;
 		document.getElementById('referdoc_getchildlist').submit();
 	}
@@ -32,4 +31,8 @@ function referdoc_parentno_change() {
 function referdoclist_update(formnum) {
 	
 	document.getElementById(formnum).submit();
+}
+
+function referdelete(referid) {
+	
 }

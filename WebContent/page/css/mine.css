@@ -30,6 +30,15 @@ TEXTAREA {
     border: solid #1c94c4 1px;
     overflow: hidden
 }
+.div_merge{
+    font-size: 13px;
+    margin: 10px 5px;
+    padding-left: 10px;
+    line-height: 30px;
+    height:30px;
+    background-color: #E8F2FC;
+    border: solid #1c94c4 1px;
+}
 .div_message{
     font-size: 14px;
     margin: 10px 5px;
