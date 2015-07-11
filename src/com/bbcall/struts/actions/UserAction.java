@@ -133,6 +133,7 @@ public class UserAction extends ActionSupport implements SessionAware{
 		int result = userServices.register(token, account, password, usertype, name, picurl, mobile, gender, email, language, skill, description, accessgroup); // 调用userServices.register
 
 		if (result == ResultCode.SUCCESS) {
+//			Integer newuserid = userServices.getUserinfo().getUser_id();
 			dataMap.putAll(Tools.JsonHeadMap(result, true));
 			System.out.println(dataMap);
 			return "registerSuccess";

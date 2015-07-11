@@ -50,7 +50,14 @@ public class FileUploadAction extends ActionSupport {
 				.getRealPath(savePath); // 得到保存文件的路径
 		String uploadFileType = uploadFileName.substring(uploadFileName
 				.lastIndexOf(".") + 1); // 封装上传文件后缀
-		String storeFileName = userid + "_photo." + uploadFileType; // 封装保存文件名
+		String storeFileName;
+		
+		if (userid == null) {
+			storeFileName = token + "_photo." + uploadFileType; // 封装保存文件名
+		} else {
+
+			storeFileName = userid + "_photo." + uploadFileType; // 封装保存文件名
+		}
 		
 		int result = fileUploadServices.uploadFile(upload, uploadFileName, storePath, storeFileName);
 		dataMap.clear(); // dataMap中的数据将会被Struts2转换成JSON字符串，所以这里要先清空其中的数据

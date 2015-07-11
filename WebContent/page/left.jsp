@@ -106,6 +106,13 @@
 							href="${pageContext.request.contextPath }/page/adminlist.jsp"
 							target=main>管理員列表</a></td>
 					</tr>
+					<tr height=20>
+						<td align=middle width=30><img height=9
+							src="./img/menu_icon.gif" width=9></td>
+						<td><a class=menuchild
+							href="${pageContext.request.contextPath }/page/register.jsp"
+							target=main>添加新帳戶</a></td>
+					</tr>
 					<tr height=4>
 						<td colspan=2></td>
 					</tr>

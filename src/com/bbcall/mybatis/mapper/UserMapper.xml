@@ -11,7 +11,7 @@
     <!--mybatis ehcache缓存配置 -->
     <!-- 以下两个<cache>标签二选一,第一个可以输出日志,第二个不输出日志 -->
 <!-- <cache type="org.mybatis.caches.ehcache.LoggingEhcache" /> -->
-<!-- <cache type="org.mybatis.caches.ehcache.EhcacheCache"/>  -->
+<cache type="org.mybatis.caches.ehcache.EhcacheCache"/>
 
 	<resultMap id="UserResultMap" type="com.bbcall.mybatis.table.User" >
     	<id column="user_id" property="user_id" jdbcType="INTEGER" />
@@ -100,7 +100,7 @@
 		user_token=#{user_token}
 	</select>
 	
-	<select id="findAll" resultMap="UserResultMap">
+	<select id="findAll" resultMap="UserResultMap" flushCache="true" useCache="false">
 		select user_id, user_account, user_password, user_email, user_mobile,
 		user_type, user_name, user_gender, user_pic_url, user_language, user_address_code,
 		user_address, user_skill, user_description, user_access_group, user_grade,
@@ -108,7 +108,7 @@
 		from USER
 	</select>
 	
-	<select id="listUserWhereOrderBy" resultMap="UserResultMap">
+	<select id="listUserWhereOrderBy" resultMap="UserResultMap" flushCache="true" useCache="false">
 		select user_id, user_account, user_password, user_email, user_mobile,
 		user_type, user_name, user_gender, user_pic_url, user_language, user_address_code,
 		user_address, user_skill, user_description, user_access_group, user_grade,
@@ -124,7 +124,7 @@
         </if>  
 	</select>
 	
-	<select id="listUserOrderBy" resultMap="UserResultMap">
+	<select id="listUserOrderBy" resultMap="UserResultMap" flushCache="true" useCache="false">
 		select user_id, user_account, user_password, user_email, user_mobile,
 		user_type, user_name, user_gender, user_pic_url, user_language, user_address_code,
 		user_address, user_skill, user_description, user_access_group, user_grade,

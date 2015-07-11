@@ -90,6 +90,13 @@
 			<result name="loginFailed">
 				<param name="location">/page/login.jsp</param>
 			</result>
+			<result name="registerSuccess">
+				<param name="location">/page/register.jsp</param>
+			</result>
+
+			<result name="registerFailed">
+				<param name="location">/page/register.jsp</param>
+			</result>
 			<result name="updateSuccess">
 				<param name="location">/page/update.jsp</param>
 			</result>

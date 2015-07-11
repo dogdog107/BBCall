@@ -83,7 +83,6 @@
   		<context:include-filter type="annotation" expression="org.springframework.stereotype.Repository" />
 	</context:component-scan>
 
-
 	<!-- Struts2 Related -->
 	<!-- 
 		<bean id="userServices" class="com.bbcall.struts.services.UserServices"></bean> 
