@@ -30,7 +30,7 @@
 	<div class="div_content">
 		<div class="div_search">
 			<span>
-					排序(Order By)：
+					<span>排序(Order By):</span>
 					<select name="col_name" id="col_name" onchange="col_name_change(this.value)">
 						<option value="user_id">默認排序(ID)</option>
 						<option value="user_account">按用戶帳號(Account)</option>
@@ -57,7 +57,7 @@
 		<div style="font-size: 12px; margin: 10px 5px;">
 			<table class="table_list" border="1" width="100%">
 				<tbody id="datas">
-					<tr style="font-weight: bold;">
+					<tr style="color:#1c94c4">
 						<td width="80px">用戶序號<br/>User ID</td>
 						<td width="100px">頭像<br/>User Pic</td>
 						<td width="150px">帳戶<br/>Account</td>
@@ -78,6 +78,7 @@
 						<td id="logintime"></td>
 						<td id="createtime"></td>
 						<td id="status_operation">
+							<span>修改狀態:</span>
 							<select id="statusOpr" onchange="updateStatus(this.id, this.value)">
 								<option value="1">Active</option>
 								<option value="2">Pause</option>
