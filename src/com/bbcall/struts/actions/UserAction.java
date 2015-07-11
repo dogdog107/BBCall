@@ -344,25 +344,62 @@ public class UserAction extends ActionSupport implements SessionAware{
 		return "json";
 	}
 	
-	// checkUserById
+	/**
+	 * getUserById Action
+	 * @return
+	 * @throws Exception
+	 */
 	public String getUserById() throws Exception {
 		System.out.println("Here is UserAction.getUserById");
 		dataMap.clear(); // dataMap中的数据将会被Struts2转换成JSON字符串，所以这里要先清空其中的数据
 		if (userid == null) {
-			dataMap.putAll(Tools.JsonHeadMap(ResultCode.REQUIREINFO_NOTENOUGH, false));
+			dataMap.putAll(Tools.JsonHeadMap(ResultCode.REQUIREINFO_NOTENOUGH,
+					false));
 			return INPUT;
 		}
-		
-		int result = userServices.checkUserList("user_id", "", userid.toString());// 调用userServices.checkAddressList
+
+		int result = userServices.getUserById(userid);
 		if (result == ResultCode.SUCCESS) {
-			List<User> userlist = userServices.getUserlist();
-			dataMap.put("userlist", userlist); // 把addresslist对象放入dataMap
+			User tempUser = userServices.getUserinfo();
+			username = tempUser.getUser_name();
+			account = tempUser.getUser_account();
+			usertype = tempUser.getUser_type();
+			name = tempUser.getUser_name();
+			picurl = tempUser.getUser_pic_url();
+			mobile = tempUser.getUser_mobile();
+			gender = tempUser.getUser_gender();
+			email = tempUser.getUser_email();
+			language = tempUser.getUser_language();
+			skill = tempUser.getUser_skill();
+			token = tempUser.getUser_token();
+			description = tempUser.getUser_description();
+			addresscode = tempUser.getUser_address_code();
+			address = tempUser.getUser_address();
+			accessgroup = tempUser.getUser_access_group();
+			status = tempUser.getUser_status();
+			userid = tempUser.getUser_id();
+
+//			dataMap = obj2map.getValueMap(tempUser); // 将对象转换成Map
+			dataMap.put("userlist", tempUser); // 把addresslist对象放入dataMap
 			dataMap.putAll(Tools.JsonHeadMap(result, true));
+			return "getUserByIdSuccess";
 		} else {
 			dataMap.putAll(Tools.JsonHeadMap(result, false));
 			System.out.println(dataMap);
+			return "getUserByIdFailed";
 		}
-		return SUCCESS;
+		// int result = userServices.checkUserList("user_id", "",
+		// userid.toString());// 调用userServices.checkAddressList
+		// if (result == ResultCode.SUCCESS) {
+		// List<User> userlist = userServices.getUserlist();
+		//
+		// dataMap.put("userlist", userlist); // 把addresslist对象放入dataMap
+		// dataMap.putAll(Tools.JsonHeadMap(result, true));
+		// } else {
+		// dataMap.putAll(Tools.JsonHeadMap(result, false));
+		// System.out.println(dataMap);
+		// }
+		// return SUCCESS;
 	}
 	public String getUserByIdJson() throws Exception {
 		System.out.println("Here is UserAction.getUserByIdJson");
@@ -410,14 +447,42 @@ public class UserAction extends ActionSupport implements SessionAware{
 			return "checkTokenFailed";
 		}
 	}
-	
 	public String checkTokenJson() throws Exception {
 		System.out.println("Here is UserAction.checkTokenJson");
 		checkToken();
 		return "json";
 	}
 	
+	/**
+	 * deleteUserById Action
+	 * @return
+	 * @throws Exception
+	 */
+	public String deleteUserById() throws Exception {
+		System.out.println("Here is UserAction.deleteUserById");
+		dataMap.clear(); // dataMap中的数据将会被Struts2转换成JSON字符串，所以这里要先清空其中的数据
+		if (userid == null) {
+			dataMap.putAll(Tools.JsonHeadMap(ResultCode.REQUIREINFO_NOTENOUGH,
+					false));
+			return INPUT;
+		}
 
+		int result = userServices.deleteUserById(userid);
+		if (result == ResultCode.SUCCESS) {
+			dataMap.putAll(Tools.JsonHeadMap(result, true));
+			return "deleteUserByIdSuccess";
+		} else {
+			dataMap.putAll(Tools.JsonHeadMap(result, false));
+			System.out.println(dataMap);
+			return "deleteUserByIdFailed";
+		}
+	}
+	public String deleteUserByIdJson() throws Exception {
+		System.out.println("Here is UserAction.deleteUserByIdJson");
+		deleteUserById();
+		return "json";
+	}
+	
 //	public void setTest(int test) {
 //		this.test = test;
 //	}

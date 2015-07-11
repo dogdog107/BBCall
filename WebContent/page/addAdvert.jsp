@@ -9,7 +9,7 @@
 <link href="${pageContext.request.contextPath }/page/css/mine.css" type="text/css" rel="stylesheet" />
 
 <!--WebUploader引入CSS-->
-<link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath }/page/WebUploader/webuploader.css">
+<link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath }/page/WebUploader/webuploader.css" />
 
 <title>新增廣告 (Add Advertisement)</title>
 </head>

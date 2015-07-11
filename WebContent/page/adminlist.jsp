@@ -10,10 +10,13 @@
 <script type="text/javascript"
 	src="${pageContext.request.contextPath }/jquery/jquery-1.8.3.js"></script>
 <script type="text/javascript"
-	src="${pageContext.request.contextPath }/jquery/userlistPage.js?token=${sessionScope.user_token}"></script>
+	src="${pageContext.request.contextPath }/jquery/getUserWhereOrderBy.js?token=${sessionScope.user_token}"></script>
 <script type="text/javascript">
 	var token = "${sessionScope.user_token}";
 	var link = "${pageContext.request.contextPath }";
+	
+	var where_col = "user_type";
+	var where_value = "3";
 </script>
 </head>
 <body onload="onload()">
@@ -22,7 +25,7 @@
 		style="font-size: 12px;">
 		<tr height="28">
 			<td background="${pageContext.request.contextPath }/page/img/title_bg1.jpg">當前位置:<a href="defult.jsp"
-				target="main">主頁(Home)</a> -> 用戶列表(User List)
+				target="main">主頁(Home)</a> -> 師傅列表(User List)
 			</td>
 		</tr>
 		<tr>
@@ -38,18 +41,16 @@
 			<span>
 <!-- 				<form action="#" method="post"> -->
 					排序(Order By)：
-					<select name="col_name" id="col_name" onchange="col_name_change(this.value)">
-						<option value="user_id">默認排序(ID)</option>
-						<option value="user_account">按用戶帳號(Account)</option>
-						<option value="user_name">按用戶姓名(Name)</option>
-						<option value="user_type">按用戶身份(Type)</option>
+					<select name="order_col" id="order_col" onchange="order_col_change(this.value)">
 						<option value="user_status">按用戶狀態(Status)</option>
-						<option value="user_create_time">按註冊時間(CreateTime)</option>
-						<option value="user_login_time">按登錄時間(LoginTime)</option>
 					</select>
-					<select name="specify_value" id="specify_value" onchange="specify_value_change(this.value)">
+					<select name="order_value" id="order_value" onchange="order_value_change(this.value)">
 						<option value='ASC'>升序(ASC)</option>
 						<option value='DESC'>降序(DESC)</option>
+						<option value='1'>Active排頭(Active on Top)</option>
+						<option value='2'>Pause排頭(Pause on Top)</option>
+						<option value='3'>Pending排頭(Pending on Top)</option>
+						<option value='4'>Locked排頭(Locked on Top)</option>
 					</select>
 					<span id="search_value_span" style="display: none">
 						<font color=#1c94c4 id="search_value_message"></font>
