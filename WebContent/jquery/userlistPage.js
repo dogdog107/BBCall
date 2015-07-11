@@ -64,7 +64,8 @@ function checkUserList(col_name, specify_value, search_value){
 					row.find("#logintime").text(logintime.replace("T", " "));
 					row.find("#createtime").text(createtime.replace("T", " "));
 					row.find("#btnDetail").attr("onclick", "location.href='user_getUserById.action?userid=" + n.user_id + "'");
-					row.find("#btnDelete").attr("onclick", "location.href=''");
+					row.find("#btnDelete").attr("onclick", "deleteUser(this.id)");
+					row.find("#btnDelete").attr("id", "btnDelete_" + n.user_id);
 					// row.find("#OrderDate").text(ChangeDate(n.订购日期));
 					// if(n.发货日期!== undefined)
 					// row.find("#ShippedDate").text(ChangeDate(n.发货日期));
@@ -83,6 +84,33 @@ function checkUserList(col_name, specify_value, search_value){
 			}
 		}
 	});
+}
+
+
+function deleteUser(idname){
+	var userid = idname.split("_")[1];
+	if (confirm('確定要刪除用戶(ID:'+ userid +')嗎？\n Confirm to delete user (ID:'+ userid +')?')) {
+		$.ajax({
+			type : "post",
+			url : "${pageContext.request.contextPath}/user_deleteUserByIdJson.action",
+			data : {
+				"token" : token,
+				"userid" : userid
+			},
+			success : function(data) {
+				if (data.result) {
+					var rowname = "userlist_" + userid;
+					$("#message").html("<font color=green> (ID:"+ userid +") Delete Success ! </font>");
+					$("#div_message").show(300).delay(5000).hide(300);
+					$("#" + rowname).hide(300).remove();
+				} else {
+					$("#message").html("<font color=red> (ID:"+ userid +") Delete Failed ! </font>");
+					$("#div_message").show(300).delay(5000).hide(300);
+					alert("Delete failed. " + data.errmsg);
+				}
+			}
+		});
+	}
 }
 
 function updateStatus(idname, value) {

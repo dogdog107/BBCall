@@ -94,11 +94,11 @@ function checkpwd(id) {
 	if (childobj.value != document.getElementById('prepassword').value) {
 		childobj.value = '';
 		childobj.style.borderColor = 'red';
-		document.getElementById('pwdnotice').innerHTML = '两次的密码不一致！请重新输入。';
+		document.getElementById('pwdnotice').innerHTML = '兩次的密碼不一致！請重新輸入。';
 		document.getElementById('pwdnotice').style.color = 'red';
 	} else {
 		childobj.style.borderColor = '#00e500';
-		document.getElementById('pwdnotice').innerHTML = '密码正确。';
+		document.getElementById('pwdnotice').innerHTML = '密碼正確。';
 		document.getElementById('pwdnotice').style.color = 'green';
 	}
 	return;

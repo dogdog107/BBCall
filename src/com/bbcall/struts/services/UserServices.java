@@ -801,8 +801,12 @@ public class UserServices {
 		}
 	}
 
-	
-	public int getUserById (Integer userid){
+	/**
+	 * getUserById
+	 * @param userid
+	 * @return
+	 */
+	public int getUserById(Integer userid){
 		System.out.println("Here is UserServices.getUserById method...");
 		if (userid == null)
 			return ResultCode.REQUIREINFO_NOTENOUGH;
@@ -813,6 +817,19 @@ public class UserServices {
 		} else {
 			return ResultCode.USERID_ERROR;
 		}
+	}
+
+	/**
+	 * deleteUserById
+	 * @param userid
+	 * @return
+	 */
+	public int deleteUserById(Integer userid) {
+		System.out.println("Here is UserServices.deleteUserById method...");
+		if (userid == null)
+			return ResultCode.REQUIREINFO_NOTENOUGH;
+		userMapper.deleteUserById(userid);
+		return ResultCode.SUCCESS;
 	}
 	
 	// ###################
