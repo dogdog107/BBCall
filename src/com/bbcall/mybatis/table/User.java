@@ -1,5 +1,6 @@
 package com.bbcall.mybatis.table;
 
+import java.io.Serializable;
 import java.math.BigInteger;
 import java.sql.Timestamp;
 
@@ -31,7 +32,11 @@ import java.sql.Timestamp;
 //	user_token VARCHAR (255)
 //) DEFAULT CHARSET = utf8;
 
-public class User {
+public class User implements Serializable{
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 410461494640128718L;
 	private Integer user_id;
 	private String user_account;
 	private String user_password;

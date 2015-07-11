@@ -38,10 +38,10 @@
 		<form id="register_form" action="user_register" method="post" enctype="multipart/form-data">
 			<div style="font-size: 13px; margin: 10px 5px">
 				<span> <s:if test="dataMap.result">
-							<p align="center" style="font-size: 15px;color: green"> ## 修改成功！${ dataMap.errmsg} ## </p>
+							<p align="center" style="font-size: 15px;color: green"> ## 添加成功！${ dataMap.errmsg} ## </p>
 					</s:if> <s:else>
 						<s:if test="!dataMap.result">
-								<p align="center" style="font-size: 15px;color: red"> ## 修改失敗！${ dataMap.errmsg} ## </p>
+								<p align="center" style="font-size: 15px;color: red"> ## 添加失敗！${ dataMap.errmsg} ## </p>
 						</s:if>
 					</s:else>
 				</span>

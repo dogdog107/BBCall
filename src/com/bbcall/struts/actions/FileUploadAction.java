@@ -53,7 +53,7 @@ public class FileUploadAction extends ActionSupport {
 		String storeFileName;
 		
 		if (userid == null) {
-			storeFileName = token + "_photo." + uploadFileType; // 封装保存文件名
+			storeFileName = randomCode.getNoncestr() + "_photo." + uploadFileType; // 封装保存文件名
 		} else {
 
 			storeFileName = userid + "_photo." + uploadFileType; // 封装保存文件名
