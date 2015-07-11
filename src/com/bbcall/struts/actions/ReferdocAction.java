@@ -41,27 +41,29 @@ public class ReferdocAction extends ActionSupport {
 		dataMap = new HashMap<String, Object>(); // 新建dataMap来储存JSON字符串
 		dataMap.clear(); // dataMap中的数据将会被Struts2转换成JSON字符串，所以这里要先清空其中的数据
 
-		int parentno = Integer.parseInt(referdoc_parentno);
-		
-		int result = referdocServices.addReferdoc(referdoc_type,
-				parentno, referdoc_level, referdoc_price);
+		int parentno = 0;
+		if (referdoc_parentno != null) {
+			parentno = Integer.parseInt(referdoc_parentno);
+		}
+
+		int result = referdocServices.addReferdoc(referdoc_type, parentno,
+				referdoc_level, referdoc_price);
 
 		if (result == ResultCode.SUCCESS) {
 			List<Referdoc> referdoclist = referdocServices.referdocinfos();
 			dataMap.put("referdoclist", referdoclist);
 			dataMap.putAll(Tools.JsonHeadMap(result, true));
-//			dataMap.put("resultcode", result);
-//			dataMap.put("errmsg", ResultCode.getErrmsg(result));
-//			dataMap.put("addResult", true);
+			// dataMap.put("resultcode", result);
+			// dataMap.put("errmsg", ResultCode.getErrmsg(result));
+			// dataMap.put("addResult", true);
 			return "getsuccess";
 		} else {
 			dataMap.putAll(Tools.JsonHeadMap(result, true));
-//			dataMap.put("resultcode", result); // 放入一个是否操作成功的标识
-//			dataMap.put("errmsg", ResultCode.getErrmsg(result));
-//			dataMap.put("addResult", false); // 放入registerResult
+			// dataMap.put("resultcode", result); // 放入一个是否操作成功的标识
+			// dataMap.put("errmsg", ResultCode.getErrmsg(result));
+			// dataMap.put("addResult", false); // 放入registerResult
 			return "addFailed";
 		}
-		
 
 	}
 
@@ -76,25 +78,24 @@ public class ReferdocAction extends ActionSupport {
 
 		int referdocid = Integer.parseInt(referdoc_id);
 		int parentno = Integer.parseInt(referdoc_parentno);
-		
-		int result = referdocServices.updateReferdoc(referdocid,
-				referdoc_type, parentno, referdoc_level,
-				referdoc_price);
-		
-	    referdocServices.getChildReferdoclist(parentno);
+
+		int result = referdocServices.updateReferdoc(referdocid, referdoc_type,
+				parentno, referdoc_level, referdoc_price);
+
+		referdocServices.getChildReferdoclist(parentno);
 		List<Referdoc> referdoclist = referdocServices.referdocinfos();
-		
+
 		if (result == ResultCode.SUCCESS) {
-			
-			
-			for (int i=0; i<referdoclist.size(); i++) {
+
+			for (int i = 0; i < referdoclist.size(); i++) {
 				System.out.println(referdoclist.get(i).getReferdoc_type());
 			}
 			dataMap.put("referdoclist", referdoclist);
+			dataMap.put("parentno", parentno);
 			dataMap.putAll(Tools.JsonHeadMap(result, true));
-//			dataMap.put("resultcode", result);
-//			dataMap.put("errmsg", ResultCode.getErrmsg(result));
-//			dataMap.put("updateResult", true);
+			// dataMap.put("resultcode", result);
+			// dataMap.put("errmsg", ResultCode.getErrmsg(result));
+			// dataMap.put("updateResult", true);
 		}
 
 		return "getsuccess";
@@ -111,16 +112,16 @@ public class ReferdocAction extends ActionSupport {
 		dataMap.clear(); // dataMap中的数据将会被Struts2转换成JSON字符串，所以这里要先清空其中的数据
 
 		int referdocid = Integer.parseInt(referdoc_id);
-		
+
 		int result = referdocServices.deleteReferdoc(referdocid);
 
 		if (result == ResultCode.SUCCESS) {
 			List<Referdoc> referdoclist = referdocServices.referdocinfos();
 			dataMap.put("referdoclist", referdoclist);
 			dataMap.putAll(Tools.JsonHeadMap(result, true));
-//			dataMap.put("resultcode", result);
-//			dataMap.put("errmsg", ResultCode.getErrmsg(result));
-//			dataMap.put("deleteResult", true);
+			// dataMap.put("resultcode", result);
+			// dataMap.put("errmsg", ResultCode.getErrmsg(result));
+			// dataMap.put("deleteResult", true);
 		}
 
 		return "getsuccess";
@@ -142,9 +143,9 @@ public class ReferdocAction extends ActionSupport {
 			Referdoc referdoc = referdocServices.referdocinfo();
 			dataMap.put("referdoc", referdoc);
 			dataMap.putAll(Tools.JsonHeadMap(result, true));
-//			dataMap.put("resultcode", result);
-//			dataMap.put("errmsg", ResultCode.getErrmsg(result));
-//			dataMap.put("deleteResult", true);
+			// dataMap.put("resultcode", result);
+			// dataMap.put("errmsg", ResultCode.getErrmsg(result));
+			// dataMap.put("deleteResult", true);
 		}
 
 		return SUCCESS;
@@ -165,9 +166,9 @@ public class ReferdocAction extends ActionSupport {
 			List<Referdoc> referdoclist = referdocServices.referdocinfos();
 			dataMap.put("referdoclist", referdoclist);
 			dataMap.putAll(Tools.JsonHeadMap(result, true));
-//			dataMap.put("resultcode", result);
-//			dataMap.put("errmsg", ResultCode.getErrmsg(result));
-//			dataMap.put("getlistResult", true);
+			// dataMap.put("resultcode", result);
+			// dataMap.put("errmsg", ResultCode.getErrmsg(result));
+			// dataMap.put("getlistResult", true);
 		}
 
 		return "getsuccess";
@@ -185,12 +186,13 @@ public class ReferdocAction extends ActionSupport {
 		int result = referdocServices.getParentReferdoclist();
 
 		if (result == ResultCode.SUCCESS) {
-			List<Referdoc> parentreferdoclist = referdocServices.referdocinfos();
+			List<Referdoc> parentreferdoclist = referdocServices
+					.referdocinfos();
 			dataMap.put("parentreferdoclist", parentreferdoclist);
 			dataMap.putAll(Tools.JsonHeadMap(result, true));
-//			dataMap.put("resultcode", result);
-//			dataMap.put("errmsg", ResultCode.getErrmsg(result));
-//			dataMap.put("getparentlistResult", true);
+			// dataMap.put("resultcode", result);
+			// dataMap.put("errmsg", ResultCode.getErrmsg(result));
+			// dataMap.put("getparentlistResult", true);
 		}
 
 		return SUCCESS;
@@ -205,17 +207,21 @@ public class ReferdocAction extends ActionSupport {
 		dataMap = new HashMap<String, Object>(); // 新建dataMap来储存JSON字符串
 		dataMap.clear(); // dataMap中的数据将会被Struts2转换成JSON字符串，所以这里要先清空其中的数据
 
-		int parentno = Integer.parseInt(referdoc_parentno);
-		
+		System.out.println("referdoc_parentno " + referdoc_parentno);
+		int parentno = 0;
+		if (referdoc_parentno != null) {
+			parentno = Integer.parseInt(referdoc_parentno);
+		}
+
 		int result = referdocServices.getChildReferdoclist(parentno);
 
 		if (result == ResultCode.SUCCESS) {
 			List<Referdoc> referdoclist = referdocServices.referdocinfos();
 			dataMap.put("referdoclist", referdoclist);
 			dataMap.putAll(Tools.JsonHeadMap(result, true));
-//			dataMap.put("resultcode", result);
-//			dataMap.put("errmsg", ResultCode.getErrmsg(result));
-//			dataMap.put("getchildlistResult", true);
+			// dataMap.put("resultcode", result);
+			// dataMap.put("errmsg", ResultCode.getErrmsg(result));
+			// dataMap.put("getchildlistResult", true);
 		}
 
 		return "getsuccess";
@@ -231,20 +237,21 @@ public class ReferdocAction extends ActionSupport {
 		dataMap.clear(); // dataMap中的数据将会被Struts2转换成JSON字符串，所以这里要先清空其中的数据
 
 		int parentno = Integer.parseInt(referdoc_parentno);
-		
-		int result = referdocServices.chkReferType(referdoc_type,
-				parentno);
+
+		int result = referdocServices.chkReferType(referdoc_type, parentno);
 
 		if (result == ResultCode.REFERDOC_TYPE_NOTEXIST) {
 			dataMap.putAll(Tools.JsonHeadMap(result, true));
-//			dataMap.put("resultcode", result); // 放入一个是否操作成功的标识
-//			dataMap.put("errmsg", ResultCode.getErrmsg(result));
-//			dataMap.put("chkreferdoctypeResult", true); // 放入checkUserNameResult
+			// dataMap.put("resultcode", result); // 放入一个是否操作成功的标识
+			// dataMap.put("errmsg", ResultCode.getErrmsg(result));
+			// dataMap.put("chkreferdoctypeResult", true); //
+			// 放入checkUserNameResult
 		} else {
 			dataMap.putAll(Tools.JsonHeadMap(result, true));
-//			dataMap.put("resultcode", result); // 放入一个是否操作成功的标识
-//			dataMap.put("errmsg", ResultCode.getErrmsg(result));
-//			dataMap.put("chkreferdoctypeResult", false); // 放入checkUserNameResult
+			// dataMap.put("resultcode", result); // 放入一个是否操作成功的标识
+			// dataMap.put("errmsg", ResultCode.getErrmsg(result));
+			// dataMap.put("chkreferdoctypeResult", false); //
+			// 放入checkUserNameResult
 		}
 		return SUCCESS;
 	}
@@ -266,11 +273,12 @@ public class ReferdocAction extends ActionSupport {
 		if (order_type_code_list == null) {
 			dataMap.put("referprice", 0);
 			dataMap.putAll(Tools.JsonHeadMap(result, true));
-//			dataMap.put("resultcode", result); // 放入一个是否操作成功的标识
-//			dataMap.put("errmsg", ResultCode.getErrmsg(result));
-//			dataMap.put("referpriceResult", false); // 放入chkreferdoctypeResult
+			// dataMap.put("resultcode", result); // 放入一个是否操作成功的标识
+			// dataMap.put("errmsg", ResultCode.getErrmsg(result));
+			// dataMap.put("referpriceResult", false); //
+			// 放入chkreferdoctypeResult
 		} else {
-			for (int i = 0; i< order_type_code_list.size(); i++) {
+			for (int i = 0; i < order_type_code_list.size(); i++) {
 				type_code = Integer.parseInt(order_type_code_list.get(i));
 				result = referdocServices.getReferdoc(type_code);
 				referd = referdocServices.referdocinfo();
@@ -279,9 +287,10 @@ public class ReferdocAction extends ActionSupport {
 				System.out.println(referprice);
 				dataMap.put("referprice", referprice);
 				dataMap.putAll(Tools.JsonHeadMap(result, true));
-//				dataMap.put("resultcode", result); // 放入一个是否操作成功的标识
-//				dataMap.put("errmsg", ResultCode.getErrmsg(result));
-//				dataMap.put("referpriceResult", false); // 放入chkreferdoctypeResult
+				// dataMap.put("resultcode", result); // 放入一个是否操作成功的标识
+				// dataMap.put("errmsg", ResultCode.getErrmsg(result));
+				// dataMap.put("referpriceResult", false); //
+				// 放入chkreferdoctypeResult
 			}
 		}
 

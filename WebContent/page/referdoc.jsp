@@ -36,9 +36,9 @@
 		</tr>
 	</table>
 	<div></div>
-		<div class="div_search">
+		<div class="div_merge">
 			<span>
-			<form action="referdoc_getchildlist"
+				<form action="referdoc_getchildlist"
 					id="referdoc_getchildlist" method="post">
 				一級項 ：
 				
@@ -46,7 +46,11 @@
 					<option value="0">請選擇</option>
 				</select>
 				</form>
-				&nbsp;&nbsp;&nbsp;&nbsp;
+			</span>
+			
+		</div>
+		<div class="div_merge">
+			<span>
 				<input type="button" value="添加參考價" Onclick="location='${pageContext.request.contextPath}/page/addreferdoc.jsp'" />
 			</span>
 			
@@ -77,12 +81,12 @@
 						<td><input type="text" name="referdoc_type" id="referdoc_type" value='<s:property value='#referdoclist.referdoc_type'/>' ></input></td>
 						<td><input type="text" name="referdoc_price" id="referdoc_price" value='<s:property value='#referdoclist.referdoc_price'/>' ></input></td>
 						
+						<td><input type="submit" value="修改"></input></td>
+						<td><input type="button" value="删除" onclick="location.href='referdoc_delete.action?referdoc_id=<s:property value='#referdoclist.referdoc_id'/>'"></input></td>
 						</form>
-						<td><a href="" id="referdoc_updatelink" onclick="referdoclist_update('<s:property value='#referdoclist.referdoc_id'/>')">修改</a>
-						</td>	
-						<td id="referdoc_href"><a
-							href="${pageContext.request.contextPath}/page/referdoc_delete.action?referdoc_id=<s:property value='#referdoclist.referdoc_id'/>">刪除</a>
-						</td>
+						
+						
+						
 					</tr>
 					</s:iterator>
                     

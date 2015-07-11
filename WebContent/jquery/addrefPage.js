@@ -13,7 +13,7 @@ function referdoc_level_change() {
 			url : "${pageContext.request.contextPath}/referdoc_getparentlistJson.action",
 			data : {},
 			success : function(data) {
-				if(data.getparentlistResult){
+				if(data.result){
 					var parentreferdoclist = data.parentreferdoclist;
 					$.each(parentreferdoclist, function(i, n){
 						$("#referdoc_parentno").append("<option value='"+n.referdoc_id+"'>"+n.referdoc_type+"</option>");
