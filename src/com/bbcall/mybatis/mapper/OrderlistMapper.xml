@@ -37,7 +37,7 @@
 		<result column="order_refer_price" property="order_refer_price"
 			jdbcType="DECIMAL" />
 		<result column="order_status" property="order_status" jdbcType="VARCHAR" />
-		<result column="order_score" property="order_score" jdbcType="INTEGER" />
+		<result column="order_score" property="order_score" jdbcType="DECIMAL" />
 		<result column="order_evaluation" property="order_evaluation"
 			jdbcType="LONGVARCHAR" />
 		<result column="order_remark" property="order_remark" jdbcType="LONGVARCHAR" />
@@ -287,9 +287,9 @@
 		order_master_id=#{order_master_id} LIMIT #{offset},10
 	</select>
 
-	<select id="getOrdersByMId" parameterType="int" resultMap="OrderResultMap">
+	<select id="getOrdersByMId" resultMap="OrderResultMap">
 		select * from ORDERLIST where
-		order_master_id=#{order_master_id}
+		order_master_id=#{order_master_id} and order_status=#{order_status} 
 	</select>
 
 	<select id="getOrders" resultMap="OrderResultMap">
@@ -299,13 +299,13 @@
 	</select>
 
 	<update id="updateOrder" parameterType="com.bbcall.mybatis.table.Orderlist">
-		update ORDERLIST set
+		update ORDERLIST set 
 		order_book_time=#{order_book_time},
 		order_book_location=#{order_book_location},
 		order_book_location_code=#{order_book_location_code},
 		order_contact_mobile=#{order_contact_mobile},
 		order_contact_name=#{order_contact_name},
-		order_pic_ur=#{order_pic_url},
+		order_pic_url=#{order_pic_url},
 		order_description=#{order_description},
 		order_urgent=#{order_urgent},
 		order_urgent_bonus=#{order_urgent_bonus},
@@ -329,8 +329,9 @@
 
 	<update id="completeOrder">
 		update ORDERLIST set
-		order_score=#{order_score,jdbcType=INTEGER},
+		order_score=#{order_score,jdbcType=DECIMAL},
 		order_evaluation=#{order_evaluation,jdbcType=LONGVARCHAR},
+		order_end_time=#{order_end_time},
 		order_status="3"
 		where
 		order_id=#{order_id,jdbcType=INTEGER}

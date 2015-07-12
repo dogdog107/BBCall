@@ -10,8 +10,10 @@ import org.springframework.context.ApplicationContext;
 import org.springframework.context.support.FileSystemXmlApplicationContext;
 
 import com.bbcall.mybatis.dao.OrderlistMapper;
+import com.bbcall.mybatis.dao.UserMapper;
 import com.bbcall.mybatis.table.AddressList;
 import com.bbcall.mybatis.table.Orderlist;
+import com.bbcall.mybatis.table.User;
 import com.bbcall.struts.services.OrderlistServices;
 import com.sun.jndi.url.iiopname.iiopnameURLContextFactory;
 
@@ -21,8 +23,17 @@ public class test {
 		// TODO Auto-generated method stub
 		ApplicationContext ctx = null;
 		ctx = new FileSystemXmlApplicationContext("/conf_xml/applicationContext.xml");
-		OrderlistServices orderlistServices = (OrderlistServices) ctx.getBean("orderlistServices");
+//		OrderlistServices orderlistServices = (OrderlistServices) ctx.getBean("orderlistServices");
 //		OrderlistMapper orderlistMapper = (OrderlistMapper) ctx.getBean("orderlistMapper");
+//		UserMapper userMapper = (UserMapper) ctx.getBean("userMapper");
+//		
+//		User user = userMapper.getUserById(1);
+//		
+//		user.setUser_grade(5.77);
+//		
+//		userMapper.updateUser(user);
+		System.out.println(Boolean.parseBoolean("true"));
+		
 		
 //		DateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm");
 //		format.setLenient(false);
@@ -40,6 +51,7 @@ public class test {
 //
 //		}
 		
+//		System.out.println(new Double("4.0"));
 //		List<AddressList> adlist = orderlistServices.getAddresslist();
 //		
 //		int result = orderlistServices.getUnOrders(1,4);

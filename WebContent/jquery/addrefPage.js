@@ -15,6 +15,7 @@ function referdoc_level_change() {
 			success : function(data) {
 				if(data.result){
 					var parentreferdoclist = data.parentreferdoclist;
+					document.getElementById('referdoc_parentno').options.length=0;
 					$.each(parentreferdoclist, function(i, n){
 						$("#referdoc_parentno").append("<option value='"+n.referdoc_id+"'>"+n.referdoc_type+"</option>");
 					});
@@ -25,6 +26,11 @@ function referdoc_level_change() {
 			}
 		});
 	} else {
+		var op=document.createElement("option"); 
+		op.setAttribute("value",0);        
+		op.appendChild(document.createTextNode("请选择")); 
+		document.getElementById('referdoc_parentno').options.length=0;
+		document.getElementById('referdoc_parentno').appendChild(op);
 		document.getElementById('parentno_tr').style.display="none";
 		document.getElementById('price_tr').style.display="none";
 	}

@@ -69,14 +69,24 @@ public class OrderlistAction extends ActionSupport {
 
 		System.out.println("add()");
 		int result = 1;
+		
+		
 		// List<Referdoc> referdoclist = new ArrayList<Referdoc>();
 		int book_location_code = Integer.parseInt(order_book_location_code);
 		BigInteger contact_mobile = new BigInteger(order_contact_mobile);
 		double urgent_bonus = 0;
-		if (order_urgent_bonus != null) {
+		if (order_urgent_bonus != null && !order_urgent_bonus.equals("")) {
 			urgent_bonus = Double.parseDouble(order_urgent_bonus);
+			
+			order_urgent = "true";
+		} else {
+			order_urgent = "false";
 		}
-		double price = Double.parseDouble(order_price);
+		
+		double price = 0;
+		if (order_price != null && !order_price.equals("")) {
+			price = Double.parseDouble(order_price);
+		}
 		int section = Integer.parseInt(order_section);
 		int order_user_id = Integer.parseInt(user_id);
 
@@ -202,9 +212,12 @@ public class OrderlistAction extends ActionSupport {
 		dataMap.clear(); // dataMap中的数据将会被Struts2转换成JSON字符串，所以这里要先清空其中的数据
 
 		int orderid = Integer.parseInt(order_id);
-		int score = 0;
-		if (order_score != null) {
-			score = Integer.parseInt(order_score);
+		double score = 0;
+		System.out.println("order_id in");
+		if (order_score != null && !order_score.equals("")) {
+			System.out.println("order_score in " + order_score);
+			score = Double.parseDouble(order_score);
+
 		}
 
 		int result = orderlistServices.completeOrder(score, order_evaluation,
@@ -450,22 +463,34 @@ public class OrderlistAction extends ActionSupport {
 		dataMap = new HashMap<String, Object>(); // 新建dataMap来储存JSON字符串
 		dataMap.clear(); // dataMap中的数据将会被Struts2转换成JSON字符串，所以这里要先清空其中的数据
 
+		
 		int orderid = Integer.parseInt(order_id);
+		System.out.println("order_id " + order_id);
 		int result = orderlistServices.getOrderById(orderid);
+		System.out.println("get success");
 		// Referdoc referdoclist = new Referdoc();
 
 		if (result == ResultCode.SUCCESS) {
 			Orderlist orderlist = orderlistServices.orderlistinfo();
+			System.out.println(orderlist.getOrder_price());
 
 			// referdocServices.getReferdoc(orderlist.getOrder_type_code());
 
 			// referdoclist = referdocServices.referdocinfo();
 
-			String[] url = orderlist.getOrder_pic_url().split(";");
-
-			for (int i = 0; i < url.length; i++) {
-				orderFileFileName.add(url[i]);
+			String[] url = null;
+			String picurl = orderlist.getOrder_pic_url();
+			
+			if (picurl != null) {
+				url = orderlist.getOrder_pic_url().split(";");
+				for (int i = 0; i < url.length; i++) {
+					orderFileFileName.add(url[i]);
+				}
 			}
+
+			System.out.println("url");
+			
+			System.out.println("orderFileFileName");
 
 			dataMap.put("orderlist", orderlist);
 			// dataMap.put("referdoclist", referdoclist);

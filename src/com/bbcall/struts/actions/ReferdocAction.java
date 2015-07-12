@@ -29,6 +29,7 @@ public class ReferdocAction extends ActionSupport {
 	private String referdoc_parentno;
 	private int referdoc_level;
 	private double referdoc_price;
+	private String referdoc_flag;
 	private List<String> order_type_code_list;
 
 	@Override
@@ -47,7 +48,7 @@ public class ReferdocAction extends ActionSupport {
 		}
 
 		int result = referdocServices.addReferdoc(referdoc_type, parentno,
-				referdoc_level, referdoc_price);
+				referdoc_level, referdoc_price, referdoc_flag);
 
 		if (result == ResultCode.SUCCESS) {
 			List<Referdoc> referdoclist = referdocServices.referdocinfos();
@@ -80,7 +81,7 @@ public class ReferdocAction extends ActionSupport {
 		int parentno = Integer.parseInt(referdoc_parentno);
 
 		int result = referdocServices.updateReferdoc(referdocid, referdoc_type,
-				parentno, referdoc_level, referdoc_price);
+				parentno, referdoc_level, referdoc_price, referdoc_flag);
 
 		referdocServices.getChildReferdoclist(parentno);
 		List<Referdoc> referdoclist = referdocServices.referdocinfos();
@@ -360,6 +361,14 @@ public class ReferdocAction extends ActionSupport {
 
 	public void setReferdoc_level(int referdoc_level) {
 		this.referdoc_level = referdoc_level;
+	}
+
+	public String getReferdoc_flag() {
+		return referdoc_flag;
+	}
+
+	public void setReferdoc_flag(String referdoc_flag) {
+		this.referdoc_flag = referdoc_flag;
 	}
 
 }

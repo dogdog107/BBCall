@@ -51,7 +51,7 @@ public class Orderlist {
 	private String order_type;
 	private double order_refer_price;
 	private int order_status;
-	private int order_score;
+	private double order_score;
 	private String order_evaluation;
 	private String order_remark;
 	private int order_section;
@@ -160,11 +160,11 @@ public class Orderlist {
 		this.order_status = order_status;
 	}
 
-	public int getOrder_score() {
+	public double getOrder_score() {
 		return order_score;
 	}
 
-	public void setOrder_score(int order_score) {
+	public void setOrder_score(double order_score) {
 		this.order_score = order_score;
 	}
 

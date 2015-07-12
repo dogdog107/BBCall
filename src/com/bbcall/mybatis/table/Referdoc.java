@@ -16,6 +16,7 @@ public class Referdoc {
 	private int referdoc_parentno;
 	private int referdoc_level;
 	private double referdoc_price;
+	private boolean referdoc_flag;
 
 	public int getReferdoc_id() {
 		return referdoc_id;
@@ -55,6 +56,14 @@ public class Referdoc {
 
 	public void setReferdoc_level(int referdoc_level) {
 		this.referdoc_level = referdoc_level;
+	}
+
+	public boolean isReferdoc_flag() {
+		return referdoc_flag;
+	}
+
+	public void setReferdoc_flag(boolean referdoc_flag) {
+		this.referdoc_flag = referdoc_flag;
 	}
 
 }

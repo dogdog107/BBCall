@@ -1,5 +1,6 @@
 package com.bbcall.mybatis.dao;
 
+import java.sql.Timestamp;
 import java.util.List;
 
 import org.apache.ibatis.annotations.Param;
@@ -137,7 +138,8 @@ public interface OrderlistMapper {
 			@Param("offset") int offset);
 
 	// 通过师傅账号取得订单列表
-	public List<Orderlist> getOrdersByMId(int order_master_id);
+	public List<Orderlist> getOrdersByMId(@Param("order_master_id") int order_master_id,
+			@Param("order_status") int order_status);
 
 	// 通过师傅账户和订单状态取得订单列表
 	public List<Orderlist> getOrders(@Param("order_status") int order_status,
@@ -145,9 +147,10 @@ public interface OrderlistMapper {
 			@Param("offset") int offset);
 
 	// 更改订单为完成状态
-	public void completeOrder(@Param("order_score") int order_score,
+	public void completeOrder(@Param("order_score") double order_score,
 			@Param("order_evaluation") String order_evaluation,
-			@Param("order_id") int order_id);
+			@Param("order_id") int order_id,
+			@Param("order_end_time") Timestamp order_end_time);
 
 	public void change(@Param("order_id") int order_id,
 			@Param("order_status") int order_status,
