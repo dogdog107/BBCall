@@ -38,10 +38,10 @@
 		<form id="register_form" action="user_register" method="post" enctype="multipart/form-data">
 			<div style="font-size: 13px; margin: 10px 5px">
 				<span> <s:if test="dataMap.result">
-							<p align="center" style="font-size: 15px;color: green"> ## 修改成功！${ dataMap.errmsg} ## </p>
+							<p align="center" style="font-size: 15px;color: green"> ## 添加成功！${ dataMap.errmsg} ## </p>
 					</s:if> <s:else>
 						<s:if test="!dataMap.result">
-								<p align="center" style="font-size: 15px;color: red"> ## 修改失敗！${ dataMap.errmsg} ## </p>
+								<p align="center" style="font-size: 15px;color: red"> ## 添加失敗！${ dataMap.errmsg} ## </p>
 						</s:if>
 					</s:else>
 				</span>
@@ -49,7 +49,7 @@
 			<table border="1" width="100%" class="table_update">
 					<input type="hidden" id="token" name="token" value="${sessionScope.user_token}" />
 				<tr>
-					<td>用戶頭像 (UserPhoto)</td>
+					<td width="400px" >用戶頭像 (UserPhoto)</td>
 					<td>
 						<input type="hidden" id="picurl" name="picurl" value="" />
 						<!--用来存放item-->
@@ -69,8 +69,7 @@
 				</tr>
 				<tr>
 					<td>用戶名 (account)</td>
-					<td><input type="text" name="account" id="account" /></td>
-					<td><span id="checkUserNameResult"></span></td>
+					<td><input type="text" name="account" id="account" /><span id="checkUserNameResult"></span></td>
 				</tr>
 				<tr>
 					<td>輸入密碼 (Enter Password)</td>
@@ -84,9 +83,7 @@
 				</tr>
 				<tr>
 					<td>用戶姓名 (User Name)</td>
-					<td><input type="text" name="name" onfocus="this.value=''"
-						onblur="if(this.value==''){this.value='${sessionScope.user_name}'}"
-						value="${sessionScope.user_name}" /></td>
+					<td><input type="text" name="name" /></td>
 				</tr>
 				<tr>
 					<td>用戶性別 (User Gender)</td>
@@ -98,20 +95,16 @@
 				</tr>
 				<tr>
 					<td>手機號碼 (User Mobile)</td>
-					<td><input type="text" name="mobile" onfocus="this.value=''"
-						onblur="if(this.value==''){this.value='${sessionScope.user_mobile}'}"
-						value="${sessionScope.user_mobile}" /></td>
+					<td><input type="text" name="mobile" /></td>
 				</tr>
 				<tr>
 					<td>電子郵箱 (User Email)</td>
-					<td><input type="text" name="email" onfocus="this.value=''"
-						onblur="if(this.value==''){this.value='${sessionScope.user_email}'}"
-						value="${sessionScope.user_email}" /></td>
+					<td><input type="text" name="email" /></td>
 				</tr>
 				<tr>
 					<td>用戶語言 (User Language)</td>
 					<td>
-					<input type="hidden" id="language" name="language" value="${sessionScope.user_language}"/>
+					<input type="hidden" id="language" name="language" value=""/>
 					
 					<label><input name="languagepart" type="checkbox" id="English" value="English" />英文(English)</label>&nbsp;&nbsp;
 					<label><input name="languagepart" type="checkbox" id="Cantonese" value="Cantonese" />廣東話(Cantonese)</label>&nbsp;&nbsp;
@@ -121,9 +114,7 @@
 				<tr>
 					<td>用戶技能 (User Skill)</td>
 					<td>
-					<input type="text" name="skill" onfocus="this.value=''"
-						onblur="if(this.value==''){this.value='${sessionScope.user_skill}'}"
-						value="${sessionScope.user_skill}" /></td>
+					<input type="text" name="skill" /></td>
 				</tr>
 				<tr>
 					<td>默認地址 (User Address)</td>
@@ -137,16 +128,11 @@
 					<select id="adscode_3" onchange="getaddresslist(this.options[selectedIndex].value,3)">
 							<option value="0">--請選擇鎮區--</option>
 					</select>
-					<input type="hidden" name="addresscode" id="addresscode" value="${sessionScope.user_address_code}"/>
+					<input type="hidden" name="addresscode" id="addresscode" value=""/>
 					<input type="hidden" id="addresscodename" value=""/>
 					
-					<s:if test="%{#session.user_address!=null}">
-						<s:set name="lastadsset" value="%{#session.user_address.split(';')[#session.user_address.split(';').length-1]}"/>
-					</s:if>
-					<input type="text" onfocus="this.value=''" id="lastads"
-						onblur="if(this.value==''){this.value='${lastadsset}'}"
-						value="${lastadsset}" />
-					<input type="hidden" name="address" id="address" value="${sessionScope.user_address}"/>	
+					<input type="text" onfocus="this.value=''" id="lastads" />
+					<input type="hidden" name="address" id="address" value=""/>	
 					</td>
 				</tr>
 				<tr>
@@ -160,6 +146,12 @@
 		// 添加全局站点信息
 		var BASE_URL = '${pageContext.request.contextPath }';
 		var token = '${sessionScope.user_token}';
+		var photourl = '';
+		var usertype = '';
+		var gender = '';
+		var addresscode = '';
+		var language = '';
+		var skill = '';
 	</script>
 
 	<!--引入jquery-->
@@ -171,6 +163,6 @@
 		src="${pageContext.request.contextPath }/page/WebUploader/webuploader.js"></script>
 	<!-- 页面JS文件 -->
 	<script type="text/javascript"
-		src="${pageContext.request.contextPath }/jquery/checkUserName.js"></script>
+		src="${pageContext.request.contextPath }/jquery/registerPage.js"></script>
 </body>
 </html>

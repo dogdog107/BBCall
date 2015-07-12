@@ -11,6 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Controller;
 
+import com.bbcall.functions.PageInfoToMap;
 import com.bbcall.functions.ResultCode;
 import com.bbcall.functions.ObjectToMap;
 import com.bbcall.functions.Tools;
@@ -27,6 +28,7 @@ public class UserAction extends ActionSupport implements SessionAware{
 	private UserServices userServices;
 	private Map<String, Object> dataMap = new LinkedHashMap<String, Object>(); // 新建dataMap来储存JSON字符串
 	private ObjectToMap obj2map = new ObjectToMap();// 新建ObjectToMap对象
+	private PageInfoToMap pageinfo2map = new PageInfoToMap();// 新建PageInfoToMap对象
 	private Map<String, Object> session;
 	
 	private String username;
@@ -54,6 +56,7 @@ public class UserAction extends ActionSupport implements SessionAware{
 	private String order_value;
 	private String where_col;
 	private String where_value;
+	private Integer pagenum; // 页面页数
 	
 	
 //	private int test;
@@ -130,9 +133,10 @@ public class UserAction extends ActionSupport implements SessionAware{
 		System.out.println("Here is UserAction.register");
 
 		dataMap.clear(); // dataMap中的数据将会被Struts2转换成JSON字符串，所以这里要先清空其中的数据
-		int result = userServices.register(token, account, password, usertype, name, picurl, mobile, gender, email, language, skill, description, accessgroup); // 调用userServices.register
+		int result = userServices.register(token, account, password, usertype, name, picurl, mobile, gender, email, language, skill, description, accessgroup, addresscode, address); // 调用userServices.register
 
 		if (result == ResultCode.SUCCESS) {
+//			Integer newuserid = userServices.getUserinfo().getUser_id();
 			dataMap.putAll(Tools.JsonHeadMap(result, true));
 			System.out.println(dataMap);
 			return "registerSuccess";
@@ -251,10 +255,11 @@ public class UserAction extends ActionSupport implements SessionAware{
 	public String checkUserListWhereOrderBy() throws Exception {
 		System.out.println("Here is UserAction.checkUserListWhereOrderBy");
 		dataMap.clear(); // dataMap中的数据将会被Struts2转换成JSON字符串，所以这里要先清空其中的数据
-		int result = userServices.checkUserListWhereOrderBy(order_col, order_value, where_col, where_value);// 调用userServices.checkAddressList
+		int result = userServices.checkUserListWhereOrderBy(order_col, order_value, where_col, where_value, pagenum);// 调用userServices.checkAddressList
 		if (result == ResultCode.SUCCESS) {
 			List<User> userlist = userServices.getUserlist();
 			dataMap.put("userlist", userlist); // 把addresslist对象放入dataMap
+			dataMap.putAll(pageinfo2map.pageInfoMap(userlist));// 把分页信息放进dataMap
 			dataMap.putAll(Tools.JsonHeadMap(result, true));
 		} else {
 			dataMap.putAll(Tools.JsonHeadMap(result, false));
@@ -296,11 +301,14 @@ public class UserAction extends ActionSupport implements SessionAware{
 //			return INPUT;
 //		}
 		
-		int result = userServices.checkUserList(col_name, specify_value, search_value);// 调用userServices.checkAddressList
+		int result = userServices.checkUserList(col_name, specify_value, search_value, pagenum);// 调用userServices.checkAddressList
 		if (result == ResultCode.SUCCESS) {
 			List<User> userlist = userServices.getUserlist();
+			
 			dataMap.put("userlist", userlist); // 把addresslist对象放入dataMap
+			dataMap.putAll(pageinfo2map.pageInfoMap(userlist)); // 把分页信息放进dataMap
 			dataMap.putAll(Tools.JsonHeadMap(result, true));
+			System.out.println(dataMap);
 		} else {
 			dataMap.putAll(Tools.JsonHeadMap(result, false));
 			System.out.println(dataMap);
@@ -711,5 +719,13 @@ public class UserAction extends ActionSupport implements SessionAware{
 
 	public void setWhere_value(String where_value) {
 		this.where_value = where_value;
+	}
+
+	public Integer getPagenum() {
+		return pagenum;
+	}
+
+	public void setPagenum(Integer pagenum) {
+		this.pagenum = pagenum;
 	}
 }

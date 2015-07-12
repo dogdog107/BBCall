@@ -1,11 +1,17 @@
-
-
+var global_col_name = '';
+var global_specify_value = '';
+var global_search_value = '';
 
 function onload() {
 	checkUserList();
 }
 
-function checkUserList(col_name, specify_value, search_value){
+//调用pagechange方法
+function pagechange(pagenum){
+	checkUserList(global_col_name, global_specify_value, global_search_value, pagenum);
+}
+
+function checkUserList(col_name, specify_value, search_value, pagenum){
 	$
 	.ajax({
 		type : "post",
@@ -14,12 +20,29 @@ function checkUserList(col_name, specify_value, search_value){
 			"token" : token,
 			"col_name" : col_name,
 			"specify_value" : specify_value,
-			"search_value" : search_value
+			"search_value" : search_value,
+			"pagenum" : pagenum
 		},
 		success : function(data) {
 			if (data.result) {
-				var userlist = data.userlist;
-				$.each(userlist, function(i, n) {
+				//*初始化分页条
+				if (data.lastPageNum == 1){
+					//当只有一页时隐藏分页条
+					$("#page_bar").hide(300);
+				} else {
+					//显示分页条
+					$("#page_bar").show(300);
+					//当前页页码
+					$("#xiye").html(data.currentPageNum);
+					//尾页页码
+					$("#mo").html(data.lastPageNum);
+				}
+				// 清除现有列表
+				$("#datas").hide();
+				$("tr[id^='userlist_']").remove();
+				// 拿出列表
+				var templist = data.userlist;
+				$.each(templist, function(i, n) {
 					var row = $("#template").clone();
 					row.find("#userid").text(n.user_id);
 					if (n.user_pic_url == "") {
@@ -27,33 +50,35 @@ function checkUserList(col_name, specify_value, search_value){
 					} else {
 						row.find("#picurl").html("<img src=" + n.user_pic_url + " height='60' width='60'>");
 					}
-//					row.find("#amendlink").html("<a href=" + link + "/user_checkUserListJson.action?id=" + n.user_id + ">修改</a>");
 					row.find("#account").text(n.user_account);
 					row.find("#name").text(n.user_name);
 					switch (n.user_type) {
 					case 1:
-						row.find("#usertype").text("User");
+						row.find("#usertype").html("<span style='color:#55AA00'>User</span>");
 						break;
 					case 2:
-						row.find("#usertype").text("Master");
+						row.find("#usertype").html("<span style='color:#0066FF'>Master</span>");
 						break;
 					case 3:
-						row.find("#usertype").text("Admin");
+						row.find("#usertype").html("<span style='color:#EE7700'>Admin</span>");
+						break;
+					case 4:
+						row.find("#usertype").html("<span style='color:#CC0000'>SuperAdmin</span>");
 						break;
 					}
 					
 					switch (n.user_status) {
 					case 1:
-						row.find("#status").text("Active");
+						row.find("#status").html("<span style='color:#55AA00'>Active</span>");
 						break;
 					case 2:
-						row.find("#status").text("Pause");
+						row.find("#status").html("<span style='color:#0066FF'>Pause</span>");
 						break;
 					case 3:
-						row.find("#status").text("Pending");
+						row.find("#status").html("<span style='color:#EE7700'>Pending</span>");
 						break;
 					case 4:
-						row.find("#status").text("Locked");
+						row.find("#status").html("<span style='color:#CC0000'>Locked</span>");
 						break;
 					}
 					row.find("#statusOpr").val(n.user_status);
@@ -61,7 +86,9 @@ function checkUserList(col_name, specify_value, search_value){
 					row.find("#statusOpr").attr("id", "statusOpr_" + n.user_id);
 					var logintime = n.user_login_time;
 					var createtime = n.user_create_time;
-					row.find("#logintime").text(logintime.replace("T", " "));
+					if (logintime != null) {
+						row.find("#logintime").text(logintime.replace("T", " "));
+					}
 					row.find("#createtime").text(createtime.replace("T", " "));
 					row.find("#btnDetail").attr("onclick", "location.href='user_getUserById.action?userid=" + n.user_id + "'");
 					row.find("#btnDelete").attr("onclick", "deleteUser(this.id)");
@@ -76,7 +103,11 @@ function checkUserList(col_name, specify_value, search_value){
 					row.appendTo("#datas");// 添加到模板的容器中
 					row.toggle();
 				});
+				// 显示数据
+				$("#datas").show(300);
 			} else {
+				//隐藏分页条
+				$("#page_bar").hide(300);
 				$("#message").html(
 						"<font color=red>Page Fail ! " + data.errmsg
 								+ "</font>");
@@ -104,7 +135,7 @@ function deleteUser(idname){
 					$("#div_message").show(300).delay(5000).hide(300);
 					$("#" + rowname).hide(300).remove();
 				} else {
-					$("#message").html("<font color=red> (ID:"+ userid +") Delete Failed ! </font>");
+					$("#message").html("<font color=red> (ID:"+ userid +") Delete Failed ! " + data.errmsg + "</font>");
 					$("#div_message").show(300).delay(5000).hide(300);
 					alert("Delete failed. " + data.errmsg);
 				}
@@ -128,24 +159,27 @@ function updateStatus(idname, value) {
 			success : function(data) {
 				if (data.result) {
 //					window.location.reload();
+					$("#" + defaultStatusName).hide();
 					switch (value) {
 					case "1":
-						$("#" + defaultStatusName).text("Active");
+						$("#" + defaultStatusName).html("<span style='color:#55AA00'>Active</span>");
 						break;
 					case "2":
-						$("#" + defaultStatusName).text("Pause");
+						$("#" + defaultStatusName).html("<span style='color:#0066FF'>Pause</span>");
 						break;
 					case "3":
-						$("#" + defaultStatusName).text("Pending");
+						$("#" + defaultStatusName).html("<span style='color:#EE7700'>Pending</span>");
 						break;
 					case "4":
-						$("#" + defaultStatusName).text("Locked");
+						$("#" + defaultStatusName).html("<span style='color:#CC0000'>Locked</span>");
 						break;
 					}
+					$("#" + defaultStatusName).show(300);
+					$("#" + defaultStatusName).attr("style", "border:solid #55AA00 2px;");
 					$("#message").html("<font color=green> (ID:"+ userid +") Status Update Success ! </font>");
 					$("#div_message").show(300).delay(5000).hide(300);
 				} else {
-					$("#message").html("<font color=red> (ID:"+ userid +") Status Update Failed ! </font>");
+					$("#message").html("<font color=red> (ID:"+ userid +") Status Update Failed ! " + data.errmsg + "</font>");
 					$("#div_message").show(300).delay(5000).hide(300);
 					alert("Update failed. " + data.errmsg);
 				}
@@ -209,8 +243,8 @@ function col_name_change(colname_value) {
 	}
 	if (validateResult){
 		$("#specify_value").val("ASC");
-		$("tr[id^='userlist_']").remove();
 		checkUserList(colname_value);
+		global_col_name = colname_value;
 		$("#message").html("<font color=green> Sorting by " + colname_value + " </font>");
 		$("#div_message").show(300).delay(3000).hide(300);
 	}else{
@@ -250,8 +284,9 @@ function specify_value_change(specify_value) {
 			$("#search_value_message").text(" | " + $("#col_name").find("option:selected").text() + "搜索(Search): "); 
 			$("#search_value_span").show();
 		}else{
-			$("tr[id^='userlist_']").remove();
 			checkUserList(new_col_name, new_specify_value);
+			global_col_name = new_col_name;
+			global_specify_value = new_specify_value;
 			$("#message").html("<font color=green> Sorting by " + $("#col_name").val() + " with " + specify_value + " </font>");
 			$("#div_message").show(300).delay(3000).hide(300);
 		}
@@ -265,6 +300,5 @@ function specify_value_change(specify_value) {
 function search_value() {
 	var new_col_name = $("#col_name").val();
 	var new_search_value = $("#search_value").val();
-	$("tr[id^='userlist_']").remove();
 	checkUserList(new_col_name,"",new_search_value);
 }

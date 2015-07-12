@@ -37,11 +37,34 @@
 		<!-- dataSource: 需要引用上面的数据源ID, 所以ref＝id -->
 		<property name="dataSource" ref="dataSource" />
 		
+		<!-- mapperLocations: 指定sql XML 的包名 -->
 		<property name="mapperLocations" value="classpath*:com/bbcall/mybatis/mapper/*.xml" />
-		
+
 		<!-- typeAliasesPackage: 指定实体类的包名，自动将实体的简单类名映射成为别名 -->
 		<property name="typeAliasesPackage" value="com.bbcall.mybatis.table" />
 
+		<!-- 配置MyBatis的插件 -->
+		<property name="plugins">
+			<array>
+			
+				<!-- PageHelper3.7.5 分页插件 配置文件 -->
+				<!-- com.github.pagehelper为PageHelper类所在包名 -->
+				<bean class="com.github.pagehelper.PageHelper">
+					<property name="properties">
+						<value>
+						
+							<!-- dialect: 指定系统使用的数据库类型，没有默认值，必须指定该属性。 -->
+							<!-- 可选值为oracle,mysql,mariadb,sqlite,hsqldb,postgresql,db2,sqlserver,informix -->
+							dialect=mysql
+							
+							<!-- pageSizeZero: 设置为true时，如果pageSize=0或者RowBounds.limit = 0就会查询出全部的结果 -->
+							<!-- （相当于没有执行分页查询，但是返回结果仍然是Page类型） -->
+							pageSizeZero=true
+						</value>
+					</property>
+				</bean>
+			</array>
+		</property>
 	</bean>
 	
 	<!-- 
@@ -82,7 +105,6 @@
   		<context:include-filter type="annotation" expression="org.springframework.stereotype.Service" />
   		<context:include-filter type="annotation" expression="org.springframework.stereotype.Repository" />
 	</context:component-scan>
-
 
 	<!-- Struts2 Related -->
 	<!-- 

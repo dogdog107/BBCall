@@ -10,8 +10,8 @@
 
     <!--mybatis ehcache缓存配置 -->
     <!-- 以下两个<cache>标签二选一,第一个可以输出日志,第二个不输出日志 -->
-<!-- <cache type="org.mybatis.caches.ehcache.LoggingEhcache" /> -->
-<!-- <cache type="org.mybatis.caches.ehcache.EhcacheCache"/>  -->
+	<cache type="org.mybatis.caches.ehcache.LoggingEhcache" />
+	<!-- <cache type="org.mybatis.caches.ehcache.EhcacheCache"/> -->
 
 	<resultMap id="UserResultMap" type="com.bbcall.mybatis.table.User" >
     	<id column="user_id" property="user_id" jdbcType="INTEGER" />
@@ -46,10 +46,10 @@
 		useGeneratedKeys="true" keyProperty="user_id">
 		insert into USER(user_account,
 		user_password, user_type, user_status, user_name, user_pic_url,
-		user_mobile, user_gender, user_email, user_language, user_skill, user_description, user_access_group)
+		user_mobile, user_gender, user_email, user_language, user_skill, user_description, user_access_group, user_address, user_address_code)
 		values(#{user_account}, #{user_password}, #{user_type},
 		#{user_status}, #{user_name}, #{user_pic_url}, #{user_mobile},
-		#{user_gender}, #{user_email}, #{user_language}, #{user_skill}, #{user_description}, #{user_access_group})
+		#{user_gender}, #{user_email}, #{user_language}, #{user_skill}, #{user_description}, #{user_access_group}, #{user_address}, #{user_address_code})
 	</insert>
 
 	<select id="getUserByAccount" parameterType="String" resultMap="UserResultMap">

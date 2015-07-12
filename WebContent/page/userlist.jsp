@@ -7,14 +7,8 @@
 <meta http-equiv="content-type" content="text/html; charset=utf-8" />
 <link rel="shortcut icon" href="${pageContext.request.contextPath }/page/img/BBCallicon_32X32.ico" type="image/x-icon" />
 <link href="${pageContext.request.contextPath }/page/css/mine.css" type="text/css" rel="stylesheet" />
-<script type="text/javascript"
-	src="${pageContext.request.contextPath }/jquery/jquery-1.8.3.js"></script>
-<script type="text/javascript"
-	src="${pageContext.request.contextPath }/jquery/userlistPage.js?token=${sessionScope.user_token}"></script>
-<script type="text/javascript">
-	var token = "${sessionScope.user_token}";
-	var link = "${pageContext.request.contextPath }";
-</script>
+
+
 </head>
 <body onload="onload()">
 
@@ -36,8 +30,7 @@
 	<div class="div_content">
 		<div class="div_search">
 			<span>
-<!-- 				<form action="#" method="post"> -->
-					排序(Order By)：
+					<span>排序(Order By):</span>
 					<select name="col_name" id="col_name" onchange="col_name_change(this.value)">
 						<option value="user_id">默認排序(ID)</option>
 						<option value="user_account">按用戶帳號(Account)</option>
@@ -56,25 +49,24 @@
 						<input name="search_value" id="search_value" type="text" style="width: 100px;"/>
 						<input value="查詢/Submit" type="submit" onclick="search_value()"/>
 					</span>
-<!-- 				</form> -->
+					<div id="div_message" class="div_message" style="display: none">
+						<span id="message"> </span>
+					</div>
 			</span>
-		</div>
-		<div id="div_message" class="div_message" style="display: none">
-			<span id="message"> </span>
 		</div>
 		<div style="font-size: 12px; margin: 10px 5px;">
 			<table class="table_list" border="1" width="100%">
 				<tbody id="datas">
-					<tr style="font-weight: bold;">
-						<td>用戶序號<br/>User ID</td>
-						<td>頭像<br/>User Pic</td>
-						<td>帳戶<br/>Account</td>
-						<td>姓名<br/>Name</td>
-						<td>身份<br/>Type</td>
-						<td>狀態<br/>Status</td>
-						<td>登陸時間<br/>Login Time</td>
-						<td>註冊時間<br/>Create Time</td>
-						<td colspan="2" align="center">操作<br/>Operations</td>
+					<tr style="color:#1c94c4">
+						<td width="80px">用戶序號<br/>User ID</td>
+						<td width="100px">頭像<br/>User Pic</td>
+						<td width="150px">帳戶<br/>Account</td>
+						<td width="150px">姓名<br/>Name</td>
+						<td width="80px">身份<br/>Type</td>
+						<td width="80px">狀態<br/>Status</td>
+						<td width="200px">登陸時間<br/>Login Time</td>
+						<td width="200px">註冊時間<br/>Create Time</td>
+						<td  colspan="2" align="center">操作<br/>Operations</td>
 					</tr>
 					<tr id="template" style="display: none; font-size: 12px;">
 						<td id="userid"></td>
@@ -86,6 +78,7 @@
 						<td id="logintime"></td>
 						<td id="createtime"></td>
 						<td id="status_operation">
+							<span>修改狀態:</span>
 							<select id="statusOpr" onchange="updateStatus(this.id, this.value)">
 								<option value="1">Active</option>
 								<option value="2">Pause</option>
@@ -98,10 +91,39 @@
 					</tr>
 				</tbody>
 				<tr>
-					<td colspan="20" style="text-align: center;">[1]2</td>
+					<td colspan="20" align="center">
+
+					</td>
 				</tr>
 			</table>
+			<div class="wrap">
+				<div id="page_bar" class="fenye">
+					<ul>
+						<li id="first">首頁</li>
+						<li id="top" onclick="topclick()">上一頁</li>
+						<li class="xifenye" id="xifenye"><a id="xiye"></a>/<a
+							id="mo"></a>
+							<div class="xab" id="xab" style="display: none">
+								<ul id="uljia">
+
+								</ul>
+							</div></li>
+						<li id="down" onclick="downclick()">下一頁</li>
+						<li id="last">尾頁</li>
+					</ul>
+				</div>
+			</div>
 		</div>
 	</div>
+	<script type="text/javascript">
+		var token = "${sessionScope.user_token}";
+		var link = "${pageContext.request.contextPath }";
+	</script>
+	<script type="text/javascript"
+		src="${pageContext.request.contextPath }/jquery/jquery-1.8.3.js"></script>
+	<script type="text/javascript"
+		src="${pageContext.request.contextPath }/jquery/userlistPage.js?token=${sessionScope.user_token}"></script>
+	<script type="text/javascript"
+		src="${pageContext.request.contextPath }/jquery/paging.js"></script>
 </body>
 </html>

@@ -14,6 +14,7 @@ import com.bbcall.functions.SHA1_Encode;
 import com.bbcall.functions.Tools;
 import com.bbcall.mybatis.dao.UserMapper;
 import com.bbcall.mybatis.table.User;
+import com.github.pagehelper.PageHelper;
 
 @Service("userServices")
 public class UserServices {
@@ -68,7 +69,7 @@ public class UserServices {
 
 	public int register(String token, String account, String password, Integer usertype,
 			String name, String picurl, BigInteger mobile, Integer gender,
-			String email, String language, String skill, String description, String accessgroup) {
+			String email, String language, String skill, String description, String accessgroup, Integer addresscode, String address) {
 		System.out.println("Here is UserServices.register method...");
 
 		int registermode = 0; // 记录register的模式: 1=user,2=admin
@@ -170,6 +171,25 @@ public class UserServices {
 				user.setUser_pic_url(picurl);
 			}
 			
+			// ***** 检测 addresscode & address *****
+			if (addresscode != null && addresscode != 0 && (addresscode + "").length() != 6)// 判断地址码是否六位数
+				return ResultCode.ADDRESSCODE_ERROR;
+
+			if (addresscode != null && addresscode != 0 && Tools.isEmpty(address))
+				return ResultCode.ADDRESS_NOTMATCH;
+
+			if ((addresscode != null && !Tools.isEmpty(address))) {
+
+				String addressname = addressServices.checkAddresscodeName(addresscode);// 调用checkAddresscodeName方法，获取地址名
+				if (addressname == null)// 如果addressname 返回null, 表明addresscode错误
+					return ResultCode.ADDRESSCODE_ERROR;
+				if (address.replace(";", "").matches(addressname + "(.*)")) {// 判断地址名是否一致
+					user.setUser_address(address);// 放入新地址名
+					user.setUser_address_code(addresscode);// 放入新地址码
+				} else
+					return ResultCode.ADDRESS_NOTMATCH;
+			}
+
 			// ***** 添加姓名 *****
 			if (!Tools.isEmpty(name)) {
 				user.setUser_name(name);
@@ -590,9 +610,17 @@ public class UserServices {
 
 	}
 
-	public int checkUserListWhereOrderBy(String order_col, String order_value,String where_col, String where_value) {
+	public int checkUserListWhereOrderBy(String order_col, String order_value,String where_col, String where_value, Integer pagenum) {
 		System.out.println("Here is UserServices.checkUserListWhereOrderBy method...");
+		//当传进来的pagenum为空 或者 pagenum == 0 时，显示第一页
+		if (pagenum == null || pagenum == 0)
+			pagenum = 1;
 		
+	    //PageHelper.startPage(PageNum, PageSize) 
+		//获取第1页，10条内容，当PageSize=0时会查询出全部的结果
+	    PageHelper.startPage(pagenum, 5);
+	    
+	    //紧跟着的第一个select方法会被分页
 		List<User> userlist = userMapper.listUserWhereOrderBy(where_col, order_col, where_value, order_value);
 		if (userlist.size() > 0) {
 			this.userlist = userlist;
@@ -606,10 +634,21 @@ public class UserServices {
 	// ## 拉取User表
 	// ###################
 
-	public int checkUserList(String col_name, String specify_value, String search_value) {
+	public int checkUserList(String col_name, String specify_value, String search_value, Integer pagenum) {
 		System.out.println("Here is UserServices.checkUserList method...");
 		
+		//当传进来的pagenum为空 或者 pagenum == 0 时，显示第一页
+		if (pagenum == null || pagenum == 0)
+			pagenum = 1;
+		
+	    //PageHelper.startPage(PageNum, PageSize) 
+		//获取第1页，10条内容，当PageSize=0时会查询出全部的结果
+	    PageHelper.startPage(pagenum, 5);
+
+	    //紧跟着的第一个select方法会被分页
 		List<User> userlist = userMapper.listUserOrderBy(col_name, specify_value, search_value);
+
+		
 		if (userlist.size() > 0) {
 			this.userlist = userlist;
 			return ResultCode.SUCCESS;

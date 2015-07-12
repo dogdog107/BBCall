@@ -44,6 +44,11 @@
 	<div></div>
 
 	<div style="font-size: 13px; margin: 10px 5px">
+			<div class="div_search">
+			<span>
+				<input id="btnBack" type="submit" value="返回用户列表/Go Back" onclick="javascript:history.go(-1);"/>
+			</span>
+		</div>
 		<div id="div_message" class="div_message" style="display: none"
 			width="50%" align="left">
 			<span id="message"> </span>

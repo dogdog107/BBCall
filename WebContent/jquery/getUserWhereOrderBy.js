@@ -1,10 +1,16 @@
-
+var global_order_col = '';
+var global_order_value = '';
 
 function onload() {
-	checkUserList("", "", where_col, where_value); // where user_type = 2
+	checkUserList(global_order_col, global_order_value, where_col, where_value); // where user_type = 2
 }
 
-function checkUserList(order_col, order_value, where_col, where_value){
+//调用pagechange方法
+function pagechange(pagenum){
+	checkUserList(global_order_col, global_order_value, where_col, where_value, pagenum);
+}
+
+function checkUserList(order_col, order_value, where_col, where_value, pagenum){
 	$
 	.ajax({
 		type : "post",
@@ -14,10 +20,28 @@ function checkUserList(order_col, order_value, where_col, where_value){
 			"order_col" : order_col,
 			"order_value" : order_value,
 			"where_col" : where_col,
-			"where_value" : where_value
+			"where_value" : where_value,
+			"pagenum" : pagenum
 		},
 		success : function(data) {
 			if (data.result) {
+				
+				//*初始化分页条
+				if (data.lastPageNum == 1){
+					//当只有一页时隐藏分页条
+					$("#page_bar").hide(300);
+				} else {
+					//显示分页条
+					$("#page_bar").show(300);
+					//当前页页码
+					$("#xiye").html(data.currentPageNum);
+					//尾页页码
+					$("#mo").html(data.lastPageNum);
+				}
+				// 清除现有列表
+				$("#datas").hide();
+				$("tr[id^='userlist_']").remove();
+				// 拿出列表
 				var userlist = data.userlist;
 				$.each(userlist, function(i, n) {
 					var row = $("#template").clone();
@@ -32,36 +56,41 @@ function checkUserList(order_col, order_value, where_col, where_value){
 					row.find("#name").text(n.user_name);
 					switch (n.user_type) {
 					case 1:
-						row.find("#usertype").text("User");
+						row.find("#usertype").html("<span style='color:#55AA00'>User</span>");
 						break;
 					case 2:
-						row.find("#usertype").text("Master");
+						row.find("#usertype").html("<span style='color:#0066FF'>Master</span>");
 						break;
 					case 3:
-						row.find("#usertype").text("Admin");
+						row.find("#usertype").html("<span style='color:#EE7700'>Admin</span>");
+						break;
+					case 4:
+						row.find("#usertype").html("<span style='color:#CC0000'>SuperAdmin</span>");
 						break;
 					}
 					
 					switch (n.user_status) {
 					case 1:
-						row.find("#status").text("Active");
+						row.find("#status").html("<span style='color:#55AA00'>Active</span>");
 						break;
 					case 2:
-						row.find("#status").text("Pause");
+						row.find("#status").html("<span style='color:#0066FF'>Pause</span>");
 						break;
 					case 3:
-						row.find("#status").text("Pending");
+						row.find("#status").html("<span style='color:#EE7700'>Pending</span>");
 						break;
 					case 4:
-						row.find("#status").text("Locked");
+						row.find("#status").html("<span style='color:#CC0000'>Locked</span>");
 						break;
 					}
-					row.find("#statusOpr").val(n.user_status);
+					row.find("#statusOpr").val(n	.user_status);
 					row.find("#status").attr("id", "status_" + n.user_id);
 					row.find("#statusOpr").attr("id", "statusOpr_" + n.user_id);
 					var logintime = n.user_login_time;
 					var createtime = n.user_create_time;
-					row.find("#logintime").text(logintime.replace("T", " "));
+					if (logintime != null) {
+						row.find("#logintime").text(logintime.replace("T", " "));
+					}
 					row.find("#createtime").text(createtime.replace("T", " "));
 					// row.find("#OrderDate").text(ChangeDate(n.订购日期));
 					// if(n.发货日期!== undefined)
@@ -76,7 +105,11 @@ function checkUserList(order_col, order_value, where_col, where_value){
 					row.appendTo("#datas");// 添加到模板的容器中
 					row.toggle();
 				});
+				// 显示数据
+				$("#datas").show(300);
 			} else {
+				//隐藏分页条
+				$("#page_bar").hide(300);
 				$("#message").html(
 						"<font color=red>Page Fail ! " + data.errmsg
 								+ "</font>");
@@ -103,7 +136,7 @@ function deleteUser(idname){
 					$("#div_message").show(300).delay(5000).hide(300);
 					$("#" + rowname).hide(300).remove();
 				} else {
-					$("#message").html("<font color=red> (ID:"+ userid +") Delete Failed ! </font>");
+					$("#message").html("<font color=red> (ID:"+ userid +") Delete Failed ! " + data.errmsg + "</font>");
 					$("#div_message").show(300).delay(5000).hide(300);
 					alert("Delete failed. " + data.errmsg);
 				}
@@ -127,24 +160,27 @@ function updateStatus(idname, value) {
 			success : function(data) {
 				if (data.result) {
 //					window.location.reload();
+					$("#" + defaultStatusName).hide();
 					switch (value) {
 					case "1":
-						$("#" + defaultStatusName).text("Active");
+						$("#" + defaultStatusName).html("<span style='color:#55AA00'>Active</span>");
 						break;
 					case "2":
-						$("#" + defaultStatusName).text("Pause");
+						$("#" + defaultStatusName).html("<span style='color:#0066FF'>Pause</span>");
 						break;
 					case "3":
-						$("#" + defaultStatusName).text("Pending");
+						$("#" + defaultStatusName).html("<span style='color:#EE7700'>Pending</span>");
 						break;
 					case "4":
-						$("#" + defaultStatusName).text("Locked");
+						$("#" + defaultStatusName).html("<span style='color:#CC0000'>Locked</span>");
 						break;
 					}
+					$("#" + defaultStatusName).attr("style", "border:solid #55AA00 2px;");
+					$("#" + defaultStatusName).show(300);
 					$("#message").html("<font color=green> (ID:"+ userid +") Status Update Success ! </font>");
 					$("#div_message").show(300).delay(5000).hide(300);
 				} else {
-					$("#message").html("<font color=red> (ID:"+ userid +") Status Update Failed ! </font>");
+					$("#message").html("<font color=red> (ID:"+ userid +") Status Update Failed ! " + data.errmsg + "</font>");
 					$("#div_message").show(300).delay(5000).hide(300);
 					alert("Update failed. " + data.errmsg);
 				}
@@ -198,8 +234,10 @@ function order_value_change(order_value) {
 			$("#order_value_message").text(" | " + $("#order_col").find("option:selected").text() + "搜索(Search): "); 
 			$("#order_value_span").show();
 		}else{
-			$("tr[id^='userlist_']").remove();
 			checkUserList(new_order_col, new_order_value, where_col, where_value);
+			global_order_col = new_order_col;
+			global_order_value = new_order_value;
+			
 			$("#message").html("<font color=green> Sorting by " + $("#order_col").val() + " with " + order_value + " </font>");
 			$("#div_message").show(300).delay(3000).hide(300);
 		}
