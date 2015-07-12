@@ -7,8 +7,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.bbcall.functions.ResultCode;
+import com.bbcall.mybatis.dao.OrderlistMapper;
 import com.bbcall.mybatis.dao.PreorderMapper;
+import com.bbcall.mybatis.dao.ReferdocMapper;
 import com.bbcall.mybatis.dao.UserMapper;
+import com.bbcall.mybatis.table.Orderlist;
 import com.bbcall.mybatis.table.Preorder;
 import com.bbcall.mybatis.table.User;
 
@@ -20,6 +23,12 @@ public class PreorderServices {
 
 	@Autowired
 	private UserMapper userMapper;
+
+	@Autowired
+	private ReferdocMapper referdocMapper;
+
+	@Autowired
+	private OrderlistMapper orderlistMapper;
 
 	public Preorder preorderinfo;
 	public List<Preorder> preorderinfos;
@@ -53,14 +62,25 @@ public class PreorderServices {
 
 		Preorder preorder = new Preorder();
 		User user = userMapper.getUserById(preorder_master_id);
+		Orderlist orderlist = orderlistMapper.getOrder(preorder_order_id);
 
-		String[] skilllist = user.getUser_skill().split(";");
 		String userskill = "";
+		if (user.getUser_skill() != null && !user.getUser_skill().equals("")) {
 
-		for (int i = 0; i < skilllist.length; i++) {
-			userskill = userskill + skilllist[i] + " ";
+			String[] skilllist = user.getUser_skill().split(";");
+
+			int referdoc_code_num = 0;
+
+			for (int i = 0; i < skilllist.length; i++) {
+
+				referdoc_code_num = Integer.parseInt(skilllist[i]);
+
+				userskill = userskill
+						+ referdocMapper.getReferdoc(referdoc_code_num)
+								.getReferdoc_type() + " ";
+			}
 		}
-		
+
 		System.out.println("userskill" + userskill);
 
 		preorder.setPreorder_master_id(preorder_master_id);
@@ -77,9 +97,12 @@ public class PreorderServices {
 		preorder.setPreorder_master_skill(userskill);
 		preorder.setPreorder_order_id(preorder_order_id);
 
-		System.out.println("preorder_order_id" + preorder_order_id);
 		preorderMapper.addPreorder(preorder);
 		System.out.println("addsuccess");
+
+		orderlist.setOrder_status(7);
+
+		orderlistMapper.updateOrder(orderlist);
 
 		preorderinfos = preorderMapper
 				.getPreordersByAccount(preorder_master_id);

@@ -299,13 +299,13 @@
 	</select>
 
 	<update id="updateOrder" parameterType="com.bbcall.mybatis.table.Orderlist">
-		update ORDERLIST set
+		update ORDERLIST set 
 		order_book_time=#{order_book_time},
 		order_book_location=#{order_book_location},
 		order_book_location_code=#{order_book_location_code},
 		order_contact_mobile=#{order_contact_mobile},
 		order_contact_name=#{order_contact_name},
-		order_pic_ur=#{order_pic_url},
+		order_pic_url=#{order_pic_url},
 		order_description=#{order_description},
 		order_urgent=#{order_urgent},
 		order_urgent_bonus=#{order_urgent_bonus},

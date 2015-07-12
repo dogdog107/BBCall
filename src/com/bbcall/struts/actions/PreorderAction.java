@@ -41,7 +41,13 @@ public class PreorderAction extends ActionSupport {
 		dataMap.clear(); // dataMap中的数据将会被Struts2转换成JSON字符串，所以这里要先清空其中的数据
 
 		System.out.println("inin");
-		double price = Double.parseDouble(preorder_price);
+		double price = 0;
+		
+		if (preorder_price != null && !preorder_price.equals("")) {
+			price = Double.parseDouble(preorder_price);
+		}
+		
+		
 		System.out.println("preorder_price " + preorder_price);
 		int preorderid = Integer.parseInt(preorder_order_id);
 

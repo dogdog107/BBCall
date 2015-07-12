@@ -10,6 +10,7 @@
 		<result column="referdoc_parentno" property="referdoc_parentno" jdbcType="INTEGER" />
 		<result column="referdoc_level" property="referdoc_level" jdbcType="INTEGER" />
 		<result column="referdoc_price" property="referdoc_price" jdbcType="DECIMAL" />
+		<result column="referdoc_flag" property="referdoc_flag" jdbcType="BIT" />
 	</resultMap>
 
 	<insert id="addReferdoc" parameterType="com.bbcall.mybatis.table.Referdoc"
@@ -18,11 +19,13 @@
 		(referdoc_type,
 		referdoc_parentno,
 		referdoc_level,
-		referdoc_price) values
+		referdoc_price,
+		referdoc_flag) values
 		(#{referdoc_type},
 		#{referdoc_parentno},
 		#{referdoc_level},
-		#{referdoc_price})
+		#{referdoc_price},
+		#{referdoc_flag})
 	</insert>
 	<select id="getReferdoc" parameterType="int"
 		resultType="com.bbcall.mybatis.table.Referdoc">
@@ -56,7 +59,8 @@
 		referdoc_type=#{referdoc_type},
 		referdoc_parentno=#{referdoc_parentno},
 		referdoc_level=#{referdoc_level},
-		referdoc_price=#{referdoc_price}
+		referdoc_price=#{referdoc_price},
+		referdoc_flag=#{referdoc_flag}
 		where
 		referdoc_id=#{referdoc_id}
 	</update>

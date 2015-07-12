@@ -96,12 +96,12 @@ public class OrderlistServices {
 		format.setLenient(false);
 
 		Timestamp ts = new Timestamp(System.currentTimeMillis());
-		System.out.println("ts" +ts);
+		System.out.println("ts" + ts);
 
 		try {
 
 			ts = new Timestamp(format.parse(order_book_time).getTime());
-			System.out.println("ts" +ts);
+			System.out.println("ts" + ts);
 
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
@@ -118,7 +118,6 @@ public class OrderlistServices {
 		orderlist.setOrder_contact_name(order_contact_name);
 		orderlist.setOrder_pic_url(order_pic_url);
 		orderlist.setOrder_description(order_description);
-		orderlist.setOrder_price(order_price);
 		orderlist.setOrder_urgent(Boolean.parseBoolean(order_urgent));
 		orderlist.setOrder_urgent_bonus(order_urgent_bonus);
 		orderlist.setOrder_user_id(order_user_id);
@@ -128,11 +127,16 @@ public class OrderlistServices {
 		orderlist.setOrder_type(referdoc.getReferdoc_type());
 		orderlist.setOrder_refer_price(referdoc.getReferdoc_price());
 		orderlist.setOrder_score(0);
-		
+		if (referdoc.isReferdoc_flag()) {
+			orderlist.setOrder_price(referdoc.getReferdoc_price());
+		} else {
+			orderlist.setOrder_price(order_price);
+		}
+
 		orderlistMapper.addOrder(orderlist);
 
-		orderlistinfos = orderlistMapper
-				.getUnOrdersByUserAccount(order_user_id,0);
+		orderlistinfos = orderlistMapper.getUnOrdersByUserAccount(
+				order_user_id, 0);
 
 		return ResultCode.SUCCESS;
 
@@ -257,8 +261,8 @@ public class OrderlistServices {
 
 		preorderMapper.deletePreorderByOrderId(order_id);
 
-		orderlistinfos = orderlistMapper
-				.getUnOrdersByUserAccount(order_user_id,offset);
+		orderlistinfos = orderlistMapper.getUnOrdersByUserAccount(
+				order_user_id, offset);
 
 		return ResultCode.SUCCESS;
 	}
@@ -316,7 +320,7 @@ public class OrderlistServices {
 	// ##
 	// ################################################################################
 
-	public int getUnOrders(int user_id,int offset) {
+	public int getUnOrders(int user_id, int offset) {
 
 		String[] skilllist = null;
 		orderlistinfos = null;
@@ -324,7 +328,8 @@ public class OrderlistServices {
 		User user = userMapper.getUserById(user_id);
 
 		if (user.getUser_type().equals(1)) { // 如果是用户的account
-			orderlistinfos = orderlistMapper.getUnOrdersByUserAccount(user_id,offset);
+			orderlistinfos = orderlistMapper.getUnOrdersByUserAccount(user_id,
+					offset);
 		} else if (user.getUser_type().equals(2)) { // 如果是师傅的account
 			skilllist = user.getUser_skill().split(";"); // 取得师傅的技能列表
 			for (int i = 0; i < skilllist.length; i++) { // 通过技能列表取得所有符合师傅技能的订单
@@ -332,20 +337,21 @@ public class OrderlistServices {
 				type_code = Integer.parseInt(skilllist[i]);
 				if (orderlistinfos == null) {
 					orderlistinfos = orderlistMapper.getOrdersByMasterSkill(1,
-							type_code, user_id,offset);
+							type_code, user_id, offset);
 				} else {
 					orderlistinfos.addAll(orderlistMapper
-							.getOrdersByMasterSkill(1, type_code, user_id,offset));
+							.getOrdersByMasterSkill(1, type_code, user_id,
+									offset));
 				}
 			}
 
 		} else { // 如果是管理员的account,取出所有未确认的订单
 			orderlistinfos = orderlistMapper.getUnOrders(offset);
 		}
-//		
-//		for (int i=0; i< orderlistinfos.size();i++) {
-//			System.out.println(orderlistinfos.get(i).getOrder_id());
-//		}
+		//
+		// for (int i=0; i< orderlistinfos.size();i++) {
+		// System.out.println(orderlistinfos.get(i).getOrder_id());
+		// }
 
 		return ResultCode.SUCCESS;
 	}
@@ -376,7 +382,7 @@ public class OrderlistServices {
 	// ################################################################################
 
 	public int getUnOrderlist(String skilllist, String locationlist,
-			int master_id,int offset) {
+			int master_id, int offset) {
 
 		orderlistinfos = null;
 		int type_code = 0;
@@ -392,10 +398,11 @@ public class OrderlistServices {
 
 				if (orderlistinfos == null) {
 					orderlistinfos = orderlistMapper.getOrdersByMasterSkill(1,
-							type_code, master_id,offset);
+							type_code, master_id, offset);
 				} else {
 					orderlistinfos.addAll(orderlistMapper
-							.getOrdersByMasterSkill(1, type_code, master_id,offset));
+							.getOrdersByMasterSkill(1, type_code, master_id,
+									offset));
 				}
 			}
 		} else if (skilllist.equals("") && !locationlist.equals("")) {
@@ -403,7 +410,7 @@ public class OrderlistServices {
 			area_code = Integer.parseInt(locationlist);
 
 			orderlistinfos = orderlistMapper.getOrdersByMasterLocation(1,
-					area_code, master_id,offset);
+					area_code, master_id, offset);
 		} else if (!skilllist.equals("") && locationlist.equals("")) {
 
 			sklist = skilllist.split(";");
@@ -414,10 +421,11 @@ public class OrderlistServices {
 
 				if (orderlistinfos == null) {
 					orderlistinfos = orderlistMapper.getOrdersByMasterSkill(1,
-							type_code, master_id,offset);
+							type_code, master_id, offset);
 				} else {
 					orderlistinfos.addAll(orderlistMapper
-							.getOrdersByMasterSkill(1, type_code, master_id,offset));
+							.getOrdersByMasterSkill(1, type_code, master_id,
+									offset));
 				}
 
 			}
@@ -434,11 +442,11 @@ public class OrderlistServices {
 				if (orderlistinfos == null) {
 					orderlistinfos = orderlistMapper
 							.getUnOrdersByMasterLocation(type_code, area_code,
-									master_id,offset);
+									master_id, offset);
 				} else {
 					orderlistinfos.addAll(orderlistMapper
 							.getUnOrdersByMasterLocation(type_code, area_code,
-									master_id,offset));
+									master_id, offset));
 				}
 
 			}
@@ -473,7 +481,7 @@ public class OrderlistServices {
 	// ################################################################################
 
 	public int getUnOrdersByBookTime(int master_id, String skilllist,
-			String locationlist,int offset) {
+			String locationlist, int offset) {
 
 		orderlistinfos = null;
 		int type_code = 0;
@@ -489,10 +497,11 @@ public class OrderlistServices {
 
 				if (orderlistinfos == null) {
 					orderlistinfos = orderlistMapper.getOrdersByMasterSkill2(1,
-							type_code, master_id,offset);
+							type_code, master_id, offset);
 				} else {
 					orderlistinfos.addAll(orderlistMapper
-							.getOrdersByMasterSkill2(1, type_code, master_id,offset));
+							.getOrdersByMasterSkill2(1, type_code, master_id,
+									offset));
 				}
 			}
 		} else if (skilllist.equals("") && !locationlist.equals("")) {
@@ -501,10 +510,11 @@ public class OrderlistServices {
 
 			if (orderlistinfos == null) {
 				orderlistinfos = orderlistMapper.getOrdersByMasterLocation2(1,
-						area_code, master_id,offset);
+						area_code, master_id, offset);
 			} else {
 				orderlistinfos.addAll(orderlistMapper
-						.getOrdersByMasterLocation2(1, area_code, master_id,offset));
+						.getOrdersByMasterLocation2(1, area_code, master_id,
+								offset));
 			}
 		} else if (!skilllist.equals("") && locationlist.equals("")) {
 
@@ -516,10 +526,11 @@ public class OrderlistServices {
 
 				if (orderlistinfos == null) {
 					orderlistinfos = orderlistMapper.getOrdersByMasterSkill2(1,
-							type_code, master_id,offset);
+							type_code, master_id, offset);
 				} else {
 					orderlistinfos.addAll(orderlistMapper
-							.getOrdersByMasterSkill2(1, type_code, master_id,offset));
+							.getOrdersByMasterSkill2(1, type_code, master_id,
+									offset));
 				}
 
 			}
@@ -535,11 +546,11 @@ public class OrderlistServices {
 
 				if (orderlistinfos == null) {
 					orderlistinfos = orderlistMapper.getUnOrdersByBookTime(
-							type_code, area_code, master_id,offset);
+							type_code, area_code, master_id, offset);
 				} else {
 					orderlistinfos.addAll(orderlistMapper
 							.getUnOrdersByBookTime(type_code, area_code,
-									master_id,offset));
+									master_id, offset));
 				}
 
 			}
@@ -575,10 +586,11 @@ public class OrderlistServices {
 		User user = userMapper.getUserById(user_id);
 
 		if (user.getUser_type().equals(1)) { // 如果是用户的account
-			orderlistinfos = orderlistMapper.getComOrdersByUserAccount(user_id,offset);
+			orderlistinfos = orderlistMapper.getComOrdersByUserAccount(user_id,
+					offset);
 		} else if (user.getUser_type().equals(2)) { // 如果是师傅的account
-			orderlistinfos = orderlistMapper
-					.getComOrdersByMasterAccount(user_id,offset);
+			orderlistinfos = orderlistMapper.getComOrdersByMasterAccount(
+					user_id, offset);
 		} else { // 如果是管理员的account,取出所有已完成的订单
 			orderlistinfos = orderlistMapper.getComOrders(offset);
 		}
@@ -608,7 +620,7 @@ public class OrderlistServices {
 	// ## (1) orderlistinfos
 	// ##
 	// ################################################################################
-	public int getProOrders(int user_id,int offset) {
+	public int getProOrders(int user_id, int offset) {
 
 		User user = userMapper.getUserById(user_id);
 		System.out.println(user.getUser_account());
@@ -617,17 +629,18 @@ public class OrderlistServices {
 
 		if (user.getUser_type().equals(1)) { // 如果是用户的account
 			System.out.println("1");
-			orderlistinfos = orderlistMapper.getProOrdersByUserAccount(user_id,offset);
-			
+			orderlistinfos = orderlistMapper.getProOrdersByUserAccount(user_id,
+					offset);
+
 		} else if (user.getUser_type().equals(2)) { // 如果是师傅的account
 			System.out.println("2");
-			orderlistinfos = orderlistMapper
-					.getProOrdersByMasterAccount(user_id,offset);
-					
+			orderlistinfos = orderlistMapper.getProOrdersByMasterAccount(
+					user_id, offset);
+
 		} else { // 如果是管理员的account,取出所有已完成的订单
 			System.out.println("3");
 			orderlistinfos = orderlistMapper.getProOrders(offset);
-			
+
 		}
 
 		return ResultCode.SUCCESS;
@@ -669,9 +682,8 @@ public class OrderlistServices {
 
 		preorderMapper.deletePreorderByOrderId(order_id);
 
-		orderlistinfos = orderlistMapper
-				.getProOrdersByUserAccount(orderlistMapper.getOrder(order_id)
-						.getOrder_user_id(),0);
+		orderlistinfos = orderlistMapper.getProOrdersByUserAccount(
+				orderlistMapper.getOrder(order_id).getOrder_user_id(), 0);
 
 		return ResultCode.SUCCESS;
 	}
@@ -706,7 +718,7 @@ public class OrderlistServices {
 		orderlistMapper.change(order_id, order_status, order_remark);
 
 		orderlistinfo = orderlistMapper.getOrder(order_id);
-		System.out.println("orderlistinfo "+ orderlistinfo.getOrder_status());
+		System.out.println("orderlistinfo " + orderlistinfo.getOrder_status());
 
 		return ResultCode.SUCCESS;
 	}
@@ -739,18 +751,19 @@ public class OrderlistServices {
 			int order_id) {
 
 		System.out.println("this is order action complete order function");
-		orderlistMapper.completeOrder(order_score, order_evaluation, order_id,new Timestamp(System.currentTimeMillis()));
+		orderlistMapper.completeOrder(order_score, order_evaluation, order_id,
+				new Timestamp(System.currentTimeMillis()));
 		System.out.println("mapper completed");
-		
+
 		Orderlist orderlist = orderlistMapper.getOrder(order_id);
-		
+
 		int master_id = orderlist.getOrder_master_id();
 		int user_id = orderlist.getOrder_user_id();
 		System.out.println("master_id: " + master_id);
 		System.out.println("user_id: " + user_id);
-		List<Orderlist> ors = orderlistMapper.getOrdersByMId(master_id,3);
-		for(int j=0; j<ors.size();j++) {
-			
+		List<Orderlist> ors = orderlistMapper.getOrdersByMId(master_id, 3);
+		for (int j = 0; j < ors.size(); j++) {
+
 			System.out.println("order_id: " + ors.get(j).getOrder_id());
 		}
 		User tempuser = userMapper.getUserById(user_id);
@@ -758,29 +771,23 @@ public class OrderlistServices {
 		if (order_score != 0) {
 			double scores = 0;
 			System.out.println("score not empty");
-			if (ors.size() <= 0) {
+			if (ors.size() <= 1) {
 				finalscore = order_score;
-				System.out.println("size le 0: " + finalscore);
+				System.out.println("size le 1: " + finalscore);
 			} else {
-				for (int i=0; i<ors.size(); i++) {
+				for (int i = 0; i < ors.size(); i++) {
 					scores = scores + ors.get(i).getOrder_score();
 				}
-				scores = scores + order_score;
 				finalscore = scores / ors.size();
-				System.out.println("size gt 0: " + finalscore);
+				System.out.println("size gt 1: " + finalscore);
 			}
-			
-			
+
+			System.out.println(tempuser.getUser_id());
 			tempuser.setUser_grade(finalscore);
 			userMapper.updateUser(tempuser);
 		}
-		
-		orderlistinfos = orderlistMapper
-				.getComOrdersByUserAccount(user_id,0);
-		for (int k=0; k<orderlistinfos.size(); k++) {
-			
-			System.out.println("get complete order : " + orderlistinfos.get(k).getOrder_id());
-		}
+
+		orderlistinfos = orderlistMapper.getComOrdersByUserAccount(user_id, 0);
 
 		return ResultCode.SUCCESS;
 	}
@@ -917,53 +924,53 @@ public class OrderlistServices {
 	// ##
 	// ################################################################################
 	public int selectOrderlist(int order_status, int order_master_id,
-			int order_type_code,int offset) {
+			int order_type_code, int offset) {
 
 		if (order_status == 0) {
 
 			if (order_type_code == 0) {
-				orderlistinfos = orderlistMapper
-						.getOrdersByMaster(order_master_id,0);
+				orderlistinfos = orderlistMapper.getOrdersByMaster(
+						order_master_id, 0);
 			} else {
 				orderlistinfos.addAll(orderlistMapper.getOrdersByMasterSkill(2,
-						order_type_code, order_master_id,offset));
+						order_type_code, order_master_id, offset));
 				orderlistinfos.addAll(orderlistMapper.getOrdersByMasterSkill(3,
-						order_type_code, order_master_id,offset));
+						order_type_code, order_master_id, offset));
 			}
 
 		} else {
 			if (order_type_code == 0) {
 				orderlistinfos = orderlistMapper.getOrders(order_status,
-						order_master_id,offset);
+						order_master_id, offset);
 
 			} else {
 				orderlistinfos = orderlistMapper.getOrdersByMasterSkill(
-						order_status, order_type_code, order_master_id,offset);
+						order_status, order_type_code, order_master_id, offset);
 			}
 		}
 
 		return ResultCode.SUCCESS;
 	}
-	
-	public int getOrderlist(int user_id,String order_status, int offset) {
+
+	public int getOrderlist(int user_id, String order_status, int offset) {
 
 		switch (order_status) {
 		case "2":
 			orderlistinfos = orderlistMapper.getProOrders(offset);
 			break;
-		
+
 		case "3":
 			orderlistinfos = orderlistMapper.getComOrders(offset);
 			break;
-		
+
 		case "4":
 			orderlistinfos = orderlistMapper.getRecOrders(offset);
 			break;
-			
+
 		case "5":
 			orderlistinfos = orderlistMapper.getWasOrders(offset);
 			break;
-	
+
 		case "6":
 			orderlistinfos = orderlistMapper.getDelOrders(offset);
 			break;

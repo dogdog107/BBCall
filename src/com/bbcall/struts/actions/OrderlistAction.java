@@ -69,14 +69,24 @@ public class OrderlistAction extends ActionSupport {
 
 		System.out.println("add()");
 		int result = 1;
+		
+		
 		// List<Referdoc> referdoclist = new ArrayList<Referdoc>();
 		int book_location_code = Integer.parseInt(order_book_location_code);
 		BigInteger contact_mobile = new BigInteger(order_contact_mobile);
 		double urgent_bonus = 0;
-		if (order_urgent_bonus != null) {
+		if (order_urgent_bonus != null && !order_urgent_bonus.equals("")) {
 			urgent_bonus = Double.parseDouble(order_urgent_bonus);
+			
+			order_urgent = "true";
+		} else {
+			order_urgent = "false";
 		}
-		double price = Double.parseDouble(order_price);
+		
+		double price = 0;
+		if (order_price != null && !order_price.equals("")) {
+			price = Double.parseDouble(order_price);
+		}
 		int section = Integer.parseInt(order_section);
 		int order_user_id = Integer.parseInt(user_id);
 
@@ -204,10 +214,10 @@ public class OrderlistAction extends ActionSupport {
 		int orderid = Integer.parseInt(order_id);
 		double score = 0;
 		System.out.println("order_id in");
-		if (order_score != null) {
+		if (order_score != null && !order_score.equals("")) {
 			System.out.println("order_score in " + order_score);
 			score = Double.parseDouble(order_score);
-			System.out.println("score out");
+
 		}
 
 		int result = orderlistServices.completeOrder(score, order_evaluation,

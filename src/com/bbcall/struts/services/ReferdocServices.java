@@ -44,7 +44,7 @@ public class ReferdocServices {
 	// ################################################################################
 
 	public int addReferdoc(String referdoc_type, int referdoc_parentno,
-			int referdoc_level, double referdoc_price) {
+			int referdoc_level, double referdoc_price,String referdoc_flag) {
 		// TODO Auto-generated method stub
 
 		if (referdoc_type.equals("")) {
@@ -59,6 +59,7 @@ public class ReferdocServices {
 				referdoc.setReferdoc_parentno(referdoc_parentno);
 				referdoc.setReferdoc_level(referdoc_level);
 				referdoc.setReferdoc_price(referdoc_price);
+				referdoc.setReferdoc_flag(Boolean.parseBoolean(referdoc_flag));
 
 				referdocMapper.addReferdoc(referdoc);
 
@@ -97,7 +98,7 @@ public class ReferdocServices {
 	// ################################################################################
 
 	public int updateReferdoc(int referdoc_id, String referdoc_type,
-			int referdoc_parentno, int referdoc_level, double referdoc_price) {
+			int referdoc_parentno, int referdoc_level, double referdoc_price, String referdoc_flag) {
 
 		Referdoc referdoc = referdocMapper.getReferdoc(referdoc_id);
 
@@ -105,6 +106,7 @@ public class ReferdocServices {
 		referdoc.setReferdoc_parentno(referdoc_parentno);
 		referdoc.setReferdoc_level(referdoc_level);
 		referdoc.setReferdoc_price(referdoc_price);
+		referdoc.setReferdoc_flag(Boolean.parseBoolean(referdoc_flag));
 
 		referdocMapper.updateReferdoc(referdoc);
 
@@ -145,9 +147,11 @@ public class ReferdocServices {
 			}
 		}
 
+		int parent_code = referdocMapper.getReferdoc(referdoc_id).getReferdoc_parentno();
+		
 		referdocMapper.deleteReferdoc(referdoc_id);
 
-		referdocinfos = referdocMapper.getReferdoclist();
+		referdocinfos = referdocMapper.getReferdoclistByParent(parent_code);
 
 		return ResultCode.SUCCESS;
 	}

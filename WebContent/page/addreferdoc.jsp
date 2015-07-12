@@ -62,6 +62,7 @@
 						<td>參考類型歸屬</td>
 						<td>
 							<select name="referdoc_parentno" id="referdoc_parentno">
+								<option value='0'>请选择</option>
 							</select>
 						</td>
 					</tr>
