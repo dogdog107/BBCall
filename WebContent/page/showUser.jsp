@@ -19,10 +19,10 @@
 	src="${pageContext.request.contextPath }/jquery/showUserPage.js?token=${sessionScope.user_token}"></script>
 <script type="text/javascript">
 		var token = "${sessionScope.user_token}";
-		var usertype = ${usertype};
-		var gender = ${gender};
-		var status = ${status};
-		var userid = ${userid};
+		var usertype = "${usertype}";
+		var gender = "${gender}";
+		var status = "${status}";
+		var userid = "${userid}";
 </script>
 </head>
 

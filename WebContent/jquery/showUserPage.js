@@ -7,24 +7,24 @@ function onload() {
 $(function() {
 
 	switch (usertype) {
-	case 1:
+	case "1":
 		$('#usertype').text("User");
 		break;
-	case 2:
+	case "2":
 		$('#usertype').text("Master");
 		break;
-	case 3:
+	case "3":
 		$('#usertype').text("Admin");
 		break;
-	case 4:
+	case "4":
 		$('#usertype').text("SuperAdmin");
 		break;
 	}
 	switch (gender) {
-	case 1:
+	case "1":
 		$('#gender').text("Male");
 		break;
-	case 2:
+	case "2":
 		$('#gender').text("Female");
 		break;
 	}

@@ -49,6 +49,7 @@ public class UserAction extends ActionSupport implements SessionAware{
 	private String accessgroup;
 	private Integer status;
 	private Integer userid;
+	private Double grade;
 	private String col_name;
 	private String specify_value;
 	private String search_value;
@@ -133,7 +134,7 @@ public class UserAction extends ActionSupport implements SessionAware{
 		System.out.println("Here is UserAction.register");
 
 		dataMap.clear(); // dataMap中的数据将会被Struts2转换成JSON字符串，所以这里要先清空其中的数据
-		int result = userServices.register(token, account, password, usertype, name, picurl, mobile, gender, email, language, skill, description, accessgroup, addresscode, address); // 调用userServices.register
+		int result = userServices.register(token, account, password, usertype, name, picurl, mobile, gender, email, language, skill, description, accessgroup, addresscode, address, grade); // 调用userServices.register
 
 		if (result == ResultCode.SUCCESS) {
 //			Integer newuserid = userServices.getUserinfo().getUser_id();
@@ -180,7 +181,7 @@ public class UserAction extends ActionSupport implements SessionAware{
 //			return INPUT;
 //		}
 		
-		int result = userServices.update(account, password, usertype, name, picurl, mobile, gender, addresscode, address, email, language, skill, description, accessgroup, status, token, userid); // 调用userServices.login
+		int result = userServices.update(account, password, usertype, name, picurl, mobile, gender, addresscode, address, email, language, skill, description, accessgroup, status, token, userid, grade); // 调用userServices.login
 
 		if (result == ResultCode.SUCCESS) {
 //			Object userinfo = userServices.getUserinfo(); // 调用userInfo对象
@@ -232,7 +233,7 @@ public class UserAction extends ActionSupport implements SessionAware{
 //			return INPUT;
 //		}
 		
-		int result = userServices.update(account, password, usertype, name, picurl, mobile, gender, addresscode, address, email, language, skill, description, accessgroup, status, token, userid); // 调用userServices.login
+		int result = userServices.update(account, password, usertype, name, picurl, mobile, gender, addresscode, address, email, language, skill, description, accessgroup, status, token, userid, grade); // 调用userServices.login
 		
 		if (result == ResultCode.SUCCESS) {
 			dataMap.putAll(Tools.JsonHeadMap(result, true));
@@ -390,6 +391,7 @@ public class UserAction extends ActionSupport implements SessionAware{
 //			dataMap = obj2map.getValueMap(tempUser); // 将对象转换成Map
 			dataMap.put("userlist", tempUser); // 把addresslist对象放入dataMap
 			dataMap.putAll(Tools.JsonHeadMap(result, true));
+			System.out.println(dataMap);
 			return "getUserByIdSuccess";
 		} else {
 			dataMap.putAll(Tools.JsonHeadMap(result, false));
@@ -727,5 +729,13 @@ public class UserAction extends ActionSupport implements SessionAware{
 
 	public void setPagenum(Integer pagenum) {
 		this.pagenum = pagenum;
+	}
+
+	public Double getGrade() {
+		return grade;
+	}
+
+	public void setGrade(Double grade) {
+		this.grade = grade;
 	}
 }
