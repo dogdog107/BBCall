@@ -202,9 +202,12 @@ public class OrderlistAction extends ActionSupport {
 		dataMap.clear(); // dataMap中的数据将会被Struts2转换成JSON字符串，所以这里要先清空其中的数据
 
 		int orderid = Integer.parseInt(order_id);
-		int score = 0;
+		double score = 0;
+		System.out.println("order_id in");
 		if (order_score != null) {
-			score = Integer.parseInt(order_score);
+			System.out.println("order_score in " + order_score);
+			score = Double.parseDouble(order_score);
+			System.out.println("score out");
 		}
 
 		int result = orderlistServices.completeOrder(score, order_evaluation,
@@ -450,22 +453,34 @@ public class OrderlistAction extends ActionSupport {
 		dataMap = new HashMap<String, Object>(); // 新建dataMap来储存JSON字符串
 		dataMap.clear(); // dataMap中的数据将会被Struts2转换成JSON字符串，所以这里要先清空其中的数据
 
+		
 		int orderid = Integer.parseInt(order_id);
+		System.out.println("order_id " + order_id);
 		int result = orderlistServices.getOrderById(orderid);
+		System.out.println("get success");
 		// Referdoc referdoclist = new Referdoc();
 
 		if (result == ResultCode.SUCCESS) {
 			Orderlist orderlist = orderlistServices.orderlistinfo();
+			System.out.println(orderlist.getOrder_price());
 
 			// referdocServices.getReferdoc(orderlist.getOrder_type_code());
 
 			// referdoclist = referdocServices.referdocinfo();
 
-			String[] url = orderlist.getOrder_pic_url().split(";");
-
-			for (int i = 0; i < url.length; i++) {
-				orderFileFileName.add(url[i]);
+			String[] url = null;
+			String picurl = orderlist.getOrder_pic_url();
+			
+			if (picurl != null) {
+				url = orderlist.getOrder_pic_url().split(";");
+				for (int i = 0; i < url.length; i++) {
+					orderFileFileName.add(url[i]);
+				}
 			}
+
+			System.out.println("url");
+			
+			System.out.println("orderFileFileName");
 
 			dataMap.put("orderlist", orderlist);
 			// dataMap.put("referdoclist", referdoclist);

@@ -127,6 +127,7 @@ public class OrderlistServices {
 		orderlist.setOrder_section(order_section);
 		orderlist.setOrder_type(referdoc.getReferdoc_type());
 		orderlist.setOrder_refer_price(referdoc.getReferdoc_price());
+		orderlist.setOrder_score(0);
 		
 		orderlistMapper.addOrder(orderlist);
 
@@ -734,27 +735,41 @@ public class OrderlistServices {
 	// ## (1) orderlistinfos
 	// ##
 	// ################################################################################
-	public int completeOrder(int order_score, String order_evaluation,
+	public int completeOrder(double order_score, String order_evaluation,
 			int order_id) {
 
-		orderlistMapper.completeOrder(order_score, order_evaluation, order_id);
+		System.out.println("this is order action complete order function");
+		orderlistMapper.completeOrder(order_score, order_evaluation, order_id,new Timestamp(System.currentTimeMillis()));
+		System.out.println("mapper completed");
 		
 		Orderlist orderlist = orderlistMapper.getOrder(order_id);
 		
 		int master_id = orderlist.getOrder_master_id();
 		int user_id = orderlist.getOrder_user_id();
-
-		List<Orderlist> ors = orderlistMapper.getOrdersByMId(master_id);
+		System.out.println("master_id: " + master_id);
+		System.out.println("user_id: " + user_id);
+		List<Orderlist> ors = orderlistMapper.getOrdersByMId(master_id,3);
+		for(int j=0; j<ors.size();j++) {
+			
+			System.out.println("order_id: " + ors.get(j).getOrder_id());
+		}
 		User tempuser = userMapper.getUserById(user_id);
-		
+		double finalscore = tempuser.getUser_grade();
 		if (order_score != 0) {
-			int scores = 0;
-			double finalscore = 0;
-			for (int i=0; i<ors.size(); i++) {
-				scores = scores + ors.get(i).getOrder_score();
+			double scores = 0;
+			System.out.println("score not empty");
+			if (ors.size() <= 0) {
+				finalscore = order_score;
+				System.out.println("size le 0: " + finalscore);
+			} else {
+				for (int i=0; i<ors.size(); i++) {
+					scores = scores + ors.get(i).getOrder_score();
+				}
+				scores = scores + order_score;
+				finalscore = scores / ors.size();
+				System.out.println("size gt 0: " + finalscore);
 			}
 			
-			finalscore = scores / ors.size();
 			
 			tempuser.setUser_grade(finalscore);
 			userMapper.updateUser(tempuser);
@@ -762,6 +777,10 @@ public class OrderlistServices {
 		
 		orderlistinfos = orderlistMapper
 				.getComOrdersByUserAccount(user_id,0);
+		for (int k=0; k<orderlistinfos.size(); k++) {
+			
+			System.out.println("get complete order : " + orderlistinfos.get(k).getOrder_id());
+		}
 
 		return ResultCode.SUCCESS;
 	}

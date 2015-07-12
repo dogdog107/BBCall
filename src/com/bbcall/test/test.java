@@ -40,6 +40,7 @@ public class test {
 //
 //		}
 		
+		System.out.println(new Double("4.0"));
 //		List<AddressList> adlist = orderlistServices.getAddresslist();
 //		
 //		int result = orderlistServices.getUnOrders(1,4);
