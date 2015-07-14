@@ -68,7 +68,7 @@
                         <td>序號</td>
                         <td>訂單類型</td>
                         <td>訂單參考價格</td>
-                        
+                        <td>固定价格</td>
                         <td colspan="4" align="center">操作</td>
                     </tr>
                     <s:iterator value="dataMap.referdoclist" id="referdoclist">
@@ -80,6 +80,19 @@
 						<td><input type="text" name="referdoc_id" readonly="true" id="referdoc_id" value='<s:property value='#referdoclist.referdoc_id'/>' ></input></td>
 						<td><input type="text" name="referdoc_type" id="referdoc_type" value='<s:property value='#referdoclist.referdoc_type'/>' ></input></td>
 						<td><input type="text" name="referdoc_price" id="referdoc_price" value='<s:property value='#referdoclist.referdoc_price'/>' ></input></td>
+						
+						<td>
+							<select name="referdoc_flag" id="referdoc_flag">
+								<s:if test="#referdoclist.referdoc_flag">
+									<option id="select1" value="true" selected="selected">true</option>
+									<option id="select2" value="false">false</option>
+								</s:if>
+								<s:else>
+									<option id="select2" value="false" selected="selected">false</option>
+									<option id="select1" value="true">true</option>
+								</s:else>
+							</select>
+						</td>
 						
 						<td><input type="submit" value="修改"></input></td>
 						<td><input type="button" value="删除" onclick="location.href='referdoc_delete.action?referdoc_id=<s:property value='#referdoclist.referdoc_id'/>'"></input></td>

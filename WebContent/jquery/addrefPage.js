@@ -7,6 +7,7 @@ function referdoc_level_change() {
 	if (level == 2) {
 		document.getElementById('parentno_tr').style.display="";
 		document.getElementById('price_tr').style.display="";
+		document.getElementById('flag_tr').style.display="";
 		
 		$.ajax({
 			type : "post",
@@ -33,5 +34,7 @@ function referdoc_level_change() {
 		document.getElementById('referdoc_parentno').appendChild(op);
 		document.getElementById('parentno_tr').style.display="none";
 		document.getElementById('price_tr').style.display="none";
+		document.getElementById('select2').selected="selected";
+		document.getElementById('flag_tr').style.display="none";
 	}
 }

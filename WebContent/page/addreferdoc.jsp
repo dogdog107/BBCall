@@ -70,6 +70,15 @@
 						<td>參考價格</td>
 						<td><input type="text" name="referdoc_price" id="referdoc_price" value="0"></input></td>
 					</tr>
+					<tr id="flag_tr" style="display:none">
+						<td>是否固定价格</td>
+						<td>
+							<select name="referdoc_flag" id="referdoc_flag">
+								<option id="select2" value="false" selected="selected">false</option>
+								<option id="select1" value="true">true</option>
+							</select>
+						</td>
+					</tr>
                     <tr align="center">
                     	<td><input type="submit" value="添加"></input></td>
 					    <td><input type="button" value="返回" Onclick="location='${pageContext.request.contextPath}/referdoc_getlist.action'"></input></td>
