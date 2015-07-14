@@ -33,76 +33,82 @@
 		</tr>
 	</table>
 	<div></div>
-
+	<div style="font-size: 13px; margin: 10px 5px">
+		<span id="span_message" >
+		</span>
+	</div>
+	<div class="div_search">
+		<span> <span>  請先選擇要添加的帳戶類型 (Please choose user type firstly):</span>
+		</span>
+			<div id="div_message" class="div_message" style="display: none">
+				<span id="message"> </span>
+			</div>
+		</span>
+	</div>
 	<div style="font-size: 13px; margin: 10px 5px">
 		<form id="register_form" action="user_register" method="post" enctype="multipart/form-data">
-			<div style="font-size: 13px; margin: 10px 5px">
-				<span> <s:if test="dataMap.result">
-							<p align="center" style="font-size: 15px;color: green"> ## 添加成功！${ dataMap.errmsg} ## </p>
-					</s:if> <s:else>
-						<s:if test="!dataMap.result">
-								<p align="center" style="font-size: 15px;color: red"> ## 添加失敗！${ dataMap.errmsg} ## </p>
-						</s:if>
-					</s:else>
-				</span>
-			</div>
 			<table border="1" width="100%" class="table_update">
-					<input type="hidden" id="token" name="token" value="${sessionScope.user_token}" />
+				<input type="hidden" id="token" name="token"
+					value="${sessionScope.user_token}" />
 				<tr>
-					<td width="400px" >用戶頭像 (UserPhoto)</td>
-					<td>
-						<input type="hidden" id="picurl" name="picurl" value="" />
-						<!--用来存放item-->
-						<div id="smallPhoto" class="uploader-list"></div>
-						<div id="smallPhotoPicker">选择图片</div>
-					</td>
-				</tr>
-				<tr>
-					<td>用戶類型 (UserType)</td>
-					<td><select name="usertype" id="usertype">
-							<option>請選擇(Choose)</option>
+					<td width="300px">用戶類型 (UserType)<span style="color: red; font-weight:bold">*</span></td>
+					<td><select name="usertype" id="usertype" onchange="changeUserType(this.value)">
+							<option value="">請選擇(Choose)</option>
 							<option value="1">Customer</option>
 							<option value="2">Master</option>
 							<option value="3">Admin</option>
 							<option value="4">SuperAdmin</option>
 					</select></td>
 				</tr>
+			</table>
+			<table border="1" width="100%" class="table_update" id="table_main" style="display: none">
 				<tr>
-					<td>用戶名 (account)</td>
-					<td><input type="text" name="account" id="account" /><span id="checkUserNameResult"></span></td>
+					<td width="300px" >用戶頭像 (UserPhoto)<span id="td_pic" style="color: red; font-weight:bold"></span></td>
+					<td>
+						<input type="hidden" id="picurl" name="picurl" value="" />
+						<!--用来存放item-->
+						<div id="smallPhoto" class="uploader-list"></div>
+						<div id="tempPicker"><div id="smallPhotoPicker">选择图片</div></div>
+					</td>
 				</tr>
 				<tr>
-					<td>輸入密碼 (Enter Password)</td>
-					<td><input type="password" id="prepassword"
-						onblur="if(this.value!=''){document.getElementById('repwd').style.display=''}" /></td>
+					<td>用戶名 (account)<span style="color: red; font-weight:bold">*</span></td>
+					<td><input type="text" name="account" id="account" /><span id="checkAccountResult"></span></td>
+				</tr>
+				<tr>
+					<td>輸入密碼 (Enter Password)<span style="color: red; font-weight:bold">*</span></td>
+					<td><input type="password" id="prepassword" /></td>
 				</tr>
 				<tr id="repwd" style="display: none">
-					<td>再輸一次 (Enter Password Again)</td>
-					<td><input type="password" name="password" id="password"
-						onblur="checkpwd('password')" /> <span id="pwdnotice"></span></td>
+					<td style="color:#55AA00">再輸一次 (Enter Password Again)<span style="color: red; font-weight:bold">*</span></td>
+					<td style="border:solid #55AA00 1px;">
+						<input type="password" name="password" id="password"
+						onblur="checkpwd('password')" /> 
+						<span id="pwdnotice"></span>
+					</td>
 				</tr>
 				<tr>
-					<td>用戶姓名 (User Name)</td>
+					<td>用戶姓名 (User Name)<span id="td_name" style="color: red; font-weight:bold"></span></td>
 					<td><input type="text" name="name" /></td>
 				</tr>
 				<tr>
-					<td>用戶性別 (User Gender)</td>
+					<td>用戶性別 (User Gender)<span id="td_gender" style="color: red; font-weight:bold"></span></td>
 					<td><select name="gender" id="gender">
-							<option>請選擇(Choose)</option>
+							<option value="">請選擇(Choose)</option>
 							<option value="1">Male</option>
 							<option value="2">Female</option>
 					</select></td>
 				</tr>
 				<tr>
-					<td>手機號碼 (User Mobile)</td>
-					<td><input type="text" name="mobile" /></td>
+					<td>手機號碼 (User Mobile)<span id="td_mobile" style="color: red; font-weight:bold"></span></td>
+					<td><input type="text" name="mobile" id="mobile" /><span id="checkMobileResult"></span></td>
 				</tr>
 				<tr>
-					<td>電子郵箱 (User Email)</td>
-					<td><input type="text" name="email" /></td>
+					<td>電子郵箱 (User Email)<span id="td_email" style="color: red; font-weight:bold"></span></td>
+					<td><input type="text" name="email" id="email" /><span id="checkEmailResult"></span></td>
 				</tr>
 				<tr>
-					<td>用戶語言 (User Language)</td>
+					<td>用戶語言 (User Language)<span id="td_language" style="color: red; font-weight:bold"></span></td>
 					<td>
 					<input type="hidden" id="language" name="language" value=""/>
 					
@@ -112,12 +118,12 @@
 					</td>
 				</tr>
 				<tr>
-					<td>用戶技能 (User Skill)</td>
+					<td>用戶技能 (User Skill)<span id="td_skill" style="color: red; font-weight:bold"></span></td>
 					<td>
 					<input type="text" name="skill" /></td>
 				</tr>
 				<tr>
-					<td>默認地址 (User Address)</td>
+					<td>默認地址 (User Address)<span id="td_address" style="color: red; font-weight:bold"></span></td>
 					<td>
 					<select id="adscode_1" onchange="getaddresslist(this.options[selectedIndex].value,1)">
 							<option value="0">--請選擇省份--</option>
@@ -152,6 +158,8 @@
 		var addresscode = '';
 		var language = '';
 		var skill = '';
+		var registerResult = '${dataMap.result}';
+		var registerMsg = '${dataMap.errmsg}';
 	</script>
 
 	<!--引入jquery-->

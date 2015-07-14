@@ -28,6 +28,7 @@ public class UserServices {
 	
 	private SHA1_Encode encrypt = new SHA1_Encode();
 	private User userinfo = new User();
+	private User tokenUserInfo = new User();
 	private User updateduserinfo = new User();
 	private List<User> userlist;
 
@@ -53,6 +54,9 @@ public class UserServices {
 	// ##------------------------------------------------------------------------------
 	// ## 2. Optional parameters:
 	// ## (1) 'description'
+	// ## (2) 'addresscode'
+	// ## (3) 'address'
+	// ## (4) 'accessgroup'
 	// ##
 	// ##------------------------------------------------------------------------------
 	// ## 3. Return parameters:
@@ -69,7 +73,7 @@ public class UserServices {
 
 	public int register(String token, String account, String password, Integer usertype,
 			String name, String picurl, BigInteger mobile, Integer gender,
-			String email, String language, String skill, String description, String accessgroup, Integer addresscode, String address) {
+			String email, String language, String skill, String description, String accessgroup, Integer addresscode, String address, Double grade) {
 		System.out.println("Here is UserServices.register method...");
 
 		int registermode = 0; // 记录register的模式: 1=user,2=admin
@@ -121,6 +125,8 @@ public class UserServices {
 			
 			
 		}
+		
+		System.out.println("Registermode: " + registermode);
 		
 		int registerResult;// 新建返回值
 		int checkUserNameResult = checkUserName(account);// 调用checkUserName方法并得到返回码
@@ -199,7 +205,12 @@ public class UserServices {
 			if (mobile != null) {
 				if (Tools.isNumeric(mobile.toString())
 						&& (mobile.toString().length() >= 8)) {
-					user.setUser_mobile(mobile);
+					int checkMobileResult = checkUserName(mobile.toString());// 调用checkUserName方法检测手机号是否唯一并得到返回码
+					if (checkMobileResult == ResultCode.USERNAME_NOTEXIST) {// 检测用户名是否存在
+						user.setUser_mobile(mobile);
+					} else {
+						return checkMobileResult;
+					}
 				} else {
 					return ResultCode.USERMOBILE_ERROR;
 				}
@@ -217,7 +228,12 @@ public class UserServices {
 			// ***** 添加邮箱 *****
 			if (!Tools.isEmpty(email)) {
 				if (email.contains("@")) {
-					user.setUser_email(email);
+					int checkEmailResult = checkUserName(email);// 调用checkUserName方法检测邮箱地址是否唯一并得到返回码
+					if (checkEmailResult == ResultCode.USERNAME_NOTEXIST) {// 检测用户名是否存在
+						user.setUser_email(email);
+					} else {
+						return checkEmailResult;
+					}
 				} else {
 					return ResultCode.USEREMAIL_ERROR;
 				}
@@ -248,6 +264,17 @@ public class UserServices {
 			} else {
 				user.setUser_access_group(defaultaccess);
 			}
+			// ***** 添加用户分值 *****
+			if (registermode == 2) { // 判断register的模式:1=user,2=admin
+				if(grade == null) {
+					user.setUser_grade((double) 0);
+				} else {
+					user.setUser_grade(grade);
+				}
+			} else {
+				user.setUser_grade((double) 0);
+			}
+			
 			
 			userMapper.addUserByAccount(user);// 把用户信息插入数据表
 			// ** user_skill子表的逻辑部分
@@ -383,7 +410,7 @@ public class UserServices {
 			String name, String picurl, BigInteger mobile, Integer gender,
 			Integer addresscode, String address, String email, String language,
 			String skill, String description, String accessgroup,
-			Integer status, String token, Integer userid) {
+			Integer status, String token, Integer userid, Double grade) {
 		System.out.println("Here is UserServices.update method...");
 
 		int updatemode = 0; // 记录update的模式: 1=user,2=admin
@@ -393,30 +420,45 @@ public class UserServices {
 		// ***** 检测 token & userid *****
 		if (Tools.isEmpty(token) && userid == null)// 检测必要参数是否为空、null
 			return ResultCode.REQUIREINFO_NOTENOUGH;
+
+		System.out.println("token: " + token);
+		System.out.println("userid: " + userid);
+		
 		if (!Tools.isEmpty(token)) {
-			int checkResult = checkUserToken(token);
-			if (checkResult == ResultCode.SUCCESS) {
-				user = userinfo;
-				if (userid != null) {
-					if (user.getUser_type().equals(3) || user.getUser_type().equals(4)) { // 管理员后台update模式
-						user = userMapper.getUserById(userid); // 根据userID读取用户数据
-						updatemode = 2;
-						if (null == user)
-							return ResultCode.USERID_ERROR;
-					} else if (userid.equals(user.getUser_id())) {
+			int checkResult;
+			if (userid != null) {
+				checkResult = checkUpdateAccess(token, userid); // 检测token用户是否有权限
+				if (checkResult == ResultCode.SUCCESS) { // 有权限时，判断updatemode
+					user = userinfo; // 把用戶信息封裝給待update的user對象
+					
+					if (tokenUserInfo.getUser_id().equals(userid)) {// 检测token的用户id与传进来的userid是否相同
+						
 						updatemode = 1; // 用户update模式
+						if (userinfo.getUser_type().equals(3) || userinfo.getUser_type().equals(4)){
+							updatemode = 2; // 管理员update模式
+						}
 					} else {
-						return ResultCode.ACCESS_REJECT;
+						updatemode = 2; // 管理员update模式
 					}
-				} else {
+				} else
+					return checkResult; // 返回token状态
+			} else {
+				checkResult = checkUserToken(token);// 檢測token狀態，並取出相應的用戶信息
+				if (checkResult == ResultCode.SUCCESS) {
+					user = userinfo; // 把用戶信息封裝給待update的user對象
 					updatemode = 1; // 用户update模式
-				}
-			} else
-				return checkResult;
+					if (userinfo.getUser_type().equals(3) || userinfo.getUser_type().equals(4)){
+						updatemode = 2; // 管理员update模式
+					}
+				} else
+					return checkResult; // 返回token状态
+			}
 		} else {
 			return ResultCode.REQUIREINFO_NOTENOUGH;
 		}
-
+		
+		System.out.println("UpdateMode: " + updatemode);
+		
 		// ***** 检测 addresscode & address *****
 		if (addresscode != null && addresscode != 0 && (addresscode + "").length() != 6)// 判断地址码是否六位数
 			return ResultCode.ADDRESSCODE_ERROR;
@@ -455,16 +497,22 @@ public class UserServices {
 				return ResultCode.ADDRESS_NOTMATCH;
 		}
 
-		// ***** 检测其它变量 *****
+		// ***** 检测account *****
 		if (!Tools.isEmpty(account) && !account.equals(user.getUser_account())) {
 			if (account.length() >= 6){
-				user.setUser_account(account);
-				changecount++;
-				System.out.println("account changed!");
+				int checkAccountResult = checkUserName(account);// 调用checkUserName方法检测账号是否唯一并得到返回码
+				if (checkAccountResult == ResultCode.USERNAME_NOTEXIST) {// 检测用户名是否存在
+					user.setUser_account(account);
+					changecount++;
+					System.out.println("account changed!");
+				} else {
+					return checkAccountResult;
+				}
 			} else {
 				return ResultCode.USERACCOUNT_ERROR;
 			}
 		}
+		// ***** 检测password *****
 		if (!Tools.isEmpty(password) && !encrypt.getDigestOfString(password.getBytes()).equals(user.getUser_password())) {
 			if (password.length() >= 6) {
 				user.setUser_password(encrypt.getDigestOfString(password.getBytes()));
@@ -474,31 +522,32 @@ public class UserServices {
 				return ResultCode.USERPASSWORD_ERROR;
 			}
 		}
+		// ***** 检测name *****
 		if (!Tools.isEmpty(name) && !name.equals(user.getUser_name())) {
 			user.setUser_name(name);
 			changecount++;
 			System.out.println("name changed!");
 		}
-		if (Tools.isEmpty(picurl)
-				&& (Tools.isEmpty(user.getUser_pic_url()) || !Tools
-						.isNumeric(user
-								.getUser_pic_url()
-								.substring(
-										user.getUser_pic_url().lastIndexOf("/") + 1)
-								.split("_")[0]))) {
+		// ***** 检测picurl *****
+		if (Tools.isEmpty(picurl) && (Tools.isEmpty(user.getUser_pic_url()))) {
 			if (user.getUser_type().equals(3)) {
 				picurl = "/BBCall/UserPhoto/Admin_photo.png";
 			} else if (user.getUser_type().equals(4)) {
 				picurl = "/BBCall/UserPhoto/SuperAdmin_photo.png";
 			} else {
-				switch (user.getUser_gender()) {
-				case 1:
-					picurl = "/BBCall/UserPhoto/Male_photo.png";
-					break;
-				case 2:
-					picurl = "/BBCall/UserPhoto/Female_photo.png";
-					break;
+				if (gender != null) {
+					switch (user.getUser_gender()) {
+					case 1:
+						picurl = "/BBCall/UserPhoto/Male_photo.png";
+						break;
+					case 2:
+						picurl = "/BBCall/UserPhoto/Female_photo.png";
+						break;
+					}
+				} else {
+					picurl = "/BBCall/UserPhoto/Default_photo.png";
 				}
+
 			}
 		}
 		if (!Tools.isEmpty(picurl) && !picurl.equals(user.getUser_pic_url())) {
@@ -510,16 +559,23 @@ public class UserServices {
 				System.out.println("status changed as user mode!(usertype)");
 			}
 		}
+		// ***** 检测mobile *****
 		if (mobile != null && !mobile.equals(user.getUser_mobile())) {
 			if (Tools.isNumeric(mobile.toString())
 					&& (mobile.toString().length() >= 8)) {
-				user.setUser_mobile(mobile);
-				changecount++;
-				System.out.println("mobile changed!");
+				int checkMobileResult = checkUserName(mobile.toString());// 调用checkUserName方法检测手机号是否唯一并得到返回码
+				if (checkMobileResult == ResultCode.USERNAME_NOTEXIST) {// 检测用户名是否存在
+					user.setUser_mobile(mobile);
+					changecount++;
+					System.out.println("mobile changed!");
+				} else {
+					return checkMobileResult;
+				}
 			} else {
 				return ResultCode.USERMOBILE_ERROR;
 			}
 		}
+		// ***** 检测gender *****
 		if (gender != null && !gender.equals(user.getUser_gender())) {
 			if ((gender.equals(1) || gender.equals(2))) { // 1=Male,2=Female
 				user.setUser_gender(gender);
@@ -529,38 +585,56 @@ public class UserServices {
 				return ResultCode.USERGENDER_ERROR;
 			}
 		}
+		// ***** 检测email *****
 		if (!Tools.isEmpty(email) && !email.equals(user.getUser_email())) {
 			if (email.contains("@")) {
-				user.setUser_email(email);
-				changecount++;
-				System.out.println("email changed!");
+				int checkEmailResult = checkUserName(email);// 调用checkUserName方法检测邮箱地址是否唯一并得到返回码
+				if (checkEmailResult == ResultCode.USERNAME_NOTEXIST) {// 检测用户名是否存在
+					user.setUser_email(email);
+					changecount++;
+					System.out.println("email changed!");
+				} else {
+					return checkEmailResult;
+				}
 			} else {
 				return ResultCode.USEREMAIL_ERROR;
 			}
 		}
+		// ***** 检测language *****
 		if (!Tools.isEmpty(language) && !language.equals(user.getUser_language())) {
 			user.setUser_language(language);
 			changecount++;
 			System.out.println("language changed!");
 		}
+		// ***** 检测description *****
 		if (!Tools.isEmpty(description)
 				&& !description.equals(user.getUser_description())) {
 			user.setUser_description(description);
 			changecount++;
 			System.out.println("description changed!");
 		}
-		if (!Tools.isEmpty(accessgroup)
-				&& !accessgroup.equals(user.getUser_access_group())) {
+		// ***** 检测accessgroup *****
+		if (updatemode == 2 && !Tools.isEmpty(accessgroup)
+				&& !accessgroup.equals(user.getUser_access_group())) { // admin模式时才能修改accessgroup
 			user.setUser_access_group(accessgroup);
 			changecount++;
 			System.out.println("accessgroup changed!");
 		}
+		// ***** 检测status *****
 		if (updatemode == 2 && status != null
 				&& !user.getUser_status().equals(status)) {// admin模式时，判断status是否有变化
 			user.setUser_status(status);
 			changecount++;
 			System.out.println("status changed!");
 		}
+		// ***** 检测grade *****
+		if (updatemode == 2 && grade != null
+				&& !user.getUser_grade().equals(grade)) {// admin模式时，判断grade是否需要修改
+			user.setUser_grade(grade);
+			changecount++;
+			System.out.println("grade changed!");
+		}
+		// ***** 检测skill *****
 		if (!Tools.isEmpty(skill) && !skill.equals(user.getUser_skill())) {
 			user.setUser_skill(skill);
 			changecount++;
@@ -570,14 +644,18 @@ public class UserServices {
 				System.out.println("status changed as user mode!(skill)");
 			}
 		}
+		// ***** 检测usertype *****
 		if (usertype != null && !user.getUser_type().equals(usertype)) {
-			user.setUser_type(usertype);
-			changecount++;
-			System.out.println("usertype changed!");
 			if (updatemode == 1) {// 用户模式时，user状态转为pending 待审核
+				if (usertype.equals(3) || usertype.equals(4)) { // 检测到要修改成管理员模式
+					return ResultCode.USERTYPE_ERROR;
+				}
 				user.setUser_status(3);
 				System.out.println("status changed as user mode!(usertype)");
 			}
+			user.setUser_type(usertype);
+			changecount++;
+			System.out.println("usertype changed!");
 		}
 
 		// ** user_skill子表的逻辑部分
@@ -807,33 +885,53 @@ public class UserServices {
 		if (Tools.isEmpty(token) && userid == null)
 			return ResultCode.REQUIREINFO_NOTENOUGH;
 
-		if (userid.equals(4)) { // superadmin 不能被修改
+		User updateUser = new User();
+		updateUser = userMapper.getUserById(userid);// 根据userid得出用户信息
+
+		if (updateUser == null) {
+			return ResultCode.USERID_ERROR; // 错误的userid.
+		}
+
+		Integer updateUserType = updateUser.getUser_type(); // 封装待更新的用户type
+
+		if (updateUserType.equals(4)) { // superadmin 不能被修改
 			return ResultCode.ACCESS_REJECT;
 		}
 
 		int tokenresult = checkUserToken(token); // 调用userServices.checkUserTokenes
 		if (tokenresult == ResultCode.SUCCESS) {
-			Integer updateUserID = userinfo.getUser_type();
-			switch (userid) {
-			case 3:
-				if (!updateUserID.equals(4)) {
-					return ResultCode.ACCESS_REJECT;
+			Integer tokenUserType = userinfo.getUser_type();
+			switch (updateUserType) {
+			case 3:// admin 的用户信息
+				if (!userinfo.getUser_id().equals(userid)) { // 检测token的userid
+					// 与待update的userid是否相同
+					if (!tokenUserType.equals(4)) {
+						return ResultCode.ACCESS_REJECT;
+					}
 				}
 				break;
-			case 2:
-				if (!updateUserID.equals(3) || !updateUserID.equals(4)) {
-					return ResultCode.ACCESS_REJECT;
+			case 2:// master 的用户信息
+				if (!userinfo.getUser_id().equals(userid)) { // 检测token的userid
+																// 与待update的userid是否相同
+					if (!tokenUserType.equals(3) && !tokenUserType.equals(4)) { // 如果不一致，则需要admin以上的用户权限
+						return ResultCode.ACCESS_REJECT;
+					}
 				}
 				break;
-			case 1:
-				if (!updateUserID.equals(3) || !updateUserID.equals(4)) {
-					return ResultCode.ACCESS_REJECT;
+			case 1:// user 的用户信息
+				if (!userinfo.getUser_id().equals(userid)) { // 检测token的userid
+																// 与待update的userid是否相同
+					if (!tokenUserType.equals(3) && !tokenUserType.equals(4)) { // 如果不一致，则需要admin以上的用户权限
+						return ResultCode.ACCESS_REJECT;
+					}
 				}
 				break;
 
 			default:
 				return ResultCode.UNKNOWN_ERROR;
 			}
+			tokenUserInfo = userinfo; // 返回待token的用户对象到tokenUserInfo
+			userinfo = updateUser; // 返回待update的用户对象到userinfo
 			return ResultCode.SUCCESS;
 		} else {
 			return tokenresult;
