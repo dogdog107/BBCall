@@ -47,6 +47,7 @@ public class Orderlist {
 	private double order_urgent_bonus;
 	private int order_user_id;
 	private int order_master_id;
+	private String order_master_name;
 	private int order_type_code;
 	private String order_type;
 	private double order_refer_price;
@@ -238,6 +239,14 @@ public class Orderlist {
 
 	public void setOrder_master_id(int order_master_id) {
 		this.order_master_id = order_master_id;
+	}
+
+	public String getOrder_master_name() {
+		return order_master_name;
+	}
+
+	public void setOrder_master_name(String order_master_name) {
+		this.order_master_name = order_master_name;
 	}
 
 }

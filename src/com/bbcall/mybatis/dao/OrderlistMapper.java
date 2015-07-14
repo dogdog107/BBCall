@@ -117,7 +117,8 @@ public interface OrderlistMapper {
 	// 获取所有洗衣订单按照订单状态排序
 	public List<Orderlist> getWashOrderlistByParm(
 			@Param("order_status") String order_status,
-			@Param("order_section") String order_section);
+			@Param("order_section") String order_section,
+			@Param("order_master_name") String order_master_name);
 
 	// 更新订单详情
 	public void updateOrder(Orderlist order);
@@ -125,6 +126,7 @@ public interface OrderlistMapper {
 	// 当用户确认后，更改订单师傅账户和订单状态
 	public void updateOrderAsMasterAccount(
 			@Param("order_master_id") int order_master_id,
+			@Param("order_master_name") String order_master_name,
 			@Param("order_price") double order_price,
 			@Param("order_id") int order_id);
 

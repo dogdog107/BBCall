@@ -43,6 +43,8 @@
 		<result column="order_remark" property="order_remark" jdbcType="LONGVARCHAR" />
 		<result column="order_section" property="order_section"
 			jdbcType="INTEGER" />
+		<result column="order_master_name" property="order_master_name"
+			jdbcType="VARCHAR" />
 	</resultMap>
 
 	<insert id="addOrder" parameterType="com.bbcall.mybatis.table.Orderlist"
@@ -65,7 +67,8 @@
 		order_status,
 		order_section,
 		order_type,
-		order_refer_price) values
+		order_refer_price,
+		order_master_name) values
 		(#{order_create_time},
 		#{order_end_time},
 		#{order_book_time},
@@ -83,7 +86,8 @@
 		#{order_status},
 		#{order_section},
 		#{order_type},
-		#{order_refer_price})
+		#{order_refer_price},
+		#{order_master_name})
 	</insert>
 
 	<select id="getUnOrdersByUserAccount" parameterType="int"
@@ -241,7 +245,11 @@
  
         	and order_section = #{order_section}
     	</if>
-		    order by order_book_time asc
+    	<if test="order_master_name != null and order_master_name != ''">
+ 
+        	and order_master_name = #{order_master_name}
+    	</if>
+		    order by order_book_time asc, order_create_time asc
 	</select>
 	
 	<select id="getWashOrders" resultMap="OrderResultMap">
@@ -311,13 +319,15 @@
 		order_type=#{order_type},
 		order_refer_price=#{order_refer_price},
 		order_status=#{order_status},
-		order_remark=#{order_remark}
+		order_remark=#{order_remark},
+		order_master_name=#{order_master_name}
 		where
 		order_id=#{order_id}
 	</update>
 	<update id="updateOrderAsMasterAccount">
 		update ORDERLIST set
 		order_master_id=#{order_master_id,jdbcType=INTEGER},
+		order_master_name=#{order_master_name,jdbcType=VARCHAR},
 		order_price=#{order_price,jdbcType=DECIMAL},
 		order_status="2"
 		where

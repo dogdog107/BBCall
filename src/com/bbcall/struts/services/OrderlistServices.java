@@ -692,7 +692,8 @@ public class OrderlistServices {
 			price = preroder.getPreorder_price();
 		}
 
-		orderlistMapper.updateOrderAsMasterAccount(master_id, price, order_id);
+		User tempuser = userMapper.getUserById(master_id);
+		orderlistMapper.updateOrderAsMasterAccount(master_id, tempuser.getUser_name(),price, order_id);
 
 		preorderMapper.deletePreorderByOrderId(order_id);
 
@@ -903,7 +904,7 @@ public class OrderlistServices {
 	// ## (1) orderlistinfos
 	// ##
 	// ################################################################################
-	public int getWashOrderlist(String order_status, String order_section) {
+	public int getWashOrderlist(String order_status, String order_section,String order_master_name) {
 
 		// Map<String, Object> params = new HashMap<String, Object>();
 		//
@@ -912,7 +913,7 @@ public class OrderlistServices {
 		// params.put("order_section", order_section);
 
 		orderlistinfos = orderlistMapper.getWashOrderlistByParm(order_status,
-				order_section);
+				order_section,order_master_name);
 
 		return ResultCode.SUCCESS;
 	}

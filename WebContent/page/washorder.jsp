@@ -63,6 +63,8 @@
 					<option value="5">正在清洗</option>
 					<option value="6">正在配送</option>
 				</select>
+				&nbsp;
+				<input type="text" name="order_master_name" id="order_master_name"></input>
 				<input value="查詢" type="submit" />
 			</form>
 
@@ -92,8 +94,8 @@
 								value='#order.order_book_time' /></td>
 						<td id="order_book_location"><s:property
 								value='#order.order_book_location' /></td>
-						<td id="order_master_account"><s:property
-								value='#order.order_master_account' /></td>
+						<td id="order_master_name"><s:property
+								value='#order.order_master_name' /></td>
 						<td id="order_status"><s:if
 								test="%{#order.order_status == 1}">新建訂單</s:if> <s:if
 								test="%{#order.order_status == 2}">待評價訂單</s:if> <s:if
