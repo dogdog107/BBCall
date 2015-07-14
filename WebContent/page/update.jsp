@@ -58,10 +58,12 @@
 			</div>
 			<table border="1" width="100%" class="table_update">
 				<tr id="userid_tr" style="display: none">
-					<td>用戶ID (UserID)</td>
+					<td width="300px">用戶ID (UserID)</td>
 					<td>
-					<input name="userid" id="userid" value="${sessionScope.user_id}" />
+					<span>${sessionScope.user_id}</span>
+					<%-- <input name="userid" id="userid" value="${sessionScope.user_id}" /> --%>
 					<input type="hidden" id="token" name="token" value="${sessionScope.user_token}" />
+					<input type="hidden" id="userid" name="userid" value="${sessionScope.user_id}" />
 					</td>
 				</tr>
 				<tr>
@@ -133,11 +135,25 @@
 					</td>
 				</tr>
 				<tr>
-					<td>用戶技能 (User Skill)</td>
-					<td>
-					<input type="text" name="skill" onfocus="this.value=''"
-						onblur="if(this.value==''){this.value='${sessionScope.user_skill}'}"
-						value="${sessionScope.user_skill}" /></td>
+					<td>用戶技能 (User Skill)
+						<input type="button" value="增加技能(Add Skill)" class="btn btn-default" onclick="addSkill()" />
+					</td>
+					<td id="skill_main">
+					<input type="hidden" id="skill" name="skill" value="${sessionScope.user_skill}"/>
+					<div  id="skill_template" style="display: none; padding: 6px 12px;">
+						<div>
+							<select id="skillParentCode"
+								onchange="getChildSkillList(this.options[selectedIndex].value, this.id)">
+								<option value="0">--請選擇技能--</option>
+							</select>
+							<input id="deleteSkill" type="button" value="刪除此技能(Delete this skill)" onclick="deleteSkillbtn(this.id)" class="btn btn-default"/>
+						</div>
+						<div id="skillChildList">
+						
+						</div>
+					</div>
+
+					</td>
 				</tr>
 				<tr>
 					<td>默認地址 (User Address)</td>
@@ -164,8 +180,14 @@
 					</td>
 				</tr>
 				<tr>
-					<td colspan="2" align="center"><input type="submit" value="修改(Submit)" onclick="return validate();" class="btn btn-default" /><input
-						type="button" value="取消(Cancel)" onclick="location.href='defult.jsp'" class="btn btn-default" /></td>
+					<td>用戶簡介 (Description)</td>
+					<td> 
+						<textarea rows="5" name="description" style="width:400px;" >${sessionScope.user_description}</textarea>
+					</td>
+				</tr>
+				<tr>
+					<td colspan="2" align="center"><input type="submit" value="修改&#10;(Submit)" onclick="return validate();" class="btn btn-default" /><input
+						type="button" value="取消&#10;(Cancel)" onclick="location.href='defult.jsp'" class="btn btn-default" /></td>
 				</tr>
 			</table>
 		</form>

@@ -38,14 +38,13 @@
 		</span>
 	</div>
 	<div class="div_search">
-		<span> <span>  請先選擇要添加的帳戶類型 (Please choose user type firstly):</span>
+		<span> <span id="span_search">  請先選擇要添加的帳戶類型 (Please choose user type firstly):</span>
 		</span>
 			<div id="div_message" class="div_message" style="display: none">
 				<span id="message"> </span>
 			</div>
-		</span>
 	</div>
-	<div style="font-size: 13px; margin: 10px 5px">
+	<div id="div_main" style="font-size: 13px; margin: 10px 5px">
 		<form id="register_form" action="user_register" method="post" enctype="multipart/form-data">
 			<table border="1" width="100%" class="table_update">
 				<input type="hidden" id="token" name="token"

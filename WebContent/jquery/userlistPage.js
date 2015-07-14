@@ -38,7 +38,7 @@ function checkUserList(col_name, specify_value, search_value, pagenum){
 					$("#mo").html(data.lastPageNum);
 				}
 				// 清除现有列表
-				$("#datas").hide();
+//				$("#datas").hide();
 				$("tr[id^='userlist_']").remove();
 				// 拿出列表
 				var templist = data.userlist;
@@ -101,10 +101,10 @@ function checkUserList(col_name, specify_value, search_value, pagenum){
 					// "&pageindex="+pageIndex+">&nbsp;More</a>");
 					row.attr("id", "userlist_" + n.user_id);// 改变绑定好数据的行的id
 					row.appendTo("#datas");// 添加到模板的容器中
-					row.toggle();
+					row.toggle(300);
 				});
 				// 显示数据
-				$("#datas").show(300);
+//				$("#datas").show(300);
 			} else {
 				//隐藏分页条
 				$("#page_bar").hide(300);

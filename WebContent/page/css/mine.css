@@ -12,7 +12,7 @@ INPUT {
 	FONT-SIZE: 13px; FONT-FAMILY: "Verdana", "Arial", "Helvetica", "sans-serif"
 }
 SELECT {
-	FONT-SIZE: 13px; FONT-FAMILY: "Verdana", "Arial", "Helvetica", "sans-serif"
+	FONT-SIZE: 20px; FONT-FAMILY: "Verdana", "Arial", "Helvetica", "sans-serif"
 }
 TEXTAREA {
 	FONT-SIZE: 13px; FONT-FAMILY: "Verdana", "Arial", "Helvetica", "sans-serif"
@@ -53,7 +53,8 @@ TEXTAREA {
 }
 .table_update{
     border-collapse:collapse;
-    border: 1px solid #E3E6EB
+    border: 1px solid #E3E6EB;
+    margin-bottom: 100px;
 }
 .table_update td{
     line-height: 25px;
@@ -62,7 +63,7 @@ TEXTAREA {
 }
 .table_list{
     border-collapse:collapse;
-    border: 1px solid #E3E6EB
+    border: 1px solid #E3E6EB;
 }
 .table_list td{
     line-height: 25px;
@@ -81,13 +82,13 @@ TEXTAREA {
 
 .btn {
   display: inline-block;
-  padding: 6px 12px;
+  padding: 4px 12px;
   margin-bottom: 0;
-  font-size: 14px;
+  font-size: 13px;
   font-weight: normal;
   line-height: 1.428571429;
   text-align: center;
-  white-space: nowrap;
+/*   white-space: nowrap; */
   vertical-align: middle;
   cursor: pointer;
   background-image: none;

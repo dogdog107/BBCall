@@ -7,14 +7,7 @@
 <meta http-equiv="content-type" content="text/html; charset=utf-8" />
 <link rel="shortcut icon" href="${pageContext.request.contextPath }/page/img/BBCallicon_32X32.ico" type="image/x-icon" />
 <link href="${pageContext.request.contextPath }/page/css/mine.css" type="text/css" rel="stylesheet" />
-<script type="text/javascript"
-	src="${pageContext.request.contextPath }/jquery/jquery-1.8.3.js"></script>
-<script type="text/javascript"
-	src="${pageContext.request.contextPath }/jquery/advertlistPage.js?token=${sessionScope.user_token}"></script>
-<script type="text/javascript">
-	var token = "${sessionScope.user_token}";
-	var link = "${pageContext.request.contextPath }";
-</script>
+
 </head>
 <body onload="onload()">
 
@@ -49,28 +42,12 @@
 		<div class="div_search">
 			<span>
 			<input id="btnNew" type="submit" value="增加廣告/New AD" onclick="location.href='addAdvert.jsp'"/>
-					排序(Order By)：
-					<select name="col_name" id="col_name" onchange="col_name_change(this.value)">
-						<option value="user_id">默認排序(ID)</option>
-						<option value="user_account">按用戶帳號(Account)</option>
-						<option value="user_name">按用戶姓名(Name)</option>
-						<option value="user_type">按用戶身份(Type)</option>
-						<option value="user_status">按用戶狀態(Status)</option>
-						<option value="user_create_time">按註冊時間(CreateTime)</option>
-						<option value="user_login_time">按登錄時間(LoginTime)</option>
-					</select>
-					<select name="specify_value" id="specify_value" onchange="specify_value_change(this.value)">
-						<option value='ASC'>升序(ASC)</option>
-						<option value='DESC'>降序(DESC)</option>
-					</select>
-					<span id="search_value_span" style="display: none">
-						<font color=#1c94c4 id="search_value_message"></font>
-						<input name="search_value" id="search_value" type="text" style="width: 100px;"/>
-						<input value="查詢/Submit" type="submit" onclick="search_value()"/>
-					</span>
 			</span>
+			<div id="div_message" class="div_message" style="display: none">
+				<span id="message"> </span>
+			</div>
 		</div>
-		<div id="div_message" class="div_message" style="display: none">
+<%-- 		<div id="div_message" class="div_message" style="display: none">
 			<span id="message"> </span>
 			<div style="font-size: 13px; margin: 10px 5px">
 				<span> <s:if test="dataMap.result">
@@ -84,17 +61,17 @@
 					</s:else>
 				</span>
 			</div>
-		</div>
+		</div> --%>
 		<div style="font-size: 12px; margin: 10px 5px;">
 			<table class="table_list" border="1" width="100%">
 				<tbody id="datas">
-					<tr style="font-weight: bold;">
-						<td>廣告序號<br/>AD ID</td>
-						<td>小圖像<br/>AD Small Pic</td>
+					<tr style="color:#1c94c4">
+						<td width="80px">廣告序號<br/>AD ID</td>
+						<td width="100px">小圖像<br/>AD Small Pic</td>
 						<td width="300px">標題<br/>Title</td>
 						<td width="300px">概要<br/>Summary</td>
-						<td>廣告類別<br/>Type</td>
-						<td>創建時間<br/>Create Time</td>
+						<td width="80px">廣告類別<br/>Type</td>
+						<td width="150px">創建時間<br/>Create Time</td>
 						<td colspan="2" align="center">操作<br/>Operations</td>
 					</tr>
 					<tr id="template" style="display: none; font-size: 12px;">
@@ -111,11 +88,34 @@
 						</td>
 					</tr>
 				</tbody>
-				<tr>
-					<td colspan="20" style="text-align: center;">[1]2</td>
-				</tr>
 			</table>
+			<div class="wrap">
+				<div id="page_bar" class="fenye">
+					<ul>
+						<li id="first">首頁</li>
+						<li id="top" onclick="topclick()">上一頁</li>
+						<li class="xifenye" id="xifenye"><a id="xiye"></a>/<a id="mo"></a>
+							<div class="xab" id="xab" style="display: none">
+								<ul id="uljia">
+
+								</ul>
+							</div></li>
+						<li id="down" onclick="downclick()">下一頁</li>
+						<li id="last">尾頁</li>
+					</ul>
+				</div>
+			</div>
 		</div>
 	</div>
+<script type="text/javascript">
+	var token = "${sessionScope.user_token}";
+	var link = "${pageContext.request.contextPath }";
+</script>
+<script type="text/javascript"
+	src="${pageContext.request.contextPath }/jquery/jquery-1.8.3.js"></script>
+<script type="text/javascript"
+	src="${pageContext.request.contextPath }/jquery/advertlistPage.js?token=${sessionScope.user_token}"></script>
+<script type="text/javascript"
+	src="${pageContext.request.contextPath }/jquery/paging.js"></script>
 </body>
 </html>
