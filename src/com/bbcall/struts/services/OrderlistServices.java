@@ -399,9 +399,15 @@ public class OrderlistServices {
 				if (orderlistinfos == null) {
 					orderlistinfos = orderlistMapper.getOrdersByMasterSkill(1,
 							type_code, master_id, offset);
+					orderlistinfos.addAll(orderlistMapper
+							.getOrdersByMasterSkill(7, type_code, master_id,
+									offset));
 				} else {
 					orderlistinfos.addAll(orderlistMapper
 							.getOrdersByMasterSkill(1, type_code, master_id,
+									offset));
+					orderlistinfos.addAll(orderlistMapper
+							.getOrdersByMasterSkill(7, type_code, master_id,
 									offset));
 				}
 			}
@@ -411,6 +417,8 @@ public class OrderlistServices {
 
 			orderlistinfos = orderlistMapper.getOrdersByMasterLocation(1,
 					area_code, master_id, offset);
+			orderlistinfos.addAll(orderlistMapper.getOrdersByMasterLocation(7,
+					area_code, master_id, offset));
 		} else if (!skilllist.equals("") && locationlist.equals("")) {
 
 			sklist = skilllist.split(";");
@@ -422,9 +430,15 @@ public class OrderlistServices {
 				if (orderlistinfos == null) {
 					orderlistinfos = orderlistMapper.getOrdersByMasterSkill(1,
 							type_code, master_id, offset);
+					orderlistinfos.addAll(orderlistMapper
+							.getOrdersByMasterSkill(7, type_code, master_id,
+									offset));
 				} else {
 					orderlistinfos.addAll(orderlistMapper
 							.getOrdersByMasterSkill(1, type_code, master_id,
+									offset));
+					orderlistinfos.addAll(orderlistMapper
+							.getOrdersByMasterSkill(7, type_code, master_id,
 									offset));
 				}
 
@@ -889,13 +903,16 @@ public class OrderlistServices {
 	// ## (1) orderlistinfos
 	// ##
 	// ################################################################################
-	public int getWashOrderlist(String sortparm) {
+	public int getWashOrderlist(String order_status, String order_section) {
 
-		if (sortparm.equals("order_status")) {
-			orderlistinfos = orderlistMapper.getWashOrderlistByStatus();
-		} else {
-			orderlistinfos = orderlistMapper.getWashOrderlistByMaster();
-		}
+		// Map<String, Object> params = new HashMap<String, Object>();
+		//
+		// params.put("sortparm", sortparm);
+		// params.put("order_status", order_status);
+		// params.put("order_section", order_section);
+
+		orderlistinfos = orderlistMapper.getWashOrderlistByParm(order_status,
+				order_section);
 
 		return ResultCode.SUCCESS;
 	}

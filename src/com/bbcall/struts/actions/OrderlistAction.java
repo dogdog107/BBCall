@@ -551,7 +551,7 @@ public class OrderlistAction extends ActionSupport {
 		dataMap = new HashMap<String, Object>(); // 新建dataMap来储存JSON字符串
 		dataMap.clear(); // dataMap中的数据将会被Struts2转换成JSON字符串，所以这里要先清空其中的数据
 
-		int result = orderlistServices.getWashOrderlist(sortparm);
+		int result = orderlistServices.getWashOrderlist(order_status,order_section);
 		// List<Referdoc> referdoclist = new ArrayList<Referdoc>();
 
 		if (result == ResultCode.SUCCESS) {
@@ -577,6 +577,7 @@ public class OrderlistAction extends ActionSupport {
 		getwashorderlistasc();
 		return "json";
 	}
+	
 
 	public String getwashorderlist() throws Exception {
 		dataMap = new HashMap<String, Object>(); // 新建dataMap来储存JSON字符串

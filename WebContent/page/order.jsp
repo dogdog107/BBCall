@@ -45,6 +45,7 @@
 				訂單狀態：
 				<select name="order_status" style="width: 100px;">
 					<option value="1">新建訂單</option>
+					<option value="7">已出價訂單</option>
 					<option value="2">待評價訂單</option>
 					<option value="3">已評價訂單</option>
 					<option value="4">收到貨物</option>
@@ -61,6 +62,7 @@
 				<select name="order_status2" style="width: 100px;">
 					<option selected="selected" value="0">請選擇</option>
 					<option value="1">新建訂單</option>
+					<option value="7">已出價訂單</option>
 					<option value="2">待評價訂單</option>
 					<option value="3">已評價訂單</option>
 					<option value="4">收到貨物</option>
@@ -104,7 +106,10 @@
 								test="%{#order.order_status == 3}">已評價訂單</s:if> <s:if
 								test="%{#order.order_status == 4}">收到貨物</s:if> <s:if
 								test="%{#order.order_status == 5}">正在清洗</s:if> <s:if
-								test="%{#order.order_status == 6}">正在配送</s:if></td>
+								test="%{#order.order_status == 6}">正在配送</s:if>
+								<s:if
+								test="%{#order.order_status == 7}">已出價訂單</s:if></td>
+								
 						<td id="order_type_code" style="display: none"><s:property
 								value='#order.order_type_code' /></td>
 						<td id="order_href"><a
