@@ -58,7 +58,7 @@
 			</div>
 			<table border="1" width="100%" class="table_update">
 				<tr id="userid_tr" style="display: none">
-					<td width="300px">用戶ID (UserID)</td>
+					<td  width="300px">用戶ID (UserID)</td>
 					<td>
 					<span>${sessionScope.user_id}</span>
 					<%-- <input name="userid" id="userid" value="${sessionScope.user_id}" /> --%>
@@ -67,7 +67,7 @@
 					</td>
 				</tr>
 				<tr>
-					<td>用戶頭像 (UserPhoto)</td>
+					<td  width="300px">用戶頭像 (UserPhoto)</td>
 					<td>
 						<img id="user_photo" src="" height="80" width="80" /><br/>
 						<input type="file" name="upload" id="upload" onchange="upload(this)" class="btn btn-default" />
@@ -136,7 +136,7 @@
 				</tr>
 				<tr>
 					<td>用戶技能 (User Skill)
-						<input type="button" value="增加技能(Add Skill)" class="btn btn-default" onclick="addSkill()" />
+						<img type="image" align="center" src="${pageContext.request.contextPath }/page/img/add_1.png" onclick="addSkill()" />
 					</td>
 					<td id="skill_main">
 					<input type="hidden" id="skill" name="skill" value="${sessionScope.user_skill}"/>
@@ -146,7 +146,7 @@
 								onchange="getChildSkillList(this.options[selectedIndex].value, this.id)">
 								<option value="0">--請選擇技能--</option>
 							</select>
-							<input id="deleteSkill" type="button" value="刪除此技能(Delete this skill)" onclick="deleteSkillbtn(this.id)" class="btn btn-default"/>
+							<img id="deleteSkill" align="center" src="${pageContext.request.contextPath }/page/img/remove_1.png" onclick="deleteSkillbtn(this.id)"/>
 						</div>
 						<div id="skillChildList">
 						

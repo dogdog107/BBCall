@@ -57,8 +57,10 @@ function getChildSkillList(parentcode, idname, skillvalue) {
 				for ( var j = 0; j < data.referdoclist.length; j++) {
 					$('<label><input name="skillcodepart" id="skillcodepartid_' + data.referdoclist[j].referdoc_id + '" type="checkbox" value="' + data.referdoclist[j].referdoc_id + '" />' + data.referdoclist[j].referdoc_type + '&nbsp;&nbsp;</label>').appendTo($childskill);
 				}
-				var skillpartid = "skillcodepartid_" + skillvalue;
-				$childskill.find("#" + skillpartid).attr("checked", true);
+				if (skillvalue != '' && skillvalue != undefined){
+					var skillpartid = "skillcodepartid_" + skillvalue;
+					$childskill.find("#" + skillpartid).attr("checked", true);
+				}
 				$childskill.show(300);
 			} else {
 				alert(data.errmsg);
@@ -80,7 +82,7 @@ function getParentSkillList(idname, skillvalue) {
 									data.parentreferdoclist[j].referdoc_type,
 									data.parentreferdoclist[j].referdoc_id));
 				}
-				if(skillvalue != ''){
+				if(skillvalue != '' && skillvalue != undefined){
 					$("#" + idname).val(skillvalue);
 				}
 			} else {
@@ -93,6 +95,9 @@ function getParentSkillList(idname, skillvalue) {
 function addSkill(skillvalue) {
 	var objs = document.getElementsByName('skillpart');
 	var objlength = objs.length + 1;
+	while (document.getElementById("skillpart_" + objlength) != null) {
+		objlength++;
+	}
 	var count = 0;
 	if (skillvalue != '' && skillvalue != undefined) {
 		var tempskillvalue = skillvalue.split(";");
@@ -146,7 +151,10 @@ function addSkill(skillvalue) {
 function deleteSkillbtn(idname) {
 	var idno = idname.split("_")[1];
 	var deletename = "skillpart_" + idno;
-	$("#" + deletename).remove();
+	$("#" + deletename).hide(300);
+	setTimeout(function() {
+		$("#" + deletename).remove();
+	}, 300); // how long do you want the delay to be?
 }
 
 function updateAddressCodeName(idno) {

@@ -82,7 +82,11 @@
 						<td id="adverttype"></td>
 						<td id="createtime"></td>
 						<td id="status_operation">
-
+							<span>置頂狀態:</span>
+							<select id="istopOpr" onchange="updateIsTop(this.id, this.value)">
+								<option value="0">未置頂</option>
+								<option value="1">置頂中</option>
+							</select><br/>
 							<input id="btnDetail" type="submit" value="詳情/Detail" onclick=""/>
 							<input id="btnDelete" type="submit" value="刪除/Delete" onclick=""/>
 						</td>
@@ -108,6 +112,7 @@
 		</div>
 	</div>
 <script type="text/javascript">
+	var BASE_URL = '${pageContext.request.contextPath }';
 	var token = "${sessionScope.user_token}";
 	var link = "${pageContext.request.contextPath }";
 </script>

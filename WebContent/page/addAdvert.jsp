@@ -13,7 +13,7 @@
 
 <title>新增廣告 (Add Advertisement)</title>
 </head>
-<body>
+<body onload="onload()">
 	<table cellspacing=0 cellpadding=0 width="100%" align=center border=0
 		style="font-size: 12px;">
 		<tr height=28>
@@ -59,13 +59,23 @@
 					<td><textarea rows="3" name="advertisement_summary" style="width:400px;"></textarea></td>
 				</tr>
 				<tr>
-					<td>廣告類型 (AD Type)</td>
-					<td><select name="advertisement_type" id="advertisement_type">
-							<option>請選擇(Choose)</option>
-							<option value="1">Customer</option>
-							<option value="2">Master</option>
-							<option value="3">Admin</option>
-					</select></td>
+					<td>用戶技能 (User Skill)
+					</td>
+					<td id="skill_main">
+					<input type="hidden" id="advertisement_type" name="advertisement_type" value=""/>
+					<div style="padding: 6px 12px;">
+						<div>
+							<select id="skillParentCode"
+								onchange="getChildSkillList(this.options[selectedIndex].value)">
+								<option value="0">--請選擇廣告類型--</option>
+							</select>
+						</div>
+						<div id="skillChildList">
+						
+						</div>
+					</div>
+
+					</td>
 				</tr>
 				<tr>
 					<td>廣告大標圖 (AD Big Photo)</td>

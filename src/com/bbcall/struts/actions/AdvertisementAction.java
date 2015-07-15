@@ -41,6 +41,7 @@ public class AdvertisementAction extends ActionSupport{
 	
 	// Advertisement-related parameters
 	private Integer advertisement_id;
+	private Integer advertisement_istop;
 	private String advertisement_title;
 	private String advertisement_type;
 	private String advertisement_bigphoto_url;
@@ -52,6 +53,7 @@ public class AdvertisementAction extends ActionSupport{
 	
 	// Page-related parameters
 	private Integer pagenum; // 页面页数
+	
 	/**
 	 * addAdvert Action
 	 * @author Roger Luo
@@ -188,6 +190,30 @@ public class AdvertisementAction extends ActionSupport{
 		return "json";
 	}
 	
+	/**
+	 * updateAdvertIsTop Action
+	 * @return
+	 * @throws Exception
+	 */
+	public String updateAdvertIsTop() throws Exception {
+		int result = advertisementServices.updateAdvertIsTop(advertisement_id, advertisement_istop);
+		dataMap.clear(); // dataMap中的数据将会被Struts2转换成JSON字符串，所以这里要先清空其中的数据
+		if (result == ResultCode.SUCCESS) {
+			dataMap.putAll(Tools.JsonHeadMap(result, true));
+			System.out.println(dataMap);
+			return "updateAdvertIsTopSuccess";
+		} else {
+			dataMap.putAll(Tools.JsonHeadMap(result, false));
+			System.out.println(dataMap);
+			System.out.println("updateAdvertIsTop Failed");
+			return "updateAdvertIsTopFailed";
+		}
+	}
+	public String updateAdvertIsTopJson() throws Exception {
+		updateAdvertIsTop();
+		return "json";
+	}
+	
 	
 	// Json Format Return
 	public Map<String, Object> getDataMap() {
@@ -292,5 +318,13 @@ public class AdvertisementAction extends ActionSupport{
 
 	public void setPagenum(Integer pagenum) {
 		this.pagenum = pagenum;
+	}
+
+	public Integer getAdvertisement_istop() {
+		return advertisement_istop;
+	}
+
+	public void setAdvertisement_istop(Integer advertisement_istop) {
+		this.advertisement_istop = advertisement_istop;
 	}
 }

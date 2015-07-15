@@ -1,16 +1,15 @@
 
 
-
 function onload() {
 	checkAdvertList();
 }
 
 //调用pagechange方法
 function pagechange(pagenum){
-	checkUserList(global_col_name, global_specify_value, global_search_value, pagenum);
+	checkAdvertList(pagenum);
 }
 
-function checkAdvertList(col_name, specify_value, search_value, pagenum){
+function checkAdvertList(pagenum){
 	$
 	.ajax({
 		type : "post",
@@ -46,9 +45,17 @@ function checkAdvertList(col_name, specify_value, search_value, pagenum){
 					} else {
 						row.find("#smallpicurl").html("<img src=" + n.advertisement_smallphoto_url + " height='60' width='60'>");
 					}
-					row.find("#adverttitle").text(n.advertisement_title);
+					if(n.advertisement_istop == 1) {
+						row.find("#adverttitle").html("<img id='topimg_" + n.advertisement_id + "' align='center' src='" + BASE_URL + "/page/img/top_1.gif'><span>" + n.advertisement_title + "</span>");
+						row.find("#istopOpr").val(n.advertisement_istop);
+					} else {
+						row.find("#adverttitle").text(n.advertisement_title);
+					}
+					row.find("#adverttitle").attr("id", "adverttitle_" + n.advertisement_id);
+					row.find("#istopOpr").attr("id", "istopOpr_" + n.advertisement_id);
 					row.find("#advertsummary").text(n.advertisement_summary);
-					row.find("#adverttype").text(n.advertisement_type);
+					row.find("#adverttype").attr("id", "adverttype_" + n.advertisement_id);
+					checkAdvertType(n.advertisement_type, "adverttype_" + n.advertisement_id)
 					var createtime = n.advertisement_create_time;
 					row.find("#createtime").text(createtime.replace("T", " "));
 					row.find("#btnDetail").attr("onclick", "location.href='advert_showAdvert.action?advertisement_id=" + n.advertisement_id + "'");
@@ -58,6 +65,9 @@ function checkAdvertList(col_name, specify_value, search_value, pagenum){
 					row.attr("id", "advertlist_" + n.advertisement_id);// 改变绑定好数据的行的id
 					row.appendTo("#datas");// 添加到模板的容器中
 					row.toggle(300);
+				});
+				$.each(advertList, function(i) {
+					
 				});
 			} else {
 				//隐藏分页条
@@ -69,6 +79,62 @@ function checkAdvertList(col_name, specify_value, search_value, pagenum){
 			}
 		}
 	});
+}
+
+function updateIsTop(idname, value) {
+	var advertid = idname.split("_")[1];
+	if (confirm('確定要修改廣告(ID:'+ advertid +')的置頂狀態嗎？\n Confirm to change the "TOP" status for AD (ID:'+ advertid +')?')) {
+		$.ajax({
+			type : "post",
+			url : "${pageContext.request.contextPath}/advert_updateAdvertIsTopJson",
+			data : {
+				"token" : token,
+				"advertisement_id" : advertid,
+				"advertisement_istop" : value
+			},
+			success : function(data) {
+				if (data.result) {
+					var titleid = "adverttitle_" + advertid;
+					$("#" + titleid).hide();
+					switch (value) {
+					case "0":
+						var topimgid = "topimg_" + advertid;
+						$("#" + topimgid).remove();
+						break;
+					case "1":
+						$("#" + titleid).append("<img id='topimg_" + advertid + "' align='center' src='" + BASE_URL + "/page/img/top_1.gif'>");
+						break;
+					}
+					$("#" + titleid).attr("style", "border:solid #55AA00 2px;");
+					$("#" + titleid).show(300);
+					$("#message").html("<font color=green> (ID:"+ advertid +") TOP Update Success ! </font>");
+					$("#div_message").show(300).delay(5000).hide(300);
+				} else {
+					$("#message").html("<font color=red> (ID:"+ advertid +") TOP Update Failed ! " + data.errmsg + "</font>");
+					$("#div_message").show(300).delay(5000).hide(300);
+					var istopOprid = "istopOpr_" + advertid;
+					switch (value) {
+					case "0":
+						$("#" + istopOprid).val(1);
+						break;
+					case "1":
+						$("#" + istopOprid).val(0);
+						break;
+					}
+				}
+			}
+		});
+	} else {
+		var istopOprid = "istopOpr_" + advertid;
+		switch (value) {
+		case "0":
+			$("#" + istopOprid).val(1);
+			break;
+		case "1":
+			$("#" + istopOprid).val(0);
+			break;
+		}
+	}
 }
 
 function deleteAdvert(idno){
@@ -94,4 +160,20 @@ function deleteAdvert(idno){
 			}
 		});
 	}
+}
+
+function checkAdvertType(typecode, idname){
+	$.ajax({
+		type : "post",
+		url : "${pageContext.request.contextPath}/referdoc_selectJson.action",
+		data : {
+			"token" : token,
+			"referdoc_id" : typecode
+		},
+		success : function(data) {
+			if (data.result) {
+				$("#" + idname).text(data.referdoc.referdoc_type).show(300);
+			}
+		}
+	});
 }
