@@ -9,6 +9,7 @@ import com.bbcall.functions.ResultCode;
 import com.bbcall.mybatis.dao.BlacklistMapper;
 import com.bbcall.mybatis.dao.UserMapper;
 import com.bbcall.mybatis.table.Blacklist;
+import com.github.pagehelper.PageHelper;
 
 @Service("blacklistServices")
 public class BlacklistServices {
@@ -47,8 +48,8 @@ public class BlacklistServices {
 	// ## (1) blacklistinfos
 	// ##
 	// ################################################################################
-	public int addBlacklist(int blacklist_user_id,
-			int blacklist_master_id, int blacklist_order_id) {
+	public int addBlacklist(int blacklist_user_id, int blacklist_master_id,
+			int blacklist_order_id, Integer pagenum) {
 
 		System.out.println("Here is BlacklistServices.add method...");
 		Blacklist blacklist = new Blacklist();
@@ -58,41 +59,88 @@ public class BlacklistServices {
 
 		blacklistMapper.addBlacklist(blacklist);
 
-		blacklistinfos = blacklistMapper
-				.getBlacklistByUser(blacklist_user_id);
+		// 当传进来的pagenum为空 或者 pagenum == 0 时，显示第一页
+		if (pagenum == null || pagenum == 0)
+			pagenum = 1;
+
+		// PageHelper.startPage(PageNum, PageSize)
+		// 获取第1页，10条内容，当PageSize=0时会查询出全部的结果
+		PageHelper.startPage(pagenum, 10);
+
+		blacklistinfos = blacklistMapper.getBlacklistByUser(blacklist_user_id);
 
 		return ResultCode.SUCCESS;
 	}
 
-	public int deleteBlacklist(int blacklist_id, int blacklist_user_id) {
+	public int deleteBlacklist(int blacklist_id, int blacklist_user_id,
+			Integer pagenum) {
 
 		System.out.println("Here is BlacklistServices.delete method...");
 
 		blacklistMapper.deleteBlacklistById(blacklist_id);
 
-		blacklistinfos = blacklistMapper
-				.getBlacklistByUser(blacklist_user_id);
+		// 当传进来的pagenum为空 或者 pagenum == 0 时，显示第一页
+		if (pagenum == null || pagenum == 0)
+			pagenum = 1;
+
+		// PageHelper.startPage(PageNum, PageSize)
+		// 获取第1页，10条内容，当PageSize=0时会查询出全部的结果
+		PageHelper.startPage(pagenum, 10);
+
+		blacklistinfos = blacklistMapper.getBlacklistByUser(blacklist_user_id);
 
 		return ResultCode.SUCCESS;
 	}
 
-	public int getBlacklist(int user_id) {
+	public int getBlacklistForCustomer(int user_id, Integer pagenum) {
 
-		if (userMapper.getUserById(user_id).getUser_type() == 1) {
-			blacklistinfos = blacklistMapper.getBlacklistByUser(user_id);
-		} else if (userMapper.getUserById(user_id).getUser_type() == 2) {
-			blacklistinfos = blacklistMapper.getBlacklistByMaster(user_id);
-		} else {
-			blacklistinfos = blacklistMapper.getBlacklist();
-		}
+		// 当传进来的pagenum为空 或者 pagenum == 0 时，显示第一页
+		if (pagenum == null || pagenum == 0)
+			pagenum = 1;
+
+		// PageHelper.startPage(PageNum, PageSize)
+		// 获取第1页，10条内容，当PageSize=0时会查询出全部的结果
+		PageHelper.startPage(pagenum, 10);
+
+		blacklistinfos = blacklistMapper.getBlacklistByUser(user_id);
 
 		return ResultCode.SUCCESS;
 	}
-	
+
+	public int getBlacklistForMaster(int user_id, Integer pagenum) {
+
+		// 当传进来的pagenum为空 或者 pagenum == 0 时，显示第一页
+		if (pagenum == null || pagenum == 0)
+			pagenum = 1;
+
+		// PageHelper.startPage(PageNum, PageSize)
+		// 获取第1页，10条内容，当PageSize=0时会查询出全部的结果
+		PageHelper.startPage(pagenum, 10);
+
+		blacklistinfos = blacklistMapper.getBlacklistByMaster(user_id);
+
+		return ResultCode.SUCCESS;
+	}
+
+	public int getBlacklistForAdm(Integer pagenum) {
+
+		// 当传进来的pagenum为空 或者 pagenum == 0 时，显示第一页
+		if (pagenum == null || pagenum == 0)
+			pagenum = 1;
+
+		// PageHelper.startPage(PageNum, PageSize)
+		// 获取第1页，10条内容，当PageSize=0时会查询出全部的结果
+		PageHelper.startPage(pagenum, 10);
+
+		blacklistinfos = blacklistMapper.getBlacklist();
+
+		return ResultCode.SUCCESS;
+	}
+
 	public int getBlacklistById(int blacklist_id) {
-		
+
 		blacklistinfo = blacklistMapper.getBlacklistById(blacklist_id);
-		
+
 		return ResultCode.SUCCESS;
 	}
 

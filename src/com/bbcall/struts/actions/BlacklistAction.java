@@ -8,10 +8,13 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Controller;
 
+import com.bbcall.functions.PageInfoToMap;
 import com.bbcall.functions.ResultCode;
 import com.bbcall.functions.Tools;
 import com.bbcall.mybatis.table.Blacklist;
+import com.bbcall.mybatis.table.User;
 import com.bbcall.struts.services.BlacklistServices;
+import com.bbcall.struts.services.UserServices;
 import com.opensymphony.xwork2.ActionSupport;
 
 @Scope("prototype")
@@ -22,12 +25,18 @@ public class BlacklistAction extends ActionSupport {
 	@Autowired
 	private BlacklistServices blacklistServices;
 
+	@Autowired
+	private UserServices userServices;
+
 	private String blacklist_id;
 	private String blacklist_user_id;
 	private String blacklist_master_id;
 	private String blacklist_order_id;
+	private String user_id;
+	private Integer pagenum; // 页面页数
 
 	private Map<String, Object> dataMap;
+	private PageInfoToMap pageinfo2map = new PageInfoToMap();// 新建PageInfoToMap对象
 
 	@Override
 	public String execute() throws Exception {
@@ -41,19 +50,20 @@ public class BlacklistAction extends ActionSupport {
 
 		int user_id = Integer.parseInt(blacklist_user_id);
 		int master_id = Integer.parseInt(blacklist_master_id);
-		int border_id = Integer.parseInt(blacklist_order_id);
-		
-		int result = blacklistServices.addBlacklist(user_id,
-				master_id, border_id);
+		int order_id = Integer.parseInt(blacklist_order_id);
+
+		int result = blacklistServices.addBlacklist(user_id, master_id,
+				order_id, pagenum);
 
 		if (result == ResultCode.SUCCESS) {
 			List<Blacklist> blacklists = blacklistServices.blacklistinfos();
 			dataMap.put("blacklists", blacklists);
+			dataMap.putAll(pageinfo2map.pageInfoMap(blacklists));// 把分页信息放进dataMap
 			dataMap.putAll(Tools.JsonHeadMap(result, true));
-//			dataMap.put("resultcode", result);
-//			dataMap.put("errmsg", ResultCode.getErrmsg(result));
-//			dataMap.put("insertResult", true);
-//			System.out.println(dataMap);
+			// dataMap.put("resultcode", result);
+			// dataMap.put("errmsg", ResultCode.getErrmsg(result));
+			// dataMap.put("insertResult", true);
+			// System.out.println(dataMap);
 		}
 
 		return SUCCESS;
@@ -72,18 +82,19 @@ public class BlacklistAction extends ActionSupport {
 
 		int user_id = Integer.parseInt(blacklist_user_id);
 		int black_id = Integer.parseInt(blacklist_id);
-		
-		int result = blacklistServices.deleteBlacklist(black_id,
-				user_id);
+
+		int result = blacklistServices.deleteBlacklist(black_id, user_id,
+				pagenum);
 
 		if (result == ResultCode.SUCCESS) {
 			List<Blacklist> blacklists = blacklistServices.blacklistinfos();
 			dataMap.put("blacklists", blacklists);
+			dataMap.putAll(pageinfo2map.pageInfoMap(blacklists));// 把分页信息放进dataMap
 			dataMap.putAll(Tools.JsonHeadMap(result, true));
-//			dataMap.put("resultcode", result);
-//			dataMap.put("errmsg", ResultCode.getErrmsg(result));
-//			dataMap.put("deleteResult", true);
-//			System.out.println(dataMap);
+			// dataMap.put("resultcode", result);
+			// dataMap.put("errmsg", ResultCode.getErrmsg(result));
+			// dataMap.put("deleteResult", true);
+			// System.out.println(dataMap);
 		}
 
 		return SUCCESS;
@@ -99,24 +110,41 @@ public class BlacklistAction extends ActionSupport {
 		dataMap = new HashMap<String, Object>(); // 新建dataMap来储存JSON字符串
 		dataMap.clear(); // dataMap中的数据将会被Struts2转换成JSON字符串，所以这里要先清空其中的数据
 
-		int result = 0;
+		int result = 1;
 
-		if (blacklist_user_id != null) {
-			int user_id = Integer.parseInt(blacklist_user_id);
-			result = blacklistServices.getBlacklist(user_id);
+		int userid = Integer.parseInt(user_id);
+
+		userServices.getUserById(userid);
+
+		User tempuUser = userServices.getUserinfo();
+
+		Integer usertype = tempuUser.getUser_type();
+
+		if (usertype.equals(1)) {
+			result = blacklistServices.getBlacklistForCustomer(userid, pagenum);
+		} else if (usertype.equals(2)) {
+			result = blacklistServices.getBlacklistForMaster(userid, pagenum);
 		} else {
-			int master_id = Integer.parseInt(blacklist_master_id);
-			result = blacklistServices.getBlacklist(master_id);
+			result = blacklistServices.getBlacklistForAdm(pagenum);
 		}
+		
+//		if (blacklist_user_id != null) {
+//			int user_id = Integer.parseInt(blacklist_user_id);
+//			result = blacklistServices.getBlacklist(user_id);
+//		} else {
+//			int master_id = Integer.parseInt(blacklist_master_id);
+//			result = blacklistServices.getBlacklist(master_id);
+//		}
 
 		if (result == ResultCode.SUCCESS) {
 			List<Blacklist> blacklists = blacklistServices.blacklistinfos();
 			dataMap.put("blacklists", blacklists);
+			dataMap.putAll(pageinfo2map.pageInfoMap(blacklists));// 把分页信息放进dataMap
 			dataMap.putAll(Tools.JsonHeadMap(result, true));
-//			dataMap.put("resultcode", result);
-//			dataMap.put("errmsg", ResultCode.getErrmsg(result));
-//			dataMap.put("getBlacklistResult", true);
-//			System.out.println(dataMap);
+			// dataMap.put("resultcode", result);
+			// dataMap.put("errmsg", ResultCode.getErrmsg(result));
+			// dataMap.put("getBlacklistResult", true);
+			// System.out.println(dataMap);
 		}
 
 		return SUCCESS;
@@ -128,27 +156,28 @@ public class BlacklistAction extends ActionSupport {
 		getBlacklist();
 		return "json";
 	}
-	
+
 	public String getBlacklistById() throws Exception {
 		dataMap = new HashMap<String, Object>(); // 新建dataMap来储存JSON字符串
 		dataMap.clear(); // dataMap中的数据将会被Struts2转换成JSON字符串，所以这里要先清空其中的数据
-		
+
 		int bk_id = Integer.parseInt(blacklist_id);
-		
+
 		int result = blacklistServices.getBlacklistById(bk_id);
-		
+
 		if (result == ResultCode.SUCCESS) {
-			Blacklist blacklist = blacklistServices.blacklistinfo();
-			dataMap.put("blacklist", blacklist);
-			dataMap.put("resultcode", result);
-			dataMap.put("errmsg", ResultCode.getErrmsg(result));
-			dataMap.put("getBlacklistByIdResult", true);
-			System.out.println(dataMap);
+			Blacklist blacklists = blacklistServices.blacklistinfo();
+			dataMap.put("blacklists", blacklists);
+			dataMap.putAll(Tools.JsonHeadMap(result, true));
+//			dataMap.put("resultcode", result);
+//			dataMap.put("errmsg", ResultCode.getErrmsg(result));
+//			dataMap.put("getBlacklistByIdResult", true);
+//			System.out.println(dataMap);
 		}
 
 		return SUCCESS;
 	}
-	
+
 	public String getBlacklistByIdJson() throws Exception {
 		System.out.println("Here is blacklistAction.getBlacklistByIdJson");
 		getBlacklistById();
@@ -199,5 +228,28 @@ public class BlacklistAction extends ActionSupport {
 		return blacklistServices;
 	}
 
-	
+	public Integer getPagenum() {
+		return pagenum;
+	}
+
+	public void setPagenum(Integer pagenum) {
+		this.pagenum = pagenum;
+	}
+
+	public String getUser_id() {
+		return user_id;
+	}
+
+	public void setUser_id(String user_id) {
+		this.user_id = user_id;
+	}
+
+	public UserServices getUserServices() {
+		return userServices;
+	}
+
+	public void setUserServices(UserServices userServices) {
+		this.userServices = userServices;
+	}
+
 }

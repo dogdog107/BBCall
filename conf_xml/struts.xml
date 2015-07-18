@@ -165,6 +165,15 @@
 				<param name="root">dataMap</param>
 			</result>
 		</action>
+		
+		<!-- Blacklist Action -->
+		<action name="blacklist_*" method="{1}" class="blacklistAction">
+			<result name="success">/page/blacklist.jsp</result>
+			
+			<result type="json" name="json">
+				<param name="root">dataMap</param>
+			</result>
+		</action>
 
 		<!-- Address Action -->
 		<action name="address_*" method="{1}" class="addressAction">
