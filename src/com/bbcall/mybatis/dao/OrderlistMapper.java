@@ -14,91 +14,86 @@ public interface OrderlistMapper {
 
 	// 通过用户账号取得未完成订单列表
 	public List<Orderlist> getUnOrdersByUserAccount(
-			@Param("order_user_id") int order_user_id,
-			@Param("offset") int offset);
+			@Param("order_user_id") int order_user_id);
 
 	// 通过用户账号取得已完成订单列表
 	public List<Orderlist> getComOrdersByUserAccount(
-			@Param("order_user_id") int order_user_id,
-			@Param("offset") int offset);
+			@Param("order_user_id") int order_user_id);
+
+//	// 通过订单类型、师傅账号、技能类型取得未完成订单列表
+//	public List<Orderlist> getOrdersByMasterLocation(
+//			@Param("order_status") int order_status,
+//			@Param("order_book_location_code") int order_book_location_code,
+//			@Param("order_master_id") int order_master_id);
+//
+//	// 通过订单类型、师傅账号、技能类型取得未完成订单列表
+//	public List<Orderlist> getOrdersByMasterLocation2(
+//			@Param("order_status") int order_status,
+//			@Param("order_book_location_code") int order_book_location_code,
+//			@Param("order_master_id") int order_master_id);
+
+//	// 通过订单类型、师傅账号、技能类型取得未完成订单列表
+//	public List<Orderlist> getOrdersByMasterSkill(
+//			@Param("order_status") int order_status,
+//			@Param("order_type_list") String[] order_type_list,
+//			@Param("order_master_id") int order_master_id);
 
 	// 通过订单类型、师傅账号、技能类型取得未完成订单列表
-	public List<Orderlist> getOrdersByMasterLocation(
-			@Param("order_status") int order_status,
-			@Param("order_book_location_code") int order_book_location_code,
-			@Param("order_master_id") int order_master_id,
-			@Param("offset") int offset);
-
-	// 通过订单类型、师傅账号、技能类型取得未完成订单列表
-	public List<Orderlist> getOrdersByMasterLocation2(
-			@Param("order_status") int order_status,
-			@Param("order_book_location_code") int order_book_location_code,
-			@Param("order_master_id") int order_master_id,
-			@Param("offset") int offset);
-
-	// 通过订单类型、师傅账号、技能类型取得未完成订单列表
-	public List<Orderlist> getOrdersByMasterSkill(
-			@Param("order_status") int order_status,
-			@Param("order_type_code") int order_type_code,
-			@Param("order_master_id") int order_master_id,
-			@Param("offset") int offset);
-
-	// 通过订单类型、师傅账号、技能类型取得未完成订单列表
-	public List<Orderlist> getOrdersByMasterSkill2(
-			@Param("order_status") int order_status,
-			@Param("order_type_code") int order_type_code,
-			@Param("order_master_id") int order_master_id,
-			@Param("offset") int offset);
+	public List<Orderlist> getUnOrdersBySkill(
+			@Param("ordertypelist") String[] ordertypelist,
+			@Param("order_master_id") int order_master_id);
+//
+//	// 通过订单类型、师傅账号、技能类型取得未完成订单列表
+//	public List<Orderlist> getOrdersByMasterSkill2(
+//			@Param("order_status") int order_status,
+//			@Param("order_type_code") int order_type_code,
+//			@Param("order_master_id") int order_master_id);
 
 	// 通过师傅账号/技能类型/订单地区取得未完成订单列表 (按发布时间排序)
 	public List<Orderlist> getUnOrdersByMasterLocation(
-			@Param("order_type_code") int order_type_code,
-			@Param("order_book_location_code") int order_book_location_code,
-			@Param("order_master_id") int order_master_id,
-			@Param("offset") int offset);
+			@Param("ordertypelist") String[] ordertypelist,
+			@Param("order_book_location_code") String order_book_location_code,
+			@Param("sortparm") String sortparm,
+			@Param("order_master_id") int order_master_id);
 
-	// 通过师傅账号/技能类型/订单地区取得未完成订单列表 (按工作截止时间排序)
-	public List<Orderlist> getUnOrdersByBookTime(
-			@Param("order_type_code") int order_type_code,
-			@Param("order_book_location_code") int order_book_location_code,
-			@Param("order_master_id") int order_master_id,
-			@Param("offset") int offset);
+//	// 通过师傅账号/技能类型/订单地区取得未完成订单列表 (按工作截止时间排序)
+//	public List<Orderlist> getUnOrdersByBookTime(
+//			@Param("order_type_code") int order_type_code,
+//			@Param("order_book_location_code") int order_book_location_code,
+//			@Param("order_master_id") int order_master_id);
 
 	// 通过师傅账号取得已完成订单列表
 	public List<Orderlist> getComOrdersByMasterAccount(
-			@Param("order_master_id") int order_master_id,
-			@Param("offset") int offset);
+			@Param("order_master_id") int order_master_id);
 
 	// 通过用户账号取得正在处理中的订单
 	public List<Orderlist> getProOrdersByUserAccount(
-			@Param("order_user_id") int order_user_id,
-			@Param("offset") int offset);
+			@Param("order_user_id") int order_user_id);
 
 	// 通过师傅账号取得正在处理订单列表
 	public List<Orderlist> getProOrdersByMasterAccount(
-			@Param("order_master_id") int order_master_id,
-			@Param("offset") int offset);
+			@Param("order_master_id") int order_master_id);
 
 	// 通过id取得特定订单
 	public Orderlist getOrder(int order_id);
 
 	// 获取所有未完成订单列表
-	public List<Orderlist> getUnOrders(int offset);
+	public List<Orderlist> getUnOrders();
 
 	// 获取所有已完成订单列表
-	public List<Orderlist> getComOrders(int offset);
+	public List<Orderlist> getComOrders();
 
 	// 获取所有已接收订单列表
-	public List<Orderlist> getRecOrders(int offset);
+	public List<Orderlist> getRecOrders();
 
 	// 获取所有正在清洗订单列表
-	public List<Orderlist> getWasOrders(int offset);
+	public List<Orderlist> getWasOrders();
 
 	// 获取所有正在配送订单列表
-	public List<Orderlist> getDelOrders(int offset);
+	public List<Orderlist> getDelOrders();
 
 	// 获取所有正在处理订单列表
-	public List<Orderlist> getProOrders(int offset);
+	public List<Orderlist> getProOrders();
 
 	// 获取所有洗衣订单
 	public List<Orderlist> getWashOrderlist();
@@ -135,8 +130,7 @@ public interface OrderlistMapper {
 
 	// 通过师傅账号取得订单列表
 	public List<Orderlist> getOrdersByMaster(
-			@Param("order_master_id") int order_master_id,
-			@Param("offset") int offset);
+			@Param("order_master_id") int order_master_id);
 
 	// 通过师傅账号取得订单列表
 	public List<Orderlist> getOrdersByMId(
@@ -144,9 +138,9 @@ public interface OrderlistMapper {
 			@Param("order_status") int order_status);
 
 	// 通过师傅账户和订单状态取得订单列表
-	public List<Orderlist> getOrders(@Param("order_status") int order_status,
+	public List<Orderlist> getOrders(@Param("order_status") String order_status,
 			@Param("order_master_id") int order_master_id,
-			@Param("offset") int offset);
+			@Param("order_type_code") String order_type_code);
 
 	// 更改订单为完成状态
 	public void completeOrder(@Param("order_score") double order_score,

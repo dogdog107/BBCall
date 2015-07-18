@@ -259,6 +259,23 @@ public class PreorderServices {
 		return ResultCode.SUCCESS;
 	}
 
+	public int selectPreorder(int preorder_master_id, int preorder_order_id) {
+		System.out.println("Here is PreorderServices.selectPreorder method...");
+
+		preorderinfo = preorderMapper.getPreoder(preorder_master_id, preorder_order_id);
+
+		return ResultCode.SUCCESS;
+	}
+	
+	public int delete(int preorder_order_id) {
+		System.out.println("Here is PreorderServices.delete method...");
+
+		preorderMapper.deletePreorderByOrderId(preorder_order_id);
+
+		return ResultCode.SUCCESS;
+	}
+	
+	
 	public Preorder preorderinfo() {
 
 		return preorderinfo;

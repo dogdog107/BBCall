@@ -33,6 +33,3 @@ function referdoclist_update(formnum) {
 	document.getElementById(formnum).submit();
 }
 
-function referdelete(referid) {
-	
-}

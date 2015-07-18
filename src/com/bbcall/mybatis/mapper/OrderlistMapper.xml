@@ -93,31 +93,52 @@
 	<select id="getUnOrdersByUserAccount" parameterType="int"
 		resultMap="OrderResultMap">
 		select * from ORDERLIST
-		where (order_status=1 or order_status=7) and
-		order_user_id=#{order_user_id} order by order_create_time asc LIMIT #{offset},10
+		where (order_status=1 or
+		order_status=7) and
+		order_user_id=#{order_user_id} order by
+		order_create_time asc
 	</select>
 
 	<select id="getProOrdersByUserAccount" parameterType="int"
 		resultMap="OrderResultMap">
 		select * from ORDERLIST
 		where order_status="2" and
-		order_user_id=#{order_user_id} order by order_create_time asc LIMIT #{offset},10
+		order_user_id=#{order_user_id} order by order_book_time asc
 	</select>
 	<select id="getComOrdersByUserAccount" parameterType="int"
 		resultMap="OrderResultMap">
 		select * from ORDERLIST
 		where order_status="3" and
-		order_user_id=#{order_user_id} order by order_create_time asc LIMIT #{offset},10
+		order_user_id=#{order_user_id} order by order_end_time desc
 	</select>
 
 	<select id="getOrdersByMasterSkill" resultMap="OrderResultMap">
 		select * from
 		ORDERLIST where order_status=#{order_status,jdbcType=INTEGER} and
 		order_type_code=#{order_type_code,jdbcType=INTEGER} and
-		order_user_id not in (select blacklist_user_id from
+		order_user_id
+		not in (select blacklist_user_id from
 		BLACKLIST where
 		blacklist_master_id=#{order_master_id,jdbcType=INTEGER})
-		order by order_create_time LIMIT #{offset},10
+		order by
+		order_create_time
+	</select>
+
+	<select id="getUnOrdersBySkill" resultMap="OrderResultMap">
+		select * from
+		ORDERLIST where (order_status=1 or order_status=7)
+		<if test="ordertypelist!=null and ordertypelist.length!=0">
+			and order_type_code in
+			<foreach collection="ordertypelist" item="order_type_code"
+				index="index" open="(" close=")" separator=",">
+				#{order_type_code}
+			</foreach>
+		</if>
+		and order_user_id not in (select blacklist_user_id from
+		BLACKLIST where
+		blacklist_master_id=#{order_master_id,jdbcType=INTEGER})
+		order by
+		order_book_time
 	</select>
 
 	<select id="getOrdersByMasterSkill2" resultMap="OrderResultMap">
@@ -128,7 +149,8 @@
 		not in (select blacklist_user_id from
 		BLACKLIST where
 		blacklist_master_id=#{order_master_id,jdbcType=INTEGER})
-		order by order_book_time LIMIT #{offset},10
+		order by
+		order_book_time
 	</select>
 
 	<select id="getOrdersByMasterLocation" resultMap="OrderResultMap">
@@ -139,7 +161,8 @@
 		order_user_id not in (select blacklist_user_id from
 		BLACKLIST where
 		blacklist_master_id=#{order_master_id,jdbcType=INTEGER})
-		order by order_create_time LIMIT #{offset},10
+		order by
+		order_create_time
 	</select>
 
 	<select id="getOrdersByMasterLocation2" resultMap="OrderResultMap">
@@ -150,10 +173,29 @@
 		order_user_id not in (select blacklist_user_id from
 		BLACKLIST where
 		blacklist_master_id=#{order_master_id,jdbcType=INTEGER})
-		order by order_book_time LIMIT #{offset},10
+		order by
+		order_book_time
 	</select>
 
 	<select id="getUnOrdersByMasterLocation" resultMap="OrderResultMap">
+		select * from 
+		ORDERLIST where (order_status=1 or order_status=7) 
+		and order_type_code in 
+		<foreach collection="ordertypelist" item="order_type_code"
+			index="index" open="(" close=")" separator=",">
+			#{order_type_code}
+		</foreach>
+		<if	test="order_book_location_code != null and order_book_location_code != ''">
+
+		 and order_book_location_code=#{order_book_location_code} 
+		</if>
+		and order_user_id 
+		not in (select blacklist_user_id from 
+		BLACKLIST where 
+		blacklist_master_id=#{order_master_id,jdbcType=INTEGER}) 
+		order by ${sortparm} asc
+	</select>
+	<select id="getUnOrdersByBookTime" resultMap="OrderResultMap">
 		select * from
 		ORDERLIST where (order_status=1 or order_status=7) and
 		order_type_code=#{order_type_code,jdbcType=INTEGER} and
@@ -164,65 +206,51 @@
 		BLACKLIST where
 		blacklist_master_id=#{order_master_id,jdbcType=INTEGER})
 		order by
-		order_create_time asc LIMIT #{offset},10
-	</select>
-	<select id="getUnOrdersByBookTime" resultMap="OrderResultMap">
-		select * from
-		ORDERLIST where (order_status=1 or order_status=7)  and
-		order_type_code=#{order_type_code,jdbcType=INTEGER} and
-		order_book_location_code=#{order_book_location_code,jdbcType=INTEGER}
-		and
-		order_user_id
-		not in (select blacklist_user_id from
-		BLACKLIST where
-		blacklist_master_id=#{order_master_id,jdbcType=INTEGER})
-		order by
-		order_book_time asc LIMIT #{offset},10
+		order_book_time asc
 	</select>
 	<select id="getComOrdersByMasterAccount" parameterType="String"
 		resultMap="OrderResultMap">
 		select * from ORDERLIST where order_status="3" and
-		order_master_id=#{order_master_id} order by order_end_time LIMIT
-		#{offset},10
+		order_master_id=#{order_master_id} order by order_end_time desc
 	</select>
 	<select id="getProOrdersByMasterAccount" parameterType="String"
 		resultMap="OrderResultMap">
 		select * from ORDERLIST where order_status="2" and
-		order_master_id=#{order_master_id} LIMIT #{offset},10
+		order_master_id=#{order_master_id} order by order_book_time
 	</select>
 	<select id="getUnOrders" resultMap="OrderResultMap">
 		select * from ORDERLIST
 		where
-		(order_status=1 or order_status=7) order by order_book_time LIMIT #{offset},10
+		(order_status=1 or order_status=7) order by order_book_time
 	</select>
 	<select id="getProOrders" resultMap="OrderResultMap">
 		select * from ORDERLIST
 		where
-		order_status="2" LIMIT #{offset},10
+		order_status="2" order by order_book_time
 	</select>
 
 	<select id="getComOrders" resultMap="OrderResultMap">
 		select * from ORDERLIST
 		where
-		order_status="3" LIMIT #{offset},10
+		order_status="3" order by order_end_time desc
 	</select>
-	
+
 	<select id="getRecOrders" resultMap="OrderResultMap">
 		select * from ORDERLIST
 		where
-		order_status="4" LIMIT #{offset},10
+		order_status="4"
 	</select>
-	
+
 	<select id="getWasOrders" resultMap="OrderResultMap">
 		select * from ORDERLIST
 		where
-		order_status="5" LIMIT #{offset},10
+		order_status="5"
 	</select>
-	
+
 	<select id="getDelOrders" resultMap="OrderResultMap">
 		select * from ORDERLIST
 		where
-		order_status="6" LIMIT #{offset},10
+		order_status="6"
 	</select>
 
 	<select id="getWashOrderlist" resultMap="OrderResultMap">
@@ -235,23 +263,23 @@
 	<select id="getWashOrderlistByParm" resultMap="OrderResultMap">
 		select * from
 		ORDERLIST
-		where 
-		order_type_code in (15000,15001,15002) 
+		where
+		order_type_code in (15000,15001,15002)
 		<if test="order_status != null and order_status != ''">
- 
-        	and order_status = #{order_status}
-    	</if>
-        <if test="order_section != null and order_section != ''">
- 
-        	and order_section = #{order_section}
-    	</if>
-    	<if test="order_master_name != null and order_master_name != ''">
- 
-        	and order_master_name = #{order_master_name}
-    	</if>
-		    order by order_book_time asc, order_create_time asc
+
+			and order_status = #{order_status}
+		</if>
+		<if test="order_section != null and order_section != ''">
+
+			and order_section = #{order_section}
+		</if>
+		<if test="order_master_name != null and order_master_name != ''">
+
+			and order_master_name = #{order_master_name}
+		</if>
+		order by order_book_time asc, order_create_time asc
 	</select>
-	
+
 	<select id="getWashOrders" resultMap="OrderResultMap">
 		select * from ORDERLIST
 		where
@@ -289,22 +317,33 @@
 	<select id="getOrdersByMaster" resultMap="OrderResultMap">
 		select * from ORDERLIST
 		where
-		order_master_id=#{order_master_id} LIMIT #{offset},10
+		order_master_id=#{order_master_id}
 	</select>
 
 	<select id="getOrdersByMId" resultMap="OrderResultMap">
-		select * from ORDERLIST where
-		order_master_id=#{order_master_id} and order_status=#{order_status} 
+		select * from ORDERLIST
+		where
+		order_master_id=#{order_master_id} and
+		order_status=#{order_status}
 	</select>
 
 	<select id="getOrders" resultMap="OrderResultMap">
-		select * from ORDERLIST where
-		order_status=#{order_status,jdbcType=INTEGER} and
-		order_master_id=#{order_master_id,jdbcType=INTEGER} LIMIT #{offset},10
+		select * from ORDERLIST where 
+		order_master_id=#{order_master_id}
+		<if test="order_status != null and order_status != ''">
+
+			and order_status = #{order_status} 
+		</if>
+		<if test="order_type_code != null and order_type_code != ''">
+
+			and order_type_code = #{order_type_code} 
+		</if>
+		order by order_book_time asc, order_create_time asc
+		
 	</select>
 
 	<update id="updateOrder" parameterType="com.bbcall.mybatis.table.Orderlist">
-		update ORDERLIST set 
+		update ORDERLIST set
 		order_book_time=#{order_book_time},
 		order_book_location=#{order_book_location},
 		order_book_location_code=#{order_book_location_code},

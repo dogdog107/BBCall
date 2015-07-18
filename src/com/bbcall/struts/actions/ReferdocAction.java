@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Controller;
 
+import com.bbcall.functions.PageInfoToMap;
 import com.bbcall.functions.ResultCode;
 import com.bbcall.functions.Tools;
 import com.bbcall.mybatis.table.Referdoc;
@@ -23,6 +24,7 @@ public class ReferdocAction extends ActionSupport {
 	private ReferdocServices referdocServices;
 
 	private Map<String, Object> dataMap;
+	private PageInfoToMap pageinfo2map = new PageInfoToMap();// 新建PageInfoToMap对象
 
 	private String referdoc_id;
 	private String referdoc_type;
@@ -31,6 +33,7 @@ public class ReferdocAction extends ActionSupport {
 	private double referdoc_price;
 	private String referdoc_flag;
 	private List<String> order_type_code_list;
+	private Integer pagenum; // 页面页数
 
 	@Override
 	public String execute() throws Exception {
@@ -48,11 +51,12 @@ public class ReferdocAction extends ActionSupport {
 		}
 
 		int result = referdocServices.addReferdoc(referdoc_type, parentno,
-				referdoc_level, referdoc_price, referdoc_flag);
+				referdoc_level, referdoc_price, referdoc_flag, pagenum);
 
 		if (result == ResultCode.SUCCESS) {
 			List<Referdoc> referdoclist = referdocServices.referdocinfos();
 			dataMap.put("referdoclist", referdoclist);
+			dataMap.putAll(pageinfo2map.pageInfoMap(referdoclist));// 把分页信息放进dataMap
 			dataMap.putAll(Tools.JsonHeadMap(result, true));
 			// dataMap.put("resultcode", result);
 			// dataMap.put("errmsg", ResultCode.getErrmsg(result));
@@ -83,15 +87,13 @@ public class ReferdocAction extends ActionSupport {
 		int result = referdocServices.updateReferdoc(referdocid, referdoc_type,
 				parentno, referdoc_level, referdoc_price, referdoc_flag);
 
-		referdocServices.getChildReferdoclist(parentno);
+		referdocServices.getChildReferdoclist(parentno,pagenum);
 		List<Referdoc> referdoclist = referdocServices.referdocinfos();
 
 		if (result == ResultCode.SUCCESS) {
 
-			for (int i = 0; i < referdoclist.size(); i++) {
-				System.out.println(referdoclist.get(i).getReferdoc_type());
-			}
 			dataMap.put("referdoclist", referdoclist);
+			dataMap.putAll(pageinfo2map.pageInfoMap(referdoclist));// 把分页信息放进dataMap
 			dataMap.put("parentno", parentno);
 			dataMap.putAll(Tools.JsonHeadMap(result, true));
 			// dataMap.put("resultcode", result);
@@ -114,11 +116,12 @@ public class ReferdocAction extends ActionSupport {
 
 		int referdocid = Integer.parseInt(referdoc_id);
 
-		int result = referdocServices.deleteReferdoc(referdocid);
+		int result = referdocServices.deleteReferdoc(referdocid,pagenum);
 
 		if (result == ResultCode.SUCCESS) {
 			List<Referdoc> referdoclist = referdocServices.referdocinfos();
 			dataMap.put("referdoclist", referdoclist);
+			dataMap.putAll(pageinfo2map.pageInfoMap(referdoclist));// 把分页信息放进dataMap
 			dataMap.putAll(Tools.JsonHeadMap(result, true));
 			// dataMap.put("resultcode", result);
 			// dataMap.put("errmsg", ResultCode.getErrmsg(result));
@@ -161,11 +164,12 @@ public class ReferdocAction extends ActionSupport {
 		dataMap = new HashMap<String, Object>(); // 新建dataMap来储存JSON字符串
 		dataMap.clear(); // dataMap中的数据将会被Struts2转换成JSON字符串，所以这里要先清空其中的数据
 
-		int result = referdocServices.getReferdoclist();
+		int result = referdocServices.getReferdoclist(pagenum);
 
 		if (result == ResultCode.SUCCESS) {
 			List<Referdoc> referdoclist = referdocServices.referdocinfos();
 			dataMap.put("referdoclist", referdoclist);
+			dataMap.putAll(pageinfo2map.pageInfoMap(referdoclist));// 把分页信息放进dataMap
 			dataMap.putAll(Tools.JsonHeadMap(result, true));
 			// dataMap.put("resultcode", result);
 			// dataMap.put("errmsg", ResultCode.getErrmsg(result));
@@ -214,7 +218,7 @@ public class ReferdocAction extends ActionSupport {
 			parentno = Integer.parseInt(referdoc_parentno);
 		}
 
-		int result = referdocServices.getChildReferdoclist(parentno);
+		int result = referdocServices.getChildReferdoclist(parentno,pagenum);
 
 		if (result == ResultCode.SUCCESS) {
 			List<Referdoc> referdoclist = referdocServices.referdocinfos();
@@ -369,6 +373,14 @@ public class ReferdocAction extends ActionSupport {
 
 	public void setReferdoc_flag(String referdoc_flag) {
 		this.referdoc_flag = referdoc_flag;
+	}
+
+	public Integer getPagenum() {
+		return pagenum;
+	}
+
+	public void setPagenum(Integer pagenum) {
+		this.pagenum = pagenum;
 	}
 
 }

@@ -11,6 +11,8 @@
 	src="${pageContext.request.contextPath }/jquery/jquery-1.8.3.js"></script>
 <script type="text/javascript"
 	src="${pageContext.request.contextPath }/jquery/referdocPage.js?token=${sessionScope.user.user_token}"></script>
+<script type="text/javascript"
+		src="${pageContext.request.contextPath }/jquery/paging.js"></script>
 <script type="text/javascript">
 	var token = "${sessionScope.user.user_token}";
 	var link = "${pageContext.request.contextPath}";
@@ -97,19 +99,28 @@
 						<td><input type="submit" value="修改"></input></td>
 						<td><input type="button" value="删除" onclick="location.href='referdoc_delete.action?referdoc_id=<s:property value='#referdoclist.referdoc_id'/>'"></input></td>
 						</form>
-						
-						
-						
 					</tr>
 					</s:iterator>
                     
                 </tbody>
-                    <tr>
-                        <td colspan="20" style="text-align: center;">
-                            [1]2
-                        </td>
-                    </tr>
             </table>
+            <div class="wrap">
+				<div id="page_bar" class="fenye">
+					<ul>
+						<li id="first">首頁</li>
+						<li id="top" onclick="topclick()">上一頁</li>
+						<li class="xifenye" id="xifenye"><a id="xiye"></a>/<a
+							id="mo"></a>
+							<div class="xab" id="xab" style="display: none">
+								<ul id="uljia">
+
+								</ul>
+							</div></li>
+						<li id="down" onclick="downclick()">下一頁</li>
+						<li id="last">尾頁</li>
+					</ul>
+				</div>
+			</div>
         </div>
 </body>
 </html>
