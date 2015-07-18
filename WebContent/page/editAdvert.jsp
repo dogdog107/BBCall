@@ -20,7 +20,7 @@
 			<td
 				background="${pageContext.request.contextPath }/page/img/title_bg1.jpg">當前位置:<a
 				href="${pageContext.request.contextPath }/page/defult.jsp"
-				target=main>主頁(Home)</a> -> 新增廣告 (Add Advertisement)
+				target=main>主頁(Home)</a> -> 修改廣告 (Edit Advertisement)
 			</td>
 		</tr>
 		<tr>
@@ -59,7 +59,7 @@
 					<td><textarea rows="3" name="advertisement_summary" style="width:400px;"></textarea></td>
 				</tr>
 				<tr>
-					<td>廣告類型 (Advertisement Types)
+					<td>用戶技能 (User Skill)
 					</td>
 					<td id="skill_main">
 					<input type="hidden" id="advertisement_type" name="advertisement_type" value=""/>

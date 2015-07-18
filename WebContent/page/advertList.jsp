@@ -82,6 +82,11 @@
 						<td id="adverttype"></td>
 						<td id="createtime"></td>
 						<td id="status_operation">
+							<span>廣告狀態:</span>
+							<select id="statusOpr" onchange="updateStatus(this.id, this.value)">
+								<option value="0">停用中</option>
+								<option value="1">顯示中</option>
+							</select><br/>
 							<span>置頂狀態:</span>
 							<select id="istopOpr" onchange="updateIsTop(this.id, this.value)">
 								<option value="0">未置頂</option>

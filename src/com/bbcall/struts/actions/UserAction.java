@@ -57,7 +57,12 @@ public class UserAction extends ActionSupport implements SessionAware{
 	private String order_value;
 	private String where_col;
 	private String where_value;
+	
+	// page related parameters
 	private Integer pagenum; // 页面页数
+	
+	// others parameters
+	private String updateResult;
 	
 	
 //	private int test;
@@ -207,31 +212,30 @@ public class UserAction extends ActionSupport implements SessionAware{
 		update();
 		return "json";
 	}
+	
+	public String updateUserById() throws Exception{
+		System.out.println("Here is UserAction.update");
+		dataMap.clear(); // dataMap中的数据将会被Struts2转换成JSON字符串，所以这里要先清空其中的数据
+		
+		int result = userServices.update(account, password, usertype, name, picurl, mobile, gender, addresscode, address, email, language, skill, description, accessgroup, status, token, userid, grade); // 调用userServices.login
+
+		if (result == ResultCode.SUCCESS) {
+			dataMap = obj2map.getValueMap(userServices.getUserinfo()); //将对象转换成Map
+			dataMap.putAll(Tools.JsonHeadMap(result, true));
+			System.out.println(dataMap);
+			return "updateUserSuccess";
+		} else {
+			dataMap.putAll(Tools.JsonHeadMap(result, false));
+			System.out.println(dataMap);
+			System.out.println("Update Failed");
+			return "updateUserFailed";
+		}
+	}
+	
 	// UpdateStatus Action
 	public String updateStatus() throws Exception{
 		System.out.println("Here is UserAction.updateStatus");
 		dataMap.clear(); // dataMap中的数据将会被Struts2转换成JSON字符串，所以这里要先清空其中的数据
-
-//		String requireAccess = "UserUpdate";
-//		/*
-//		 * Token Validation
-//		 */
-//		int tokenResult = userServices.checkUserToken(token);
-//		while (tokenResult != ResultCode.SUCCESS) {
-//			dataMap.putAll(Tools.JsonHeadMap(tokenResult, false));
-//			System.out.println(dataMap);
-//			return INPUT;
-//		}
-//		
-//		/*
-//		 * access Validation
-//		 */
-//		int accessResult = userServices.checkUserAccess(userServices.getUserinfo().getUser_access_group(), requireAccess);
-//		while (accessResult != ResultCode.SUCCESS) {
-//			dataMap.putAll(Tools.JsonHeadMap(accessResult, false));
-//			System.out.println(dataMap);
-//			return INPUT;
-//		}
 		
 		int result = userServices.update(account, password, usertype, name, picurl, mobile, gender, addresscode, address, email, language, skill, description, accessgroup, status, token, userid, grade); // 调用userServices.login
 		
@@ -417,6 +421,11 @@ public class UserAction extends ActionSupport implements SessionAware{
 		return "json";
 	}
 	
+	// edituserPage Action
+	public String editUser() throws Exception {
+		getUserById();
+		return "editUser";
+	}
 	
 	// checkUserName Action
 	public String checkUserName() throws Exception {
@@ -737,5 +746,13 @@ public class UserAction extends ActionSupport implements SessionAware{
 
 	public void setGrade(Double grade) {
 		this.grade = grade;
+	}
+
+	public String isUpdateResult() {
+		return updateResult;
+	}
+
+	public void setUpdateResult(String updateResult) {
+		this.updateResult = updateResult;
 	}
 }

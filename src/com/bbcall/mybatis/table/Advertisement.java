@@ -12,6 +12,7 @@ import java.sql.Timestamp;
 //	advertisement_summary VARCHAR (255),
 //	advertisement_content text,
 //	advertisement_istop tinyint NOT NULL DEFAULT 0,
+//	advertisement_status tinyint NOT NULL DEFAULT 0,
 //	advertisement_create_time TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 //) DEFAULT CHARSET = utf8;
 
@@ -19,6 +20,7 @@ public class Advertisement {
 
 	private Integer advertisement_id;
 	private Integer advertisement_istop;
+	private Integer advertisement_status;
 	private String advertisement_title;
 	private String advertisement_type;
 	private String advertisement_bigphoto_url;
@@ -98,6 +100,14 @@ public class Advertisement {
 
 	public void setAdvertisement_istop(Integer advertisement_istop) {
 		this.advertisement_istop = advertisement_istop;
+	}
+
+	public Integer getAdvertisement_status() {
+		return advertisement_status;
+	}
+
+	public void setAdvertisement_status(Integer advertisement_status) {
+		this.advertisement_status = advertisement_status;
 	}
 
 }

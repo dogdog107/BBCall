@@ -52,7 +52,7 @@
 				<tr>
 					<td width="300px">用戶類型 (UserType)<span style="color: red; font-weight:bold">*</span></td>
 					<td><select name="usertype" id="usertype" onchange="changeUserType(this.value)">
-							<option value="">請選擇(Choose)</option>
+							<option value="0">請選擇(Choose)</option>
 							<option value="1">Customer</option>
 							<option value="2">Master</option>
 							<option value="3">Admin</option>
@@ -141,7 +141,7 @@
 					</td>
 				</tr>
 				<tr>
-					<td colspan="2" align="center"><input type="submit" value="修改(Submit)" onclick="return validate();" class="btn btn-default" /><input
+					<td colspan="2" align="center"><input type="submit" value="提交(Submit)" onclick="return validate();" class="btn btn-default" /><input
 						type="button" value="取消(Cancel)" onclick="location.href='defult.jsp'" class="btn btn-default" /></td>
 				</tr>
 			</table>

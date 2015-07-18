@@ -54,7 +54,7 @@ TEXTAREA {
 .table_update{
     border-collapse:collapse;
     border: 1px solid #E3E6EB;
-    margin-bottom: 100px;
+    margin-bottom: 50px;
 }
 .table_update td{
     line-height: 25px;

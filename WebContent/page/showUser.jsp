@@ -23,6 +23,9 @@
 		var gender = "${gender}";
 		var status = "${status}";
 		var userid = "${userid}";
+		var userskill = "${skill}";
+		var updateResult = "${updateResult}";
+		var updateErrmsg = "${dataMap.errmsg}";
 </script>
 </head>
 
@@ -47,11 +50,12 @@
 			<div class="div_search">
 			<span>
 				<input id="btnBack" type="submit" value="返回用户列表/Go Back" onclick="javascript:history.go(-1);"/>
+				<input id="btnBack" type="submit" value="編輯用戶信息/Edit User Info" onclick="location.href='user_editUser.action?token=${sessionScope.user_token}&userid=${userid}'"/>
 			</span>
-		</div>
 		<div id="div_message" class="div_message" style="display: none"
 			width="50%" align="left">
 			<span id="message"> </span>
+		</div>
 		</div>
 		<table border="1" width="100%" class="table_update">
 			<tr id="userid_tr">

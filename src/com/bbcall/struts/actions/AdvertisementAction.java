@@ -48,6 +48,7 @@ public class AdvertisementAction extends ActionSupport{
 	private String advertisement_smallphoto_url;
 	private String advertisement_summary;
 	private String advertisement_content;
+	private Integer advertisement_status;
 	private Timestamp advertisement_create_time;
 	private List<Advertisement> advertList;
 	
@@ -127,12 +128,12 @@ public class AdvertisementAction extends ActionSupport{
 	}
 	
 	/**
-	 * showAdvertList Action
+	 * showAllAdvertList Action
 	 * @author Roger Luo
 	 * @return
 	 * @throws Exception
 	 */
-	public String showAdvertList() throws Exception {
+	public String showAllAdvertList() throws Exception {
 		advertList = advertisementServices.getAllAdvertList(pagenum);
 		dataMap.clear(); // dataMap中的数据将会被Struts2转换成JSON字符串，所以这里要先清空其中的数据
 		dataMap.put("advertList", advertList);
@@ -140,18 +141,18 @@ public class AdvertisementAction extends ActionSupport{
 		dataMap.putAll(Tools.JsonHeadMap(ResultCode.SUCCESS, true));
 		return SUCCESS;
 	}
-	public String showAdvertListJson() throws Exception {
-		showAdvertList();
+	public String showAllAdvertListJson() throws Exception {
+		showAllAdvertList();
 		return "json";
 	}
 	
 	/**
-	 * showAdvertSummaryList Action
+	 * showAllAdvertSummaryList Action
 	 * @author Roger Luo
 	 * @return
 	 * @throws Exception
 	 */
-	public String showAdvertSummaryList() throws Exception {
+	public String showAllAdvertSummaryList() throws Exception {
 		advertList = advertisementServices.getAllAdvertSummaryList(pagenum);
 		dataMap.clear(); // dataMap中的数据将会被Struts2转换成JSON字符串，所以这里要先清空其中的数据
 		dataMap.put("advertList", advertList);
@@ -159,8 +160,47 @@ public class AdvertisementAction extends ActionSupport{
 		dataMap.putAll(Tools.JsonHeadMap(ResultCode.SUCCESS, true));
 		return SUCCESS;
 	}
-	public String showAdvertSummaryListJson() throws Exception {
-		showAdvertSummaryList();
+	public String showAllAdvertSummaryListJson() throws Exception {
+		showAllAdvertSummaryList();
+		return "json";
+	}
+	
+	
+	/**
+	 * showActiveAdvertList Action
+	 * @author Roger Luo
+	 * @return
+	 * @throws Exception
+	 */
+	public String showActiveAdvertList() throws Exception {
+		advertList = advertisementServices.getActiveAdvertList(pagenum);
+		dataMap.clear(); // dataMap中的数据将会被Struts2转换成JSON字符串，所以这里要先清空其中的数据
+		dataMap.put("advertList", advertList);
+		dataMap.putAll(pageinfo2map.pageInfoMap(advertList));// 把分页信息放进dataMap
+		dataMap.putAll(Tools.JsonHeadMap(ResultCode.SUCCESS, true));
+		return SUCCESS;
+	}
+	public String showActiveAdvertListJson() throws Exception {
+		showActiveAdvertList();
+		return "json";
+	}
+	
+	/**
+	 * showActiveAdvertSummaryList Action
+	 * @author Roger Luo
+	 * @return
+	 * @throws Exception
+	 */
+	public String showActiveAdvertSummaryList() throws Exception {
+		advertList = advertisementServices.getActiveAdvertSummaryList(pagenum);
+		dataMap.clear(); // dataMap中的数据将会被Struts2转换成JSON字符串，所以这里要先清空其中的数据
+		dataMap.put("advertList", advertList);
+		dataMap.putAll(pageinfo2map.pageInfoMap(advertList));// 把分页信息放进dataMap
+		dataMap.putAll(Tools.JsonHeadMap(ResultCode.SUCCESS, true));
+		return SUCCESS;
+	}
+	public String showActiveAdvertSummaryListJson() throws Exception {
+		showActiveAdvertSummaryList();
 		return "json";
 	}
 	
@@ -211,6 +251,30 @@ public class AdvertisementAction extends ActionSupport{
 	}
 	public String updateAdvertIsTopJson() throws Exception {
 		updateAdvertIsTop();
+		return "json";
+	}
+	
+	/**
+	 * updateAdvertStatus Action
+	 * @return
+	 * @throws Exception
+	 */
+	public String updateAdvertStatus() throws Exception {
+		int result = advertisementServices.updateAdvertStatus(advertisement_id, advertisement_status);
+		dataMap.clear(); // dataMap中的数据将会被Struts2转换成JSON字符串，所以这里要先清空其中的数据
+		if (result == ResultCode.SUCCESS) {
+			dataMap.putAll(Tools.JsonHeadMap(result, true));
+			System.out.println(dataMap);
+			return "updateAdvertStatusSuccess";
+		} else {
+			dataMap.putAll(Tools.JsonHeadMap(result, false));
+			System.out.println(dataMap);
+			System.out.println("updateAdvertStatus Failed");
+			return "updateAdvertStatusFailed";
+		}
+	}
+	public String updateAdvertStatusJson() throws Exception {
+		updateAdvertStatus();
 		return "json";
 	}
 	
@@ -326,5 +390,13 @@ public class AdvertisementAction extends ActionSupport{
 
 	public void setAdvertisement_istop(Integer advertisement_istop) {
 		this.advertisement_istop = advertisement_istop;
+	}
+
+	public Integer getAdvertisement_status() {
+		return advertisement_status;
+	}
+
+	public void setAdvertisement_status(Integer advertisement_status) {
+		this.advertisement_status = advertisement_status;
 	}
 }
