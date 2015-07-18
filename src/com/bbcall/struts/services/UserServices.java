@@ -189,6 +189,16 @@ public class UserServices {
 				String addressname = addressServices.checkAddresscodeName(addresscode);// 调用checkAddresscodeName方法，获取地址名
 				if (addressname == null)// 如果addressname 返回null, 表明addresscode错误
 					return ResultCode.ADDRESSCODE_ERROR;
+				
+				// 清除开头为;的符号
+				while(address.startsWith(";")){
+					address = address.substring(1, address.length());
+				}
+				// 清除结尾为;的符号
+				while(address.endsWith(";")){
+					address = address.substring(0, address.length() - 1);
+				}
+				
 				if (address.replace(";", "").matches(addressname + "(.*)")) {// 判断地址名是否一致
 					user.setUser_address(address);// 放入新地址名
 					user.setUser_address_code(addresscode);// 放入新地址码
@@ -240,11 +250,27 @@ public class UserServices {
 			}
 
 			// ***** 添加语言 *****
+			// 清除开头为;的符号
+			while(language.startsWith(";")){
+				language = language.substring(1, language.length());
+			}
+			// 清除结尾为;的符号
+			while(language.endsWith(";")){
+				language = language.substring(0, language.length() - 1);
+			}
 			if (!Tools.isEmpty(language)) {
 				user.setUser_language(language);
 			}
 			
 			// ***** 添加技能 *****
+			// 清除开头为;的符号
+			while(skill.startsWith(";")){
+				skill = skill.substring(1, skill.length());
+			}
+			// 清除结尾为;的符号
+			while(skill.endsWith(";")){
+				skill = skill.substring(0, skill.length() - 1);
+			}
 			if (!Tools.isEmpty(skill)) {
 				user.setUser_skill(skill);
 			}
@@ -472,6 +498,15 @@ public class UserServices {
 			if (addresscode == null)
 				return ResultCode.ADDRESSCODE_ERROR;
 
+			// 清除开头为;的符号
+			while(address.startsWith(";")){
+				address = address.substring(1, address.length());
+			}
+			// 清除结尾为;的符号
+			while(address.endsWith(";")){
+				address = address.substring(0, address.length() - 1);
+			}
+			
 			String addressname = addressServices.checkAddresscodeName(addresscode);// 调用checkAddresscodeName方法，获取地址名
 			if (address.replace(";", "").matches(addressname + "(.*)")) {// 判断地址名是否一致
 				user.setUser_address(address);// 放入新地址名
@@ -601,6 +636,14 @@ public class UserServices {
 			}
 		}
 		// ***** 检测language *****
+		// 清除开头为;的符号
+		while(language.startsWith(";")){
+			language = language.substring(1, language.length());
+		}
+		// 清除结尾为;的符号
+		while(language.endsWith(";")){
+			language = language.substring(0, language.length() - 1);
+		}
 		if (!Tools.isEmpty(language) && !language.equals(user.getUser_language())) {
 			user.setUser_language(language);
 			changecount++;
@@ -635,6 +678,13 @@ public class UserServices {
 			System.out.println("grade changed!");
 		}
 		// ***** 检测skill *****
+		
+		while(skill.endsWith(";")){
+			skill = skill.substring(0, skill.length() - 1);
+		}
+		if (!Tools.isEmpty(skill)) {
+			user.setUser_skill(skill);
+		}
 		if (!Tools.isEmpty(skill) && !skill.equals(user.getUser_skill())) {
 			user.setUser_skill(skill);
 			changecount++;

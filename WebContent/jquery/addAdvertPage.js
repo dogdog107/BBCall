@@ -331,8 +331,67 @@ jQuery(function() {
 //建议使用工厂方法getEditor创建和引用编辑器实例，如果在某个闭包下引用该编辑器，直接调用UE.getEditor('editor')就能拿到相关的实例
 var ue = UE.getEditor('editor');
 
+//拿一级项技能表
+function getParentSkillList(idname) {
+	$.ajax({
+		type : "post",
+		url : "${pageContext.request.contextPath}/referdoc_getparentlistJson.action",
+		success : function(data) {
+			if (data.result) {
+				for ( var j = 0; j < data.parentreferdoclist.length; j++) {
+					document.getElementById(idname).options
+							.add(new Option(
+									data.parentreferdoclist[j].referdoc_type,
+									data.parentreferdoclist[j].referdoc_id));
+				}
+			} else {
+				alert(data.errmsg);
+			}
+		}
+	});
+}
+
+//拿技能表
+function getChildSkillList(parentcode) {
+	$.ajax({
+		type : "post",
+		url : "${pageContext.request.contextPath}/referdoc_getchildlistJson.action",
+		data : {
+			"referdoc_parentno" : parentcode
+		},
+		success : function(data) {
+			if (data.result) {
+				var $childskill = $("#skillChildList");
+				$childskill.hide().text(" ");
+				for ( var j = 0; j < data.referdoclist.length; j++) {
+					$('<label><input name="skillcodepart" id="skillcodepartid_' + data.referdoclist[j].referdoc_id + '" type="radio" value="' + data.referdoclist[j].referdoc_id + '" />' + data.referdoclist[j].referdoc_type + '&nbsp;&nbsp;</label>').appendTo($childskill);
+				}
+				$childskill.show(300);
+			} else {
+				alert(data.errmsg);
+			}
+		}
+	});
+}
+
+function onload(){
+	getParentSkillList("skillParentCode");
+}
+
 function validate() {
 	var ADContent = UE.getEditor('editor').getContent();
 	$( '#advertisement_content' ).val(ADContent);
+	
+	
+	var objs2 = document.getElementsByName('skillcodepart');
+	for(var i=0;i<objs2.length;i++){
+		if (objs2[i].type == 'radio'){
+			if(objs2[i].checked == true){
+				document.getElementById("advertisement_type").value = objs2[i].value;
+				break;
+			}
+		}
+	}
+	
 	return true;
 }

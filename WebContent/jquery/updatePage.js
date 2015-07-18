@@ -39,6 +39,124 @@ function showaddresslist(times, childcode, parentcode) {
 			});
 }
 
+
+// 拿技能表
+function getChildSkillList(parentcode, idname, skillvalue) {
+	var idno = idname.split("_")[1];
+	var childListDiv = "skillChildList_" + idno; 
+	$.ajax({
+		type : "post",
+		url : "${pageContext.request.contextPath}/referdoc_getchildlistJson.action",
+		data : {
+			"referdoc_parentno" : parentcode
+		},
+		success : function(data) {
+			if (data.result) {
+				var $childskill = $("#" + childListDiv);
+				$childskill.hide().text(" ");
+				for ( var j = 0; j < data.referdoclist.length; j++) {
+					$('<label><input name="skillcodepart" id="skillcodepartid_' + data.referdoclist[j].referdoc_id + '" type="checkbox" value="' + data.referdoclist[j].referdoc_id + '" />' + data.referdoclist[j].referdoc_type + '&nbsp;&nbsp;</label>').appendTo($childskill);
+				}
+				if (skillvalue != '' && skillvalue != undefined){
+					var skillpartid = "skillcodepartid_" + skillvalue;
+					$childskill.find("#" + skillpartid).attr("checked", true);
+				}
+				$childskill.show(300);
+			} else {
+				alert(data.errmsg);
+			}
+		}
+	});
+}
+
+// 拿一级项技能表
+function getParentSkillList(idname, skillvalue) {
+	$.ajax({
+		type : "post",
+		url : "${pageContext.request.contextPath}/referdoc_getparentlistJson.action",
+		success : function(data) {
+			if (data.result) {
+				for ( var j = 0; j < data.parentreferdoclist.length; j++) {
+					document.getElementById(idname).options
+							.add(new Option(
+									data.parentreferdoclist[j].referdoc_type,
+									data.parentreferdoclist[j].referdoc_id));
+				}
+				if(skillvalue != '' && skillvalue != undefined){
+					$("#" + idname).val(skillvalue);
+				}
+			} else {
+				alert(data.errmsg);
+			}
+		}
+	});
+}
+
+function addSkill(skillvalue) {
+	var objs = document.getElementsByName('skillpart');
+	var objlength = objs.length + 1;
+	while (document.getElementById("skillpart_" + objlength) != null) {
+		objlength++;
+	}
+	var count = 0;
+	if (skillvalue != '' && skillvalue != undefined) {
+		var tempskillvalue = skillvalue.split(";");
+		if (tempskillvalue.length == 0) {
+			return;
+		} else {
+			var doskillvalue = tempskillvalue[(tempskillvalue.length-1)];
+		}
+		if (objs.length != 0) {
+			var secondskill = document.getElementsByName('skillcodepart');
+			for (var j = 0; j < secondskill.length; j++) {
+				if (secondskill[j].type == 'checkbox' && secondskill[j].value == doskillvalue) {
+					secondskill[j].checked = true;
+					count++;
+					break;
+				}
+			}
+		}
+	}
+	if (count == 0){
+		var row = $("#skill_template").clone();
+		row.find("#skillParentCode").attr("id", "skillParentCode_" + objlength);
+		row.find("#deleteSkill").attr("onclick", "deleteSkillbtn(this.id)");
+		row.find("#deleteSkill").attr("id", "deleteSkill_" + objlength);
+		row.find("#skillChildList").attr("id", "skillChildList_" + objlength);
+		row.attr("name", "skillpart");
+		row.attr("id", "skillpart_" + objlength);
+		row.appendTo("#skill_main");// 添加到模板的容器中
+		if (skillvalue != '' && skillvalue != undefined) {
+			var firstskillcode = parseInt(doskillvalue / 1000) * 1000;
+			getParentSkillList("skillParentCode_" + objlength, firstskillcode);
+			getChildSkillList(firstskillcode, "skillChildList_" + objlength, doskillvalue);
+		} else {
+			getParentSkillList("skillParentCode_" + objlength);
+		}
+		row.toggle(300);
+	}
+	if (skillvalue == '' || skillvalue == undefined) {
+		return;
+	}
+	if (tempskillvalue.length == 1) {
+		return;
+	} else {
+		var tempdoskillvalue = ";" + doskillvalue;
+		
+		addSkill(skillvalue.split(tempdoskillvalue)[0]);
+	}
+	
+}
+
+function deleteSkillbtn(idname) {
+	var idno = idname.split("_")[1];
+	var deletename = "skillpart_" + idno;
+	$("#" + deletename).hide(300);
+	setTimeout(function() {
+		$("#" + deletename).remove();
+	}, 300); // how long do you want the delay to be?
+}
+
 function updateAddressCodeName(idno) {
 	var namevalue = "";
 	var idname = "";
@@ -142,6 +260,13 @@ function onload() {
 			document.getElementById(lgestr[i]).checked = true;
 		}
 	}
+
+	if (skill != '') {
+		addSkill(skill);
+	} else {
+		addSkill();
+	}
+	
 	$(function() {
 		if (addresscode != '' && addresscode != 0) {
 			$.post(
@@ -205,6 +330,30 @@ function validate() {
 		}
 	}
 	document.getElementById("language").value = languagestr;
+	
+	var objs2 = document.getElementsByName('skillcodepart');
+	var skillstr='';
+	for(var i=0;i<objs2.length;i++){
+		if (objs2[i].type == 'checkbox'){
+			if(objs2[i].checked == true){
+				if(i == 0){
+					skillstr = objs2[i].value;
+				}else{
+					var skillstrTemp = skillstr.split(";");
+					var count = 0;
+					for(var j=0; j<skillstrTemp.length; j++){
+						if (skillstrTemp[j] == objs2[i].value) {
+							count++;
+						}
+					}
+					if (count == 0){
+						skillstr = objs2[i].value + ';' + skillstr;
+					}
+				}
+			}
+		}
+	}
+	document.getElementById("skill").value = skillstr;
 	
 	return true;
 }

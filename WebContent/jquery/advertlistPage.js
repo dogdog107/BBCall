@@ -1,20 +1,41 @@
 
 
-
 function onload() {
 	checkAdvertList();
 }
 
-function checkAdvertList(col_name, specify_value, search_value){
+//调用pagechange方法
+function pagechange(pagenum){
+	checkAdvertList(pagenum);
+}
+
+function checkAdvertList(pagenum){
 	$
 	.ajax({
 		type : "post",
 		url : "${pageContext.request.contextPath}/advert_showAdvertSummaryListJson.action",
 		data : {
-			"token" : token
+			"token" : token,
+			"pagenum" : pagenum
 		},
 		success : function(data) {
 			if (data.result) {
+				//*初始化分页条
+				if (data.lastPageNum == 1){
+					//当只有一页时隐藏分页条
+					$("#page_bar").hide(300);
+				} else {
+					//显示分页条
+					$("#page_bar").show(300);
+					//当前页页码
+					$("#xiye").html(data.currentPageNum);
+					//尾页页码
+					$("#mo").html(data.lastPageNum);
+				}
+				// 清除现有列表
+//				$("#datas").hide();
+				$("tr[id^='advertlist_']").remove();
+				// 拿出列表
 				var advertList = data.advertList;
 				$.each(advertList, function(i, n) {
 					var row = $("#template").clone();
@@ -24,19 +45,33 @@ function checkAdvertList(col_name, specify_value, search_value){
 					} else {
 						row.find("#smallpicurl").html("<img src=" + n.advertisement_smallphoto_url + " height='60' width='60'>");
 					}
-					row.find("#adverttitle").text(n.advertisement_title);
+					if(n.advertisement_istop == 1) {
+						row.find("#adverttitle").html("<img id='topimg_" + n.advertisement_id + "' align='center' src='" + BASE_URL + "/page/img/top_1.gif'><span>" + n.advertisement_title + "</span>");
+						row.find("#istopOpr").val(n.advertisement_istop);
+					} else {
+						row.find("#adverttitle").text(n.advertisement_title);
+					}
+					row.find("#adverttitle").attr("id", "adverttitle_" + n.advertisement_id);
+					row.find("#istopOpr").attr("id", "istopOpr_" + n.advertisement_id);
 					row.find("#advertsummary").text(n.advertisement_summary);
-					row.find("#adverttype").text(n.advertisement_type);
+					row.find("#adverttype").attr("id", "adverttype_" + n.advertisement_id);
+					checkAdvertType(n.advertisement_type, "adverttype_" + n.advertisement_id)
 					var createtime = n.advertisement_create_time;
 					row.find("#createtime").text(createtime.replace("T", " "));
 					row.find("#btnDetail").attr("onclick", "location.href='advert_showAdvert.action?advertisement_id=" + n.advertisement_id + "'");
-					row.find("#btnDelete").attr("onclick", "location.href='advert_deleteAdvert.action?advertisement_id=" + n.advertisement_id + "'");
+					row.find("#btnDelete").attr("onclick", "deleteAdvert(" + n.advertisement_id + ")");
+//					row.find("#btnDelete").attr("onclick", "location.href='advert_deleteAdvert.action?advertisement_id=" + n.advertisement_id + "'");
 
 					row.attr("id", "advertlist_" + n.advertisement_id);// 改变绑定好数据的行的id
 					row.appendTo("#datas");// 添加到模板的容器中
-					row.toggle();
+					row.toggle(300);
+				});
+				$.each(advertList, function(i) {
+					
 				});
 			} else {
+				//隐藏分页条
+				$("#page_bar").hide(300);
 				$("#message").html(
 						"<font color=red>Page Fail ! " + data.errmsg
 								+ "</font>");
@@ -46,158 +81,99 @@ function checkAdvertList(col_name, specify_value, search_value){
 	});
 }
 
-function updateStatus(idname, value) {
-	var userid = idname.split("_")[1];
-	var defaultStatusName = "status_" + userid;
-	if (confirm('確定要修改用戶(ID:'+ userid +')的狀態嗎？\n Confirm to change the status for user (ID:'+ userid +')?')) {
+function updateIsTop(idname, value) {
+	var advertid = idname.split("_")[1];
+	if (confirm('確定要修改廣告(ID:'+ advertid +')的置頂狀態嗎？\n Confirm to change the "TOP" status for AD (ID:'+ advertid +')?')) {
 		$.ajax({
 			type : "post",
-			url : "${pageContext.request.contextPath}/user_updateStatusJson.action",
+			url : "${pageContext.request.contextPath}/advert_updateAdvertIsTopJson",
 			data : {
 				"token" : token,
-				"userid" : userid,
-				"status" : value
+				"advertisement_id" : advertid,
+				"advertisement_istop" : value
 			},
 			success : function(data) {
 				if (data.result) {
-//					window.location.reload();
+					var titleid = "adverttitle_" + advertid;
+					$("#" + titleid).hide();
 					switch (value) {
+					case "0":
+						var topimgid = "topimg_" + advertid;
+						$("#" + topimgid).remove();
+						break;
 					case "1":
-						$("#" + defaultStatusName).text("Active");
-						break;
-					case "2":
-						$("#" + defaultStatusName).text("Pause");
-						break;
-					case "3":
-						$("#" + defaultStatusName).text("Pending");
-						break;
-					case "4":
-						$("#" + defaultStatusName).text("Locked");
+						$("#" + titleid).append("<img id='topimg_" + advertid + "' align='center' src='" + BASE_URL + "/page/img/top_1.gif'>");
 						break;
 					}
-					$("#message").html("<font color=green> (ID:"+ userid +") Status Update Success ! </font>");
+					$("#" + titleid).attr("style", "border:solid #55AA00 2px;");
+					$("#" + titleid).show(300);
+					$("#message").html("<font color=green> (ID:"+ advertid +") TOP Update Success ! </font>");
 					$("#div_message").show(300).delay(5000).hide(300);
 				} else {
-					$("#message").html("<font color=red> (ID:"+ userid +") Status Update Failed ! </font>");
+					$("#message").html("<font color=red> (ID:"+ advertid +") TOP Update Failed ! " + data.errmsg + "</font>");
 					$("#div_message").show(300).delay(5000).hide(300);
-					alert("Update failed. " + data.errmsg);
+					var istopOprid = "istopOpr_" + advertid;
+					switch (value) {
+					case "0":
+						$("#" + istopOprid).val(1);
+						break;
+					case "1":
+						$("#" + istopOprid).val(0);
+						break;
+					}
 				}
 			}
 		});
 	} else {
-		switch ($("#" + defaultStatusName).text()) {
-		case "Active":
-			$("#" + idname).val(1);
+		var istopOprid = "istopOpr_" + advertid;
+		switch (value) {
+		case "0":
+			$("#" + istopOprid).val(1);
 			break;
-		case "Pause":
-			$("#" + idname).val(2);
-			break;
-		case "Pending":
-			$("#" + idname).val(3);
-			break;
-		case "Locked":
-			$("#" + idname).val(4);
+		case "1":
+			$("#" + istopOprid).val(0);
 			break;
 		}
 	}
-
 }
 
-function col_name_change(colname_value) {
-	var validateResult = false;
-	$("#search_value_span").hide();
-	$("#specify_value").empty();
-	switch (colname_value) {
-	case "user_id":
-	case "user_create_time":
-	case "user_login_time":
-		validateResult = true;
-		$("#specify_value").append("<option value='ASC'>升序(ASC)</option>");
-		$("#specify_value").append("<option value='DESC'>降序(DESC)</option>");
-		break;
-	case "user_account":
-	case "user_name":
-		validateResult = true;
-		$("#specify_value").append("<option value='ASC'>升序(ASC)</option>");
-		$("#specify_value").append("<option value='DESC'>降序(DESC)</option>");
-		$("#specify_value").append("<option value='custom'>自定義搜索(Search)</option>");
-		break;
-	case "user_type":
-		validateResult = true;
-		$("#specify_value").append("<option value='ASC'>升序(ASC)</option>");
-		$("#specify_value").append("<option value='DESC'>降序(DESC)</option>");
-		$("#specify_value").append("<option value='1'>用戶排頭(User on Top)</option>");
-		$("#specify_value").append("<option value='2'>師傅排頭(Master on Top)</option>");
-		$("#specify_value").append("<option value='3'>管理員排頭(Admin on Top)</option>");
-		break;
-	case "user_status":
-		validateResult = true;
-		$("#specify_value").append("<option value='ASC'>升序(ASC)</option>");
-		$("#specify_value").append("<option value='DESC'>降序(DESC)</option>");
-		$("#specify_value").append("<option value='1'>Active排頭(Active on Top)</option>");
-		$("#specify_value").append("<option value='2'>Pause排頭(Pause on Top)</option>");
-		$("#specify_value").append("<option value='3'>Pending排頭(Pending on Top)</option>");
-		$("#specify_value").append("<option value='4'>Locked排頭(Locked on Top)</option>");
-		break;
+function deleteAdvert(idno){
+	if (confirm('確定要刪除廣告(ID:'+ idno +')嗎？\n Confirm to delete Advertisement (ID:'+ idno +')?')) {
+		$.ajax({
+			type : "post",
+			url : "${pageContext.request.contextPath}/advert_deleteAdvertJson.action",
+			data : {
+				"token" : token,
+				"advertisement_id" : idno
+			},
+			success : function(data) {
+				if (data.result) {
+					var rowname = "advertlist_" + idno;
+					$("#message").html("<font color=green> (ID:"+ idno +") Delete Success ! </font>");
+					$("#div_message").show(300).delay(5000).hide(300);
+					$("#" + rowname).hide(300).remove();
+				} else {
+					$("#message").html("<font color=red> (ID:"+ idno +") Delete Failed ! " + data.errmsg + "</font>");
+					$("#div_message").show(300).delay(5000).hide(300);
+					alert("Delete failed. " + data.errmsg);
+				}
+			}
+		});
 	}
-	if (validateResult){
-		$("#specify_value").val("ASC");
-		$("tr[id^='userlist_']").remove();
-		checkUserList(colname_value);
-		$("#message").html("<font color=green> Sorting by " + colname_value + " </font>");
-		$("#div_message").show(300).delay(3000).hide(300);
-	}else{
-		$("#message").html("<font color=red> Invalid value : " + colname_value + " </font>");
-		$("#div_message").show(300).delay(5000).hide(300);
-	}
-	
-
 }
 
-function specify_value_change(specify_value) {
-	var validateResult = false;
-	var new_col_name = "";
-	var new_specify_value = "";
-	$("#search_value_span").hide();
-	switch (specify_value) {
-	case "ASC":
-	case "DESC":
-		validateResult = true;
-		new_col_name = $("#col_name").val() + " " + specify_value;
-		break;
-	case "1":
-	case "2":
-	case "3":
-	case "4":
-		validateResult = true;
-		new_col_name = $("#col_name").val();
-		new_specify_value = specify_value;
-		break;
-	case "custom":
-		validateResult = true;
-		break;
-	}
-	if (validateResult){
-		if(specify_value == 'custom'){
-			$("#search_value").val("");
-			$("#search_value_message").text(" | " + $("#col_name").find("option:selected").text() + "搜索(Search): "); 
-			$("#search_value_span").show();
-		}else{
-			$("tr[id^='userlist_']").remove();
-			checkUserList(new_col_name, new_specify_value);
-			$("#message").html("<font color=green> Sorting by " + $("#col_name").val() + " with " + specify_value + " </font>");
-			$("#div_message").show(300).delay(3000).hide(300);
+function checkAdvertType(typecode, idname){
+	$.ajax({
+		type : "post",
+		url : "${pageContext.request.contextPath}/referdoc_selectJson.action",
+		data : {
+			"token" : token,
+			"referdoc_id" : typecode
+		},
+		success : function(data) {
+			if (data.result) {
+				$("#" + idname).text(data.referdoc.referdoc_type).show(300);
+			}
 		}
-	}else{
-		$("#message").html("<font color=red> Invalid value : " + specify_value + " </font>");
-		$("#div_message").show(300).delay(5000).hide(300);
-	}
-}
-
-
-function search_value() {
-	var new_col_name = $("#col_name").val();
-	var new_search_value = $("#search_value").val();
-	$("tr[id^='userlist_']").remove();
-	checkUserList(new_col_name,"",new_search_value);
+	});
 }

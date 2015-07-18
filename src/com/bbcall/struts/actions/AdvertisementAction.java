@@ -10,6 +10,7 @@ import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Controller;
 
 import com.bbcall.functions.ObjectToMap;
+import com.bbcall.functions.PageInfoToMap;
 import com.bbcall.functions.ResultCode;
 import com.bbcall.functions.Tools;
 import com.bbcall.mybatis.table.Advertisement;
@@ -33,12 +34,14 @@ public class AdvertisementAction extends ActionSupport{
 	private UserServices userServices;
 	private Map<String, Object> dataMap = new LinkedHashMap<String, Object>(); // 新建dataMap来储存JSON字符串
 	private ObjectToMap obj2map = new ObjectToMap();// 新建ObjectToMap对象
+	private PageInfoToMap pageinfo2map = new PageInfoToMap();// 新建PageInfoToMap对象
 	
 	// User-related parameters
 	private String token;
 	
 	// Advertisement-related parameters
 	private Integer advertisement_id;
+	private Integer advertisement_istop;
 	private String advertisement_title;
 	private String advertisement_type;
 	private String advertisement_bigphoto_url;
@@ -47,7 +50,10 @@ public class AdvertisementAction extends ActionSupport{
 	private String advertisement_content;
 	private Timestamp advertisement_create_time;
 	private List<Advertisement> advertList;
-
+	
+	// Page-related parameters
+	private Integer pagenum; // 页面页数
+	
 	/**
 	 * addAdvert Action
 	 * @author Roger Luo
@@ -127,9 +133,10 @@ public class AdvertisementAction extends ActionSupport{
 	 * @throws Exception
 	 */
 	public String showAdvertList() throws Exception {
-		advertList = advertisementServices.getAllAdvertList();
+		advertList = advertisementServices.getAllAdvertList(pagenum);
 		dataMap.clear(); // dataMap中的数据将会被Struts2转换成JSON字符串，所以这里要先清空其中的数据
 		dataMap.put("advertList", advertList);
+		dataMap.putAll(pageinfo2map.pageInfoMap(advertList));// 把分页信息放进dataMap
 		dataMap.putAll(Tools.JsonHeadMap(ResultCode.SUCCESS, true));
 		return SUCCESS;
 	}
@@ -145,9 +152,10 @@ public class AdvertisementAction extends ActionSupport{
 	 * @throws Exception
 	 */
 	public String showAdvertSummaryList() throws Exception {
-		advertList = advertisementServices.getAllAdvertSummaryList();
+		advertList = advertisementServices.getAllAdvertSummaryList(pagenum);
 		dataMap.clear(); // dataMap中的数据将会被Struts2转换成JSON字符串，所以这里要先清空其中的数据
 		dataMap.put("advertList", advertList);
+		dataMap.putAll(pageinfo2map.pageInfoMap(advertList));// 把分页信息放进dataMap
 		dataMap.putAll(Tools.JsonHeadMap(ResultCode.SUCCESS, true));
 		return SUCCESS;
 	}
@@ -179,6 +187,30 @@ public class AdvertisementAction extends ActionSupport{
 	
 	public String deleteAdvertJson() throws Exception {
 		deleteAdvert();
+		return "json";
+	}
+	
+	/**
+	 * updateAdvertIsTop Action
+	 * @return
+	 * @throws Exception
+	 */
+	public String updateAdvertIsTop() throws Exception {
+		int result = advertisementServices.updateAdvertIsTop(advertisement_id, advertisement_istop);
+		dataMap.clear(); // dataMap中的数据将会被Struts2转换成JSON字符串，所以这里要先清空其中的数据
+		if (result == ResultCode.SUCCESS) {
+			dataMap.putAll(Tools.JsonHeadMap(result, true));
+			System.out.println(dataMap);
+			return "updateAdvertIsTopSuccess";
+		} else {
+			dataMap.putAll(Tools.JsonHeadMap(result, false));
+			System.out.println(dataMap);
+			System.out.println("updateAdvertIsTop Failed");
+			return "updateAdvertIsTopFailed";
+		}
+	}
+	public String updateAdvertIsTopJson() throws Exception {
+		updateAdvertIsTop();
 		return "json";
 	}
 	
@@ -278,5 +310,21 @@ public class AdvertisementAction extends ActionSupport{
 
 	public void setAdvertList(List<Advertisement> advertList) {
 		this.advertList = advertList;
+	}
+
+	public Integer getPagenum() {
+		return pagenum;
+	}
+
+	public void setPagenum(Integer pagenum) {
+		this.pagenum = pagenum;
+	}
+
+	public Integer getAdvertisement_istop() {
+		return advertisement_istop;
+	}
+
+	public void setAdvertisement_istop(Integer advertisement_istop) {
+		this.advertisement_istop = advertisement_istop;
 	}
 }

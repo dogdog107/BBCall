@@ -39,7 +39,7 @@ function checkUserList(order_col, order_value, where_col, where_value, pagenum){
 					$("#mo").html(data.lastPageNum);
 				}
 				// 清除现有列表
-				$("#datas").hide();
+//				$("#datas").hide();
 				$("tr[id^='userlist_']").remove();
 				// 拿出列表
 				var userlist = data.userlist;
@@ -49,7 +49,7 @@ function checkUserList(order_col, order_value, where_col, where_value, pagenum){
 					if (n.user_pic_url == "") {
 						row.find("#picurl").html("<img src='' height='60' width='60'>");
 					} else {
-						row.find("#picurl").html("<img src=" + n.user_pic_url + " height='60' width='60'>");
+						row.find("#picurl").html("<img align='center' src=" + n.user_pic_url + " height='60' width='60'>");
 					}
 //					row.find("#amendlink").html("<a href=" + link + "/user_checkUserListJson.action?id=" + n.user_id + ">修改</a>");
 					row.find("#account").text(n.user_account);
@@ -103,10 +103,10 @@ function checkUserList(order_col, order_value, where_col, where_value, pagenum){
 					row.find("#btnDelete").attr("id", "btnDelete_" + n.user_id);
 					row.attr("id", "userlist_" + n.user_id);// 改变绑定好数据的行的id
 					row.appendTo("#datas");// 添加到模板的容器中
-					row.toggle();
+					row.toggle(300);
 				});
 				// 显示数据
-				$("#datas").show(300);
+//				$("#datas").show(300);
 			} else {
 				//隐藏分页条
 				$("#page_bar").hide(300);
@@ -182,7 +182,20 @@ function updateStatus(idname, value) {
 				} else {
 					$("#message").html("<font color=red> (ID:"+ userid +") Status Update Failed ! " + data.errmsg + "</font>");
 					$("#div_message").show(300).delay(5000).hide(300);
-					alert("Update failed. " + data.errmsg);
+					switch ($("#" + defaultStatusName).text()) {
+					case "Active":
+						$("#" + idname).val(1);
+						break;
+					case "Pause":
+						$("#" + idname).val(2);
+						break;
+					case "Pending":
+						$("#" + idname).val(3);
+						break;
+					case "Locked":
+						$("#" + idname).val(4);
+						break;
+					}
 				}
 			}
 		});
@@ -202,7 +215,6 @@ function updateStatus(idname, value) {
 			break;
 		}
 	}
-
 }
 
 function order_value_change(order_value) {

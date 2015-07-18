@@ -16,6 +16,7 @@
     	<result column="advertisement_smallphoto_url" property="advertisement_smallphoto_url" jdbcType="VARCHAR" />
     	<result column="advertisement_summary" property="advertisement_summary" jdbcType="VARCHAR" />
     	<result column="advertisement_content" property="advertisement_content" jdbcType="LONGVARCHAR" />
+    	<result column="advertisement_istop" property="advertisement_istop" jdbcType="INTEGER" />
     	<result column="advertisement_create_time" property="advertisement_create_time" jdbcType="TIMESTAMP" />
 	</resultMap>
 
@@ -49,8 +50,11 @@
 		advertisement_smallphoto_url, 
 		advertisement_summary,
 		advertisement_content,
+		advertisement_istop,
 		advertisement_create_time
 		from ADVERTISEMENT
+		ORDER BY
+		IF (advertisement_istop = 1, 0, 1), advertisement_create_time DESC
 	</select>
 	
 	<select id="getAllAdvertSummary" resultMap="AdvertisementResultMap">
@@ -60,8 +64,11 @@
 		advertisement_bigphoto_url,
 		advertisement_smallphoto_url, 
 		advertisement_summary,
+		advertisement_istop,
 		advertisement_create_time
 		from ADVERTISEMENT
+		ORDER BY
+		IF (advertisement_istop = 1, 0, 1), advertisement_create_time DESC
 	</select>
 
 	<select id="getAdvertById" parameterType="int"
@@ -73,10 +80,16 @@
 		advertisement_smallphoto_url, 
 		advertisement_summary,
 		advertisement_content,
+		advertisement_istop,
 		advertisement_create_time
 		from ADVERTISEMENT
 		where
 		advertisement_id=#{advertisement_id}
 	</select>
-
+	
+	<update id="updateAdvertIsTop">
+		update ADVERTISEMENT set
+		advertisement_istop=#{advertisement_istop}
+		where advertisement_id=#{advertisement_id}
+	</update>
 </mapper>

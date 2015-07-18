@@ -314,6 +314,8 @@ function onload() {
 	if (registerResult == 'true'){
 		$("#message").html("<font color=green> Register Success ! </font>");
 		$("#span_message").html("<p align='center' style='font-size: 16px; color: green'>##添加成功！" + registerMsg + " ##</p>");
+		$("#span_search").hide(300);
+		$("#div_main").hide(300);
 		$("#div_message").show(300).delay(5000).hide(300);
 	}
 	

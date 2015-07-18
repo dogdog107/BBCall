@@ -9,6 +9,7 @@ import com.bbcall.functions.ResultCode;
 import com.bbcall.functions.Tools;
 import com.bbcall.mybatis.dao.AdvertisementMapper;
 import com.bbcall.mybatis.table.Advertisement;
+import com.github.pagehelper.PageHelper;
 
 @Service("advertisementServices")
 public class AdvertisementServices {
@@ -48,6 +49,18 @@ public class AdvertisementServices {
 		advertisementMapper.deleteAdvertById(advertisement_id);
 		return ResultCode.SUCCESS;
 	}
+
+	// Update istop advertisement service
+	public int updateAdvertIsTop(Integer advertisement_id, Integer advertisement_istop){
+		if (advertisement_id == null || advertisement_istop == null)
+			return ResultCode.REQUIREINFO_NOTENOUGH;
+		
+		if (!advertisement_istop.equals(1) && !advertisement_istop.equals(0))
+			return ResultCode.REQUIREINFO_ERROR;
+		
+		advertisementMapper.updateAdvertIsTop(advertisement_id, advertisement_istop);
+		return ResultCode.SUCCESS;
+	}
 	
 	// List advertisement service
 	public int listAdvert(Integer advertisement_id){
@@ -58,13 +71,32 @@ public class AdvertisementServices {
 	}
 	
 	// ListAll advertisement service
-	public List<Advertisement> getAllAdvertList(){
+	public List<Advertisement> getAllAdvertList(Integer pagenum){
+		//当传进来的pagenum为空 或者 pagenum == 0 时，显示第一页
+		if (pagenum == null || pagenum == 0)
+			pagenum = 1;
+		
+	    //PageHelper.startPage(PageNum, PageSize) 
+		//获取第1页，10条内容，当PageSize=0时会查询出全部的结果
+	    PageHelper.startPage(pagenum, 5);
+
+	    //紧跟着的第一个select方法会被分页
 		advertList = advertisementMapper.getAllAdvert();
 		return advertList;
 	}
 	
 	// ListAll advertisement summary service
-	public List<Advertisement> getAllAdvertSummaryList(){
+	public List<Advertisement> getAllAdvertSummaryList(Integer pagenum){
+		//当传进来的pagenum为空 或者 pagenum == 0 时，显示第一页
+		if (pagenum == null || pagenum == 0)
+			pagenum = 1;
+		
+	    //PageHelper.startPage(PageNum, PageSize, "order by") 
+		//获取第1页，10条内容，当PageSize=0时会查询出全部的结果
+//	    PageHelper.startPage(pagenum, 5, "advertisement_create_time desc");
+	    PageHelper.startPage(pagenum, 5);
+
+	    //紧跟着的第一个select方法会被分页
 		advertList = advertisementMapper.getAllAdvertSummary();
 		return advertList;
 	}
