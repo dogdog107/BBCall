@@ -27,22 +27,21 @@
 		resultMap="PreorderResultMap">
 		select *
 		from PREORDER where
-		preorder_master_id=#{preorder_master_id}
-	</select>
-	<select id="getPreodersByOrderId" parameterType="int"
-		resultMap="PreorderResultMap">
-		select *
-		from PREORDER where
-		preorder_order_id=#{preorder_order_id} order by preorder_master_grade
-		desc, preorder_price asc
+		preorder_master_id=#{preorder_master_id} order by preorder_create_time desc
 	</select>
 
-	<select id="getPreodersByOrder" parameterType="int"
+	<select id="getPreodersByParm" 
 		resultMap="PreorderResultMap">
 		select *
 		from PREORDER where
-		preorder_order_id=#{preorder_order_id} order by preorder_price asc,
-		preorder_master_grade desc
+		preorder_order_id=#{preorder_order_id} 
+		<if	test="sortparm == 'preorder_price'.toString()">
+			order by preorder_price asc,preorder_master_grade desc
+		</if>
+		<if	test="sortparm == 'preorder_master_grade'.toString()">
+			order by preorder_master_grade desc,preorder_price asc
+		</if>
+		
 	</select>
 	<select id="getPreorderById" parameterType="int" resultMap="PreorderResultMap">
 		select *

@@ -923,25 +923,25 @@ public class OrderlistServices {
 		// 获取第1页，10条内容，当PageSize=0时会查询出全部的结果
 		PageHelper.startPage(pagenum, 10);
 
-		if (order_status == 0) {
-
-			if (order_master_id == 0) {
-				orderlistinfos = orderlistMapper.getWashOrderlist();
-			} else {
-				orderlistinfos = orderlistMapper
-						.getWashOrderByMaster(order_master_id);
-			}
-
-		} else {
-			if (order_master_id == 0) {
-				orderlistinfos = orderlistMapper
-						.getWashOrderByStatus(order_status);
-
-			} else {
-				orderlistinfos = orderlistMapper.getWashOrders(order_status,
-						order_master_id);
-			}
-		}
+//		if (order_status == 0) {
+//
+//			if (order_master_id == 0) {
+//				orderlistinfos = orderlistMapper.getWashOrderlist();
+//			} else {
+//				orderlistinfos = orderlistMapper
+//						.getWashOrderByMaster(order_master_id);
+//			}
+//
+//		} else {
+//			if (order_master_id == 0) {
+//				orderlistinfos = orderlistMapper
+//						.getWashOrderByStatus(order_status);
+//
+//			} else {
+//				orderlistinfos = orderlistMapper.getWashOrders(order_status,
+//						order_master_id);
+//			}
+//		}
 
 		return ResultCode.SUCCESS;
 	}
