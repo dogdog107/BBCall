@@ -168,7 +168,20 @@
 			<result name="deleteAdvertSuccess">/page/advertList.jsp</result>
 			<result name="deleteAdvertFailed">/page/advertList.jsp</result>
 			<result name="showAdvertSuccess">/page/showAdvert.jsp</result>
+			<result name="editAdvertPageSuccess">/page/editAdvert.jsp</result>
 			
+			<result name="updateAdvertByIdSuccess" type="redirectAction">
+				<param name="actionName">advert_showAdvert</param>
+				<param name="token">${token}</param>
+				<param name="advertisement_id">${advertisement_id}</param>
+				<param name="updateResult">true</param>
+			</result>
+			<result name="updateAdvertByIdFailed" type="redirectAction">
+				<param name="actionName">advert_editAdvertPage</param>
+				<param name="token">${token}</param>
+				<param name="advertisement_id">${advertisement_id}</param>
+				<param name="updateResult">false</param>
+			</result>
 			<result type="json" name="json">
 				<param name="root">dataMap</param>
 			</result>

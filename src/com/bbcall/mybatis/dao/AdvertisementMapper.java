@@ -10,9 +10,12 @@ public interface AdvertisementMapper {
 	
 	// 添加广告 add advertisement
 	public void addAdvert(Advertisement advertisement);
-
+	
 	// 删除广告 delete advertisement
 	public void deleteAdvertById(Integer advertisement_id);
+
+	// 更新广告 update advertisement
+	public void updateAdvertById(Advertisement advertisement);
 	
 	// 置顶广告 
 	public void updateAdvertIsTop(

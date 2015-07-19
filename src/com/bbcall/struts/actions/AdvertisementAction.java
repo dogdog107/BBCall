@@ -43,7 +43,7 @@ public class AdvertisementAction extends ActionSupport{
 	private Integer advertisement_id;
 	private Integer advertisement_istop;
 	private String advertisement_title;
-	private String advertisement_type;
+	private Integer advertisement_type;
 	private String advertisement_bigphoto_url;
 	private String advertisement_smallphoto_url;
 	private String advertisement_summary;
@@ -55,6 +55,8 @@ public class AdvertisementAction extends ActionSupport{
 	// Page-related parameters
 	private Integer pagenum; // 页面页数
 	
+	// others parameters
+	private String updateResult;
 	/**
 	 * addAdvert Action
 	 * @author Roger Luo
@@ -109,6 +111,8 @@ public class AdvertisementAction extends ActionSupport{
 			advertisement_summary = advertisementServices.getAdvertisement().getAdvertisement_summary();
 			advertisement_content = advertisementServices.getAdvertisement().getAdvertisement_content();
 			advertisement_create_time = advertisementServices.getAdvertisement().getAdvertisement_create_time();
+			advertisement_istop = advertisementServices.getAdvertisement().getAdvertisement_istop();
+			advertisement_status = advertisementServices.getAdvertisement().getAdvertisement_status();
 			System.out.println(advertisement_create_time);
 			dataMap = obj2map.getValueMap(advertisementServices.getAdvertisement());
 			dataMap.putAll(Tools.JsonHeadMap(result, true));
@@ -125,6 +129,15 @@ public class AdvertisementAction extends ActionSupport{
 	public String showAdvertJson() throws Exception {
 		showAdvert();
 		return "json";
+	}
+	public String editAdvertPage() throws Exception {
+		String result = showAdvert();
+		if (result.equals("showAdvertSuccess")){
+			return "editAdvertPageSuccess";
+		} else {
+			return "editAdvertPageFailed";
+		}
+		
 	}
 	
 	/**
@@ -231,6 +244,34 @@ public class AdvertisementAction extends ActionSupport{
 	}
 	
 	/**
+	 * updateAdvertById Action
+	 * @return
+	 * @throws Exception
+	 */
+	public String updateAdvertById() throws Exception {
+		int result = advertisementServices.updateAdvert(advertisement_id,
+				advertisement_title, advertisement_type,
+				advertisement_bigphoto_url, advertisement_smallphoto_url,
+				advertisement_summary, advertisement_content,
+				advertisement_istop, advertisement_status);
+		dataMap.clear(); // dataMap中的数据将会被Struts2转换成JSON字符串，所以这里要先清空其中的数据
+		if (result == ResultCode.SUCCESS) {
+			dataMap.putAll(Tools.JsonHeadMap(result, true));
+			System.out.println(dataMap);
+			return "updateAdvertByIdSuccess";
+		} else {
+			dataMap.putAll(Tools.JsonHeadMap(result, false));
+			System.out.println(dataMap);
+			System.out.println("updateAdvertById Failed");
+			return "updateAdvertByIdFailed";
+		}
+	}
+	public String updateAdvertByIdJson() throws Exception {
+		updateAdvertById();
+		return "json";
+	}
+	
+	/**
 	 * updateAdvertIsTop Action
 	 * @return
 	 * @throws Exception
@@ -320,11 +361,11 @@ public class AdvertisementAction extends ActionSupport{
 		this.advertisement_title = advertisement_title;
 	}
 
-	public String getAdvertisement_type() {
+	public Integer getAdvertisement_type() {
 		return advertisement_type;
 	}
 
-	public void setAdvertisement_type(String advertisement_type) {
+	public void setAdvertisement_type(Integer advertisement_type) {
 		this.advertisement_type = advertisement_type;
 	}
 
@@ -398,5 +439,13 @@ public class AdvertisementAction extends ActionSupport{
 
 	public void setAdvertisement_status(Integer advertisement_status) {
 		this.advertisement_status = advertisement_status;
+	}
+
+	public String getUpdateResult() {
+		return updateResult;
+	}
+
+	public void setUpdateResult(String updateResult) {
+		this.updateResult = updateResult;
 	}
 }

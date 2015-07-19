@@ -11,7 +11,7 @@
 	<resultMap id="AdvertisementResultMap" type="com.bbcall.mybatis.table.Advertisement" >
     	<id column="advertisement_id" property="advertisement_id" jdbcType="INTEGER" />
     	<result column="advertisement_title" property="advertisement_title" jdbcType="VARCHAR" />
-    	<result column="advertisement_type" property="advertisement_type" jdbcType="VARCHAR" />
+    	<result column="advertisement_type" property="advertisement_type" jdbcType="INTEGER" />
     	<result column="advertisement_bigphoto_url" property="advertisement_bigphoto_url" jdbcType="VARCHAR" />
     	<result column="advertisement_smallphoto_url" property="advertisement_smallphoto_url" jdbcType="VARCHAR" />
     	<result column="advertisement_summary" property="advertisement_summary" jdbcType="VARCHAR" />
@@ -132,6 +132,19 @@
 	
 	<update id="updateAdvertStatus">
 		update ADVERTISEMENT set
+		advertisement_status=#{advertisement_status}
+		where advertisement_id=#{advertisement_id}
+	</update>
+	
+	<update id="updateAdvertById" parameterType="Advertisement">
+		update ADVERTISEMENT set
+		advertisement_title=#{advertisement_title},
+		advertisement_type=#{advertisement_type},
+		advertisement_bigphoto_url=#{advertisement_bigphoto_url},
+		advertisement_smallphoto_url=#{advertisement_smallphoto_url},
+		advertisement_summary=#{advertisement_summary},
+		advertisement_content=#{advertisement_content},
+		advertisement_istop=#{advertisement_istop},
 		advertisement_status=#{advertisement_status}
 		where advertisement_id=#{advertisement_id}
 	</update>

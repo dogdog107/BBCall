@@ -8,9 +8,6 @@
 <link rel="shortcut icon" href="${pageContext.request.contextPath }/page/img/BBCallicon_32X32.ico" type="image/x-icon" />
 <link href="${pageContext.request.contextPath }/page/css/mine.css" type="text/css" rel="stylesheet" />
 
-<!--WebUploader引入CSS-->
-<link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath }/page/WebUploader/webuploader.css" />
-
 <title>新增廣告 (Add Advertisement)</title>
 </head>
 <body onload="onload()">
@@ -33,7 +30,7 @@
 	</table>
 	<div></div>
 	<div style="font-size: 13px; margin: 10px 5px">
-		<span> <s:if test="dataMap.result">
+<%-- 		<span> <s:if test="dataMap.result">
 				<p align="center" style="font-size: 15px; color: green">##
 					成功！${ dataMap.errmsg} ##</p>
 			</s:if> <s:else>
@@ -42,27 +39,27 @@
 						失敗！${ dataMap.errmsg} ##</p>
 				</s:if>
 			</s:else>
-		</span>
+		</span> --%>
 	</div>
 	<div style="font-size: 13px; margin: 10px 5px">
-		<form id="addAdvert_form" action="advert_addAdvert" method="post">
-			<input type="hidden" id="token" name="token"
-				value="${sessionScope.user_token}" />
+		<form id="updateAdvert_form" action="advert_updateAdvertById" method="post">
+			<input type="hidden" id="token" name="token" value="${sessionScope.user_token}" />
+			<input type="hidden" id="advertisement_id" name="advertisement_id" value="${advertisement_id}" />
 			<table border="1" width="100%" class="table_update">
 
 				<tr>
 					<td style="width:250px">廣告標題 (AD Title)</td>
-					<td><input type="text" name="advertisement_title" style="width:400px;height:20px;"/></td>
+					<td><input type="text" name="advertisement_title" style="width:400px;height:20px;" value="${advertisement_title }"/></td>
 				</tr>
 				<tr>
 					<td>廣告概要 (AD Summary)</td>
-					<td><textarea rows="3" name="advertisement_summary" style="width:400px;"></textarea></td>
+					<td><textarea rows="3" name="advertisement_summary" style="width:400px;">${advertisement_summary }</textarea></td>
 				</tr>
 				<tr>
 					<td>用戶技能 (User Skill)
 					</td>
 					<td id="skill_main">
-					<input type="hidden" id="advertisement_type" name="advertisement_type" value=""/>
+					<input type="hidden" id="advertisement_type" name="advertisement_type" value="${advertisement_type }"/>
 					<div style="padding: 6px 12px;">
 						<div>
 							<select id="skillParentCode"
@@ -80,19 +77,17 @@
 				<tr>
 					<td>廣告大標圖 (AD Big Photo)</td>
 					<td> 
-						<input type="hidden" id="advertisement_bigphoto_url" name="advertisement_bigphoto_url" value="" />
-						<!--用来存放item-->
-						<div id="bigPhoto" class="uploader-list"></div>
-						<div id="bigPhotoPicker">选择图片</div>
+						<img id="big_photo" name="advertisement_bigphoto_url" src="${advertisement_bigphoto_url }" height="200" width="400" /><br/>
+						<span style="color:red">圖片不能編輯</span>
+						<!-- <input type="file" name="upload" id="upload" onchange="" class="" /> -->
 					</td>
 				</tr>
 				<tr>
 					<td>廣告小標圖 (AD Small Photo)</td>
 					<td>
-						<input type="hidden" id="advertisement_smallphoto_url" name="advertisement_smallphoto_url" value="" />
-						<!--用来存放item-->
-						<div id="smallPhoto" class="uploader-list"></div>
-						<div id="smallPhotoPicker">选择图片</div>
+						<img id="small_photo" name="advertisement_smallphoto_url" src="${advertisement_smallphoto_url }" height="100" width="100" /><br/>
+						<span style="color:red">圖片不能編輯</span>
+						<!-- <input type="file" name="upload" id="upload" onchange="" class="" /> -->
 					</td>
 				</tr>
 				<tr>
@@ -101,7 +96,7 @@
 				<tr>
 					<td colspan="2">
 						<input type="hidden" id="advertisement_content" name="advertisement_content" value="" />
-						<script id="editor" type="text/plain" style="width:99%;height:400px;">在這裡輸入廣告內容 (Enter AD contents here)</script>
+						<script id="editor" type="text/plain" style="width:99%;height:400px;">${advertisement_content}</script>
 					</td>
 				</tr>
 				<tr>
@@ -119,16 +114,15 @@
 		// 添加全局站点信息
 		var BASE_URL = '${pageContext.request.contextPath }';
 		var token = '${sessionScope.user_token}';
+		var advertType = '${advertisement_type }';
+		var updateResult = "${updateResult}";
+		var updateErrmsg = "${dataMap.errmsg}";
 	</script>
 	
 	<!--引入jquery-->
 	<script type="text/javascript"
 	src="${pageContext.request.contextPath }/jquery/jquery-1.8.3.js"></script>
 	
-	<!--WebUploader引入JS-->
-	<script type="text/javascript"
-		src="${pageContext.request.contextPath }/page/WebUploader/webuploader.js"></script>
-
 	<!-- UEditor配置文件 -->
 	<script type="text/javascript" charset="utf-8"
 		src="${pageContext.request.contextPath }/page/UEditor/ueditor.config.js"></script>
@@ -143,6 +137,6 @@
 
 	<!-- 页面JS文件 -->
 	<script type="text/javascript" charset="utf-8"
-		src="${pageContext.request.contextPath }/jquery/addAdvertPage.js"></script>
+		src="${pageContext.request.contextPath }/jquery/editAdvertPage.js"></script>
 </body>
 </html>
