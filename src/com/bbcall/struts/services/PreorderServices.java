@@ -14,6 +14,7 @@ import com.bbcall.mybatis.dao.UserMapper;
 import com.bbcall.mybatis.table.Orderlist;
 import com.bbcall.mybatis.table.Preorder;
 import com.bbcall.mybatis.table.User;
+import com.github.pagehelper.PageHelper;
 
 @Service("preorderServices")
 public class PreorderServices {
@@ -57,7 +58,7 @@ public class PreorderServices {
 	// ##
 	// ################################################################################
 	public int addPreorder(int preorder_master_id, double preorder_price,
-			int preorder_order_id) {
+			int preorder_order_id, Integer pagenum) {
 		System.out.println("Here is PreorderServices.add method...");
 
 		Preorder preorder = new Preorder();
@@ -104,6 +105,14 @@ public class PreorderServices {
 
 		orderlistMapper.updateOrder(orderlist);
 
+		// 当传进来的pagenum为空 或者 pagenum == 0 时，显示第一页
+		if (pagenum == null || pagenum == 0)
+			pagenum = 1;
+
+		// PageHelper.startPage(PageNum, PageSize)
+		// 获取第1页，10条内容，当PageSize=0时会查询出全部的结果
+		PageHelper.startPage(pagenum, 10);
+
 		preorderinfos = preorderMapper
 				.getPreordersByAccount(preorder_master_id);
 		System.out.println("getsuccess");
@@ -131,11 +140,18 @@ public class PreorderServices {
 	// ## 4. Return: NONE
 	// ##
 	// ################################################################################
-	public int deletePreorder(int preorder_id, int preorder_master_id) {
+	public int deletePreorder(int preorder_id, int preorder_master_id, Integer pagenum) {
 		System.out.println("Here is PreorderServices.delete method...");
 
 		preorderMapper.deletePreorder(preorder_id);
 
+		// 当传进来的pagenum为空 或者 pagenum == 0 时，显示第一页
+				if (pagenum == null || pagenum == 0)
+					pagenum = 1;
+
+				// PageHelper.startPage(PageNum, PageSize)
+				// 获取第1页，10条内容，当PageSize=0时会查询出全部的结果
+				PageHelper.startPage(pagenum, 10);
 		preorderinfos = preorderMapper
 				.getPreordersByAccount(preorder_master_id);
 
@@ -163,8 +179,16 @@ public class PreorderServices {
 	// ## (1) preorderinfos
 	// ##
 	// ################################################################################
-	public int getPreorderByAccount(int preorder_master_id) {
+	public int getPreorderByAccount(int preorder_master_id,Integer pagenum) {
 		System.out.println("Here is PreorderServices.get method...");
+
+		// 当传进来的pagenum为空 或者 pagenum == 0 时，显示第一页
+		if (pagenum == null || pagenum == 0)
+			pagenum = 1;
+
+		// PageHelper.startPage(PageNum, PageSize)
+		// 获取第1页，10条内容，当PageSize=0时会查询出全部的结果
+		PageHelper.startPage(pagenum, 10);
 
 		preorderinfos = preorderMapper
 				.getPreordersByAccount(preorder_master_id);
@@ -193,42 +217,59 @@ public class PreorderServices {
 	// ## (1) preorderinfos
 	// ##
 	// ################################################################################
-	public int getPreorderDesc(int preorder_order_id) {
+	public int getPreorderBySortparm(int preorder_order_id, String sortparm,
+			Integer pagenum) {
 		System.out.println("Here is PreorderServices.get method...");
 
-		preorderinfos = preorderMapper.getPreodersByOrderId(preorder_order_id);
+		// 当传进来的pagenum为空 或者 pagenum == 0 时，显示第一页
+		if (pagenum == null || pagenum == 0)
+			pagenum = 1;
+
+		// PageHelper.startPage(PageNum, PageSize)
+		// 获取第1页，10条内容，当PageSize=0时会查询出全部的结果
+		PageHelper.startPage(pagenum, 10);
+
+		preorderinfos = preorderMapper.getPreodersByParm(preorder_order_id,
+				sortparm);
 
 		return ResultCode.SUCCESS;
 	}
 
+	// //
 	// ################################################################################
-	// ## Get Preorder services
-	// ## 通过订单编号取得预处理订单
+	// // ## Get Preorder services
+	// // ## 通过订单编号取得预处理订单
+	// //
 	// ##==============================================================================
-	// ## Instructions
-	// ##
+	// // ## Instructions
+	// // ##
+	// //
 	// ##------------------------------------------------------------------------------
-	// ## 1. Require parameters:
-	// ## (1) preorder_order_id
+	// // ## 1. Require parameters:
+	// // ## (1) preorder_order_id
+	// //
 	// ##------------------------------------------------------------------------------
-	// ## 2. Optional parameters: NONE
-	// ##
+	// // ## 2. Optional parameters: NONE
+	// // ##
+	// //
 	// ##------------------------------------------------------------------------------
-	// ## 3. Return parameters:
-	// ## (4) ResultCode.SUCCESS
-	// ##
+	// // ## 3. Return parameters:
+	// // ## (4) ResultCode.SUCCESS
+	// // ##
+	// //
 	// ##------------------------------------------------------------------------------
-	// ## 4. Return preorderinfos:
-	// ## (1) preorderinfos
-	// ##
+	// // ## 4. Return preorderinfos:
+	// // ## (1) preorderinfos
+	// // ##
+	// //
 	// ################################################################################
-	public int getPreorderAsc(int preorder_order_id) {
-		System.out.println("Here is PreorderServices.get method...");
-
-		preorderinfos = preorderMapper.getPreodersByOrder(preorder_order_id);
-
-		return ResultCode.SUCCESS;
-	}
+	// public int getPreorderAsc(int preorder_order_id) {
+	// System.out.println("Here is PreorderServices.get method...");
+	//
+	// preorderinfos = preorderMapper.getPreodersByOrder(preorder_order_id);
+	//
+	// return ResultCode.SUCCESS;
+	// }
 
 	// ################################################################################
 	// ## Get Preorder services
@@ -255,6 +296,23 @@ public class PreorderServices {
 		System.out.println("Here is PreorderServices.get method...");
 
 		preorderinfo = preorderMapper.getPreorderById(preorder_id);
+
+		return ResultCode.SUCCESS;
+	}
+
+	public int selectPreorder(int preorder_master_id, int preorder_order_id) {
+		System.out.println("Here is PreorderServices.selectPreorder method...");
+
+		preorderinfo = preorderMapper.getPreoder(preorder_master_id,
+				preorder_order_id);
+
+		return ResultCode.SUCCESS;
+	}
+
+	public int delete(int preorder_order_id) {
+		System.out.println("Here is PreorderServices.delete method...");
+
+		preorderMapper.deletePreorderByOrderId(preorder_order_id);
 
 		return ResultCode.SUCCESS;
 	}

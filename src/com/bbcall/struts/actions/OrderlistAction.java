@@ -11,11 +11,13 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Controller;
 
+import com.bbcall.functions.PageInfoToMap;
 import com.bbcall.functions.ResultCode;
 import com.bbcall.functions.Tools;
-import com.bbcall.mybatis.table.AddressList;
 import com.bbcall.mybatis.table.Orderlist;
+import com.bbcall.mybatis.table.User;
 import com.bbcall.struts.services.OrderlistServices;
+import com.bbcall.struts.services.UserServices;
 import com.opensymphony.xwork2.ActionSupport;
 
 @Scope("prototype")
@@ -26,7 +28,11 @@ public class OrderlistAction extends ActionSupport {
 	@Autowired
 	private OrderlistServices orderlistServices;
 
+	@Autowired
+	private UserServices userServices;
+
 	private Map<String, Object> dataMap;
+	private PageInfoToMap pageinfo2map = new PageInfoToMap();// 新建PageInfoToMap对象
 
 	private String order_id;
 	private String order_book_time;
@@ -52,7 +58,7 @@ public class OrderlistAction extends ActionSupport {
 	private String locationlist;
 	private String sortparm;
 	private String order_type_list;
-	private String offset;
+	private Integer pagenum; // 页面页数
 
 	private List<String> orderFileFileName = new ArrayList<String>(); // 文件名
 
@@ -99,7 +105,7 @@ public class OrderlistAction extends ActionSupport {
 					order_book_location, book_location_code, contact_mobile,
 					order_contact_name, order_urgent, urgent_bonus,
 					orderpicurl, order_description, price, order_user_id,
-					type_code, section);
+					type_code, section, pagenum);
 		}
 
 		if (result == ResultCode.SUCCESS) {
@@ -110,6 +116,7 @@ public class OrderlistAction extends ActionSupport {
 			// referdoclist.add(referdocServices.referdocinfo());
 			// }
 			dataMap.put("orderlist", orderlist);
+			dataMap.putAll(pageinfo2map.pageInfoMap(orderlist));// 把分页信息放进dataMap
 			// dataMap.put("referdoclist", referdoclist);
 			dataMap.putAll(Tools.JsonHeadMap(result, true));
 			// dataMap.put("resultcode", result);
@@ -179,9 +186,8 @@ public class OrderlistAction extends ActionSupport {
 		int orderid = Integer.parseInt(order_id);
 		int order_user_id = Integer.parseInt(user_id);
 
-		int result = orderlistServices
-				.ChangeOrderStatus(order_user_id, orderid);
-		// List<Referdoc> referdoclist = new ArrayList<Referdoc>();
+		int result = orderlistServices.ChangeOrderStatus(order_user_id,
+				orderid, pagenum);
 
 		if (result == ResultCode.SUCCESS) {
 			List<Orderlist> orderlist = orderlistServices.orderlistinfos();
@@ -191,6 +197,7 @@ public class OrderlistAction extends ActionSupport {
 			// referdoclist.add(referdocServices.referdocinfo());
 			// }
 			dataMap.put("orderlist", orderlist);
+			dataMap.putAll(pageinfo2map.pageInfoMap(orderlist));// 把分页信息放进dataMap
 			// dataMap.put("referdoclist", referdoclist);
 			dataMap.putAll(Tools.JsonHeadMap(result, true));
 			// dataMap.put("resultcode", result);
@@ -220,7 +227,7 @@ public class OrderlistAction extends ActionSupport {
 		}
 
 		int result = orderlistServices.completeOrder(score, order_evaluation,
-				orderid);
+				orderid, pagenum);
 		// List<Referdoc> referdoclist = new ArrayList<Referdoc>();
 
 		if (result == ResultCode.SUCCESS) {
@@ -231,6 +238,7 @@ public class OrderlistAction extends ActionSupport {
 			// referdoclist.add(referdocServices.referdocinfo());
 			// }
 			dataMap.put("orderlist", orderlist);
+			dataMap.putAll(pageinfo2map.pageInfoMap(orderlist));// 把分页信息放进dataMap
 			// dataMap.put("referdoclist", referdoclist);
 			dataMap.putAll(Tools.JsonHeadMap(result, true));
 			// dataMap.put("resultcode", result);
@@ -250,11 +258,25 @@ public class OrderlistAction extends ActionSupport {
 		dataMap = new HashMap<String, Object>(); // 新建dataMap来储存JSON字符串
 		dataMap.clear(); // dataMap中的数据将会被Struts2转换成JSON字符串，所以这里要先清空其中的数据
 
-		int order_user_id = Integer.parseInt(user_id);
-		int order_offset = Integer.parseInt(offset);
+		int result = 1;
 
-		int result = orderlistServices.getUnOrders(order_user_id, order_offset);
-		// List<Referdoc> referdoclist = new ArrayList<Referdoc>();
+		int order_user_id = Integer.parseInt(user_id);
+
+		userServices.getUserById(order_user_id);
+
+		User tempuUser = userServices.getUserinfo();
+
+		Integer usertype = tempuUser.getUser_type();
+
+		if (usertype.equals(1)) {
+			result = orderlistServices.getUnOrdersForCustomer(order_user_id,
+					pagenum);
+		} else if (usertype.equals(2)) {
+			result = orderlistServices.getUnOrdersForMaster(order_user_id,
+					pagenum);
+		} else {
+			result = orderlistServices.getUnOrdersForAdm(pagenum);
+		}
 
 		if (result == ResultCode.SUCCESS) {
 			List<Orderlist> orderlist = orderlistServices.orderlistinfos();
@@ -264,6 +286,7 @@ public class OrderlistAction extends ActionSupport {
 			// referdoclist.add(referdocServices.referdocinfo());
 			// }
 			dataMap.put("orderlist", orderlist);
+			dataMap.putAll(pageinfo2map.pageInfoMap(orderlist));// 把分页信息放进dataMap
 			// dataMap.put("referdoclist", referdoclist);
 			dataMap.putAll(Tools.JsonHeadMap(result, true));
 			// dataMap.put("resultcode", result);
@@ -279,20 +302,15 @@ public class OrderlistAction extends ActionSupport {
 		return "json";
 	}
 
+	// 页面
 	public String getorderlist() throws Exception {
 		dataMap = new HashMap<String, Object>(); // 新建dataMap来储存JSON字符串
 		dataMap.clear(); // dataMap中的数据将会被Struts2转换成JSON字符串，所以这里要先清空其中的数据
 
 		int order_user_id = Integer.parseInt(user_id);
 
-		int order_offset = 0;
-
-		if (offset != null) {
-			order_offset = Integer.parseInt(offset);
-		}
-
 		int result = orderlistServices.getOrderlist(order_user_id,
-				order_status, order_offset);
+				order_status, pagenum);
 		// List<Referdoc> referdoclist = new ArrayList<Referdoc>();
 
 		if (result == ResultCode.SUCCESS) {
@@ -303,6 +321,7 @@ public class OrderlistAction extends ActionSupport {
 			// referdoclist.add(referdocServices.referdocinfo());
 			// }
 			dataMap.put("orderlist", orderlist);
+			dataMap.putAll(pageinfo2map.pageInfoMap(orderlist));// 把分页信息放进dataMap
 			// dataMap.put("referdoclist", referdoclist);
 			dataMap.putAll(Tools.JsonHeadMap(result, true));
 			// dataMap.put("resultcode", result);
@@ -325,9 +344,8 @@ public class OrderlistAction extends ActionSupport {
 
 		int order_user_id = Integer.parseInt(user_id);
 
-		int order_offset = Integer.parseInt(offset);
 		int result = orderlistServices.getUnOrderlist(skilllist, locationlist,
-				order_user_id, order_offset);
+				order_user_id, sortparm, pagenum);
 		// List<Referdoc> referdoclist = new ArrayList<Referdoc>();
 
 		if (result == ResultCode.SUCCESS) {
@@ -338,6 +356,7 @@ public class OrderlistAction extends ActionSupport {
 			// referdoclist.add(referdocServices.referdocinfo());
 			// }
 			dataMap.put("orderlist", orderlist);
+			dataMap.putAll(pageinfo2map.pageInfoMap(orderlist));// 把分页信息放进dataMap
 			// dataMap.put("referdoclist", referdoclist);
 			dataMap.putAll(Tools.JsonHeadMap(result, true));
 			// dataMap.put("resultcode", result);
@@ -354,51 +373,64 @@ public class OrderlistAction extends ActionSupport {
 	}
 
 	// 按照截止日期排序
-	public String selectunordersbybooktime() throws Exception {
-		dataMap = new HashMap<String, Object>(); // 新建dataMap来储存JSON字符串
-		dataMap.clear(); // dataMap中的数据将会被Struts2转换成JSON字符串，所以这里要先清空其中的数据
-
-		int order_user_id = Integer.parseInt(user_id);
-
-		int order_offset = Integer.parseInt(offset);
-		int result = orderlistServices.getUnOrdersByBookTime(order_user_id,
-				skilllist, locationlist, order_offset);
-		// List<Referdoc> referdoclist = new ArrayList<Referdoc>();
-
-		if (result == ResultCode.SUCCESS) {
-			List<Orderlist> orderlist = orderlistServices.orderlistinfos();
-
-			// for (int j = 0; j < orderlist.size(); j++) {
-			// referdocServices.getReferdoc(orderlist.get(j)
-			// .getOrder_type_code());
-			// referdoclist.add(referdocServices.referdocinfo());
-			// }
-			dataMap.put("orderlist", orderlist);
-			// dataMap.put("referdoclist", referdoclist);
-			dataMap.putAll(Tools.JsonHeadMap(result, true));
-			// dataMap.put("resultcode", result);
-			// dataMap.put("errmsg", ResultCode.getErrmsg(result));
-			// dataMap.put("selectunordersbybooktimeResult", true);
-		}
-
-		return SUCCESS;
-	}
-
-	public String selectunordersbybooktimeJson() throws Exception {
-		selectunordersbybooktime();
-		return "json";
-	}
+	// public String selectunordersbybooktime() throws Exception {
+	// dataMap = new HashMap<String, Object>(); // 新建dataMap来储存JSON字符串
+	// dataMap.clear(); // dataMap中的数据将会被Struts2转换成JSON字符串，所以这里要先清空其中的数据
+	//
+	// int order_user_id = Integer.parseInt(user_id);
+	//
+	// int result = orderlistServices.getUnOrdersByBookTime(order_user_id,
+	// skilllist, locationlist, pagenum);
+	// // List<Referdoc> referdoclist = new ArrayList<Referdoc>();
+	//
+	// if (result == ResultCode.SUCCESS) {
+	// List<Orderlist> orderlist = orderlistServices.orderlistinfos();
+	//
+	// // for (int j = 0; j < orderlist.size(); j++) {
+	// // referdocServices.getReferdoc(orderlist.get(j)
+	// // .getOrder_type_code());
+	// // referdoclist.add(referdocServices.referdocinfo());
+	// // }
+	// dataMap.put("orderlist", orderlist);
+	// dataMap.putAll(pageinfo2map.pageInfoMap(orderlist));// 把分页信息放进dataMap
+	// // dataMap.put("referdoclist", referdoclist);
+	// dataMap.putAll(Tools.JsonHeadMap(result, true));
+	// // dataMap.put("resultcode", result);
+	// // dataMap.put("errmsg", ResultCode.getErrmsg(result));
+	// // dataMap.put("selectunordersbybooktimeResult", true);
+	// }
+	//
+	// return SUCCESS;
+	// }
+	//
+	// public String selectunordersbybooktimeJson() throws Exception {
+	// selectunordersbybooktime();
+	// return "json";
+	// }
 
 	public String selectproorderlist() throws Exception {
 		dataMap = new HashMap<String, Object>(); // 新建dataMap来储存JSON字符串
 		dataMap.clear(); // dataMap中的数据将会被Struts2转换成JSON字符串，所以这里要先清空其中的数据
 
+		int result = 1;
+
 		int order_user_id = Integer.parseInt(user_id);
 
-		int order_offset = Integer.parseInt(offset);
-		int result = orderlistServices
-				.getProOrders(order_user_id, order_offset);
-		// List<Referdoc> referdoclist = new ArrayList<Referdoc>();
+		userServices.getUserById(order_user_id);
+
+		User tempuUser = userServices.getUserinfo();
+
+		Integer usertype = tempuUser.getUser_type();
+
+		if (usertype.equals(1)) {
+			result = orderlistServices.getProOrdersForCustomer(order_user_id,
+					pagenum);
+		} else if (usertype.equals(2)) {
+			result = orderlistServices.getProOrdersForMaster(order_user_id,
+					pagenum);
+		} else {
+			result = orderlistServices.getProOrdersForAdm(pagenum);
+		}
 
 		if (result == ResultCode.SUCCESS) {
 			List<Orderlist> orderlist = orderlistServices.orderlistinfos();
@@ -409,6 +441,7 @@ public class OrderlistAction extends ActionSupport {
 			// referdoclist.add(referdocServices.referdocinfo());
 			// }
 			dataMap.put("orderlist", orderlist);
+			dataMap.putAll(pageinfo2map.pageInfoMap(orderlist));// 把分页信息放进dataMap
 			// dataMap.put("referdoclist", referdoclist);
 			dataMap.putAll(Tools.JsonHeadMap(result, true));
 			// dataMap.put("resultcode", result);
@@ -428,12 +461,25 @@ public class OrderlistAction extends ActionSupport {
 		dataMap = new HashMap<String, Object>(); // 新建dataMap来储存JSON字符串
 		dataMap.clear(); // dataMap中的数据将会被Struts2转换成JSON字符串，所以这里要先清空其中的数据
 
-		int order_user_id = Integer.parseInt(user_id);
-		int order_offset = Integer.parseInt(offset);
+		int result = 1;
 
-		int result = orderlistServices
-				.getComOrders(order_user_id, order_offset);
-		// List<Referdoc> referdoclist = new ArrayList<Referdoc>();
+		int order_user_id = Integer.parseInt(user_id);
+
+		userServices.getUserById(order_user_id);
+
+		User tempuUser = userServices.getUserinfo();
+
+		Integer usertype = tempuUser.getUser_type();
+
+		if (usertype.equals(1)) {
+			result = orderlistServices.getComOrdersForCustomer(order_user_id,
+					pagenum);
+		} else if (usertype.equals(2)) {
+			result = orderlistServices.getComOrdersForMaster(order_user_id,
+					pagenum);
+		} else {
+			result = orderlistServices.getComOrdersForAdm(pagenum);
+		}
 
 		if (result == ResultCode.SUCCESS) {
 			List<Orderlist> orderlist = orderlistServices.orderlistinfos();
@@ -443,6 +489,7 @@ public class OrderlistAction extends ActionSupport {
 			// referdoclist.add(referdocServices.referdocinfo());
 			// }
 			dataMap.put("orderlist", orderlist);
+			dataMap.putAll(pageinfo2map.pageInfoMap(orderlist));// 把分页信息放进dataMap
 			// dataMap.put("referdoclist", referdoclist);
 			dataMap.putAll(Tools.JsonHeadMap(result, true));
 			// dataMap.put("resultcode", result);
@@ -550,7 +597,7 @@ public class OrderlistAction extends ActionSupport {
 		dataMap.clear(); // dataMap中的数据将会被Struts2转换成JSON字符串，所以这里要先清空其中的数据
 
 		int result = orderlistServices.getWashOrderlist(order_status,
-				order_section,order_master_name);
+				order_section, order_master_name, pagenum);
 		// List<Referdoc> referdoclist = new ArrayList<Referdoc>();
 
 		if (result == ResultCode.SUCCESS) {
@@ -562,6 +609,7 @@ public class OrderlistAction extends ActionSupport {
 			// referdoclist.add(referdocServices.referdocinfo());
 			// }
 			dataMap.put("orderlist", orderlist);
+			dataMap.putAll(pageinfo2map.pageInfoMap(orderlist));// 把分页信息放进dataMap
 			dataMap.putAll(Tools.JsonHeadMap(result, true));
 			// dataMap.put("referdoclist", referdoclist);
 			// dataMap.put("resultcode", result);
@@ -581,7 +629,7 @@ public class OrderlistAction extends ActionSupport {
 		dataMap = new HashMap<String, Object>(); // 新建dataMap来储存JSON字符串
 		dataMap.clear(); // dataMap中的数据将会被Struts2转换成JSON字符串，所以这里要先清空其中的数据
 
-		int result = orderlistServices.getWashOrderlist();
+		int result = orderlistServices.getWashOrderlist(pagenum);
 		// List<Referdoc> referdoclist = new ArrayList<Referdoc>();
 
 		if (result == ResultCode.SUCCESS) {
@@ -593,6 +641,7 @@ public class OrderlistAction extends ActionSupport {
 			// referdoclist.add(referdocServices.referdocinfo());
 			// }
 			dataMap.put("orderlist", orderlist);
+			dataMap.putAll(pageinfo2map.pageInfoMap(orderlist));// 把分页信息放进dataMap
 			dataMap.putAll(Tools.JsonHeadMap(result, true));
 			// dataMap.put("referdoclist", referdoclist);
 			// dataMap.put("resultcode", result);
@@ -616,7 +665,7 @@ public class OrderlistAction extends ActionSupport {
 		int order_user_id = Integer.parseInt(user_id);
 
 		int result = orderlistServices.selectWashOrderlist(orderstatus,
-				order_user_id);
+				order_user_id, pagenum);
 		// List<Referdoc> referdoclist = new ArrayList<Referdoc>();
 
 		if (result == ResultCode.SUCCESS) {
@@ -628,6 +677,7 @@ public class OrderlistAction extends ActionSupport {
 			// referdoclist.add(referdocServices.referdocinfo());
 			// }
 			dataMap.put("orderlist", orderlist);
+			dataMap.putAll(pageinfo2map.pageInfoMap(orderlist));// 把分页信息放进dataMap
 			dataMap.putAll(Tools.JsonHeadMap(result, true));
 			// dataMap.put("referdoclist", referdoclist);
 			// dataMap.put("resultcode", result);
@@ -647,13 +697,10 @@ public class OrderlistAction extends ActionSupport {
 		dataMap = new HashMap<String, Object>(); // 新建dataMap来储存JSON字符串
 		dataMap.clear(); // dataMap中的数据将会被Struts2转换成JSON字符串，所以这里要先清空其中的数据
 
-		int orderstatus = Integer.parseInt(order_status);
-		int type_code = Integer.parseInt(order_type_code);
 		int order_user_id = Integer.parseInt(user_id);
-		int order_offset = Integer.parseInt(offset);
 
-		int result = orderlistServices.selectOrderlist(orderstatus,
-				order_user_id, type_code, order_offset);
+		int result = orderlistServices.selectOrderlist(order_status,
+				order_user_id, order_type_code, pagenum);
 
 		// List<Referdoc> referdoclist = new ArrayList<Referdoc>();
 
@@ -666,6 +713,7 @@ public class OrderlistAction extends ActionSupport {
 			// referdoclist.add(referdocServices.referdocinfo());
 			// }
 			dataMap.put("orderlist", orderlist);
+			dataMap.putAll(pageinfo2map.pageInfoMap(orderlist));// 把分页信息放进dataMap
 			dataMap.putAll(Tools.JsonHeadMap(result, true));
 			// dataMap.put("referdoclist", referdoclist);
 			// dataMap.put("resultcode", result);
@@ -687,9 +735,8 @@ public class OrderlistAction extends ActionSupport {
 
 		int orderid = Integer.parseInt(order_id);
 		int order_user_id = Integer.parseInt(user_id);
-		int order_offset = Integer.parseInt(offset);
 		int result = orderlistServices.deleteOrder(orderid, order_user_id,
-				order_offset);
+				pagenum);
 		// List<Referdoc> referdoclist = new ArrayList<Referdoc>();
 		if (result == ResultCode.SUCCESS) {
 			List<Orderlist> orderlist = orderlistServices.orderlistinfos();
@@ -699,6 +746,7 @@ public class OrderlistAction extends ActionSupport {
 			// referdoclist.add(referdocServices.referdocinfo());
 			// }
 			dataMap.put("orderlist", orderlist);
+			dataMap.putAll(pageinfo2map.pageInfoMap(orderlist));// 把分页信息放进dataMap
 			// dataMap.put("referdoclist", referdoclist);
 			dataMap.putAll(Tools.JsonHeadMap(result, true));
 			// dataMap.put("resultcode", result);
@@ -715,65 +763,67 @@ public class OrderlistAction extends ActionSupport {
 	}
 
 	// checkParentAdsList Action
-	public String checkChildAdsList() throws Exception {
-		System.out.println("Here is UserAction.checkChildAdsList");
-		dataMap.clear(); // dataMap中的数据将会被Struts2转换成JSON字符串，所以这里要先清空其中的数据
-		int result = orderlistServices.checkChildAdsList(addresscode);// 调用userServices.checkParentAdsList
-
-		if (result == ResultCode.SUCCESS) {
-			List<AddressList> addresslist = orderlistServices.getAddresslist();
-			dataMap.put("addresslist", addresslist); // 把addresslist对象放入dataMap
-			dataMap.putAll(Tools.JsonHeadMap(result, true));
-			// dataMap.put("resultcode", result); // 放入一个是否操作成功的标识
-			// dataMap.put("errmsg", ResultCode.getErrmsg(result));
-			// dataMap.put("checkChildAdsListResult", true); //
-			// 放入checkUserNameResult
-		} else {
-			dataMap.putAll(Tools.JsonHeadMap(result, true));
-			// dataMap.put("resultcode", result); // 放入一个是否操作成功的标识
-			// dataMap.put("errmsg", ResultCode.getErrmsg(result));
-			// dataMap.put("checkChildAdsListResult", false); //
-			// 放入checkUserNameResult
-			System.out.println(dataMap);
-		}
-		return SUCCESS;
-	}
-
-	public String checkChildAdsListJson() throws Exception {
-		System.out.println("Here is UserAction.checkChildAdsListJson");
-		checkChildAdsList();
-		return "json";
-	}
-
-	// checkAdsList Action
-	public String checkAdsList() throws Exception {
-		System.out.println("Here is UserAction.checkAdsList");
-		dataMap.clear(); // dataMap中的数据将会被Struts2转换成JSON字符串，所以这里要先清空其中的数据
-		int result = orderlistServices.checkAdsList(addresscode);// 调用userServices.checkAdsList
-
-		if (result == ResultCode.SUCCESS) {
-			List<AddressList> addresslist = orderlistServices.getAddresslist();
-			dataMap.put("addresslist", addresslist); // 把addresslist对象放入dataMap
-			dataMap.putAll(Tools.JsonHeadMap(result, true));
-			// dataMap.put("resultcode", result); // 放入一个是否操作成功的标识
-			// dataMap.put("errmsg", ResultCode.getErrmsg(result));
-			// dataMap.put("checkAdsListResult", true); // 放入checkUserNameResult
-		} else {
-			dataMap.putAll(Tools.JsonHeadMap(result, true));
-			// dataMap.put("resultcode", result); // 放入一个是否操作成功的标识
-			// dataMap.put("errmsg", ResultCode.getErrmsg(result));
-			// dataMap.put("checkAdsListResult", false); //
-			// 放入checkUserNameResult
-			System.out.println(dataMap);
-		}
-		return SUCCESS;
-	}
-
-	public String checkAdsListJson() throws Exception {
-		System.out.println("Here is UserAction.checkAdsListJson");
-		checkAdsList();
-		return "json";
-	}
+	// public String checkChildAdsList() throws Exception {
+	// System.out.println("Here is UserAction.checkChildAdsList");
+	// dataMap.clear(); // dataMap中的数据将会被Struts2转换成JSON字符串，所以这里要先清空其中的数据
+	// int result = orderlistServices.checkChildAdsList(addresscode);//
+	// 调用userServices.checkParentAdsList
+	//
+	// if (result == ResultCode.SUCCESS) {
+	// List<AddressList> addresslist = orderlistServices.getAddresslist();
+	// dataMap.put("addresslist", addresslist); // 把addresslist对象放入dataMap
+	// dataMap.putAll(Tools.JsonHeadMap(result, true));
+	// // dataMap.put("resultcode", result); // 放入一个是否操作成功的标识
+	// // dataMap.put("errmsg", ResultCode.getErrmsg(result));
+	// // dataMap.put("checkChildAdsListResult", true); //
+	// // 放入checkUserNameResult
+	// } else {
+	// dataMap.putAll(Tools.JsonHeadMap(result, true));
+	// // dataMap.put("resultcode", result); // 放入一个是否操作成功的标识
+	// // dataMap.put("errmsg", ResultCode.getErrmsg(result));
+	// // dataMap.put("checkChildAdsListResult", false); //
+	// // 放入checkUserNameResult
+	// System.out.println(dataMap);
+	// }
+	// return SUCCESS;
+	// }
+	//
+	// public String checkChildAdsListJson() throws Exception {
+	// System.out.println("Here is UserAction.checkChildAdsListJson");
+	// checkChildAdsList();
+	// return "json";
+	// }
+	//
+	// // checkAdsList Action
+	// public String checkAdsList() throws Exception {
+	// System.out.println("Here is UserAction.checkAdsList");
+	// dataMap.clear(); // dataMap中的数据将会被Struts2转换成JSON字符串，所以这里要先清空其中的数据
+	// int result = orderlistServices.checkAdsList(addresscode);//
+	// 调用userServices.checkAdsList
+	//
+	// if (result == ResultCode.SUCCESS) {
+	// List<AddressList> addresslist = orderlistServices.getAddresslist();
+	// dataMap.put("addresslist", addresslist); // 把addresslist对象放入dataMap
+	// dataMap.putAll(Tools.JsonHeadMap(result, true));
+	// // dataMap.put("resultcode", result); // 放入一个是否操作成功的标识
+	// // dataMap.put("errmsg", ResultCode.getErrmsg(result));
+	// // dataMap.put("checkAdsListResult", true); // 放入checkUserNameResult
+	// } else {
+	// dataMap.putAll(Tools.JsonHeadMap(result, true));
+	// // dataMap.put("resultcode", result); // 放入一个是否操作成功的标识
+	// // dataMap.put("errmsg", ResultCode.getErrmsg(result));
+	// // dataMap.put("checkAdsListResult", false); //
+	// // 放入checkUserNameResult
+	// System.out.println(dataMap);
+	// }
+	// return SUCCESS;
+	// }
+	//
+	// public String checkAdsListJson() throws Exception {
+	// System.out.println("Here is UserAction.checkAdsListJson");
+	// checkAdsList();
+	// return "json";
+	// }
 
 	// // 拿到所有的订单类型进行展示
 	// public String gettypelist() throws Exception {
@@ -1066,12 +1116,20 @@ public class OrderlistAction extends ActionSupport {
 		this.user_id = user_id;
 	}
 
-	public String getOffset() {
-		return offset;
+	public Integer getPagenum() {
+		return pagenum;
 	}
 
-	public void setOffset(String offset) {
-		this.offset = offset;
+	public void setPagenum(Integer pagenum) {
+		this.pagenum = pagenum;
+	}
+
+	public UserServices getUserServices() {
+		return userServices;
+	}
+
+	public void setUserServices(UserServices userServices) {
+		this.userServices = userServices;
 	}
 
 }

@@ -21,10 +21,11 @@ public interface PreorderMapper {
 	public List<Preorder> getPreordersByAccount(int preorder_master_id);
 
 	// 通过订单编号取得预处理订单 评分降序
-	public List<Preorder> getPreodersByOrderId(int preorder_order_id);
+	public List<Preorder> getPreodersByParm(@Param("preorder_order_id") int preorder_order_id,
+			@Param("sortparm") String sortparm);
 
-	// 通过订单编号取得预处理订单 价格升序
-	public List<Preorder> getPreodersByOrder(int preorder_order_id);
+//	// 通过订单编号取得预处理订单 价格升序
+//	public List<Preorder> getPreodersByOrder(int preorder_order_id);
 
 	// 通过预处理订单编号取得预处理订单
 	public Preorder getPreorderById(int preorder_id);

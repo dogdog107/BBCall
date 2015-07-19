@@ -20,6 +20,7 @@ import com.bbcall.mybatis.table.Orderlist;
 import com.bbcall.mybatis.table.Preorder;
 import com.bbcall.mybatis.table.Referdoc;
 import com.bbcall.mybatis.table.User;
+import com.github.pagehelper.PageHelper;
 
 @Service("orderlistServices")
 public class OrderlistServices {
@@ -85,7 +86,7 @@ public class OrderlistServices {
 			String order_contact_name, String order_urgent,
 			double order_urgent_bonus, String order_pic_url,
 			String order_description, double order_price, int order_user_id,
-			int order_type_code, int order_section) {
+			int order_type_code, int order_section, Integer pagenum) {
 		// TODO Auto-generated method stub
 
 		// 创建订单对象，写入数据
@@ -135,8 +136,16 @@ public class OrderlistServices {
 
 		orderlistMapper.addOrder(orderlist);
 
-		orderlistinfos = orderlistMapper.getUnOrdersByUserAccount(
-				order_user_id, 0);
+		// 当传进来的pagenum为空 或者 pagenum == 0 时，显示第一页
+		if (pagenum == null || pagenum == 0)
+			pagenum = 1;
+
+		// PageHelper.startPage(PageNum, PageSize)
+		// 获取第1页，10条内容，当PageSize=0时会查询出全部的结果
+		PageHelper.startPage(pagenum, 10);
+
+		orderlistinfos = orderlistMapper
+				.getUnOrdersByUserAccount(order_user_id);
 
 		return ResultCode.SUCCESS;
 
@@ -256,13 +265,21 @@ public class OrderlistServices {
 	// ##
 	// ################################################################################
 
-	public int deleteOrder(int order_id, int order_user_id, int offset) {
+	public int deleteOrder(int order_id, int order_user_id, Integer pagenum) {
 		orderlistMapper.deleteOrder(order_id);
 
 		preorderMapper.deletePreorderByOrderId(order_id);
 
-		orderlistinfos = orderlistMapper.getUnOrdersByUserAccount(
-				order_user_id, offset);
+		// 当传进来的pagenum为空 或者 pagenum == 0 时，显示第一页
+		if (pagenum == null || pagenum == 0)
+			pagenum = 1;
+
+		// PageHelper.startPage(PageNum, PageSize)
+		// 获取第1页，10条内容，当PageSize=0时会查询出全部的结果
+		PageHelper.startPage(pagenum, 10);
+
+		orderlistinfos = orderlistMapper
+				.getUnOrdersByUserAccount(order_user_id);
 
 		return ResultCode.SUCCESS;
 	}
@@ -320,34 +337,51 @@ public class OrderlistServices {
 	// ##
 	// ################################################################################
 
-	public int getUnOrders(int user_id, int offset) {
+	public int getUnOrdersForCustomer(int user_id, Integer pagenum) {
+
+		// 当传进来的pagenum为空 或者 pagenum == 0 时，显示第一页
+		if (pagenum == null || pagenum == 0)
+			pagenum = 1;
+
+		// PageHelper.startPage(PageNum, PageSize)
+		// 获取第1页，10条内容，当PageSize=0时会查询出全部的结果
+		PageHelper.startPage(pagenum, 10);
+
+		orderlistinfos = orderlistMapper.getUnOrdersByUserAccount(user_id);
+
+		return ResultCode.SUCCESS;
+	}
+
+	public int getUnOrdersForMaster(int user_id, Integer pagenum) {
 
 		String[] skilllist = null;
-		orderlistinfos = null;
-		int type_code = 0;
 		User user = userMapper.getUserById(user_id);
+		skilllist = user.getUser_skill().split(";");
 
-		if (user.getUser_type().equals(1)) { // 如果是用户的account
-			orderlistinfos = orderlistMapper.getUnOrdersByUserAccount(user_id,
-					offset);
-		} else if (user.getUser_type().equals(2)) { // 如果是师傅的account
-			skilllist = user.getUser_skill().split(";"); // 取得师傅的技能列表
-			for (int i = 0; i < skilllist.length; i++) { // 通过技能列表取得所有符合师傅技能的订单
+		// 当传进来的pagenum为空 或者 pagenum == 0 时，显示第一页
+		if (pagenum == null || pagenum == 0)
+			pagenum = 1;
 
-				type_code = Integer.parseInt(skilllist[i]);
-				if (orderlistinfos == null) {
-					orderlistinfos = orderlistMapper.getOrdersByMasterSkill(1,
-							type_code, user_id, offset);
-				} else {
-					orderlistinfos.addAll(orderlistMapper
-							.getOrdersByMasterSkill(1, type_code, user_id,
-									offset));
-				}
-			}
+		// PageHelper.startPage(PageNum, PageSize)
+		// 获取第1页，10条内容，当PageSize=0时会查询出全部的结果
+		PageHelper.startPage(pagenum, 10);
 
-		} else { // 如果是管理员的account,取出所有未确认的订单
-			orderlistinfos = orderlistMapper.getUnOrders(offset);
-		}
+		orderlistinfos = orderlistMapper.getUnOrdersBySkill(skilllist, user_id);
+
+		return ResultCode.SUCCESS;
+	}
+
+	public int getUnOrdersForAdm(Integer pagenum) {
+
+		// 当传进来的pagenum为空 或者 pagenum == 0 时，显示第一页
+		if (pagenum == null || pagenum == 0)
+			pagenum = 1;
+
+		// PageHelper.startPage(PageNum, PageSize)
+		// 获取第1页，10条内容，当PageSize=0时会查询出全部的结果
+		PageHelper.startPage(pagenum, 10);
+
+		orderlistinfos = orderlistMapper.getUnOrders();
 		//
 		// for (int i=0; i< orderlistinfos.size();i++) {
 		// System.out.println(orderlistinfos.get(i).getOrder_id());
@@ -382,89 +416,28 @@ public class OrderlistServices {
 	// ################################################################################
 
 	public int getUnOrderlist(String skilllist, String locationlist,
-			int master_id, int offset) {
+			int master_id, String sortparm, Integer pagenum) {
 
 		orderlistinfos = null;
-		int type_code = 0;
-		int area_code = 0;
 		String[] sklist = null;
 
-		if (skilllist.equals("") && locationlist.equals("")) {
+		if (skilllist.equals("")) {
 			User user = userMapper.getUserById(master_id);
-			String[] skills = user.getUser_skill().split(";"); // 取得师傅的技能列表
-			for (int i = 0; i < skills.length; i++) { // 通过技能列表取得所有符合师傅技能的订单
-
-				type_code = Integer.parseInt(skills[i]);
-
-				if (orderlistinfos == null) {
-					orderlistinfos = orderlistMapper.getOrdersByMasterSkill(1,
-							type_code, master_id, offset);
-					orderlistinfos.addAll(orderlistMapper
-							.getOrdersByMasterSkill(7, type_code, master_id,
-									offset));
-				} else {
-					orderlistinfos.addAll(orderlistMapper
-							.getOrdersByMasterSkill(1, type_code, master_id,
-									offset));
-					orderlistinfos.addAll(orderlistMapper
-							.getOrdersByMasterSkill(7, type_code, master_id,
-									offset));
-				}
-			}
-		} else if (skilllist.equals("") && !locationlist.equals("")) {
-
-			area_code = Integer.parseInt(locationlist);
-
-			orderlistinfos = orderlistMapper.getOrdersByMasterLocation(1,
-					area_code, master_id, offset);
-			orderlistinfos.addAll(orderlistMapper.getOrdersByMasterLocation(7,
-					area_code, master_id, offset));
-		} else if (!skilllist.equals("") && locationlist.equals("")) {
-
-			sklist = skilllist.split(";");
-
-			for (int i = 0; i < sklist.length; i++) { // 通过技能列表取得所有符合师傅技能的订单
-
-				type_code = Integer.parseInt(sklist[i]);
-
-				if (orderlistinfos == null) {
-					orderlistinfos = orderlistMapper.getOrdersByMasterSkill(1,
-							type_code, master_id, offset);
-					orderlistinfos.addAll(orderlistMapper
-							.getOrdersByMasterSkill(7, type_code, master_id,
-									offset));
-				} else {
-					orderlistinfos.addAll(orderlistMapper
-							.getOrdersByMasterSkill(1, type_code, master_id,
-									offset));
-					orderlistinfos.addAll(orderlistMapper
-							.getOrdersByMasterSkill(7, type_code, master_id,
-									offset));
-				}
-
-			}
+			sklist = user.getUser_skill().split(";");
 		} else {
-
 			sklist = skilllist.split(";");
-
-			for (int i = 0; i < sklist.length; i++) { // 通过技能列表取得所有符合师傅技能的订单
-
-				type_code = Integer.parseInt(sklist[i]);
-
-				area_code = Integer.parseInt(locationlist);
-
-				if (orderlistinfos == null) {
-					orderlistinfos = orderlistMapper
-							.getUnOrdersByMasterLocation(type_code, area_code,
-									master_id, offset);
-				} else {
-					orderlistinfos.addAll(orderlistMapper
-							.getUnOrdersByMasterLocation(type_code, area_code,
-									master_id, offset));
-				}
-
-			}
 		}
+
+		// 当传进来的pagenum为空 或者 pagenum == 0 时，显示第一页
+		if (pagenum == null || pagenum == 0)
+			pagenum = 1;
+
+		// PageHelper.startPage(PageNum, PageSize)
+		// 获取第1页，10条内容，当PageSize=0时会查询出全部的结果
+		PageHelper.startPage(pagenum, 10);
+
+		orderlistinfos = orderlistMapper.getUnOrdersByMasterLocation(sklist,
+				locationlist, sortparm, master_id);
 
 		return ResultCode.SUCCESS;
 	}
@@ -494,84 +467,89 @@ public class OrderlistServices {
 	// ##
 	// ################################################################################
 
-	public int getUnOrdersByBookTime(int master_id, String skilllist,
-			String locationlist, int offset) {
-
-		orderlistinfos = null;
-		int type_code = 0;
-		int area_code = 0;
-		String[] sklist = null;
-
-		if (skilllist.equals("") && locationlist.equals("")) {
-			User user = userMapper.getUserById(master_id);
-			String[] skills = user.getUser_skill().split(";"); // 取得师傅的技能列表
-			for (int i = 0; i < skills.length; i++) { // 通过技能列表取得所有符合师傅技能的订单
-
-				type_code = Integer.parseInt(skills[i]);
-
-				if (orderlistinfos == null) {
-					orderlistinfos = orderlistMapper.getOrdersByMasterSkill2(1,
-							type_code, master_id, offset);
-				} else {
-					orderlistinfos.addAll(orderlistMapper
-							.getOrdersByMasterSkill2(1, type_code, master_id,
-									offset));
-				}
-			}
-		} else if (skilllist.equals("") && !locationlist.equals("")) {
-
-			area_code = Integer.parseInt(locationlist);
-
-			if (orderlistinfos == null) {
-				orderlistinfos = orderlistMapper.getOrdersByMasterLocation2(1,
-						area_code, master_id, offset);
-			} else {
-				orderlistinfos.addAll(orderlistMapper
-						.getOrdersByMasterLocation2(1, area_code, master_id,
-								offset));
-			}
-		} else if (!skilllist.equals("") && locationlist.equals("")) {
-
-			sklist = skilllist.split(";");
-
-			for (int i = 0; i < sklist.length; i++) { // 通过技能列表取得所有符合师傅技能的订单
-
-				type_code = Integer.parseInt(sklist[i]);
-
-				if (orderlistinfos == null) {
-					orderlistinfos = orderlistMapper.getOrdersByMasterSkill2(1,
-							type_code, master_id, offset);
-				} else {
-					orderlistinfos.addAll(orderlistMapper
-							.getOrdersByMasterSkill2(1, type_code, master_id,
-									offset));
-				}
-
-			}
-		} else {
-
-			sklist = skilllist.split(";");
-
-			for (int i = 0; i < sklist.length; i++) { // 通过技能列表取得所有符合师傅技能的订单
-
-				type_code = Integer.parseInt(sklist[i]);
-
-				area_code = Integer.parseInt(locationlist);
-
-				if (orderlistinfos == null) {
-					orderlistinfos = orderlistMapper.getUnOrdersByBookTime(
-							type_code, area_code, master_id, offset);
-				} else {
-					orderlistinfos.addAll(orderlistMapper
-							.getUnOrdersByBookTime(type_code, area_code,
-									master_id, offset));
-				}
-
-			}
-		}
-
-		return ResultCode.SUCCESS;
-	}
+	// public int getUnOrdersByBookTime(int master_id, String skilllist,
+	// String locationlist, Integer pagenum) {
+	//
+	// orderlistinfos = null;
+	// int type_code = 0;
+	// int area_code = 0;
+	// String[] sklist = null;
+	//
+	// // 当传进来的pagenum为空 或者 pagenum == 0 时，显示第一页
+	// if (pagenum == null || pagenum == 0)
+	// pagenum = 1;
+	//
+	// // PageHelper.startPage(PageNum, PageSize)
+	// // 获取第1页，10条内容，当PageSize=0时会查询出全部的结果
+	// PageHelper.startPage(pagenum, 10);
+	//
+	// if (skilllist.equals("") && locationlist.equals("")) {
+	// User user = userMapper.getUserById(master_id);
+	// String[] skills = user.getUser_skill().split(";"); // 取得师傅的技能列表
+	// for (int i = 0; i < skills.length; i++) { // 通过技能列表取得所有符合师傅技能的订单
+	//
+	// type_code = Integer.parseInt(skills[i]);
+	//
+	// if (orderlistinfos == null) {
+	// orderlistinfos = orderlistMapper.getOrdersByMasterSkill2(1,
+	// type_code, master_id);
+	// } else {
+	// orderlistinfos.addAll(orderlistMapper
+	// .getOrdersByMasterSkill2(1, type_code, master_id));
+	// }
+	// }
+	// } else if (skilllist.equals("") && !locationlist.equals("")) {
+	//
+	// area_code = Integer.parseInt(locationlist);
+	//
+	// if (orderlistinfos == null) {
+	// orderlistinfos = orderlistMapper.getOrdersByMasterLocation2(1,
+	// area_code, master_id);
+	// } else {
+	// orderlistinfos.addAll(orderlistMapper
+	// .getOrdersByMasterLocation2(1, area_code, master_id));
+	// }
+	// } else if (!skilllist.equals("") && locationlist.equals("")) {
+	//
+	// sklist = skilllist.split(";");
+	//
+	// for (int i = 0; i < sklist.length; i++) { // 通过技能列表取得所有符合师傅技能的订单
+	//
+	// type_code = Integer.parseInt(sklist[i]);
+	//
+	// if (orderlistinfos == null) {
+	// orderlistinfos = orderlistMapper.getOrdersByMasterSkill2(1,
+	// type_code, master_id);
+	// } else {
+	// orderlistinfos.addAll(orderlistMapper
+	// .getOrdersByMasterSkill2(1, type_code, master_id));
+	// }
+	//
+	// }
+	// } else {
+	//
+	// sklist = skilllist.split(";");
+	//
+	// for (int i = 0; i < sklist.length; i++) { // 通过技能列表取得所有符合师傅技能的订单
+	//
+	// type_code = Integer.parseInt(sklist[i]);
+	//
+	// area_code = Integer.parseInt(locationlist);
+	//
+	// if (orderlistinfos == null) {
+	// orderlistinfos = orderlistMapper.getUnOrdersByBookTime(
+	// type_code, area_code, master_id);
+	// } else {
+	// orderlistinfos.addAll(orderlistMapper
+	// .getUnOrdersByBookTime(type_code, area_code,
+	// master_id));
+	// }
+	//
+	// }
+	// }
+	//
+	// return ResultCode.SUCCESS;
+	// }
 
 	// ################################################################################
 	// ## Get Completed Order services
@@ -595,19 +573,47 @@ public class OrderlistServices {
 	// ## (1) orderlistinfos
 	// ##
 	// ################################################################################
-	public int getComOrders(int user_id, int offset) {
+	public int getComOrdersForCustomer(int user_id, Integer pagenum) {
 
-		User user = userMapper.getUserById(user_id);
+		// 当传进来的pagenum为空 或者 pagenum == 0 时，显示第一页
+		if (pagenum == null || pagenum == 0)
+			pagenum = 1;
 
-		if (user.getUser_type().equals(1)) { // 如果是用户的account
-			orderlistinfos = orderlistMapper.getComOrdersByUserAccount(user_id,
-					offset);
-		} else if (user.getUser_type().equals(2)) { // 如果是师傅的account
-			orderlistinfos = orderlistMapper.getComOrdersByMasterAccount(
-					user_id, offset);
-		} else { // 如果是管理员的account,取出所有已完成的订单
-			orderlistinfos = orderlistMapper.getComOrders(offset);
-		}
+		// PageHelper.startPage(PageNum, PageSize)
+		// 获取第1页，10条内容，当PageSize=0时会查询出全部的结果
+		PageHelper.startPage(pagenum, 10);
+
+		orderlistinfos = orderlistMapper.getComOrdersByUserAccount(user_id);
+
+		return ResultCode.SUCCESS;
+	}
+
+	public int getComOrdersForMaster(int user_id, Integer pagenum) {
+
+		// 当传进来的pagenum为空 或者 pagenum == 0 时，显示第一页
+		if (pagenum == null || pagenum == 0)
+			pagenum = 1;
+
+		// PageHelper.startPage(PageNum, PageSize)
+		// 获取第1页，10条内容，当PageSize=0时会查询出全部的结果
+		PageHelper.startPage(pagenum, 10);
+
+		orderlistinfos = orderlistMapper.getComOrdersByMasterAccount(user_id);
+
+		return ResultCode.SUCCESS;
+	}
+
+	public int getComOrdersForAdm(Integer pagenum) {
+
+		// 当传进来的pagenum为空 或者 pagenum == 0 时，显示第一页
+		if (pagenum == null || pagenum == 0)
+			pagenum = 1;
+
+		// PageHelper.startPage(PageNum, PageSize)
+		// 获取第1页，10条内容，当PageSize=0时会查询出全部的结果
+		PageHelper.startPage(pagenum, 10);
+
+		orderlistinfos = orderlistMapper.getComOrders();
 
 		return ResultCode.SUCCESS;
 	}
@@ -634,28 +640,51 @@ public class OrderlistServices {
 	// ## (1) orderlistinfos
 	// ##
 	// ################################################################################
-	public int getProOrders(int user_id, int offset) {
+	public int getProOrdersForCustomer(int user_id, Integer pagenum) {
 
-		User user = userMapper.getUserById(user_id);
-		System.out.println(user.getUser_account());
+		System.out.println("1");
 
-		orderlistinfos = null;
+		// 当传进来的pagenum为空 或者 pagenum == 0 时，显示第一页
+		if (pagenum == null || pagenum == 0)
+			pagenum = 1;
 
-		if (user.getUser_type().equals(1)) { // 如果是用户的account
-			System.out.println("1");
-			orderlistinfos = orderlistMapper.getProOrdersByUserAccount(user_id,
-					offset);
+		// PageHelper.startPage(PageNum, PageSize)
+		// 获取第1页，10条内容，当PageSize=0时会查询出全部的结果
+		PageHelper.startPage(pagenum, 10);
 
-		} else if (user.getUser_type().equals(2)) { // 如果是师傅的account
-			System.out.println("2");
-			orderlistinfos = orderlistMapper.getProOrdersByMasterAccount(
-					user_id, offset);
+		orderlistinfos = orderlistMapper.getProOrdersByUserAccount(user_id);
 
-		} else { // 如果是管理员的account,取出所有已完成的订单
-			System.out.println("3");
-			orderlistinfos = orderlistMapper.getProOrders(offset);
+		return ResultCode.SUCCESS;
+	}
 
-		}
+	public int getProOrdersForMaster(int user_id, Integer pagenum) {
+
+		System.out.println("2");
+		// 当传进来的pagenum为空 或者 pagenum == 0 时，显示第一页
+		if (pagenum == null || pagenum == 0)
+			pagenum = 1;
+
+		// PageHelper.startPage(PageNum, PageSize)
+		// 获取第1页，10条内容，当PageSize=0时会查询出全部的结果
+		PageHelper.startPage(pagenum, 10);
+
+		orderlistinfos = orderlistMapper.getProOrdersByMasterAccount(user_id);
+
+		return ResultCode.SUCCESS;
+	}
+
+	public int getProOrdersForAdm(Integer pagenum) {
+
+		System.out.println("3");
+		// 当传进来的pagenum为空 或者 pagenum == 0 时，显示第一页
+		if (pagenum == null || pagenum == 0)
+			pagenum = 1;
+
+		// PageHelper.startPage(PageNum, PageSize)
+		// 获取第1页，10条内容，当PageSize=0时会查询出全部的结果
+		PageHelper.startPage(pagenum, 10);
+
+		orderlistinfos = orderlistMapper.getProOrders();
 
 		return ResultCode.SUCCESS;
 	}
@@ -683,7 +712,7 @@ public class OrderlistServices {
 	// ## (1) orderlistinfos
 	// ##
 	// ################################################################################
-	public int ChangeOrderStatus(int master_id, int order_id) {
+	public int ChangeOrderStatus(int master_id, int order_id, Integer pagenum) {
 
 		double price = 0;
 		Preorder preroder = preorderMapper.getPreoder(master_id, order_id);
@@ -693,12 +722,22 @@ public class OrderlistServices {
 		}
 
 		User tempuser = userMapper.getUserById(master_id);
-		orderlistMapper.updateOrderAsMasterAccount(master_id, tempuser.getUser_name(),price, order_id);
+		orderlistMapper.updateOrderAsMasterAccount(master_id,
+				tempuser.getUser_name(), price, order_id);
 
 		preorderMapper.deletePreorderByOrderId(order_id);
 
-		orderlistinfos = orderlistMapper.getProOrdersByUserAccount(
-				orderlistMapper.getOrder(order_id).getOrder_user_id(), 0);
+		int userid = orderlistMapper.getOrder(order_id).getOrder_user_id();
+
+		// 当传进来的pagenum为空 或者 pagenum == 0 时，显示第一页
+		if (pagenum == null || pagenum == 0)
+			pagenum = 1;
+
+		// PageHelper.startPage(PageNum, PageSize)
+		// 获取第1页，10条内容，当PageSize=0时会查询出全部的结果
+		PageHelper.startPage(pagenum, 10);
+
+		orderlistinfos = orderlistMapper.getProOrdersByUserAccount(userid);
 
 		return ResultCode.SUCCESS;
 	}
@@ -763,7 +802,7 @@ public class OrderlistServices {
 	// ##
 	// ################################################################################
 	public int completeOrder(double order_score, String order_evaluation,
-			int order_id) {
+			int order_id, Integer pagenum) {
 
 		System.out.println("this is order action complete order function");
 		orderlistMapper.completeOrder(order_score, order_evaluation, order_id,
@@ -781,7 +820,7 @@ public class OrderlistServices {
 
 			System.out.println("order_id: " + ors.get(j).getOrder_id());
 		}
-		User tempuser = userMapper.getUserById(user_id);
+		User tempuser = userMapper.getUserById(master_id);
 		double finalscore = tempuser.getUser_grade();
 		if (order_score != 0) {
 			double scores = 0;
@@ -802,7 +841,15 @@ public class OrderlistServices {
 			userMapper.updateUser(tempuser);
 		}
 
-		orderlistinfos = orderlistMapper.getComOrdersByUserAccount(user_id, 0);
+		// 当传进来的pagenum为空 或者 pagenum == 0 时，显示第一页
+		if (pagenum == null || pagenum == 0)
+			pagenum = 1;
+
+		// PageHelper.startPage(PageNum, PageSize)
+		// 获取第1页，10条内容，当PageSize=0时会查询出全部的结果
+		PageHelper.startPage(pagenum, 10);
+
+		orderlistinfos = orderlistMapper.getComOrdersByUserAccount(user_id);
 
 		return ResultCode.SUCCESS;
 	}
@@ -828,7 +875,15 @@ public class OrderlistServices {
 	// ## (1) orderlistinfos
 	// ##
 	// ################################################################################
-	public int getWashOrderlist() {
+	public int getWashOrderlist(Integer pagenum) {
+
+		// 当传进来的pagenum为空 或者 pagenum == 0 时，显示第一页
+		if (pagenum == null || pagenum == 0)
+			pagenum = 1;
+
+		// PageHelper.startPage(PageNum, PageSize)
+		// 获取第1页，10条内容，当PageSize=0时会查询出全部的结果
+		PageHelper.startPage(pagenum, 10);
 
 		orderlistinfos = orderlistMapper.getWashOrderlist();
 
@@ -857,27 +912,36 @@ public class OrderlistServices {
 	// ## (1) orderlistinfos
 	// ##
 	// ################################################################################
-	public int selectWashOrderlist(int order_status, int order_master_id) {
+	public int selectWashOrderlist(int order_status, int order_master_id,
+			Integer pagenum) {
 
-		if (order_status == 0) {
+		// 当传进来的pagenum为空 或者 pagenum == 0 时，显示第一页
+		if (pagenum == null || pagenum == 0)
+			pagenum = 1;
 
-			if (order_master_id == 0) {
-				orderlistinfos = orderlistMapper.getWashOrderlist();
-			} else {
-				orderlistinfos = orderlistMapper
-						.getWashOrderByMaster(order_master_id);
-			}
+		// PageHelper.startPage(PageNum, PageSize)
+		// 获取第1页，10条内容，当PageSize=0时会查询出全部的结果
+		PageHelper.startPage(pagenum, 10);
 
-		} else {
-			if (order_master_id == 0) {
-				orderlistinfos = orderlistMapper
-						.getWashOrderByStatus(order_status);
-
-			} else {
-				orderlistinfos = orderlistMapper.getWashOrders(order_status,
-						order_master_id);
-			}
-		}
+//		if (order_status == 0) {
+//
+//			if (order_master_id == 0) {
+//				orderlistinfos = orderlistMapper.getWashOrderlist();
+//			} else {
+//				orderlistinfos = orderlistMapper
+//						.getWashOrderByMaster(order_master_id);
+//			}
+//
+//		} else {
+//			if (order_master_id == 0) {
+//				orderlistinfos = orderlistMapper
+//						.getWashOrderByStatus(order_status);
+//
+//			} else {
+//				orderlistinfos = orderlistMapper.getWashOrders(order_status,
+//						order_master_id);
+//			}
+//		}
 
 		return ResultCode.SUCCESS;
 	}
@@ -904,7 +968,8 @@ public class OrderlistServices {
 	// ## (1) orderlistinfos
 	// ##
 	// ################################################################################
-	public int getWashOrderlist(String order_status, String order_section,String order_master_name) {
+	public int getWashOrderlist(String order_status, String order_section,
+			String order_master_name, Integer pagenum) {
 
 		// Map<String, Object> params = new HashMap<String, Object>();
 		//
@@ -912,8 +977,16 @@ public class OrderlistServices {
 		// params.put("order_status", order_status);
 		// params.put("order_section", order_section);
 
+		// 当传进来的pagenum为空 或者 pagenum == 0 时，显示第一页
+		if (pagenum == null || pagenum == 0)
+			pagenum = 1;
+
+		// PageHelper.startPage(PageNum, PageSize)
+		// 获取第1页，10条内容，当PageSize=0时会查询出全部的结果
+		PageHelper.startPage(pagenum, 10);
+
 		orderlistinfos = orderlistMapper.getWashOrderlistByParm(order_status,
-				order_section,order_master_name);
+				order_section, order_master_name);
 
 		return ResultCode.SUCCESS;
 	}
@@ -941,60 +1014,56 @@ public class OrderlistServices {
 	// ## (1) orderlistinfos
 	// ##
 	// ################################################################################
-	public int selectOrderlist(int order_status, int order_master_id,
-			int order_type_code, int offset) {
+	public int selectOrderlist(String order_status, int order_master_id,
+			String order_type_code, Integer pagenum) {
 
-		if (order_status == 0) {
+		// 当传进来的pagenum为空 或者 pagenum == 0 时，显示第一页
+		if (pagenum == null || pagenum == 0)
+			pagenum = 1;
 
-			if (order_type_code == 0) {
-				orderlistinfos = orderlistMapper.getOrdersByMaster(
-						order_master_id, 0);
-			} else {
-				orderlistinfos.addAll(orderlistMapper.getOrdersByMasterSkill(2,
-						order_type_code, order_master_id, offset));
-				orderlistinfos.addAll(orderlistMapper.getOrdersByMasterSkill(3,
-						order_type_code, order_master_id, offset));
-			}
+		// PageHelper.startPage(PageNum, PageSize)
+		// 获取第1页，10条内容，当PageSize=0时会查询出全部的结果
+		PageHelper.startPage(pagenum, 10);
 
-		} else {
-			if (order_type_code == 0) {
-				orderlistinfos = orderlistMapper.getOrders(order_status,
-						order_master_id, offset);
-
-			} else {
-				orderlistinfos = orderlistMapper.getOrdersByMasterSkill(
-						order_status, order_type_code, order_master_id, offset);
-			}
-		}
+		orderlistinfos = orderlistMapper.getOrders(order_status,
+				order_master_id, order_type_code);
 
 		return ResultCode.SUCCESS;
 	}
 
-	public int getOrderlist(int user_id, String order_status, int offset) {
+	public int getOrderlist(int user_id, String order_status, Integer pagenum) {
+
+		// 当传进来的pagenum为空 或者 pagenum == 0 时，显示第一页
+		if (pagenum == null || pagenum == 0)
+			pagenum = 1;
+
+		// PageHelper.startPage(PageNum, PageSize)
+		// 获取第1页，10条内容，当PageSize=0时会查询出全部的结果
+		PageHelper.startPage(pagenum, 10);
 
 		switch (order_status) {
 		case "2":
-			orderlistinfos = orderlistMapper.getProOrders(offset);
+			orderlistinfos = orderlistMapper.getProOrders();
 			break;
 
 		case "3":
-			orderlistinfos = orderlistMapper.getComOrders(offset);
+			orderlistinfos = orderlistMapper.getComOrders();
 			break;
 
 		case "4":
-			orderlistinfos = orderlistMapper.getRecOrders(offset);
+			orderlistinfos = orderlistMapper.getRecOrders();
 			break;
 
 		case "5":
-			orderlistinfos = orderlistMapper.getWasOrders(offset);
+			orderlistinfos = orderlistMapper.getWasOrders();
 			break;
 
 		case "6":
-			orderlistinfos = orderlistMapper.getDelOrders(offset);
+			orderlistinfos = orderlistMapper.getDelOrders();
 			break;
 
 		default:
-			orderlistinfos = orderlistMapper.getUnOrders(offset);
+			orderlistinfos = orderlistMapper.getUnOrders();
 			break;
 		}
 

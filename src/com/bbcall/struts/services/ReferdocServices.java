@@ -8,6 +8,7 @@ import org.springframework.stereotype.Service;
 import com.bbcall.functions.ResultCode;
 import com.bbcall.mybatis.dao.ReferdocMapper;
 import com.bbcall.mybatis.table.Referdoc;
+import com.github.pagehelper.PageHelper;
 
 @Service("referdocServices")
 public class ReferdocServices {
@@ -44,7 +45,8 @@ public class ReferdocServices {
 	// ################################################################################
 
 	public int addReferdoc(String referdoc_type, int referdoc_parentno,
-			int referdoc_level, double referdoc_price,String referdoc_flag) {
+			int referdoc_level, double referdoc_price, String referdoc_flag,
+			Integer pagenum) {
 		// TODO Auto-generated method stub
 
 		if (referdoc_type.equals("")) {
@@ -62,6 +64,14 @@ public class ReferdocServices {
 				referdoc.setReferdoc_flag(Boolean.parseBoolean(referdoc_flag));
 
 				referdocMapper.addReferdoc(referdoc);
+
+				// 当传进来的pagenum为空 或者 pagenum == 0 时，显示第一页
+				if (pagenum == null || pagenum == 0)
+					pagenum = 1;
+
+				// PageHelper.startPage(PageNum, PageSize)
+				// 获取第1页，10条内容，当PageSize=0时会查询出全部的结果
+				PageHelper.startPage(pagenum, 10);
 
 				referdocinfos = referdocMapper.getReferdoclist();
 				return ResultCode.SUCCESS;
@@ -98,7 +108,8 @@ public class ReferdocServices {
 	// ################################################################################
 
 	public int updateReferdoc(int referdoc_id, String referdoc_type,
-			int referdoc_parentno, int referdoc_level, double referdoc_price, String referdoc_flag) {
+			int referdoc_parentno, int referdoc_level, double referdoc_price,
+			String referdoc_flag) {
 
 		Referdoc referdoc = referdocMapper.getReferdoc(referdoc_id);
 
@@ -136,7 +147,7 @@ public class ReferdocServices {
 	// ##
 	// ################################################################################
 
-	public int deleteReferdoc(int referdoc_id) {
+	public int deleteReferdoc(int referdoc_id, Integer pagenum) {
 
 		List<Referdoc> redocs = referdocMapper
 				.getReferdoclistByParent(referdoc_id);
@@ -147,9 +158,18 @@ public class ReferdocServices {
 			}
 		}
 
-		int parent_code = referdocMapper.getReferdoc(referdoc_id).getReferdoc_parentno();
-		
+		int parent_code = referdocMapper.getReferdoc(referdoc_id)
+				.getReferdoc_parentno();
+
 		referdocMapper.deleteReferdoc(referdoc_id);
+
+		// 当传进来的pagenum为空 或者 pagenum == 0 时，显示第一页
+		if (pagenum == null || pagenum == 0)
+			pagenum = 1;
+
+		// PageHelper.startPage(PageNum, PageSize)
+		// 获取第1页，10条内容，当PageSize=0时会查询出全部的结果
+		PageHelper.startPage(pagenum, 10);
 
 		referdocinfos = referdocMapper.getReferdoclistByParent(parent_code);
 
@@ -240,7 +260,15 @@ public class ReferdocServices {
 	// ##
 	// ################################################################################
 
-	public int getReferdoclist() {
+	public int getReferdoclist(Integer pagenum) {
+
+		// 当传进来的pagenum为空 或者 pagenum == 0 时，显示第一页
+		if (pagenum == null || pagenum == 0)
+			pagenum = 1;
+
+		// PageHelper.startPage(PageNum, PageSize)
+		// 获取第1页，10条内容，当PageSize=0时会查询出全部的结果
+		PageHelper.startPage(pagenum, 10);
 
 		referdocinfos = referdocMapper.getReferdoclist();
 
@@ -299,9 +327,20 @@ public class ReferdocServices {
 	// ##
 	// ################################################################################
 
-	public int getChildReferdoclist(int referdoc_parentno) {
-		referdocinfos = referdocMapper
-				.getReferdoclistByParent(referdoc_parentno);
+	public int getChildReferdoclist(int referdoc_parentno, Integer pagenum) {
+
+		referdocinfos.clear();
+		referdocinfos.add(referdocMapper.getReferdoc(referdoc_parentno));
+		// 当传进来的pagenum为空 或者 pagenum == 0 时，显示第一页
+		if (pagenum == null || pagenum == 0)
+			pagenum = 1;
+
+		// PageHelper.startPage(PageNum, PageSize)
+		// 获取第1页，10条内容，当PageSize=0时会查询出全部的结果
+		PageHelper.startPage(pagenum, 10);
+
+		referdocinfos.addAll(referdocMapper
+				.getReferdoclistByParent(referdoc_parentno));
 
 		return ResultCode.SUCCESS;
 	}

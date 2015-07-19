@@ -15,7 +15,7 @@
 		resultMap="BlacklistResultMap">
 		select *
 		from BLACKLIST where
-		blacklist_user_id=#{blacklist_user_id}
+		blacklist_user_id=#{blacklist_user_id} order by blacklist_id desc
 	</select>
 	<select id="getBlacklistById" parameterType="int"
 		resultMap="BlacklistResultMap">
@@ -27,11 +27,11 @@
 		resultMap="BlacklistResultMap">
 		select *
 		from BLACKLIST where
-		blacklist_master_id=#{blacklist_master_id}
+		blacklist_master_id=#{blacklist_master_id}  order by blacklist_id desc
 	</select>
 	<select id="getBlacklist" resultMap="BlacklistResultMap">
 		select *
-		from BLACKLIST order by blacklist_user_id
+		from BLACKLIST order by blacklist_id desc
 	</select>
 	<insert id="addBlacklist" parameterType="com.bbcall.mybatis.table.Blacklist"
 		useGeneratedKeys="true" keyProperty="blacklist_id">
