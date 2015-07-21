@@ -44,21 +44,25 @@ public class ReferdocServices {
 	// ##
 	// ################################################################################
 
-	public int addReferdoc(String referdoc_type, int referdoc_parentno,
+	public int addReferdoc(String referdoc_type, String referdoc_parentno,
 			int referdoc_level, double referdoc_price, String referdoc_flag,
 			Integer pagenum) {
 		// TODO Auto-generated method stub
 
+		int parentno = 0;
+		if (referdoc_parentno != null) {
+			parentno = Integer.parseInt(referdoc_parentno);
+		}
 		if (referdoc_type.equals("")) {
 			return ResultCode.REFERDOC_ADD_FAILED;
 		} else {
-			int checkResult = chkReferType(referdoc_type, referdoc_parentno);
+			int checkResult = chkReferType(referdoc_type, parentno);
 
 			if (checkResult == ResultCode.REFERDOC_TYPE_NOTEXIST) {
 
 				Referdoc referdoc = new Referdoc();
 				referdoc.setReferdoc_type(referdoc_type);
-				referdoc.setReferdoc_parentno(referdoc_parentno);
+				referdoc.setReferdoc_parentno(parentno);
 				referdoc.setReferdoc_level(referdoc_level);
 				referdoc.setReferdoc_price(referdoc_price);
 				referdoc.setReferdoc_flag(Boolean.parseBoolean(referdoc_flag));
@@ -73,7 +77,8 @@ public class ReferdocServices {
 				// 获取第1页，10条内容，当PageSize=0时会查询出全部的结果
 				PageHelper.startPage(pagenum, 10);
 
-				referdocinfos = referdocMapper.getReferdoclist();
+				referdocinfos = referdocMapper
+						.getReferdoclist(referdoc_parentno);
 				return ResultCode.SUCCESS;
 			} else {
 				return checkResult;
@@ -107,19 +112,25 @@ public class ReferdocServices {
 	// ##
 	// ################################################################################
 
-	public int updateReferdoc(int referdoc_id, String referdoc_type,
-			int referdoc_parentno, int referdoc_level, double referdoc_price,
-			String referdoc_flag) {
+	public int updateReferdoc(int referdoc_id, String referdoc_parentno,
+			double referdoc_price, String referdoc_flag, Integer pagenum) {
 
 		Referdoc referdoc = referdocMapper.getReferdoc(referdoc_id);
 
-		referdoc.setReferdoc_type(referdoc_type);
-		referdoc.setReferdoc_parentno(referdoc_parentno);
-		referdoc.setReferdoc_level(referdoc_level);
 		referdoc.setReferdoc_price(referdoc_price);
 		referdoc.setReferdoc_flag(Boolean.parseBoolean(referdoc_flag));
 
 		referdocMapper.updateReferdoc(referdoc);
+
+		// 当传进来的pagenum为空 或者 pagenum == 0 时，显示第一页
+		if (pagenum == null || pagenum == 0)
+			pagenum = 1;
+
+		// PageHelper.startPage(PageNum, PageSize)
+		// 获取第1页，10条内容，当PageSize=0时会查询出全部的结果
+		PageHelper.startPage(pagenum, 10);
+
+		referdocinfos = referdocMapper.getReferdoclist(referdoc_parentno);
 
 		return ResultCode.SUCCESS;
 	}
@@ -158,8 +169,8 @@ public class ReferdocServices {
 			}
 		}
 
-		int parent_code = referdocMapper.getReferdoc(referdoc_id)
-				.getReferdoc_parentno();
+		String parent_code = String.valueOf(referdocMapper.getReferdoc(referdoc_id)
+				.getReferdoc_parentno());
 
 		referdocMapper.deleteReferdoc(referdoc_id);
 
@@ -171,7 +182,7 @@ public class ReferdocServices {
 		// 获取第1页，10条内容，当PageSize=0时会查询出全部的结果
 		PageHelper.startPage(pagenum, 10);
 
-		referdocinfos = referdocMapper.getReferdoclistByParent(parent_code);
+		referdocinfos = referdocMapper.getReferdoclist(parent_code);
 
 		return ResultCode.SUCCESS;
 	}
@@ -260,7 +271,7 @@ public class ReferdocServices {
 	// ##
 	// ################################################################################
 
-	public int getReferdoclist(Integer pagenum) {
+	public int getReferdoclist(String referdoc_parentno, Integer pagenum) {
 
 		// 当传进来的pagenum为空 或者 pagenum == 0 时，显示第一页
 		if (pagenum == null || pagenum == 0)
@@ -270,7 +281,7 @@ public class ReferdocServices {
 		// 获取第1页，10条内容，当PageSize=0时会查询出全部的结果
 		PageHelper.startPage(pagenum, 10);
 
-		referdocinfos = referdocMapper.getReferdoclist();
+		referdocinfos = referdocMapper.getReferdoclist(referdoc_parentno);
 
 		return ResultCode.SUCCESS;
 	}
@@ -327,17 +338,10 @@ public class ReferdocServices {
 	// ##
 	// ################################################################################
 
-	public int getChildReferdoclist(int referdoc_parentno, Integer pagenum) {
+	public int getChildReferdoclist(int referdoc_parentno) {
 
 		referdocinfos.clear();
 		referdocinfos.add(referdocMapper.getReferdoc(referdoc_parentno));
-		// 当传进来的pagenum为空 或者 pagenum == 0 时，显示第一页
-		if (pagenum == null || pagenum == 0)
-			pagenum = 1;
-
-		// PageHelper.startPage(PageNum, PageSize)
-		// 获取第1页，10条内容，当PageSize=0时会查询出全部的结果
-		PageHelper.startPage(pagenum, 10);
 
 		referdocinfos.addAll(referdocMapper
 				.getReferdoclistByParent(referdoc_parentno));

@@ -20,7 +20,7 @@ public interface ReferdocMapper {
 			@Param("referdoc_parentno") int referdoc_parentno);
 
 	// 取得所有的参考数据列表
-	public List<Referdoc> getReferdoclist();
+	public List<Referdoc> getReferdoclist(@Param("referdoc_parentno") String referdoc_parentno);
 
 	// 取得所有的一级选项参考数据列表
 	public List<Referdoc> getParentReferdoc();

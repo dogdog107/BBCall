@@ -7,17 +7,18 @@
 <meta http-equiv=content-type content="text/html; charset=utf-8" />
 <link rel="shortcut icon" href="${pageContext.request.contextPath }/page/img/BBCallicon_32X32.ico" type="image/x-icon" />
 <link href="${pageContext.request.contextPath }/page/css/mine.css" type="text/css" rel="stylesheet" />
+<script type="text/javascript">
+	var token = "${sessionScope.user.user_token}";
+	var link = "${pageContext.request.contextPath}";
+	var parentno = "${dataMap.referdoclist[0].referdoc_id}";
+</script>
 <script type="text/javascript"
 	src="${pageContext.request.contextPath }/jquery/jquery-1.8.3.js"></script>
 <script type="text/javascript"
 	src="${pageContext.request.contextPath }/jquery/referdocPage.js?token=${sessionScope.user.user_token}"></script>
 <script type="text/javascript"
 		src="${pageContext.request.contextPath }/jquery/paging.js"></script>
-<script type="text/javascript">
-	var token = "${sessionScope.user.user_token}";
-	var link = "${pageContext.request.contextPath}";
-	var parentno = "${dataMap.parentno}";
-</script>
+
 <%
   String path=request.getContextPath();
 %>
@@ -73,34 +74,24 @@
                         <td>固定价格</td>
                         <td colspan="4" align="center">操作</td>
                     </tr>
-                    <s:iterator value="dataMap.referdoclist" id="referdoclist">
-					<tr id="template">
-						<form action="referdoc_update"
-							id='<s:property value='#referdoclist.referdoc_id'/>' method="post">
-						<td style="display:none"><input type="text" name="referdoc_parentno" id="referdoc_parentno" value='<s:property value='#referdoclist.referdoc_parentno'/>' ></input></td>
-						<td style="display:none"><input type="text" name="referdoc_level" id="referdoc_level" value='<s:property value='#referdoclist.referdoc_level'/>' ></input></td>
-						<td><input type="text" name="referdoc_id" readonly="true" id="referdoc_id" value='<s:property value='#referdoclist.referdoc_id'/>' ></input></td>
-						<td><input type="text" name="referdoc_type" id="referdoc_type" value='<s:property value='#referdoclist.referdoc_type'/>' ></input></td>
-						<td><input type="text" name="referdoc_price" id="referdoc_price" value='<s:property value='#referdoclist.referdoc_price'/>' ></input></td>
+                    
+					<tr id="template" style="display:none">
 						
+						<td><input type="text" id="referid" readonly="true"></input></td>
+						<td><input type="text" id="refertype" readonly="true"></input></td>
+						<td><input type="text" id="referprice" ></input></td>
 						<td>
-							<select name="referdoc_flag" id="referdoc_flag">
-								<s:if test="#referdoclist.referdoc_flag">
-									<option id="select1" value="true" selected="selected">true</option>
-									<option id="select2" value="false">false</option>
-								</s:if>
-								<s:else>
-									<option id="select2" value="false" selected="selected">false</option>
-									<option id="select1" value="true">true</option>
-								</s:else>
-							</select>
+							<select id="referflag">
+								<option id="select1" value="true" selected="selected">true</option>
+								<option id="select2" value="false">false</option>
+							</select>	
 						</td>
-						
-						<td><input type="submit" value="修改"></input></td>
-						<td><input type="button" value="删除" onclick="location.href='referdoc_delete.action?referdoc_id=<s:property value='#referdoclist.referdoc_id'/>'"></input></td>
-						</form>
+						<td style="display:none"><input type="text" id="referparentno" ></input></td>
+						<td>
+						<input id="referupdate" type="submit" value="修改" onclick=""/>
+						<input id="referdelete" type="submit" value="刪除" onclick=""/>
+						</td>
 					</tr>
-					</s:iterator>
                     
                 </tbody>
             </table>
