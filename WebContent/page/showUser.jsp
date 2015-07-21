@@ -97,7 +97,7 @@
 			</tr>
 			<tr>
 				<td>用戶技能 (User Skill)</td>
-				<td>${skill}</td>
+				<td id="userSkillID"></td>
 			</tr>
 			<tr>
 				<td>默認地址 (User Address)</td>
