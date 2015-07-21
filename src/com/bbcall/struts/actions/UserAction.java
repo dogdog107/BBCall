@@ -5,6 +5,7 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.apache.log4j.Logger;
 import org.apache.struts2.interceptor.SessionAware;
 import org.apache.struts2.json.annotations.JSON;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,6 +25,8 @@ import com.opensymphony.xwork2.ActionSupport;
 @SuppressWarnings("serial")
 public class UserAction extends ActionSupport implements SessionAware{
 
+	private static Logger logger = Logger.getLogger(UserAction.class);  
+	
 	@Autowired
 	private UserServices userServices;
 	private Map<String, Object> dataMap = new LinkedHashMap<String, Object>(); // 新建dataMap来储存JSON字符串
@@ -107,6 +110,7 @@ public class UserAction extends ActionSupport implements SessionAware{
 			System.out.println(dataMap);
 			System.out.println(session);
 //			System.out.println((dataMap.get("userinfo")));
+			logger.info("userOpr:[Login][" + username + "]" + Tools.JsonHeadMap(result, true));  
 			return "loginSuccess";
 		} else {
 			dataMap.putAll(Tools.JsonHeadMap(result, false));
@@ -116,12 +120,36 @@ public class UserAction extends ActionSupport implements SessionAware{
 			System.out.println(dataMap);
 			System.out.println("login Failed");
 //			request.setAttribute("loginResult", false);
+			logger.info("userOpr:[Login][" + username + "]" + Tools.JsonHeadMap(result, false));  
 			return "loginFailed";
 		}
 	}
-
 	public String loginJson() throws Exception {
 		System.out.println("Here is UserAction.loginJson");
+		login();
+		return "json";
+	}
+	
+	public String loginByAdmin() throws Exception {
+		return login();
+	}
+	public String loginByAdminJson() throws Exception {
+		login();
+		return "json";
+	}
+	
+	public String loginByUser() throws Exception {
+		return login();
+	}
+	public String loginByUserJson() throws Exception {
+		login();
+		return "json";
+	}
+	
+	public String loginByMaster() throws Exception {
+		return login();
+	}
+	public String loginByMasterJson() throws Exception {
 		login();
 		return "json";
 	}
@@ -129,12 +157,12 @@ public class UserAction extends ActionSupport implements SessionAware{
 	// Logout Action
 	public String logout() throws Exception {
 		System.out.println("Here is UserAction.logout");
+		logger.info("userOpr:[Logout][" + session.get("user_id") + "]" + session.get("user_account") + " - Logout Success.");  
 		session.clear(); // 清空session
 		return "login";
 	}
 	
 	// Register Action
-	
 	public String register() throws Exception {
 		System.out.println("Here is UserAction.register");
 
@@ -145,11 +173,13 @@ public class UserAction extends ActionSupport implements SessionAware{
 //			Integer newuserid = userServices.getUserinfo().getUser_id();
 			dataMap.putAll(Tools.JsonHeadMap(result, true));
 			System.out.println(dataMap);
+			logger.info("userOpr:[Register][" + account + "]" + Tools.JsonHeadMap(result, true));
 			return "registerSuccess";
 		} else {
 			dataMap.putAll(Tools.JsonHeadMap(result, false));
 			System.out.println(dataMap);
 			System.out.println("register Failed");
+			logger.info("userOpr:[Register][" + account + "]" + Tools.JsonHeadMap(result, false));
 			return "registerFailed";
 		}
 	}
@@ -198,11 +228,13 @@ public class UserAction extends ActionSupport implements SessionAware{
 			session.putAll(dataMap);// 把用户信息放进session
 			dataMap.putAll(Tools.JsonHeadMap(result, true));
 			System.out.println(dataMap);
+			logger.info("userOpr:[UserUpdate][Updated ID: " + userid + "]" + Tools.JsonHeadMap(result, true));
 			return "updateSuccess";
 		} else {
 			dataMap.putAll(Tools.JsonHeadMap(result, false));
 			System.out.println(dataMap);
 			System.out.println("Update Failed");
+			logger.info("userOpr:[UserUpdate][Updated ID: " + userid + "]" + Tools.JsonHeadMap(result, false));
 			return "updateFailed";
 		}
 		
@@ -223,11 +255,13 @@ public class UserAction extends ActionSupport implements SessionAware{
 			dataMap = obj2map.getValueMap(userServices.getUserinfo()); //将对象转换成Map
 			dataMap.putAll(Tools.JsonHeadMap(result, true));
 			System.out.println(dataMap);
+			logger.info("userOpr:[UserUpdate][Updated ID: " + userid + "]" + Tools.JsonHeadMap(result, true));
 			return "updateUserSuccess";
 		} else {
 			dataMap.putAll(Tools.JsonHeadMap(result, false));
 			System.out.println(dataMap);
 			System.out.println("Update Failed");
+			logger.info("userOpr:[UserUpdate][Updated ID: " + userid + "]" + Tools.JsonHeadMap(result, false));
 			return "updateUserFailed";
 		}
 	}
@@ -242,11 +276,13 @@ public class UserAction extends ActionSupport implements SessionAware{
 		if (result == ResultCode.SUCCESS) {
 			dataMap.putAll(Tools.JsonHeadMap(result, true));
 			System.out.println(dataMap);
+			logger.info("userOpr:[UserUpdate_Status][Updated ID: " + userid + "]" + Tools.JsonHeadMap(result, true));
 			return "updateStatusSuccess";
 		} else {
 			dataMap.putAll(Tools.JsonHeadMap(result, false));
 			System.out.println(dataMap);
 			System.out.println("updateStatus Failed");
+			logger.info("userOpr:[UserUpdate_Status][Updated ID: " + userid + "]" + Tools.JsonHeadMap(result, false));
 			return "updateStatusFailed";
 		}
 		
@@ -266,9 +302,11 @@ public class UserAction extends ActionSupport implements SessionAware{
 			dataMap.put("userlist", userlist); // 把addresslist对象放入dataMap
 			dataMap.putAll(pageinfo2map.pageInfoMap(userlist));// 把分页信息放进dataMap
 			dataMap.putAll(Tools.JsonHeadMap(result, true));
+			logger.info("userOpr:[CheckUserList]" + Tools.JsonHeadMap(result, true));
 		} else {
 			dataMap.putAll(Tools.JsonHeadMap(result, false));
 			System.out.println(dataMap);
+			logger.info("userOpr:[CheckUserList]" + Tools.JsonHeadMap(result, false));
 		}
 
 		return SUCCESS;
@@ -314,9 +352,11 @@ public class UserAction extends ActionSupport implements SessionAware{
 			dataMap.putAll(pageinfo2map.pageInfoMap(userlist)); // 把分页信息放进dataMap
 			dataMap.putAll(Tools.JsonHeadMap(result, true));
 			System.out.println(dataMap);
+			logger.info("userOpr:[CheckUserList]" + Tools.JsonHeadMap(result, true));
 		} else {
 			dataMap.putAll(Tools.JsonHeadMap(result, false));
 			System.out.println(dataMap);
+			logger.info("userOpr:[CheckUserList]" + Tools.JsonHeadMap(result, false));
 		}
 		
 		return SUCCESS;
@@ -368,6 +408,8 @@ public class UserAction extends ActionSupport implements SessionAware{
 		if (userid == null) {
 			dataMap.putAll(Tools.JsonHeadMap(ResultCode.REQUIREINFO_NOTENOUGH,
 					false));
+			logger.info("userOpr:[CheckUser]"
+					+ Tools.JsonHeadMap(ResultCode.REQUIREINFO_NOTENOUGH, false));
 			return INPUT;
 		}
 
@@ -396,10 +438,12 @@ public class UserAction extends ActionSupport implements SessionAware{
 			dataMap.put("userlist", tempUser); // 把addresslist对象放入dataMap
 			dataMap.putAll(Tools.JsonHeadMap(result, true));
 			System.out.println(dataMap);
+			logger.info("userOpr:[CheckUser]" + Tools.JsonHeadMap(result, true));
 			return "getUserByIdSuccess";
 		} else {
 			dataMap.putAll(Tools.JsonHeadMap(result, false));
 			System.out.println(dataMap);
+			logger.info("userOpr:[CheckUser]" + Tools.JsonHeadMap(result, false));
 			return "getUserByIdFailed";
 		}
 		// int result = userServices.checkUserList("user_id", "",
@@ -458,11 +502,13 @@ public class UserAction extends ActionSupport implements SessionAware{
 		if (result == ResultCode.SUCCESS) {
 			dataMap.putAll(Tools.JsonHeadMap(result, true));
 			System.out.println(dataMap);
+			logger.info("userOpr:[CheckToken]" + Tools.JsonHeadMap(result, true));
 			return "checkTokenSuccess";
 		} else {
 			dataMap.putAll(Tools.JsonHeadMap(result, false));
 			System.out.println(dataMap);
 			System.out.println("Check Token Failed");
+			logger.info("userOpr:[CheckToken]" + Tools.JsonHeadMap(result, false));
 			return "checkTokenFailed";
 		}
 	}
@@ -483,16 +529,20 @@ public class UserAction extends ActionSupport implements SessionAware{
 		if (userid == null) {
 			dataMap.putAll(Tools.JsonHeadMap(ResultCode.REQUIREINFO_NOTENOUGH,
 					false));
+			logger.info("userOpr:[DeleteUser]"
+					+ Tools.JsonHeadMap(ResultCode.REQUIREINFO_NOTENOUGH, false));
 			return INPUT;
 		}
 
 		int result = userServices.deleteUserById(userid);
 		if (result == ResultCode.SUCCESS) {
 			dataMap.putAll(Tools.JsonHeadMap(result, true));
+			logger.info("userOpr:[DeleteUser]" + Tools.JsonHeadMap(result, true));
 			return "deleteUserByIdSuccess";
 		} else {
 			dataMap.putAll(Tools.JsonHeadMap(result, false));
 			System.out.println(dataMap);
+			logger.info("userOpr:[DeleteUser]" + Tools.JsonHeadMap(result, false));
 			return "deleteUserByIdFailed";
 		}
 	}

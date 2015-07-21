@@ -41,7 +41,7 @@ function showaddresslist(times, childcode, parentcode) {
 
 
 // 拿技能表
-function getChildSkillList(parentcode, idname, skillvalue) {
+function getChildSkillList(parentcode, idname, skillvalue, callback) {
 	var idno = idname.split("_")[1];
 	var childListDiv = "skillChildList_" + idno; 
 	$.ajax({
@@ -65,87 +65,84 @@ function getChildSkillList(parentcode, idname, skillvalue) {
 			} else {
 				alert(data.errmsg);
 			}
+			if (typeof (callback) == "function") {
+				callback();
+			}
 		}
 	});
 }
 
 // 拿一级项技能表
-function getParentSkillList(idname, skillvalue) {
+function getParentSkillList(idname, skillvalue, callback) {
 	$.ajax({
 		type : "post",
 		url : "${pageContext.request.contextPath}/referdoc_getparentlistJson.action",
-		success : function(data) {
-			if (data.result) {
-				for ( var j = 0; j < data.parentreferdoclist.length; j++) {
+		success : function(skilldata) {
+			if (skilldata.result) {
+				for ( var j = 0; j < skilldata.parentreferdoclist.length; j++) {
 					document.getElementById(idname).options
 							.add(new Option(
-									data.parentreferdoclist[j].referdoc_type,
-									data.parentreferdoclist[j].referdoc_id));
+									skilldata.parentreferdoclist[j].referdoc_type,
+									skilldata.parentreferdoclist[j].referdoc_id));
 				}
 				if(skillvalue != '' && skillvalue != undefined){
 					$("#" + idname).val(skillvalue);
 				}
 			} else {
-				alert(data.errmsg);
+				alert(skilldata.errmsg);
+			}
+			if (typeof (callback) == "function") {
+				callback();
 			}
 		}
 	});
 }
 
-function addSkill(skillvalue) {
+function addSkill(parentCode, callback) {
 	var objs = document.getElementsByName('skillpart');
 	var objlength = objs.length + 1;
 	while (document.getElementById("skillpart_" + objlength) != null) {
 		objlength++;
 	}
-	var count = 0;
-	if (skillvalue != '' && skillvalue != undefined) {
-		var tempskillvalue = skillvalue.split(";");
-		if (tempskillvalue.length == 0) {
-			return;
-		} else {
-			var doskillvalue = tempskillvalue[(tempskillvalue.length-1)];
+
+	var row = $("#skill_template").clone();
+	row.find("#skillParentCode").attr("id", "skillParentCode_" + objlength);
+	row.find("#deleteSkill").attr("onclick", "deleteSkillbtn(this.id)");
+	row.find("#deleteSkill").attr("id", "deleteSkill_" + objlength);
+	row.find("#skillChildList").attr("id", "skillChildList_" + objlength);
+	row.attr("name", "skillpart");
+	row.attr("id", "skillpart_" + objlength);
+	row.appendTo("#skill_main");// 添加到模板的容器中
+	row.toggle(300);
+	getParentSkillList("skillParentCode_" + objlength, parentCode, function() {
+		if (typeof (callback) == "function") {
+			callback("skillParentCode_" + objlength);
 		}
-		if (objs.length != 0) {
-			var secondskill = document.getElementsByName('skillcodepart');
-			for (var j = 0; j < secondskill.length; j++) {
-				if (secondskill[j].type == 'checkbox' && secondskill[j].value == doskillvalue) {
-					secondskill[j].checked = true;
-					count++;
-					break;
-				}
-			}
-		}
-	}
-	if (count == 0){
-		var row = $("#skill_template").clone();
-		row.find("#skillParentCode").attr("id", "skillParentCode_" + objlength);
-		row.find("#deleteSkill").attr("onclick", "deleteSkillbtn(this.id)");
-		row.find("#deleteSkill").attr("id", "deleteSkill_" + objlength);
-		row.find("#skillChildList").attr("id", "skillChildList_" + objlength);
-		row.attr("name", "skillpart");
-		row.attr("id", "skillpart_" + objlength);
-		row.appendTo("#skill_main");// 添加到模板的容器中
-		if (skillvalue != '' && skillvalue != undefined) {
-			var firstskillcode = parseInt(doskillvalue / 1000) * 1000;
-			getParentSkillList("skillParentCode_" + objlength, firstskillcode);
-			getChildSkillList(firstskillcode, "skillChildList_" + objlength, doskillvalue);
-		} else {
-			getParentSkillList("skillParentCode_" + objlength);
-		}
-		row.toggle(300);
-	}
-	if (skillvalue == '' || skillvalue == undefined) {
-		return;
-	}
-	if (tempskillvalue.length == 1) {
+//		if (typeof (callback) == "function") {
+//			callback(parentCode, "skillParentCode_" + objlength, childCode);
+//		}
+	});
+}
+
+function showskill(skillValue) {
+	var tempskillvalue = skillValue.split(";");
+	if (tempskillvalue.length == 0) {
 		return;
 	} else {
-		var tempdoskillvalue = ";" + doskillvalue;
-		
-		addSkill(skillvalue.split(tempdoskillvalue)[0]);
+		var doskillvalue = tempskillvalue[(tempskillvalue.length - 1)];
+		var doParentCode = parseInt(doskillvalue / 1000) * 1000;
+		addSkill(doParentCode, function(ParentCodeID){
+			getChildSkillList(doParentCode, ParentCodeID, doskillvalue, function(){
+				if (tempskillvalue.length == 1) {
+					return;
+				} else {
+					var tempdoskillvalue = ";" + doskillvalue;
+					showskill(skillValue.split(tempdoskillvalue)[0]);
+				}
+			});
+		});
+//		addSkill(doParentCode, getChildSkillList, doskillvalue);
 	}
-	
 }
 
 function deleteSkillbtn(idname) {
@@ -262,7 +259,7 @@ function onload() {
 	}
 
 	if (skill != '') {
-		addSkill(skill);
+		showskill(skill);
 	} else {
 		addSkill();
 	}

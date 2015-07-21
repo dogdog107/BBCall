@@ -5,6 +5,7 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.apache.log4j.Logger;
 import org.apache.struts2.ServletActionContext;
 import org.springframework.beans.factory.annotation.Autowired;
 
@@ -17,7 +18,7 @@ import com.opensymphony.xwork2.interceptor.AbstractInterceptor;
 import com.opensymphony.xwork2.util.ValueStack;
 
 public class LoginInterceptor extends AbstractInterceptor {
-
+	private static Logger logger = Logger.getLogger(LoginInterceptor.class);  
 	private static final long serialVersionUID = 1L;
 	@Autowired
 	private UserServices userServices;
@@ -51,6 +52,8 @@ public class LoginInterceptor extends AbstractInterceptor {
 			session = invocation.getInvocationContext().getSession();
 			System.out.println("session:" + session);
 			while (session.size() != 0 && !Tools.isEmpty(session.get(sessionCheckName).toString())) {
+				// 输出 log4j 信息
+				logger.info("userOpr:[" + session.get("user_id") + "]" + session.get("user_account") + " - " + actionName);  
 				// 检测到sessionCheckName,放行 并进入access Validation.
 				return accessValidate(invocation,"session");
 //				return invocation.invoke();
@@ -64,6 +67,8 @@ public class LoginInterceptor extends AbstractInterceptor {
 				dataMap.clear(); // dataMap中的数据将会被Struts2转换成JSON字符串，所以这里要先清空其中的数据
 				int result = userServices.checkUserToken(token); // 调用userServices.checkUserTokenes
 				if (result == ResultCode.SUCCESS) {
+					// 输出 log4j 信息
+					logger.info("userOpr:[" + userServices.getUserinfo().getUser_id() + "]" + userServices.getUserinfo().getUser_account() + " - " + actionName);  
 					// 检测到token,放行 并进入access Validation.
 					return accessValidate(invocation,"token");
 				} else {
@@ -110,6 +115,7 @@ public class LoginInterceptor extends AbstractInterceptor {
 							.toString())) {
 				accessResult = ResultCode.ACCESSGROUP_ERROR;
 				errmsg = "(session) Access_group NULL, Please contact your Admin.";
+				logger.info("userOpr:" + errmsg);
 				System.out.println(errmsg);
 				break;
 			}
@@ -120,6 +126,7 @@ public class LoginInterceptor extends AbstractInterceptor {
 				return invocation.invoke();
 			} else {
 				errmsg = "(session) Access Reject, Please contact your Admin.";
+				logger.info("userOpr:" + errmsg);
 				System.out.println(errmsg);
 			}
 			break;
@@ -133,6 +140,7 @@ public class LoginInterceptor extends AbstractInterceptor {
 					.isEmpty(userServices.getUserinfo().getUser_access_group())) {
 				accessResult = ResultCode.ACCESSGROUP_ERROR;
 				errmsg = "(token) Access_group NULL, Please contact your Admin.";
+				logger.info("userOpr:" + errmsg);
 				System.out.println(errmsg);
 				break;
 			}
@@ -143,12 +151,14 @@ public class LoginInterceptor extends AbstractInterceptor {
 				return invocation.invoke();
 			} else {
 				errmsg = "(token) Access Reject, Please contact your Admin.";
+				logger.info("userOpr:" + errmsg);
 				System.out.println(errmsg);
 			}
 			break;
 		default:
 			accessResult = ResultCode.UNKNOWN_ERROR;
 			errmsg = "Fail to validate Access, please contact your Admin.";
+			logger.info("userOpr:" + errmsg);
 			System.out.println(errmsg);
 			break;
 		}

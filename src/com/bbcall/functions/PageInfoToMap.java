@@ -7,6 +7,7 @@ import java.util.Map;
 import com.github.pagehelper.PageInfo;
 
 public class PageInfoToMap {
+	@SuppressWarnings({ "rawtypes", "unchecked" })
 	public Map<String, Object> pageInfoMap(List pagelist) {
 		Map<String, Object> map = new LinkedHashMap<String, Object>();
 		
