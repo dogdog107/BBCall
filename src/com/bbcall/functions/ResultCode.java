@@ -53,9 +53,8 @@ public class ResultCode {
 	public static Integer REFERDOC_TYPE_EMPTY = 16001;// 参数订单类型为空
 	public static Integer REFERDOC_ADD_FAILED = 16002;// 添加订单失败
 
-	// 新闻错误码20XXX
-	public static Integer NEWSID_ERROR = 20001;// 新闻id不存在
-	public static Integer NEWSCATEGORY_ERROR = 20002;// 新闻分类id不存在
+	// 广告错误码20XXX
+	public static Integer ADVERTID_ERROR = 20001;// 广告id不存在
 
 	// 视频错误码21XXX
 	public static Integer VIDEOID_ERROR = 21001;// 视频id不存在
@@ -196,10 +195,7 @@ public class ResultCode {
 			
 		// 新闻类
 		case 20001:
-			errmsg = "invalid news_id";
-			break;
-		case 20002:
-			errmsg = "invalid news_category";
+			errmsg = "invalid advertisement_id";
 			break;
 
 		// 视频类

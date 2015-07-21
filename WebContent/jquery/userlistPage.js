@@ -90,7 +90,7 @@ function checkUserList(col_name, specify_value, search_value, pagenum){
 						row.find("#logintime").text(logintime.replace("T", " "));
 					}
 					row.find("#createtime").text(createtime.replace("T", " "));
-					row.find("#btnDetail").attr("onclick", "location.href='user_getUserById.action?userid=" + n.user_id + "'");
+					row.find("#btnDetail").attr("onclick", "location.href='user_getUserById.action?token=" + token + "&userid=" + n.user_id + "'");
 					row.find("#btnDelete").attr("onclick", "deleteUser(this.id)");
 					row.find("#btnDelete").attr("id", "btnDelete_" + n.user_id);
 					// row.find("#OrderDate").text(ChangeDate(n.订购日期));
@@ -243,6 +243,7 @@ function col_name_change(colname_value) {
 		$("#specify_value").append("<option value='1'>用戶排頭(User on Top)</option>");
 		$("#specify_value").append("<option value='2'>師傅排頭(Master on Top)</option>");
 		$("#specify_value").append("<option value='3'>管理員排頭(Admin on Top)</option>");
+		$("#specify_value").append("<option value='4'>超級管理員排頭(SuperAdmin on Top)</option>");
 		break;
 	case "user_status":
 		validateResult = true;

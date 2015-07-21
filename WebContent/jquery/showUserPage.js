@@ -2,6 +2,17 @@
 function onload() {
 	$('#statusOpr').val(status);
 	$('#statusOpr').attr("id", "statusOpr_" + userid);
+	
+	if (updateResult != '') {
+		if(updateResult == 'true'){
+			$("#message").html("<font color=green> Edit User Success! </font>");
+			$("#div_message").show(300).delay(5000).hide(300);
+		}
+		if (updateResult == 'false') {
+			$("#message").html("<font color=red> Edit User Failed ! " + updateErrmsg + " </font>");
+			$("#div_message").show(300).delay(5000).hide(300);
+		}
+	}
 }
 
 $(function() {
@@ -49,9 +60,9 @@ function updateStatus(idname, value) {
 					$("#message").html("<font color=green> (ID:"+ userid +") Status Update Success ! </font>");
 					$("#div_message").show(300).delay(3000).hide(300);
 				} else {
-					$("#message").html("<font color=red> (ID:"+ userid +") Status Update Failed ! </font>");
+					$("#message").html("<font color=red> (ID:"+ userid +") Status Update Failed ! " + data.errmsg + "</font>");
 					$("#div_message").show(300).delay(3000).hide(300);
-					alert("Update failed. " + data.errmsg);
+					$('#' + idname).val(status);
 				}
 			}
 		});

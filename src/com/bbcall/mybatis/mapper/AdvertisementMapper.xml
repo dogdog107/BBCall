@@ -11,12 +11,13 @@
 	<resultMap id="AdvertisementResultMap" type="com.bbcall.mybatis.table.Advertisement" >
     	<id column="advertisement_id" property="advertisement_id" jdbcType="INTEGER" />
     	<result column="advertisement_title" property="advertisement_title" jdbcType="VARCHAR" />
-    	<result column="advertisement_type" property="advertisement_type" jdbcType="VARCHAR" />
+    	<result column="advertisement_type" property="advertisement_type" jdbcType="INTEGER" />
     	<result column="advertisement_bigphoto_url" property="advertisement_bigphoto_url" jdbcType="VARCHAR" />
     	<result column="advertisement_smallphoto_url" property="advertisement_smallphoto_url" jdbcType="VARCHAR" />
     	<result column="advertisement_summary" property="advertisement_summary" jdbcType="VARCHAR" />
     	<result column="advertisement_content" property="advertisement_content" jdbcType="LONGVARCHAR" />
     	<result column="advertisement_istop" property="advertisement_istop" jdbcType="INTEGER" />
+    	<result column="advertisement_status" property="advertisement_status" jdbcType="INTEGER" />
     	<result column="advertisement_create_time" property="advertisement_create_time" jdbcType="TIMESTAMP" />
 	</resultMap>
 
@@ -51,10 +52,11 @@
 		advertisement_summary,
 		advertisement_content,
 		advertisement_istop,
+		advertisement_status,
 		advertisement_create_time
 		from ADVERTISEMENT
 		ORDER BY
-		IF (advertisement_istop = 1, 0, 1), advertisement_create_time DESC
+		IF (advertisement_status = 1, 0, 1), IF (advertisement_istop = 1, 0, 1), advertisement_create_time DESC
 	</select>
 	
 	<select id="getAllAdvertSummary" resultMap="AdvertisementResultMap">
@@ -65,8 +67,42 @@
 		advertisement_smallphoto_url, 
 		advertisement_summary,
 		advertisement_istop,
+		advertisement_status,
 		advertisement_create_time
 		from ADVERTISEMENT
+		ORDER BY
+		IF (advertisement_status = 1, 0, 1), IF (advertisement_istop = 1, 0, 1), advertisement_create_time DESC
+	</select>
+	
+	<select id="getActiveAdvert" resultMap="AdvertisementResultMap">
+		select advertisement_id,
+		advertisement_title,
+		advertisement_type, 
+		advertisement_bigphoto_url,
+		advertisement_smallphoto_url, 
+		advertisement_summary,
+		advertisement_content,
+		advertisement_istop,
+		advertisement_status,
+		advertisement_create_time
+		from ADVERTISEMENT
+		where advertisement_status = 1
+		ORDER BY
+		IF (advertisement_istop = 1, 0, 1), advertisement_create_time DESC
+	</select>
+	
+	<select id="getActiveAdvertSummary" resultMap="AdvertisementResultMap">
+		select advertisement_id,
+		advertisement_title,
+		advertisement_type, 
+		advertisement_bigphoto_url,
+		advertisement_smallphoto_url, 
+		advertisement_summary,
+		advertisement_istop,
+		advertisement_status,
+		advertisement_create_time
+		from ADVERTISEMENT
+		where advertisement_status = 1
 		ORDER BY
 		IF (advertisement_istop = 1, 0, 1), advertisement_create_time DESC
 	</select>
@@ -81,6 +117,7 @@
 		advertisement_summary,
 		advertisement_content,
 		advertisement_istop,
+		advertisement_status,
 		advertisement_create_time
 		from ADVERTISEMENT
 		where
@@ -90,6 +127,25 @@
 	<update id="updateAdvertIsTop">
 		update ADVERTISEMENT set
 		advertisement_istop=#{advertisement_istop}
+		where advertisement_id=#{advertisement_id}
+	</update>
+	
+	<update id="updateAdvertStatus">
+		update ADVERTISEMENT set
+		advertisement_status=#{advertisement_status}
+		where advertisement_id=#{advertisement_id}
+	</update>
+	
+	<update id="updateAdvertById" parameterType="Advertisement">
+		update ADVERTISEMENT set
+		advertisement_title=#{advertisement_title},
+		advertisement_type=#{advertisement_type},
+		advertisement_bigphoto_url=#{advertisement_bigphoto_url},
+		advertisement_smallphoto_url=#{advertisement_smallphoto_url},
+		advertisement_summary=#{advertisement_summary},
+		advertisement_content=#{advertisement_content},
+		advertisement_istop=#{advertisement_istop},
+		advertisement_status=#{advertisement_status}
 		where advertisement_id=#{advertisement_id}
 	</update>
 </mapper>

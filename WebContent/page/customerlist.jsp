@@ -34,8 +34,6 @@
 						<option value="user_status">按用戶狀態(Status)</option>
 					</select>
 					<select name="order_value" id="order_value" onchange="order_value_change(this.value)">
-						<option value='ASC'>升序(ASC)</option>
-						<option value='DESC'>降序(DESC)</option>
 						<option value='1'>Active排頭(Active on Top)</option>
 						<option value='2'>Pause排頭(Pause on Top)</option>
 						<option value='3'>Pending排頭(Pending on Top)</option>

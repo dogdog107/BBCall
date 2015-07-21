@@ -94,8 +94,8 @@ jQuery(function() {
         ratio = window.devicePixelRatio || 1,
 
         // 缩略图大小
-        thumbnailWidth = 200 * ratio,
-        thumbnailHeight = 100 * ratio,
+        thumbnailWidth = 400 * ratio,
+        thumbnailHeight = 200 * ratio,
 
         // Web Uploader实例
         uploader;
@@ -155,6 +155,7 @@ jQuery(function() {
             }
 
             $img.attr( 'src', src );
+            $("#bigPhotoImgTemp").remove();
         }, thumbnailWidth, thumbnailHeight );
     });
 
@@ -275,6 +276,7 @@ jQuery(function() {
 			}
 			
 			$img.attr( 'src', src );
+			$("#smallPhotoImgTemp").remove();
 		}, thumbnailWidth, thumbnailHeight );
 	});
 	

@@ -8,10 +8,11 @@ import java.sql.Timestamp;
 //	advertisement_title VARCHAR (255),
 //	advertisement_bigphoto_url VARCHAR (255),
 //	advertisement_smallphoto_url VARCHAR (255),
-//	advertisement_type VARCHAR (30),
+//	advertisement_type INT,
 //	advertisement_summary VARCHAR (255),
 //	advertisement_content text,
 //	advertisement_istop tinyint NOT NULL DEFAULT 0,
+//	advertisement_status tinyint NOT NULL DEFAULT 0,
 //	advertisement_create_time TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 //) DEFAULT CHARSET = utf8;
 
@@ -19,8 +20,9 @@ public class Advertisement {
 
 	private Integer advertisement_id;
 	private Integer advertisement_istop;
+	private Integer advertisement_status;
 	private String advertisement_title;
-	private String advertisement_type;
+	private Integer advertisement_type;
 	private String advertisement_bigphoto_url;
 	private String advertisement_smallphoto_url;
 	private String advertisement_summary;
@@ -43,11 +45,11 @@ public class Advertisement {
 		this.advertisement_title = advertisement_title;
 	}
 
-	public String getAdvertisement_type() {
+	public Integer getAdvertisement_type() {
 		return advertisement_type;
 	}
 
-	public void setAdvertisement_type(String advertisement_type) {
+	public void setAdvertisement_type(Integer advertisement_type) {
 		this.advertisement_type = advertisement_type;
 	}
 
@@ -98,6 +100,14 @@ public class Advertisement {
 
 	public void setAdvertisement_istop(Integer advertisement_istop) {
 		this.advertisement_istop = advertisement_istop;
+	}
+
+	public Integer getAdvertisement_status() {
+		return advertisement_status;
+	}
+
+	public void setAdvertisement_status(Integer advertisement_status) {
+		this.advertisement_status = advertisement_status;
 	}
 
 }

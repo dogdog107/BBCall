@@ -29,8 +29,13 @@
 	<div class="div_content">
 		<div class="div_search">
 			<span>
-				<input id="btnBack" type="submit" value="返回廣告列表/Go Back" onclick="location.href='advertList.jsp'"/>
+				<input id="btnBack" type="submit" value="返回廣告列表/Go Back" onclick="location.href='${pageContext.request.contextPath }/page/advertList.jsp'"/>
+				<input id="btnBack" type="submit" value="編輯廣告/Edit Advert" onclick="location.href='advert_editAdvertPage.action?token=${sessionScope.user_token}&advertisement_id=${advertisement_id}'"/>
 			</span>
+			<div id="div_message" class="div_message" style="display: none"
+				width="50%" align="left">
+				<span id="message"> </span>
+			</div>
 		</div>
 		<div id="div_message" class="div_message" style="display: none">
 			<span id="message"> </span>
@@ -59,9 +64,21 @@
 var token = "${sessionScope.user_token}";
 var link = "${pageContext.request.contextPath }";
 var advert_type = "${advertisement_type }";
+var updateResult = "${updateResult}";
+var updateErrmsg = "${dataMap.errmsg}";
 
 function onload(){
 	checkAdvertType(advert_type);
+	if (updateResult != '') {
+		if(updateResult == 'true'){
+			$("#message").html("<font color=green> Edit Advertisement Success! </font>");
+			$("#div_message").show(300).delay(5000).hide(300);
+		}
+		if (updateResult == 'false') {
+			$("#message").html("<font color=red> Edit Advertisement Failed ! " + updateErrmsg + " </font>");
+			$("#div_message").show(300).delay(5000).hide(300);
+		}
+	}
 }
 
 function checkAdvertType(typecode){

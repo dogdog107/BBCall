@@ -98,7 +98,7 @@ function checkUserList(order_col, order_value, where_col, where_value, pagenum){
 					// row.find("#more").html("<a
 					// href=OrderInfo.aspx?id=" + n.订单ID +
 					// "&pageindex="+pageIndex+">&nbsp;More</a>");
-					row.find("#btnDetail").attr("onclick", "location.href='user_getUserById.action?userid=" + n.user_id + "'");
+					row.find("#btnDetail").attr("onclick", "location.href='user_getUserById.action?token=" + token + "&userid=" + n.user_id + "'");
 					row.find("#btnDelete").attr("onclick", "deleteUser(this.id)");
 					row.find("#btnDelete").attr("id", "btnDelete_" + n.user_id);
 					row.attr("id", "userlist_" + n.user_id);// 改变绑定好数据的行的id

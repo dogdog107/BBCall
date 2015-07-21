@@ -10,20 +10,34 @@ public interface AdvertisementMapper {
 	
 	// 添加广告 add advertisement
 	public void addAdvert(Advertisement advertisement);
-
+	
 	// 删除广告 delete advertisement
 	public void deleteAdvertById(Integer advertisement_id);
+
+	// 更新广告 update advertisement
+	public void updateAdvertById(Advertisement advertisement);
 	
 	// 置顶广告 
 	public void updateAdvertIsTop(
 			@Param("advertisement_id") Integer advertisement_id,
 			@Param("advertisement_istop") Integer advertisement_istop);
 	
+	// update广告的状态 
+	public void updateAdvertStatus(
+			@Param("advertisement_id") Integer advertisement_id,
+			@Param("advertisement_status") Integer advertisement_status);
+	
 	// 显示全部广告 get all advertisements
 	public List<Advertisement> getAllAdvert();
 	
-	// 显示全部广告de的概要 get all advertisements Summary
+	// 显示全部广告的概要 get all advertisements Summary
 	public List<Advertisement> getAllAdvertSummary();
+	
+	// 显示active的广告 get active advertisements
+	public List<Advertisement> getActiveAdvert();
+	
+	// 显示active广告的概要 get active advertisements Summary
+	public List<Advertisement> getActiveAdvertSummary();
 	
 	// 按ID得到广告内容
 	public Advertisement getAdvertById(Integer advertisement_id);

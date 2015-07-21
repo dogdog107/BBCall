@@ -105,6 +105,20 @@
 			<result name="updateFailed">
 				<param name="location">/page/update.jsp</param>
 			</result>
+
+			<result name="updateUserSuccess" type="redirectAction">
+				<param name="actionName">user_getUserById</param>
+				<param name="token">${token}</param>
+				<param name="userid">${userid}</param>
+				<param name="updateResult">true</param>
+			</result>
+			
+			<result name="updateUserFailed" type="redirectAction">
+				<param name="actionName">user_editUser</param>
+				<param name="token">${token}</param>
+				<param name="userid">${userid}</param>
+				<param name="updateResult">false</param>
+			</result>
 			
 			<result name="getUserByIdSuccess">
 				<param name="location">/page/showUser.jsp</param>
@@ -112,6 +126,9 @@
 			
 			<result name="getUserByIdFailed">
 				<param name="location">/page/userlist.jsp</param>
+			</result>
+			<result name="editUser">
+				<param name="location">/page/editUser.jsp</param>
 			</result>
 
 			<result type="json" name="json">
@@ -151,7 +168,20 @@
 			<result name="deleteAdvertSuccess">/page/advertList.jsp</result>
 			<result name="deleteAdvertFailed">/page/advertList.jsp</result>
 			<result name="showAdvertSuccess">/page/showAdvert.jsp</result>
+			<result name="editAdvertPageSuccess">/page/editAdvert.jsp</result>
 			
+			<result name="updateAdvertByIdSuccess" type="redirectAction">
+				<param name="actionName">advert_showAdvert</param>
+				<param name="token">${token}</param>
+				<param name="advertisement_id">${advertisement_id}</param>
+				<param name="updateResult">true</param>
+			</result>
+			<result name="updateAdvertByIdFailed" type="redirectAction">
+				<param name="actionName">advert_editAdvertPage</param>
+				<param name="token">${token}</param>
+				<param name="advertisement_id">${advertisement_id}</param>
+				<param name="updateResult">false</param>
+			</result>
 			<result type="json" name="json">
 				<param name="root">dataMap</param>
 			</result>
@@ -220,6 +250,13 @@
 
 			<result name="userUploadSuccess" type="redirectAction">
 				<param name="actionName">user_update</param>
+				<param name="picurl">${picurl}</param>
+				<param name="token">${token}</param>
+				<param name="userid">${userid}</param>
+			</result>
+			
+			<result name="userUploadByIdSuccess" type="redirectAction">
+				<param name="actionName">user_updateUserById</param>
 				<param name="picurl">${picurl}</param>
 				<param name="token">${token}</param>
 				<param name="userid">${userid}</param>

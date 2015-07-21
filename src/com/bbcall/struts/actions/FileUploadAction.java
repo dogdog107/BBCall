@@ -83,6 +83,15 @@ public class FileUploadAction extends ActionSupport {
 		return "json";
 	}
  
+	public String userUploadById() throws Exception{
+		String result = userUpload();
+		if (result.equals("userUploadSuccess")) {
+			return "userUploadByIdSuccess";
+		} else {
+			return "userUploadByIdFailed";
+		}
+	}
+	
 	public String orderUpload() throws Exception {
 		System.out.println("Here is FileUploadAction.orderUpload()");
 		savePath = "OrderPhoto";

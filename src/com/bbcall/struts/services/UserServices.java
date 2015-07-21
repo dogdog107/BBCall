@@ -250,28 +250,28 @@ public class UserServices {
 			}
 
 			// ***** 添加语言 *****
-			// 清除开头为;的符号
-			while(language.startsWith(";")){
-				language = language.substring(1, language.length());
-			}
-			// 清除结尾为;的符号
-			while(language.endsWith(";")){
-				language = language.substring(0, language.length() - 1);
-			}
 			if (!Tools.isEmpty(language)) {
+				// 清除开头为;的符号
+				while(language.startsWith(";")){
+					language = language.substring(1, language.length());
+				}
+				// 清除结尾为;的符号
+				while(language.endsWith(";")){
+					language = language.substring(0, language.length() - 1);
+				}
 				user.setUser_language(language);
 			}
 			
 			// ***** 添加技能 *****
-			// 清除开头为;的符号
-			while(skill.startsWith(";")){
-				skill = skill.substring(1, skill.length());
-			}
-			// 清除结尾为;的符号
-			while(skill.endsWith(";")){
-				skill = skill.substring(0, skill.length() - 1);
-			}
 			if (!Tools.isEmpty(skill)) {
+				// 清除开头为;的符号
+				while(skill.startsWith(";")){
+					skill = skill.substring(1, skill.length());
+				}
+				// 清除结尾为;的符号
+				while(skill.endsWith(";")){
+					skill = skill.substring(0, skill.length() - 1);
+				}
 				user.setUser_skill(skill);
 			}
 
@@ -636,15 +636,15 @@ public class UserServices {
 			}
 		}
 		// ***** 检测language *****
-		// 清除开头为;的符号
-		while(language.startsWith(";")){
-			language = language.substring(1, language.length());
-		}
-		// 清除结尾为;的符号
-		while(language.endsWith(";")){
-			language = language.substring(0, language.length() - 1);
-		}
 		if (!Tools.isEmpty(language) && !language.equals(user.getUser_language())) {
+			// 清除开头为;的符号
+			while(language.startsWith(";")){
+				language = language.substring(1, language.length());
+			}
+			// 清除结尾为;的符号
+			while(language.endsWith(";")){
+				language = language.substring(0, language.length() - 1);
+			}
 			user.setUser_language(language);
 			changecount++;
 			System.out.println("language changed!");
@@ -670,6 +670,10 @@ public class UserServices {
 			changecount++;
 			System.out.println("status changed!");
 		}
+		if (updatemode == 1 && status != null
+				&& !user.getUser_status().equals(status)) {
+			return ResultCode.ACCESS_REJECT;
+		}
 		// ***** 检测grade *****
 		if (updatemode == 2 && grade != null
 				&& !user.getUser_grade().equals(grade)) {// admin模式时，判断grade是否需要修改
@@ -678,14 +682,15 @@ public class UserServices {
 			System.out.println("grade changed!");
 		}
 		// ***** 检测skill *****
-		
-		while(skill.endsWith(";")){
-			skill = skill.substring(0, skill.length() - 1);
-		}
-		if (!Tools.isEmpty(skill)) {
-			user.setUser_skill(skill);
-		}
 		if (!Tools.isEmpty(skill) && !skill.equals(user.getUser_skill())) {
+			// 清除开头为;的符号
+			while(skill.startsWith(";")){
+				skill = skill.substring(1, skill.length());
+			}
+			// 清除结尾为;的符号
+			while(skill.endsWith(";")){
+				skill = skill.substring(0, skill.length() - 1);
+			}
 			user.setUser_skill(skill);
 			changecount++;
 			System.out.println("skill changed!");

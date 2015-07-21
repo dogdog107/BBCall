@@ -13,7 +13,7 @@ function checkAdvertList(pagenum){
 	$
 	.ajax({
 		type : "post",
-		url : "${pageContext.request.contextPath}/advert_showAdvertSummaryListJson.action",
+		url : "${pageContext.request.contextPath}/advert_showAllAdvertSummaryListJson.action",
 		data : {
 			"token" : token,
 			"pagenum" : pagenum
@@ -39,20 +39,28 @@ function checkAdvertList(pagenum){
 				var advertList = data.advertList;
 				$.each(advertList, function(i, n) {
 					var row = $("#template").clone();
+					var smalllogo = '';
 					row.find("#advertid").text(n.advertisement_id);
 					if (n.advertisement_smallphoto_url == "") {
 						row.find("#smallpicurl").html("<img src='' height='60' width='60'>");
 					} else {
 						row.find("#smallpicurl").html("<img src=" + n.advertisement_smallphoto_url + " height='60' width='60'>");
 					}
-					if(n.advertisement_istop == 1) {
-						row.find("#adverttitle").html("<img id='topimg_" + n.advertisement_id + "' align='center' src='" + BASE_URL + "/page/img/top_1.gif'><span>" + n.advertisement_title + "</span>");
-						row.find("#istopOpr").val(n.advertisement_istop);
-					} else {
-						row.find("#adverttitle").text(n.advertisement_title);
+					if(n.advertisement_status == 0) {
+						smalllogo = smalllogo + "<img id='statusimg_" + n.advertisement_id + "' align='center' src='" + BASE_URL + "/page/img/stop_1.png'>"
+						row.find("#statusOpr").val(n.advertisement_status);
 					}
-					row.find("#adverttitle").attr("id", "adverttitle_" + n.advertisement_id);
+					row.find("#statusOpr").val(n.advertisement_status);
+					row.find("#statusOpr").attr("id", "statusOpr_" + n.advertisement_id);
+					if(n.advertisement_istop == 1) {
+						smalllogo = smalllogo + "<img id='topimg_" + n.advertisement_id + "' align='center' src='" + BASE_URL + "/page/img/top_3.png'>"
+//						row.find("#adverttitle").html("<img id='topimg_" + n.advertisement_id + "' align='center' src='" + BASE_URL + "/page/img/top_1.gif'><span>" + n.advertisement_title + "</span>");
+						row.find("#istopOpr").val(n.advertisement_istop);
+					}
+					row.find("#istopOpr").val(n.advertisement_istop);
 					row.find("#istopOpr").attr("id", "istopOpr_" + n.advertisement_id);
+					row.find("#adverttitle").html(smalllogo + "<span>" + n.advertisement_title + "</span>");
+					row.find("#adverttitle").attr("id", "adverttitle_" + n.advertisement_id);
 					row.find("#advertsummary").text(n.advertisement_summary);
 					row.find("#adverttype").attr("id", "adverttype_" + n.advertisement_id);
 					checkAdvertType(n.advertisement_type, "adverttype_" + n.advertisement_id)
@@ -102,7 +110,10 @@ function updateIsTop(idname, value) {
 						$("#" + topimgid).remove();
 						break;
 					case "1":
-						$("#" + titleid).append("<img id='topimg_" + advertid + "' align='center' src='" + BASE_URL + "/page/img/top_1.gif'>");
+						var tempTitle = $("#" + titleid).html();
+						tempTitle = "<img id='topimg_" + advertid + "' align='center' src='" + BASE_URL + "/page/img/top_3.png'>" + tempTitle;
+						$("#" + titleid).html(tempTitle);
+//						$("#" + titleid).append("<img id='topimg_" + advertid + "' align='center' src='" + BASE_URL + "/page/img/top_3.png'>");
 						break;
 					}
 					$("#" + titleid).attr("style", "border:solid #55AA00 2px;");
@@ -132,6 +143,65 @@ function updateIsTop(idname, value) {
 			break;
 		case "1":
 			$("#" + istopOprid).val(0);
+			break;
+		}
+	}
+}
+
+function updateStatus(idname, value) {
+	var advertid = idname.split("_")[1];
+	if (confirm('確定要修改廣告(ID:'+ advertid +')的狀態嗎？\n Confirm to change the status for AD (ID:'+ advertid +')?')) {
+		$.ajax({
+			type : "post",
+			url : "${pageContext.request.contextPath}/advert_updateAdvertStatusJson",
+			data : {
+				"token" : token,
+				"advertisement_id" : advertid,
+				"advertisement_status" : value
+			},
+			success : function(data) {
+				if (data.result) {
+					var titleid = "adverttitle_" + advertid;
+					$("#" + titleid).hide();
+					switch (value) {
+					case "0":
+						var tempTitle = $("#" + titleid).html();
+						tempTitle = "<img id='statusimg_" + advertid + "' align='center' src='" + BASE_URL + "/page/img/stop_1.png'>" + tempTitle;
+						$("#" + titleid).html(tempTitle);
+//						$("#" + titleid).append("<img id='topimg_" + advertid + "' align='center' src='" + BASE_URL + "/page/img/top_1.gif'>");
+						break;
+					case "1":
+						var statusimgid = "statusimg_" + advertid;
+						$("#" + statusimgid).remove();
+						break;
+					}
+					$("#" + titleid).attr("style", "border:solid #55AA00 2px;");
+					$("#" + titleid).show(300);
+					$("#message").html("<font color=green> (ID:"+ advertid +") Status Update Success ! </font>");
+					$("#div_message").show(300).delay(5000).hide(300);
+				} else {
+					$("#message").html("<font color=red> (ID:"+ advertid +") Status Update Failed ! " + data.errmsg + "</font>");
+					$("#div_message").show(300).delay(5000).hide(300);
+					var statusOprid = "statusOpr_" + advertid;
+					switch (value) {
+					case "0":
+						$("#" + statusOprid).val(1);
+						break;
+					case "1":
+						$("#" + statusOprid).val(0);
+						break;
+					}
+				}
+			}
+		});
+	} else {
+		var statusOprid = "statusOpr_" + advertid;
+		switch (value) {
+		case "0":
+			$("#" + statusOprid).val(1);
+			break;
+		case "1":
+			$("#" + statusOprid).val(0);
 			break;
 		}
 	}
