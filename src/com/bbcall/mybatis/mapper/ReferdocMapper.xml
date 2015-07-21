@@ -52,7 +52,14 @@
 		referdoc_parentno = 0 and referdoc_level = 1
 	</select>
 	<select id="getReferdoclist" resultMap="ReferdocResultMap">
-		select * from REFERDOC order by referdoc_id
+		select * from REFERDOC 
+		<where>
+		<if	test="referdoc_parentno != null and referdoc_parentno != ''">
+
+		 referdoc_parentno=#{referdoc_parentno} or referdoc_id=#{referdoc_parentno} 
+		</if>
+		</where>
+		order by referdoc_id
 	</select>
 	<update id="updateReferdoc" parameterType="com.bbcall.mybatis.table.Referdoc">
 		update REFERDOC set

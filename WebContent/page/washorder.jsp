@@ -9,12 +9,15 @@
 <link href="${pageContext.request.contextPath }/page/css/mine.css" type="text/css" rel="stylesheet" />
 <script type="text/javascript"
 	src="${pageContext.request.contextPath }/jquery/jquery-1.8.3.js"></script>
-<script type="text/javascript"
-	src="${pageContext.request.contextPath }/jquery/washorderPage.js?token=${sessionScope.user.user_token}"></script>
 <script type="text/javascript">
 	var token = "${sessionScope.user.user_token}";
 	var link = "${pageContext.request.contextPath}";
+
 </script>
+<script type="text/javascript"
+	src="${pageContext.request.contextPath }/jquery/washorderPage.js?token=${sessionScope.user.user_token}"></script>
+<script type="text/javascript"
+		src="${pageContext.request.contextPath }/jquery/paging.js"></script>
 <%
 	String path = request.getContextPath();
 %>
@@ -40,9 +43,7 @@
 
 	<div class="div_search">
 		<span>
-			<form action="orderlist_getwashorderlistasc"
-				id="orderlist_getwashorderlistasc" method="post">
-				時間段： 
+			<span>時間段： </span>
 				<select name="order_section" id="order_section" style="width: 100px;">
 					<option selected="selected" value="">請選擇</option>
 					<option value="1">10點-12點</option>
@@ -52,7 +53,8 @@
 					<option value="5">18點-22點</option>
 				</select>
 				&nbsp;
-				訂單狀態： 
+				<span>訂單狀態：</span>
+				 
 				<select name="order_status" id="order_status" style="width: 100px;">
 					<option selected="selected" value="">請選擇</option>
 					<option value="1">新建訂單</option>
@@ -64,9 +66,9 @@
 					<option value="6">正在配送</option>
 				</select>
 				&nbsp;
+				<span>師傅名：</span>
 				<input type="text" name="order_master_name" id="order_master_name"></input>
-				<input value="查詢" type="submit" />
-			</form>
+				<input value="查詢" type="submit" onclick="searchwash()"/>
 
 		</span>
 	</div>
@@ -85,39 +87,37 @@
 					<td>訂單狀態</td>
 					<td colspan="2" align="center">操作</td>
 				</tr>
-				<s:iterator value="dataMap.orderlist" id="order">
-					<tr id="template">
-						<td id="order_id"><s:property value='#order.order_id' /></td>
-						<td id="order_create_time"><s:property
-								value='#order.order_create_time' /></td>
-						<td id="order_book_time"><s:property
-								value='#order.order_book_time' /></td>
-						<td id="order_book_location"><s:property
-								value='#order.order_book_location' /></td>
-						<td id="order_master_name"><s:property
-								value='#order.order_master_name' /></td>
-						<td id="order_status"><s:if
-								test="%{#order.order_status == 1}">新建訂單</s:if> <s:if
-								test="%{#order.order_status == 2}">待評價訂單</s:if> <s:if
-								test="%{#order.order_status == 3}">已評價訂單</s:if> <s:if
-								test="%{#order.order_status == 4}">收到貨物</s:if> <s:if
-								test="%{#order.order_status == 5}">正在清洗</s:if> <s:if
-								test="%{#order.order_status == 6}">正在配送</s:if>
-								<s:if
-								test="%{#order.order_status == 7}">已出價訂單</s:if></td>
-						<td id="order_type_code" style="display: none"><s:property
-								value='#order.order_type_code' /></td>
-						<td id="order_href"><a
-							href="${pageContext.request.contextPath}/page/orderlist_select.action?order_id=<s:property value='#order.order_id'/>">查看</a>
+					<tr id="template" style="display:none">
+						<td id="orderid"></td>
+						<td id="ordercreatetime"></td>
+						<td id="orderbooktime"></td>
+						<td id="orderbooklocation"></td>
+						<td id="ordermastername"></td>
+						<td id="orderstatus"></td>
+						<td>
+							<input id="orderview" type="submit" value="查看" onclick=""/>
 						</td>
 					</tr>
-				</s:iterator>
 
 			</tbody>
-			<tr>
-				<td colspan="20" style="text-align: center;">[1]2</td>
-			</tr>
 		</table>
+		<div class="wrap">
+				<div id="page_bar" class="fenye">
+					<ul>
+						<li id="first">首頁</li>
+						<li id="top" onclick="topclick()">上一頁</li>
+						<li class="xifenye" id="xifenye"><a id="xiye"></a>/<a
+							id="mo"></a>
+							<div class="xab" id="xab" style="display: none">
+								<ul id="uljia">
+
+								</ul>
+							</div></li>
+						<li id="down" onclick="downclick()">下一頁</li>
+						<li id="last">尾頁</li>
+					</ul>
+				</div>
+			</div>
 	</div>
 </body>
 </html>
