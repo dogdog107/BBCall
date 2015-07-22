@@ -60,7 +60,7 @@
 						<td align=middle width=30><img height=9
 							src="./img/menu_icon.gif" width=9></td>
 						<td><a class=menuchild
-							href="${pageContext.request.contextPath }/order.jsp"
+							href="${pageContext.request.contextPath }/page/order.jsp"
 							target=main>訂單浏览</a></td>
 					</tr>
 					<tr height=4>

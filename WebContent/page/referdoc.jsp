@@ -10,14 +10,8 @@
 <script type="text/javascript">
 	var token = "${sessionScope.user.user_token}";
 	var link = "${pageContext.request.contextPath}";
-	var parentno = "${dataMap.referdoclist[0].referdoc_id}";
+
 </script>
-<script type="text/javascript"
-	src="${pageContext.request.contextPath }/jquery/jquery-1.8.3.js"></script>
-<script type="text/javascript"
-	src="${pageContext.request.contextPath }/jquery/referdocPage.js?token=${sessionScope.user.user_token}"></script>
-<script type="text/javascript"
-		src="${pageContext.request.contextPath }/jquery/paging.js"></script>
 
 <%
   String path=request.getContextPath();
@@ -41,14 +35,11 @@
 	<div></div>
 		<div class="div_merge">
 			<span>
-				<form action="referdoc_getchildlist"
-					id="referdoc_getchildlist" method="post">
 				一級項 ：
-				
-				<select name="referdoc_parentno" id="referdoc_parentno" onchange="referdoc_parentno_change()">
+				<select name="referdoc_parentno" id="referdoc_parentno">
 					<option value="0">請選擇</option>
 				</select>
-				</form>
+				<input value="查詢" type="submit" onclick="referdoc_parentno_change()"/>
 			</span>
 			
 		</div>
@@ -68,7 +59,7 @@
                 <tbody id="datas">
                 	<tr style="font-weight: bold;">
                 		
-                        <td>序號</td>
+                        <td>级别</td>
                         <td>訂單類型</td>
                         <td>訂單參考價格</td>
                         <td>固定价格</td>
@@ -77,7 +68,8 @@
                     
 					<tr id="template" style="display:none">
 						
-						<td><input type="text" id="referid" readonly="true"></input></td>
+						<td id="referlevel"></td>
+						<td style="display:none"><input type="text" id="referid"></input></td>
 						<td><input type="text" id="refertype" readonly="true"></input></td>
 						<td><input type="text" id="referprice" ></input></td>
 						<td>
@@ -113,5 +105,11 @@
 				</div>
 			</div>
         </div>
+        <script type="text/javascript"
+	src="${pageContext.request.contextPath }/jquery/jquery-1.8.3.js"></script>
+<script type="text/javascript"
+	src="${pageContext.request.contextPath }/jquery/referdocPage.js?token=${sessionScope.user.user_token}"></script>
+<script type="text/javascript"
+		src="${pageContext.request.contextPath }/jquery/paging.js"></script>
 </body>
 </html>

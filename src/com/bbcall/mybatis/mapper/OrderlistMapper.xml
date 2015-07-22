@@ -223,6 +223,16 @@
 		where
 		(order_status=1 or order_status=7) order by order_book_time
 	</select>
+	<select id="getUnOrders2" resultMap="OrderResultMap">
+		select * from ORDERLIST
+		where
+		order_status=1 order by order_book_time
+	</select>
+	<select id="getAucOrders" resultMap="OrderResultMap">
+		select * from ORDERLIST
+		where
+		order_status=7 order by order_book_time
+	</select>
 	<select id="getProOrders" resultMap="OrderResultMap">
 		select * from ORDERLIST
 		where

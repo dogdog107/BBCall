@@ -240,6 +240,30 @@ public class ReferdocAction extends ActionSupport {
 		getchildlist();
 		return "json";
 	}
+	
+	public String getchildlist2() throws Exception {
+		dataMap = new HashMap<String, Object>(); // 新建dataMap来储存JSON字符串
+		dataMap.clear(); // dataMap中的数据将会被Struts2转换成JSON字符串，所以这里要先清空其中的数据
+
+		int result = referdocServices.getChildReferdoclist2(referdoc_parentno,pagenum);
+
+		if (result == ResultCode.SUCCESS) {
+			List<Referdoc> referdoclist = referdocServices.referdocinfos();
+			dataMap.put("referdoclist", referdoclist);
+			dataMap.putAll(pageinfo2map.pageInfoMap(referdoclist));// 把分页信息放进dataMap
+			dataMap.putAll(Tools.JsonHeadMap(result, true));
+			// dataMap.put("resultcode", result);
+			// dataMap.put("errmsg", ResultCode.getErrmsg(result));
+			// dataMap.put("getchildlistResult", true);
+		}
+
+		return "getsuccess";
+	}
+
+	public String getchildlist2Json() throws Exception {
+		getchildlist2();
+		return "json";
+	}
 
 	public String chkreferdoctype() throws Exception {
 		dataMap = new HashMap<String, Object>(); // 新建dataMap来储存JSON字符串

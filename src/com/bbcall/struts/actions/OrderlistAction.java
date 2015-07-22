@@ -307,10 +307,39 @@ public class OrderlistAction extends ActionSupport {
 		dataMap = new HashMap<String, Object>(); // 新建dataMap来储存JSON字符串
 		dataMap.clear(); // dataMap中的数据将会被Struts2转换成JSON字符串，所以这里要先清空其中的数据
 
-		int order_user_id = Integer.parseInt(user_id);
+		int status = 1;
+		if (order_status != null && !order_status.equals("")) {
+			status = Integer.parseInt(order_status);
+		}
 
-		int result = orderlistServices.getOrderlist(order_user_id,
-				order_status, pagenum);
+		int result = 1;
+
+		switch (status) {
+		case 1:
+			result = orderlistServices.getOrderlist1(pagenum);
+			break;
+		case 2:
+			result = orderlistServices.getOrderlist2(pagenum);
+			break;
+		case 3:
+			result = orderlistServices.getOrderlist3(pagenum);
+			break;
+		case 4:
+			result = orderlistServices.getOrderlist4(pagenum);
+			break;
+		case 5:
+			result = orderlistServices.getOrderlist5(pagenum);
+			break;
+		case 6:
+			result = orderlistServices.getOrderlist6(pagenum);
+			break;
+		case 7:
+			result = orderlistServices.getOrderlist7(pagenum);
+			break;
+		default:
+			result = orderlistServices.getOrderlist1(pagenum);
+			break;
+		}
 		// List<Referdoc> referdoclist = new ArrayList<Referdoc>();
 
 		if (result == ResultCode.SUCCESS) {

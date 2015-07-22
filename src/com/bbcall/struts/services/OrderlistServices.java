@@ -1031,7 +1031,7 @@ public class OrderlistServices {
 		return ResultCode.SUCCESS;
 	}
 
-	public int getOrderlist(int user_id, String order_status, Integer pagenum) {
+	public int getOrderlist1(Integer pagenum) {
 
 		// 当传进来的pagenum为空 或者 pagenum == 0 时，显示第一页
 		if (pagenum == null || pagenum == 0)
@@ -1041,31 +1041,97 @@ public class OrderlistServices {
 		// 获取第1页，10条内容，当PageSize=0时会查询出全部的结果
 		PageHelper.startPage(pagenum, 10);
 
-		switch (order_status) {
-		case "2":
+			orderlistinfos = orderlistMapper.getUnOrders2();
+
+		return ResultCode.SUCCESS;
+	}
+
+	public int getOrderlist2(Integer pagenum) {
+
+		// 当传进来的pagenum为空 或者 pagenum == 0 时，显示第一页
+		if (pagenum == null || pagenum == 0)
+			pagenum = 1;
+
+		// PageHelper.startPage(PageNum, PageSize)
+		// 获取第1页，10条内容，当PageSize=0时会查询出全部的结果
+		PageHelper.startPage(pagenum, 10);
+
 			orderlistinfos = orderlistMapper.getProOrders();
-			break;
 
-		case "3":
+		return ResultCode.SUCCESS;
+	}
+
+	public int getOrderlist3(Integer pagenum) {
+
+		// 当传进来的pagenum为空 或者 pagenum == 0 时，显示第一页
+		if (pagenum == null || pagenum == 0)
+			pagenum = 1;
+
+		// PageHelper.startPage(PageNum, PageSize)
+		// 获取第1页，10条内容，当PageSize=0时会查询出全部的结果
+		PageHelper.startPage(pagenum, 10);
+
 			orderlistinfos = orderlistMapper.getComOrders();
-			break;
 
-		case "4":
+		return ResultCode.SUCCESS;
+	}
+
+	public int getOrderlist4(Integer pagenum) {
+
+		// 当传进来的pagenum为空 或者 pagenum == 0 时，显示第一页
+		if (pagenum == null || pagenum == 0)
+			pagenum = 1;
+
+		// PageHelper.startPage(PageNum, PageSize)
+		// 获取第1页，10条内容，当PageSize=0时会查询出全部的结果
+		PageHelper.startPage(pagenum, 10);
+
 			orderlistinfos = orderlistMapper.getRecOrders();
-			break;
 
-		case "5":
+		return ResultCode.SUCCESS;
+	}
+
+	public int getOrderlist5(Integer pagenum) {
+
+		// 当传进来的pagenum为空 或者 pagenum == 0 时，显示第一页
+		if (pagenum == null || pagenum == 0)
+			pagenum = 1;
+
+		// PageHelper.startPage(PageNum, PageSize)
+		// 获取第1页，10条内容，当PageSize=0时会查询出全部的结果
+		PageHelper.startPage(pagenum, 10);
+
 			orderlistinfos = orderlistMapper.getWasOrders();
-			break;
 
-		case "6":
+		return ResultCode.SUCCESS;
+	}
+
+	public int getOrderlist6(Integer pagenum) {
+
+		// 当传进来的pagenum为空 或者 pagenum == 0 时，显示第一页
+		if (pagenum == null || pagenum == 0)
+			pagenum = 1;
+
+		// PageHelper.startPage(PageNum, PageSize)
+		// 获取第1页，10条内容，当PageSize=0时会查询出全部的结果
+		PageHelper.startPage(pagenum, 10);
+
 			orderlistinfos = orderlistMapper.getDelOrders();
-			break;
 
-		default:
-			orderlistinfos = orderlistMapper.getUnOrders();
-			break;
-		}
+		return ResultCode.SUCCESS;
+	}
+
+	public int getOrderlist7(Integer pagenum) {
+
+		// 当传进来的pagenum为空 或者 pagenum == 0 时，显示第一页
+		if (pagenum == null || pagenum == 0)
+			pagenum = 1;
+
+		// PageHelper.startPage(PageNum, PageSize)
+		// 获取第1页，10条内容，当PageSize=0时会查询出全部的结果
+		PageHelper.startPage(pagenum, 10);
+
+			orderlistinfos = orderlistMapper.getAucOrders();
 
 		return ResultCode.SUCCESS;
 	}

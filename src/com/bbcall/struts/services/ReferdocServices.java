@@ -348,6 +348,22 @@ public class ReferdocServices {
 
 		return ResultCode.SUCCESS;
 	}
+	
+	public int getChildReferdoclist2(String referdoc_parentno, Integer pagenum) {
+
+		// 当传进来的pagenum为空 或者 pagenum == 0 时，显示第一页
+		if (pagenum == null || pagenum == 0)
+			pagenum = 1;
+
+		// PageHelper.startPage(PageNum, PageSize)
+		// 获取第1页，10条内容，当PageSize=0时会查询出全部的结果
+		PageHelper.startPage(pagenum, 10);
+
+		referdocinfos = referdocMapper
+				.getReferdoclist(referdoc_parentno);
+
+		return ResultCode.SUCCESS;
+	}
 
 	public int chkReferType(String referdoc_type, int referdoc_parentno) {
 
