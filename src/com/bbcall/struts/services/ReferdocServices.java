@@ -216,6 +216,29 @@ public class ReferdocServices {
 
 		return ResultCode.SUCCESS;
 	}
+	
+	public String getReferlist(String referdoclist) {
+
+		String referskill = "";
+		
+		if (referdoclist != null || !referdoclist.equals("")) {
+			
+			String[] referdocs = referdoclist.split(";");
+			
+			int referdoc_code_num = 0;
+
+			for (int i = 0; i < referdocs.length; i++) {
+
+				referdoc_code_num = Integer.parseInt(referdocs[i]);
+
+				referskill = referskill
+						+ referdocMapper.getReferdoc(referdoc_code_num)
+								.getReferdoc_type() + ";";
+			}
+		} 
+		
+		return referskill;
+	}
 
 	// ################################################################################
 	// ## Get Referdoc services
