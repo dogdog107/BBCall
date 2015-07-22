@@ -45,6 +45,7 @@ public class UserAction extends ActionSupport implements SessionAware{
 	private String email;
 	private String language;
 	private String skill;
+	private String skillname;
 	private String token;
 	private String description;
 	private Integer addresscode;
@@ -426,6 +427,7 @@ public class UserAction extends ActionSupport implements SessionAware{
 			email = tempUser.getUser_email();
 			language = tempUser.getUser_language();
 			skill = tempUser.getUser_skill();
+			skillname = tempUser.getUser_skill_name();
 			token = tempUser.getUser_token();
 			description = tempUser.getUser_description();
 			addresscode = tempUser.getUser_address_code();
@@ -804,5 +806,11 @@ public class UserAction extends ActionSupport implements SessionAware{
 
 	public void setUpdateResult(String updateResult) {
 		this.updateResult = updateResult;
+	}
+	public String getSkillname() {
+		return skillname;
+	}
+	public void setSkillname(String skillname) {
+		this.skillname = skillname;
 	}
 }
