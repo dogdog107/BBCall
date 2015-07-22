@@ -332,30 +332,30 @@
 //实例化UEditor编辑器
 //建议使用工厂方法getEditor创建和引用编辑器实例，如果在某个闭包下引用该编辑器，直接调用UE.getEditor('editor')就能拿到相关的实例
 var ue = UE.getEditor('editor');
-
-//拿一级项技能表
-function getParentSkillList(idname, parentCode) {
-	$.ajax({
-		type : "post",
-		url : "${pageContext.request.contextPath}/referdoc_getparentlistJson.action",
-		success : function(data) {
-			if (data.result) {
-				for ( var j = 0; j < data.parentreferdoclist.length; j++) {
-					document.getElementById(idname).options
-							.add(new Option(
-									data.parentreferdoclist[j].referdoc_type,
-									data.parentreferdoclist[j].referdoc_id));
-					if(parentCode != '' && parentCode != undefined && parentCode == data.parentreferdoclist[j].referdoc_id){
-						$("#" + idname).val(data.parentreferdoclist[j].referdoc_id);
-					}
-				}
-			} else {
-				alert(data.errmsg);
-			}
-		}
-	});
-}
-
+//
+////拿一级项技能表
+//function getParentSkillList(idname, parentCode) {
+//	$.ajax({
+//		type : "post",
+//		url : "${pageContext.request.contextPath}/referdoc_getparentlistJson.action",
+//		success : function(data) {
+//			if (data.result) {
+//				for ( var j = 0; j < data.parentreferdoclist.length; j++) {
+//					document.getElementById(idname).options
+//							.add(new Option(
+//									data.parentreferdoclist[j].referdoc_type,
+//									data.parentreferdoclist[j].referdoc_id));
+//					if(parentCode != '' && parentCode != undefined && parentCode == data.parentreferdoclist[j].referdoc_id){
+//						$("#" + idname).val(data.parentreferdoclist[j].referdoc_id);
+//					}
+//				}
+//			} else {
+//				alert(data.errmsg);
+//			}
+//		}
+//	});
+//}
+//
 //拿技能表
 function getChildSkillList(parentcode, childcode) {
 	$.ajax({
@@ -383,6 +383,33 @@ function getChildSkillList(parentcode, childcode) {
 	});
 }
 
+//拿一级项技能表
+function getParentSkillList(idname, skillvalue, callback) {
+	$.ajax({
+		type : "post",
+		url : "${pageContext.request.contextPath}/referdoc_getparentlistJson.action",
+		success : function(skilldata) {
+			if (skilldata.result) {
+				for ( var j = 0; j < skilldata.parentreferdoclist.length; j++) {
+					document.getElementById(idname).options
+							.add(new Option(
+									skilldata.parentreferdoclist[j].referdoc_type,
+									skilldata.parentreferdoclist[j].referdoc_id));
+				}
+				if(skillvalue != '' && skillvalue != undefined){
+					$("#" + idname).val(skillvalue);
+				}
+			} else {
+				alert(skilldata.errmsg);
+			}
+			if (typeof (callback) == "function") {
+				callback();
+			}
+		}
+	});
+}
+
+
 function onload(){
 	
 	if (updateResult != '') {
@@ -398,8 +425,9 @@ function onload(){
 	
 	if (advertType != '') {
 		var parentCode = parseInt(advertType / 1000) * 1000;
-		getParentSkillList("skillParentCode", parentCode);
-		getChildSkillList(parentCode, advertType);
+		getParentSkillList("skillParentCode", parentCode, function(){
+			getChildSkillList(parentCode, advertType);
+		});
 	}
 }
 

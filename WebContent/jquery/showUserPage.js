@@ -2,6 +2,9 @@
 function onload() {
 	$('#statusOpr').val(status);
 	$('#statusOpr').attr("id", "statusOpr_" + userid);
+	if (userskill != ''){
+		showSkill(userskill,"userSkillID");
+	}
 	
 	if (updateResult != '') {
 		if(updateResult == 'true'){
@@ -70,4 +73,40 @@ function updateStatus(idname, value) {
 		$('#' + idname).val(status);
 	}
 
+}
+
+function checkUserSkill(skillCode, idname, callback){
+	$.ajax({
+		type : "post",
+		url : "${pageContext.request.contextPath}/referdoc_selectJson.action",
+		data : {
+			"token" : token,
+			"referdoc_id" : skillCode
+		},
+		success : function(data) {
+			if (data.result) {
+				$("#" + idname).append(data.referdoc.referdoc_type + " ");
+			}
+			if (typeof (callback) == "function") {
+				callback();
+			}
+		}
+	});
+}
+
+function showSkill(skillValue, idname) {
+	var tempskillvalue = skillValue.split(";");
+	if (tempskillvalue.length == 0) {
+		return;
+	} else {
+		var doskillvalue = tempskillvalue[(tempskillvalue.length - 1)];
+		checkUserSkill(doskillvalue, idname, function(){
+			if (tempskillvalue.length == 1) {
+				return;
+			} else {
+				var tempdoskillvalue = ";" + doskillvalue;
+				showSkill(skillValue.split(tempdoskillvalue)[0], idname);
+			}
+		});
+	}
 }

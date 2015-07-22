@@ -5,6 +5,7 @@ import java.util.Date;
 import java.util.List;
 import java.sql.Timestamp;
 
+import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -19,6 +20,7 @@ import com.github.pagehelper.PageHelper;
 @Service("userServices")
 public class UserServices {
 
+	private static Logger logger = Logger.getLogger(UserServices.class);  
 	// @Autowired
 	// private UserSkillMapper userSkillMapper;
 	@Autowired
@@ -71,9 +73,11 @@ public class UserServices {
 	// ##
 	// ################################################################################
 
-	public int register(String token, String account, String password, Integer usertype,
-			String name, String picurl, BigInteger mobile, Integer gender,
-			String email, String language, String skill, String description, String accessgroup, Integer addresscode, String address, Double grade) {
+	public int register(String token, String account, String password,
+			Integer usertype, String name, String picurl, BigInteger mobile,
+			Integer gender, String email, String language, String skill,
+			String description, String accessgroup, Integer addresscode,
+			String address, Double grade) {
 		System.out.println("Here is UserServices.register method...");
 
 		int registermode = 0; // 记录register的模式: 1=user,2=admin
@@ -447,8 +451,10 @@ public class UserServices {
 		if (Tools.isEmpty(token) && userid == null)// 检测必要参数是否为空、null
 			return ResultCode.REQUIREINFO_NOTENOUGH;
 
-		System.out.println("token: " + token);
-		System.out.println("userid: " + userid);
+		System.out.println("Operation token: " + token);
+		System.out.println("Updating userid: " + userid);
+		logger.info("userOpr:[UserUpdate][Updated ID: " + userid + "]Operation token: " + token);
+		logger.info("userOpr:[UserUpdate][Updated ID: " + userid + "]Updating userid: " + userid);
 		
 		if (!Tools.isEmpty(token)) {
 			int checkResult;
@@ -484,6 +490,7 @@ public class UserServices {
 		}
 		
 		System.out.println("UpdateMode: " + updatemode);
+		logger.info("userOpr:[UserUpdate][Updated ID: " + userid + "]UpdateMode: " + updatemode);
 		
 		// ***** 检测 addresscode & address *****
 		if (addresscode != null && addresscode != 0 && (addresscode + "").length() != 6)// 判断地址码是否六位数
@@ -512,6 +519,7 @@ public class UserServices {
 				user.setUser_address(address);// 放入新地址名
 				changecount++;
 				System.out.println("address changed!");
+				logger.info("userOpr:[UserUpdate][Updated ID: " + userid + "]address changed!");
 			} else
 				return ResultCode.ADDRESS_NOTMATCH;
 		}
@@ -528,6 +536,7 @@ public class UserServices {
 				user.setUser_address_code(addresscode);// 放入新地址码
 				changecount++;
 				System.out.println("address&addresscode changed!");
+				logger.info("userOpr:[UserUpdate][Updated ID: " + userid + "]address&addresscode changed!");
 			} else
 				return ResultCode.ADDRESS_NOTMATCH;
 		}
@@ -540,6 +549,7 @@ public class UserServices {
 					user.setUser_account(account);
 					changecount++;
 					System.out.println("account changed!");
+					logger.info("userOpr:[UserUpdate][Updated ID: " + userid + "]account changed!");
 				} else {
 					return checkAccountResult;
 				}
@@ -553,6 +563,7 @@ public class UserServices {
 				user.setUser_password(encrypt.getDigestOfString(password.getBytes()));
 				changecount++;
 				System.out.println("password changed!");
+				logger.info("userOpr:[UserUpdate][Updated ID: " + userid + "]password changed!");
 			} else {
 				return ResultCode.USERPASSWORD_ERROR;
 			}
@@ -562,6 +573,7 @@ public class UserServices {
 			user.setUser_name(name);
 			changecount++;
 			System.out.println("name changed!");
+			logger.info("userOpr:[UserUpdate][Updated ID: " + userid + "]name changed!");
 		}
 		// ***** 检测picurl *****
 		if (Tools.isEmpty(picurl) && (Tools.isEmpty(user.getUser_pic_url()))) {
@@ -589,9 +601,11 @@ public class UserServices {
 			user.setUser_pic_url(picurl);
 			changecount++;
 			System.out.println("picurl changed!");
+			logger.info("userOpr:[UserUpdate][Updated ID: " + userid + "]picurl changed!");
 			if (updatemode == 1) {// 用户模式时，user状态转为pending 待审核
 				user.setUser_status(3);
-				System.out.println("status changed as user mode!(usertype)");
+				System.out.println("(picurl)status changed due to UpdateMode is 1 (user)!");
+				logger.info("userOpr:[UserUpdate][Updated ID: " + userid + "](picurl)status changed due to UpdateMode is 1 (user)!");
 			}
 		}
 		// ***** 检测mobile *****
@@ -603,6 +617,7 @@ public class UserServices {
 					user.setUser_mobile(mobile);
 					changecount++;
 					System.out.println("mobile changed!");
+					logger.info("userOpr:[UserUpdate][Updated ID: " + userid + "]mobile changed!");
 				} else {
 					return checkMobileResult;
 				}
@@ -616,6 +631,7 @@ public class UserServices {
 				user.setUser_gender(gender);
 				changecount++;
 				System.out.println("gender changed!");
+				logger.info("userOpr:[UserUpdate][Updated ID: " + userid + "]gender changed!");
 			} else {
 				return ResultCode.USERGENDER_ERROR;
 			}
@@ -628,6 +644,7 @@ public class UserServices {
 					user.setUser_email(email);
 					changecount++;
 					System.out.println("email changed!");
+					logger.info("userOpr:[UserUpdate][Updated ID: " + userid + "]email changed!");
 				} else {
 					return checkEmailResult;
 				}
@@ -648,6 +665,7 @@ public class UserServices {
 			user.setUser_language(language);
 			changecount++;
 			System.out.println("language changed!");
+			logger.info("userOpr:[UserUpdate][Updated ID: " + userid + "]language changed!");
 		}
 		// ***** 检测description *****
 		if (!Tools.isEmpty(description)
@@ -655,6 +673,7 @@ public class UserServices {
 			user.setUser_description(description);
 			changecount++;
 			System.out.println("description changed!");
+			logger.info("userOpr:[UserUpdate][Updated ID: " + userid + "]description changed!");
 		}
 		// ***** 检测accessgroup *****
 		if (updatemode == 2 && !Tools.isEmpty(accessgroup)
@@ -662,6 +681,7 @@ public class UserServices {
 			user.setUser_access_group(accessgroup);
 			changecount++;
 			System.out.println("accessgroup changed!");
+			logger.info("userOpr:[UserUpdate][Updated ID: " + userid + "]accessgroup changed!");
 		}
 		// ***** 检测status *****
 		if (updatemode == 2 && status != null
@@ -669,6 +689,7 @@ public class UserServices {
 			user.setUser_status(status);
 			changecount++;
 			System.out.println("status changed!");
+			logger.info("userOpr:[UserUpdate][Updated ID: " + userid + "]status changed!");
 		}
 		if (updatemode == 1 && status != null
 				&& !user.getUser_status().equals(status)) {
@@ -680,6 +701,7 @@ public class UserServices {
 			user.setUser_grade(grade);
 			changecount++;
 			System.out.println("grade changed!");
+			logger.info("userOpr:[UserUpdate][Updated ID: " + userid + "]grade changed!");
 		}
 		// ***** 检测skill *****
 		if (!Tools.isEmpty(skill) && !skill.equals(user.getUser_skill())) {
@@ -694,9 +716,11 @@ public class UserServices {
 			user.setUser_skill(skill);
 			changecount++;
 			System.out.println("skill changed!");
+			logger.info("userOpr:[UserUpdate][Updated ID: " + userid + "]skill changed!");
 			if (updatemode == 1) {// 用户模式时，user状态转为pending 待审核
 				user.setUser_status(3);
-				System.out.println("status changed as user mode!(skill)");
+				System.out.println("(skill)status changed due to UpdateMode is 1 (user)!");
+				logger.info("userOpr:[UserUpdate][Updated ID: " + userid + "](skill)status changed due to UpdateMode is 1 (user)!");
 			}
 		}
 		// ***** 检测usertype *****
@@ -706,11 +730,13 @@ public class UserServices {
 					return ResultCode.USERTYPE_ERROR;
 				}
 				user.setUser_status(3);
-				System.out.println("status changed as user mode!(usertype)");
+				System.out.println("(usertype)status changed due to UpdateMode is 1 (user)!");
+				logger.info("userOpr:[UserUpdate][Updated ID: " + userid + "](usertype)status changed due to UpdateMode is 1 (user)!");
 			}
 			user.setUser_type(usertype);
 			changecount++;
 			System.out.println("usertype changed!");
+			logger.info("userOpr:[UserUpdate][Updated ID: " + userid + "]usertype changed!");
 		}
 
 		// ** user_skill子表的逻辑部分
@@ -949,14 +975,16 @@ public class UserServices {
 
 		Integer updateUserType = updateUser.getUser_type(); // 封装待更新的用户type
 
-		if (updateUserType.equals(4)) { // superadmin 不能被修改
-			return ResultCode.ACCESS_REJECT;
-		}
-
 		int tokenresult = checkUserToken(token); // 调用userServices.checkUserTokenes
 		if (tokenresult == ResultCode.SUCCESS) {
 			Integer tokenUserType = userinfo.getUser_type();
 			switch (updateUserType) {
+			case 4:// superAdmin 的用户信息
+				if (!userinfo.getUser_id().equals(userid)) { // 检测token的userid
+					// 与待update的userid是否相同
+					return ResultCode.ACCESS_REJECT;
+				}
+				break;
 			case 3:// admin 的用户信息
 				if (!userinfo.getUser_id().equals(userid)) { // 检测token的userid
 					// 与待update的userid是否相同
