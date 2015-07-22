@@ -15,6 +15,7 @@ import com.bbcall.mybatis.table.AddressList;
 import com.bbcall.mybatis.table.Orderlist;
 import com.bbcall.mybatis.table.User;
 import com.bbcall.struts.services.OrderlistServices;
+import com.bbcall.struts.services.ReferdocServices;
 import com.sun.jndi.url.iiopname.iiopnameURLContextFactory;
 
 public class test {
@@ -23,7 +24,11 @@ public class test {
 		// TODO Auto-generated method stub
 		ApplicationContext ctx = null;
 		ctx = new FileSystemXmlApplicationContext("/conf_xml/applicationContext.xml");
-//		OrderlistServices orderlistServices = (OrderlistServices) ctx.getBean("orderlistServices");
+		ReferdocServices referdocServices = (ReferdocServices) ctx.getBean("referdocServices");
+		
+		String skill = referdocServices.getReferlist("15000;16000;16001");
+		
+		System.out.println(skill);
 //		OrderlistMapper orderlistMapper = (OrderlistMapper) ctx.getBean("orderlistMapper");
 //		UserMapper userMapper = (UserMapper) ctx.getBean("userMapper");
 //		
@@ -32,7 +37,7 @@ public class test {
 //		user.setUser_grade(5.77);
 //		
 //		userMapper.updateUser(user);
-		System.out.println(Boolean.parseBoolean("true"));
+//		System.out.println(Boolean.parseBoolean("true"));
 		
 		
 //		DateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm");
