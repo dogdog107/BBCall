@@ -26,8 +26,8 @@ import com.github.pagehelper.PageHelper;
 @Service("orderlistServices")
 public class OrderlistServices {
 
-	private static Logger logger = Logger.getLogger(OrderlistServices.class); 
-	
+	private static Logger logger = Logger.getLogger(OrderlistServices.class);
+
 	@Autowired
 	private OrderlistMapper orderlistMapper;
 
@@ -856,9 +856,19 @@ public class OrderlistServices {
 		PageHelper.startPage(pagenum, 10);
 
 		orderlistinfos = orderlistMapper.getComOrdersByUserAccount(user_id);
-		
-		logger.info("tradeOpr:[Tradecomplete][User ID: "+user_id+"]Order ID: "+order_id+" Master name: "+mastername+" Order type: "+type+" Order price: "+price);
-		logger.info("tradeOpr:[Tradecomplete][Master ID: "+master_id+"]Order ID: "+order_id+" Order type: "+type+" Order price: "+price);
+
+		logger.info("tradeOpr:[Tradecomplete][User ID: " + user_id
+				+ "]Order ID: " + order_id + "; Master name: " + mastername
+				+ "; Order type: " + type + "; Order price: " + price);
+		logger.info("tradeOpr:[Tradecomplete][Master ID: " + master_id
+				+ "]Order ID: " + order_id + "; Order type: " + type
+				+ "; Order price: " + price);
+
+		logger.info("gradeOpr:[Tradecomplete][User ID: " + user_id
+				+ "]Order ID: " + order_id + "; Master name: " + mastername
+				+ "; Order type: " + type + "; Order price: " + price
+				+ "; Order Score: " + order_score + "; Order Evaluation: "
+				+ order_evaluation);
 
 		return ResultCode.SUCCESS;
 	}
@@ -932,25 +942,25 @@ public class OrderlistServices {
 		// 获取第1页，10条内容，当PageSize=0时会查询出全部的结果
 		PageHelper.startPage(pagenum, 10);
 
-//		if (order_status == 0) {
-//
-//			if (order_master_id == 0) {
-//				orderlistinfos = orderlistMapper.getWashOrderlist();
-//			} else {
-//				orderlistinfos = orderlistMapper
-//						.getWashOrderByMaster(order_master_id);
-//			}
-//
-//		} else {
-//			if (order_master_id == 0) {
-//				orderlistinfos = orderlistMapper
-//						.getWashOrderByStatus(order_status);
-//
-//			} else {
-//				orderlistinfos = orderlistMapper.getWashOrders(order_status,
-//						order_master_id);
-//			}
-//		}
+		// if (order_status == 0) {
+		//
+		// if (order_master_id == 0) {
+		// orderlistinfos = orderlistMapper.getWashOrderlist();
+		// } else {
+		// orderlistinfos = orderlistMapper
+		// .getWashOrderByMaster(order_master_id);
+		// }
+		//
+		// } else {
+		// if (order_master_id == 0) {
+		// orderlistinfos = orderlistMapper
+		// .getWashOrderByStatus(order_status);
+		//
+		// } else {
+		// orderlistinfos = orderlistMapper.getWashOrders(order_status,
+		// order_master_id);
+		// }
+		// }
 
 		return ResultCode.SUCCESS;
 	}
@@ -1050,7 +1060,7 @@ public class OrderlistServices {
 		// 获取第1页，10条内容，当PageSize=0时会查询出全部的结果
 		PageHelper.startPage(pagenum, 10);
 
-			orderlistinfos = orderlistMapper.getUnOrders2();
+		orderlistinfos = orderlistMapper.getUnOrders2();
 
 		return ResultCode.SUCCESS;
 	}
@@ -1065,7 +1075,7 @@ public class OrderlistServices {
 		// 获取第1页，10条内容，当PageSize=0时会查询出全部的结果
 		PageHelper.startPage(pagenum, 10);
 
-			orderlistinfos = orderlistMapper.getProOrders();
+		orderlistinfos = orderlistMapper.getProOrders();
 
 		return ResultCode.SUCCESS;
 	}
@@ -1080,7 +1090,7 @@ public class OrderlistServices {
 		// 获取第1页，10条内容，当PageSize=0时会查询出全部的结果
 		PageHelper.startPage(pagenum, 10);
 
-			orderlistinfos = orderlistMapper.getComOrders();
+		orderlistinfos = orderlistMapper.getComOrders();
 
 		return ResultCode.SUCCESS;
 	}
@@ -1095,7 +1105,7 @@ public class OrderlistServices {
 		// 获取第1页，10条内容，当PageSize=0时会查询出全部的结果
 		PageHelper.startPage(pagenum, 10);
 
-			orderlistinfos = orderlistMapper.getRecOrders();
+		orderlistinfos = orderlistMapper.getRecOrders();
 
 		return ResultCode.SUCCESS;
 	}
@@ -1110,7 +1120,7 @@ public class OrderlistServices {
 		// 获取第1页，10条内容，当PageSize=0时会查询出全部的结果
 		PageHelper.startPage(pagenum, 10);
 
-			orderlistinfos = orderlistMapper.getWasOrders();
+		orderlistinfos = orderlistMapper.getWasOrders();
 
 		return ResultCode.SUCCESS;
 	}
@@ -1125,7 +1135,7 @@ public class OrderlistServices {
 		// 获取第1页，10条内容，当PageSize=0时会查询出全部的结果
 		PageHelper.startPage(pagenum, 10);
 
-			orderlistinfos = orderlistMapper.getDelOrders();
+		orderlistinfos = orderlistMapper.getDelOrders();
 
 		return ResultCode.SUCCESS;
 	}
@@ -1140,7 +1150,7 @@ public class OrderlistServices {
 		// 获取第1页，10条内容，当PageSize=0时会查询出全部的结果
 		PageHelper.startPage(pagenum, 10);
 
-			orderlistinfos = orderlistMapper.getAucOrders();
+		orderlistinfos = orderlistMapper.getAucOrders();
 
 		return ResultCode.SUCCESS;
 	}
