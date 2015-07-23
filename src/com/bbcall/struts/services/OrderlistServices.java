@@ -6,6 +6,7 @@ import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.List;
 
+import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -25,6 +26,8 @@ import com.github.pagehelper.PageHelper;
 @Service("orderlistServices")
 public class OrderlistServices {
 
+	private static Logger logger = Logger.getLogger(OrderlistServices.class); 
+	
 	@Autowired
 	private OrderlistMapper orderlistMapper;
 
@@ -813,6 +816,9 @@ public class OrderlistServices {
 
 		int master_id = orderlist.getOrder_master_id();
 		int user_id = orderlist.getOrder_user_id();
+		Double price = orderlist.getOrder_price();
+		String type = orderlist.getOrder_type();
+		String mastername = orderlist.getOrder_master_name();
 		System.out.println("master_id: " + master_id);
 		System.out.println("user_id: " + user_id);
 		List<Orderlist> ors = orderlistMapper.getOrdersByMId(master_id, 3);
@@ -850,6 +856,9 @@ public class OrderlistServices {
 		PageHelper.startPage(pagenum, 10);
 
 		orderlistinfos = orderlistMapper.getComOrdersByUserAccount(user_id);
+		
+		logger.info("tradeOpr:[Tradecomplete][User ID: "+user_id+"]Order ID: "+order_id+" Master name: "+mastername+" Order type: "+type+" Order price: "+price);
+		logger.info("tradeOpr:[Tradecomplete][Master ID: "+master_id+"]Order ID: "+order_id+" Order type: "+type+" Order price: "+price);
 
 		return ResultCode.SUCCESS;
 	}
