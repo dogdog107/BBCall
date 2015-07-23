@@ -1,5 +1,6 @@
 package com.bbcall.struts.services;
 
+import java.sql.Timestamp;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -7,8 +8,10 @@ import org.springframework.stereotype.Service;
 
 import com.bbcall.functions.ResultCode;
 import com.bbcall.mybatis.dao.BlacklistMapper;
+import com.bbcall.mybatis.dao.ReferdocMapper;
 import com.bbcall.mybatis.dao.UserMapper;
 import com.bbcall.mybatis.table.Blacklist;
+import com.bbcall.mybatis.table.User;
 import com.github.pagehelper.PageHelper;
 
 @Service("blacklistServices")
@@ -19,6 +22,9 @@ public class BlacklistServices {
 
 	@Autowired
 	private UserMapper userMapper;
+	
+	@Autowired
+	private ReferdocMapper referdocMapper;
 
 	public Blacklist blacklistinfo;
 	public List<Blacklist> blacklistinfos;
@@ -52,10 +58,42 @@ public class BlacklistServices {
 			int blacklist_order_id, Integer pagenum) {
 
 		System.out.println("Here is BlacklistServices.add method...");
+		
+		User user = userMapper.getUserById(blacklist_master_id);
+		
+		String userskill = "";
+		if (user.getUser_skill() != null && !user.getUser_skill().equals("")) {
+
+			String[] skilllist = user.getUser_skill().split(";");
+
+			int referdoc_code_num = 0;
+
+			for (int i = 0; i < skilllist.length; i++) {
+
+				referdoc_code_num = Integer.parseInt(skilllist[i]);
+
+				userskill = userskill
+						+ referdocMapper.getReferdoc(referdoc_code_num)
+								.getReferdoc_type() + " ";
+			}
+		}
+
+		System.out.println("userskill" + userskill);
+
+		
 		Blacklist blacklist = new Blacklist();
 		blacklist.setBlacklist_user_id(blacklist_user_id);
 		blacklist.setBlacklist_master_id(blacklist_master_id);
 		blacklist.setBlacklist_order_id(blacklist_order_id);
+		blacklist.setBlacklist_master_skill(userskill);
+		blacklist.setBlacklist_create_time(new Timestamp(System.currentTimeMillis()));
+		blacklist.setBlacklist_master_name(user.getUser_name());
+		System.out.println("user.getUser_name()" + user.getUser_name());
+		blacklist.setBlacklist_master_grade(user.getUser_grade());
+		System.out.println("user.getUser_grade()" + user.getUser_grade());
+		blacklist.setBlacklist_master_pic(user.getUser_pic_url());
+		System.out.println("user.getUser_pic_url()" + user.getUser_pic_url());
+		
 
 		blacklistMapper.addBlacklist(blacklist);
 
