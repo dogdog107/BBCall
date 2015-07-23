@@ -92,94 +92,94 @@
 
 	<select id="getUnOrdersByUserAccount" parameterType="int"
 		resultMap="OrderResultMap">
-		select * from ORDERLIST
-		where (order_status=1 or
-		order_status=7) and
-		order_user_id=#{order_user_id} order by
-		order_create_time asc
+		select * from ORDERLIST 
+		where (order_status=1 or 
+		 order_status=7) and 
+		order_user_id=#{order_user_id} order by 
+		order_create_time asc 
 	</select>
 
 	<select id="getProOrdersByUserAccount" parameterType="int"
 		resultMap="OrderResultMap">
-		select * from ORDERLIST
-		where order_status="2" and
-		order_user_id=#{order_user_id} order by order_book_time asc
+		select * from ORDERLIST 
+		where order_status="2" and 
+		order_user_id=#{order_user_id} order by order_book_time asc 
 	</select>
 	<select id="getComOrdersByUserAccount" parameterType="int"
 		resultMap="OrderResultMap">
-		select * from ORDERLIST
-		where order_status="3" and
-		order_user_id=#{order_user_id} order by order_end_time desc
+		select * from ORDERLIST 
+		where order_status="3" and 
+		order_user_id=#{order_user_id} order by order_end_time desc 
 	</select>
 
 	<select id="getOrdersByMasterSkill" resultMap="OrderResultMap">
-		select * from
-		ORDERLIST where order_status=#{order_status,jdbcType=INTEGER} and
-		order_type_code=#{order_type_code,jdbcType=INTEGER} and
-		order_user_id
-		not in (select blacklist_user_id from
-		BLACKLIST where
-		blacklist_master_id=#{order_master_id,jdbcType=INTEGER})
-		order by
-		order_create_time
+		select * from 
+		ORDERLIST where order_status=#{order_status,jdbcType=INTEGER} and 
+		order_type_code=#{order_type_code,jdbcType=INTEGER} and 
+		order_user_id 
+		not in (select blacklist_user_id from  
+		BLACKLIST where 
+		blacklist_master_id=#{order_master_id,jdbcType=INTEGER}) 
+		order by 
+		order_create_time 
 	</select>
 
 	<select id="getUnOrdersBySkill" resultMap="OrderResultMap">
-		select * from
-		ORDERLIST where (order_status=1 or order_status=7)
+		select * from 
+		ORDERLIST where (order_status=1 or order_status=7) 
 		<if test="ordertypelist!=null and ordertypelist.length!=0">
-			and order_type_code in
+			and order_type_code in 
 			<foreach collection="ordertypelist" item="order_type_code"
 				index="index" open="(" close=")" separator=",">
 				#{order_type_code}
 			</foreach>
 		</if>
-		and order_user_id not in (select blacklist_user_id from
-		BLACKLIST where
-		blacklist_master_id=#{order_master_id,jdbcType=INTEGER})
-		order by
-		order_book_time
+		 and order_user_id not in (select blacklist_user_id from 
+		BLACKLIST where 
+		blacklist_master_id=#{order_master_id,jdbcType=INTEGER}) 
+		order by 
+		order_book_time 
 	</select>
 
 	<select id="getOrdersByMasterSkill2" resultMap="OrderResultMap">
-		select * from
-		ORDERLIST where order_status=#{order_status,jdbcType=INTEGER} and
-		order_type_code=#{order_type_code,jdbcType=INTEGER} and
-		order_user_id
-		not in (select blacklist_user_id from
-		BLACKLIST where
-		blacklist_master_id=#{order_master_id,jdbcType=INTEGER})
-		order by
-		order_book_time
+		select * from 
+		ORDERLIST where order_status=#{order_status,jdbcType=INTEGER} and 
+		order_type_code=#{order_type_code,jdbcType=INTEGER} and 
+		order_user_id 
+		not in (select blacklist_user_id from 
+		BLACKLIST where 
+		blacklist_master_id=#{order_master_id,jdbcType=INTEGER}) 
+		order by 
+		order_book_time 
 	</select>
 
 	<select id="getOrdersByMasterLocation" resultMap="OrderResultMap">
-		select * from
-		ORDERLIST where order_status=#{order_status,jdbcType=INTEGER} and
-		order_book_location_code=#{order_book_location_code,jdbcType=INTEGER}
-		and
-		order_user_id not in (select blacklist_user_id from
-		BLACKLIST where
-		blacklist_master_id=#{order_master_id,jdbcType=INTEGER})
-		order by
-		order_create_time
+		select * from 
+		ORDERLIST where order_status=#{order_status,jdbcType=INTEGER} and 
+		order_book_location_code=#{order_book_location_code,jdbcType=INTEGER} 
+		and 
+		order_user_id not in (select blacklist_user_id from 
+		BLACKLIST where 
+		blacklist_master_id=#{order_master_id,jdbcType=INTEGER}) 
+		order by 
+		order_create_time 
 	</select>
 
 	<select id="getOrdersByMasterLocation2" resultMap="OrderResultMap">
-		select * from
-		ORDERLIST where order_status=#{order_status,jdbcType=INTEGER} and
-		order_book_location_code=#{order_book_location_code,jdbcType=INTEGER}
-		and
-		order_user_id not in (select blacklist_user_id from
-		BLACKLIST where
-		blacklist_master_id=#{order_master_id,jdbcType=INTEGER})
-		order by
-		order_book_time
-	</select>
+		select * from 
+		ORDERLIST where order_status=#{order_status,jdbcType=INTEGER} and 
+		order_book_location_code=#{order_book_location_code,jdbcType=INTEGER} 
+		and 
+		order_user_id not in (select blacklist_user_id from 
+		BLACKLIST where 
+		blacklist_master_id=#{order_master_id,jdbcType=INTEGER}) 
+		order by 
+		order_book_time 
+	</select> 
 
 	<select id="getUnOrdersByMasterLocation" resultMap="OrderResultMap">
-		select * from 
-		ORDERLIST where (order_status=1 or order_status=7) 
+		select * from  
+		ORDERLIST where (order_status=1 or order_status=7)  
 		and order_type_code in 
 		<foreach collection="ordertypelist" item="order_type_code"
 			index="index" open="(" close=")" separator=",">
@@ -196,85 +196,85 @@
 		order by ${sortparm} asc
 	</select>
 	<select id="getUnOrdersByBookTime" resultMap="OrderResultMap">
-		select * from
-		ORDERLIST where (order_status=1 or order_status=7) and
-		order_type_code=#{order_type_code,jdbcType=INTEGER} and
-		order_book_location_code=#{order_book_location_code,jdbcType=INTEGER}
-		and
-		order_user_id
-		not in (select blacklist_user_id from
-		BLACKLIST where
-		blacklist_master_id=#{order_master_id,jdbcType=INTEGER})
-		order by
-		order_book_time asc
+		select * from 
+		ORDERLIST where (order_status=1 or order_status=7) and 
+		order_type_code=#{order_type_code,jdbcType=INTEGER} and 
+		order_book_location_code=#{order_book_location_code,jdbcType=INTEGER} 
+		and 
+		order_user_id 
+		not in (select blacklist_user_id from 
+		BLACKLIST where 
+		blacklist_master_id=#{order_master_id,jdbcType=INTEGER}) 
+		order by 
+		order_book_time asc 
 	</select>
 	<select id="getComOrdersByMasterAccount" parameterType="String"
 		resultMap="OrderResultMap">
-		select * from ORDERLIST where order_status="3" and
+		select * from ORDERLIST where order_status="3" and 
 		order_master_id=#{order_master_id} order by order_end_time desc
 	</select>
 	<select id="getProOrdersByMasterAccount" parameterType="String"
-		resultMap="OrderResultMap">
-		select * from ORDERLIST where order_status="2" and
+		resultMap="OrderResultMap"> 
+		select * from ORDERLIST where order_status="2" and 
 		order_master_id=#{order_master_id} order by order_book_time
 	</select>
 	<select id="getUnOrders" resultMap="OrderResultMap">
-		select * from ORDERLIST
-		where
-		(order_status=1 or order_status=7) order by order_book_time
+		select * from ORDERLIST 
+		where 
+		(order_status=1 or order_status=7) order by order_book_time 
 	</select>
 	<select id="getUnOrders2" resultMap="OrderResultMap">
-		select * from ORDERLIST
-		where
-		order_status=1 order by order_book_time
+		select * from ORDERLIST 
+		where 
+		order_status=1 order by order_book_time 
 	</select>
 	<select id="getAucOrders" resultMap="OrderResultMap">
-		select * from ORDERLIST
-		where
-		order_status=7 order by order_book_time
+		select * from ORDERLIST 
+		where 
+		order_status=7 order by order_book_time 
 	</select>
 	<select id="getProOrders" resultMap="OrderResultMap">
-		select * from ORDERLIST
-		where
-		order_status="2" order by order_book_time
+		select * from ORDERLIST 
+		where 
+		order_status="2" order by order_book_time 
 	</select>
 
 	<select id="getComOrders" resultMap="OrderResultMap">
-		select * from ORDERLIST
-		where
-		order_status="3" order by order_end_time desc
-	</select>
+		select * from ORDERLIST 
+		where 
+		order_status="3" order by order_end_time desc 
+	</select> 
 
 	<select id="getRecOrders" resultMap="OrderResultMap">
-		select * from ORDERLIST
-		where
-		order_status="4"
+		select * from ORDERLIST 
+		where 
+		order_status="4" 
 	</select>
 
 	<select id="getWasOrders" resultMap="OrderResultMap">
-		select * from ORDERLIST
-		where
-		order_status="5"
-	</select>
+		select * from ORDERLIST 
+		where 
+		order_status="5" 
+	</select> 
 
 	<select id="getDelOrders" resultMap="OrderResultMap">
-		select * from ORDERLIST
-		where
-		order_status="6"
-	</select>
+		select * from ORDERLIST 
+		where 
+		order_status="6" 
+	</select> 
 
 	<select id="getWashOrderlist" resultMap="OrderResultMap">
-		select * from ORDERLIST
-		where
-		order_type_code in (15000,15001,15002) order by order_book_time
-		asc
+		select * from ORDERLIST 
+		where 
+		order_type_code in (15000,15001,15002) order by order_book_time 
+		asc 
 	</select>
 
 	<select id="getWashOrderlistByParm" resultMap="OrderResultMap">
-		select * from
-		ORDERLIST
-		where
-		order_type_code in (15000,15001,15002)
+		select * from 
+		ORDERLIST 
+		where 
+		order_type_code in (15000,15001,15002) 
 		<if test="order_status != null and order_status != ''">
 
 			and order_status = #{order_status}
@@ -287,59 +287,59 @@
 
 			and order_master_name = #{order_master_name}
 		</if>
-		order by order_book_time asc, order_create_time asc
+		 order by order_book_time asc, order_create_time asc
 	</select>
 
 	<select id="getWashOrders" resultMap="OrderResultMap">
-		select * from ORDERLIST
-		where
-		order_type_code in (15000,15001,15002) and
-		order_master_id=#{order_master_id,jdbcType=INTEGER} and
+		select * from ORDERLIST 
+		where 
+		order_type_code in (15000,15001,15002) and 
+		order_master_id=#{order_master_id,jdbcType=INTEGER} and 
 		order_status=#{order_status,jdbcType=INTEGER} order by order_book_time
 		asc
 	</select>
 
 	<select id="getWashOrderByStatus" parameterType="int" resultMap="OrderResultMap">
-		select * from ORDERLIST
-		where
-		order_type_code in (15000,15001,15002) and
-		order_status=#{order_status} order by order_book_time asc
+		select * from ORDERLIST 
+		where 
+		order_type_code in (15000,15001,15002) and 
+		order_status=#{order_status} order by order_book_time asc 
 	</select>
 
 	<select id="getWashOrderByMaster" parameterType="String"
-		resultMap="OrderResultMap">
-		select * from ORDERLIST
-		where
-		order_type_code in
-		(15000,15001,15002) and
-		order_master_id=#{order_master_id}
-		order by
+		resultMap="OrderResultMap"> 
+		select * from ORDERLIST 
+		where 
+		order_type_code in 
+		(15000,15001,15002) and 
+		order_master_id=#{order_master_id} 
+		order by 
 		order_book_time asc
 	</select>
 
 	<select id="getOrder" parameterType="int" resultMap="OrderResultMap">
-		select *
-		from ORDERLIST
-		where
-		order_id=#{order_id}
+		select * 
+		from ORDERLIST 
+		where 
+		order_id=#{order_id} 
 	</select>
 
 	<select id="getOrdersByMaster" resultMap="OrderResultMap">
-		select * from ORDERLIST
-		where
-		order_master_id=#{order_master_id}
+		select * from ORDERLIST 
+		where 
+		order_master_id=#{order_master_id} 
 	</select>
 
 	<select id="getOrdersByMId" resultMap="OrderResultMap">
-		select * from ORDERLIST
-		where
-		order_master_id=#{order_master_id} and
-		order_status=#{order_status}
+		select * from ORDERLIST 
+		where 
+		order_master_id=#{order_master_id} and 
+		order_status=#{order_status} 
 	</select>
 
 	<select id="getOrders" resultMap="OrderResultMap">
-		select * from ORDERLIST where 
-		order_master_id=#{order_master_id}
+		select * from ORDERLIST where  
+		order_master_id=#{order_master_id} 
 		<if test="order_status != null and order_status != ''">
 
 			and order_status = #{order_status} 
@@ -348,12 +348,12 @@
 
 			and order_type_code = #{order_type_code} 
 		</if>
-		order by order_book_time asc, order_create_time asc
+		 order by order_book_time asc, order_create_time asc
 		
 	</select>
 
 	<update id="updateOrder" parameterType="com.bbcall.mybatis.table.Orderlist">
-		update ORDERLIST set
+		update ORDERLIST set 
 		order_book_time=#{order_book_time},
 		order_book_location=#{order_book_location},
 		order_book_location_code=#{order_book_location_code},
@@ -369,42 +369,42 @@
 		order_refer_price=#{order_refer_price},
 		order_status=#{order_status},
 		order_remark=#{order_remark},
-		order_master_name=#{order_master_name}
-		where
+		order_master_name=#{order_master_name} 
+		where 
 		order_id=#{order_id}
 	</update>
 	<update id="updateOrderAsMasterAccount">
-		update ORDERLIST set
+		update ORDERLIST set 
 		order_master_id=#{order_master_id,jdbcType=INTEGER},
 		order_master_name=#{order_master_name,jdbcType=VARCHAR},
 		order_price=#{order_price,jdbcType=DECIMAL},
-		order_status="2"
-		where
+		order_status="2" 
+		where 
 		order_id=#{order_id,jdbcType=INTEGER}
 	</update>
 
 	<update id="completeOrder">
-		update ORDERLIST set
+		update ORDERLIST set 
 		order_score=#{order_score,jdbcType=DECIMAL},
 		order_evaluation=#{order_evaluation,jdbcType=LONGVARCHAR},
 		order_end_time=#{order_end_time},
-		order_status="3"
-		where
+		order_status="3" 
+		where 
 		order_id=#{order_id,jdbcType=INTEGER}
 	</update>
 
 	<update id="change">
-		update ORDERLIST set
+		update ORDERLIST set 
 		order_status=#{order_status,jdbcType=INTEGER},
-		order_remark=#{order_remark,jdbcType=LONGVARCHAR}
-		where
+		order_remark=#{order_remark,jdbcType=LONGVARCHAR} 
+		where 
 		order_id=#{order_id,jdbcType=INTEGER}
 	</update>
 
 	<delete id="deleteOrder" parameterType="int">
-		delete from ORDERLIST
-		where
-		order_id=#{order_id}
+		delete from ORDERLIST  
+		where 
+		order_id=#{order_id} 
 	</delete>
 
 </mapper>  

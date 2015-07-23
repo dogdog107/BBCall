@@ -364,7 +364,6 @@ public class ReferdocServices {
 	public int getChildReferdoclist(int referdoc_parentno) {
 
 		referdocinfos.clear();
-		referdocinfos.add(referdocMapper.getReferdoc(referdoc_parentno));
 
 		referdocinfos.addAll(referdocMapper
 				.getReferdoclistByParent(referdoc_parentno));
