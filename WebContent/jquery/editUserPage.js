@@ -354,7 +354,11 @@ function validate() {
 						}
 					}
 					if (count == 0){
-						skillstr = objs2[i].value + ';' + skillstr;
+						if (skillstr == '') {
+							skillstr = objs2[i].value;
+						} else {
+							skillstr = objs2[i].value + ';' + skillstr;
+						}
 					}
 				}
 			}

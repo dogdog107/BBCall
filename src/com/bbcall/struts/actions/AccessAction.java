@@ -28,7 +28,8 @@ public class AccessAction extends ActionSupport{
 	private Map<String, Object> dataMap = new LinkedHashMap<String, Object>(); // 新建dataMap来储存JSON字符串
 	private ObjectToMap obj2map = new ObjectToMap();// 新建ObjectToMap对象
 	
-	private List<AccessList> accessList;
+	private AccessGroup accessGroupTemp;
+	private List<AccessList> accessListTemp;
 	private List<String> accessNameList;
 	private List<String> accessGroupNameList;
 	private List<AccessGroup> accessGroupList;
@@ -40,10 +41,27 @@ public class AccessAction extends ActionSupport{
 	 * @return
 	 * @throws Exception
 	 */
-	public String getAccessList() throws Exception{
-		accessNameList = accessServices.getAccessList();
+	public String getAccessNameList() throws Exception{
+		accessNameList = accessServices.getAccessNameList();
 		dataMap.clear(); // dataMap中的数据将会被Struts2转换成JSON字符串，所以这里要先清空其中的数据
 		dataMap.put("accessNameList", accessNameList);
+		dataMap.putAll(Tools.JsonHeadMap(ResultCode.SUCCESS, true));
+		return SUCCESS;
+	}
+	public String getAccessNameListJson() throws Exception{
+		getAccessNameList();
+		return "json";
+	}
+	
+	/**
+	 * getAccessList 获取现有权限列表
+	 * @return
+	 * @throws Exception
+	 */
+	public String getAccessList() throws Exception{
+		accessListTemp = accessServices.getAccessList();
+		dataMap.clear(); // dataMap中的数据将会被Struts2转换成JSON字符串，所以这里要先清空其中的数据
+		dataMap.put("accessList", accessListTemp);
 		dataMap.putAll(Tools.JsonHeadMap(ResultCode.SUCCESS, true));
 		return SUCCESS;
 	}
@@ -58,9 +76,9 @@ public class AccessAction extends ActionSupport{
 	 * @throws Exception
 	 */
 	public String getAccessGroup() throws Exception{
-		accessGroupNameList = accessServices.getAccessGroupName();
+		accessGroupList = accessServices.getAccessGroupName();
 		dataMap.clear(); // dataMap中的数据将会被Struts2转换成JSON字符串，所以这里要先清空其中的数据
-		dataMap.put("accessGroupNameList", accessGroupNameList);
+		dataMap.put("accessGroupList", accessGroupList);
 		dataMap.putAll(Tools.JsonHeadMap(ResultCode.SUCCESS, true));
 		return SUCCESS;
 	}
@@ -80,9 +98,8 @@ public class AccessAction extends ActionSupport{
 		
 		int result = accessServices.getAccessByAccessGroup(accessgroup);
 		if (result == ResultCode.SUCCESS) {
-			accessGroupList = accessServices.getAGAccessList();
 			dataMap.clear(); // dataMap中的数据将会被Struts2转换成JSON字符串，所以这里要先清空其中的数据
-			dataMap.put("accessGroupList", accessGroupList);
+			dataMap = obj2map.getValueMap(accessServices.getAccessGroup()); //将对象转换成Map
 			dataMap.putAll(Tools.JsonHeadMap(result, true));
 			return SUCCESS;
 		} else {

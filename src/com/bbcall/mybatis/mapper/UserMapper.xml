@@ -47,7 +47,7 @@
 		useGeneratedKeys="true" keyProperty="user_id">
 		insert into USER(user_account,
 		user_password, user_type, user_status, user_name, user_pic_url,
-		user_mobile, user_gender, user_email, user_language, user_skill, user_skill_name， user_description, user_access_group, user_address, user_address_code)
+		user_mobile, user_gender, user_email, user_language, user_skill, user_skill_name, user_description, user_access_group, user_address, user_address_code)
 		values(#{user_account}, #{user_password}, #{user_type},
 		#{user_status}, #{user_name}, #{user_pic_url}, #{user_mobile},
 		#{user_gender}, #{user_email}, #{user_language}, #{user_skill}, #{user_skill_name}, #{user_description}, #{user_access_group}, #{user_address}, #{user_address_code})
@@ -157,7 +157,7 @@
 		user_access_group=#{user_access_group},
 		user_grade=#{user_grade},
 		user_status=#{user_status},
-		user_skill_name, =#{user_skill_name, },
+		user_skill_name=#{user_skill_name},
 		user_skill=#{user_skill}
 		where user_id=#{user_id}
 	</update>

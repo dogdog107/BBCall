@@ -27,6 +27,8 @@ public class UserServices {
 	private UserMapper userMapper;
 	@Autowired
 	private AddressServices addressServices;
+	@Autowired
+	private ReferdocServices referdocServices;
 	
 	private SHA1_Encode encrypt = new SHA1_Encode();
 	private User userinfo = new User();
@@ -277,6 +279,17 @@ public class UserServices {
 					skill = skill.substring(0, skill.length() - 1);
 				}
 				user.setUser_skill(skill);
+				
+				String skillName = referdocServices.getReferlist(skill);
+				// 清除开头为;的符号
+				while(skillName.startsWith(";")){
+					skillName = skillName.substring(1, skillName.length());
+				}
+				// 清除结尾为;的符号
+				while(skillName.endsWith(";")){
+					skillName = skillName.substring(0, skillName.length() - 1);
+				}
+				user.setUser_skill_name(skillName);
 			}
 
 			// ***** 添加描述 *****
@@ -602,7 +615,7 @@ public class UserServices {
 			changecount++;
 			System.out.println("picurl changed!");
 			logger.info("userOpr:[UserUpdate][Updated ID: " + userid + "]picurl changed!");
-			if (updatemode == 1) {// 用户模式时，user状态转为pending 待审核
+			if (updatemode == 1 && tokenUserInfo.getUser_type().equals(2)) {// 用户模式时，user状态转为pending 待审核
 				user.setUser_status(3);
 				System.out.println("(picurl)status changed due to UpdateMode is 1 (user)!");
 				logger.info("userOpr:[UserUpdate][Updated ID: " + userid + "](picurl)status changed due to UpdateMode is 1 (user)!");
@@ -714,10 +727,21 @@ public class UserServices {
 				skill = skill.substring(0, skill.length() - 1);
 			}
 			user.setUser_skill(skill);
+			
+			String skillName = referdocServices.getReferlist(skill);
+			// 清除开头为;的符号
+			while(skillName.startsWith(";")){
+				skillName = skillName.substring(1, skillName.length());
+			}
+			// 清除结尾为;的符号
+			while(skillName.endsWith(";")){
+				skillName = skillName.substring(0, skillName.length() - 1);
+			}
+			user.setUser_skill_name(skillName);
 			changecount++;
 			System.out.println("skill changed!");
 			logger.info("userOpr:[UserUpdate][Updated ID: " + userid + "]skill changed!");
-			if (updatemode == 1) {// 用户模式时，user状态转为pending 待审核
+			if (updatemode == 1 && tokenUserInfo.getUser_type().equals(2)) {// 用户模式时，user状态转为pending 待审核
 				user.setUser_status(3);
 				System.out.println("(skill)status changed due to UpdateMode is 1 (user)!");
 				logger.info("userOpr:[UserUpdate][Updated ID: " + userid + "](skill)status changed due to UpdateMode is 1 (user)!");
@@ -725,7 +749,7 @@ public class UserServices {
 		}
 		// ***** 检测usertype *****
 		if (usertype != null && !user.getUser_type().equals(usertype)) {
-			if (updatemode == 1) {// 用户模式时，user状态转为pending 待审核
+			if (updatemode == 1 && tokenUserInfo.getUser_type().equals(2)) {// 用户模式时，user状态转为pending 待审核
 				if (usertype.equals(3) || usertype.equals(4)) { // 检测到要修改成管理员模式
 					return ResultCode.USERTYPE_ERROR;
 				}
