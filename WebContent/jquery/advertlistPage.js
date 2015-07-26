@@ -66,7 +66,7 @@ function checkAdvertList(pagenum){
 					checkAdvertType(n.advertisement_type, "adverttype_" + n.advertisement_id)
 					var createtime = n.advertisement_create_time;
 					row.find("#createtime").text(createtime.replace("T", " "));
-					row.find("#btnDetail").attr("onclick", "location.href='advert_showAdvert.action?advertisement_id=" + n.advertisement_id + "'");
+					row.find("#btnDetail").attr("onclick", "location.href='advert_showAdvert.action?token=" + token + "&advertisement_id=" + n.advertisement_id + "'");
 					row.find("#btnDelete").attr("onclick", "deleteAdvert(" + n.advertisement_id + ")");
 //					row.find("#btnDelete").attr("onclick", "location.href='advert_deleteAdvert.action?advertisement_id=" + n.advertisement_id + "'");
 

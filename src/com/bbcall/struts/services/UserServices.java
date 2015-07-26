@@ -29,6 +29,8 @@ public class UserServices {
 	private AddressServices addressServices;
 	@Autowired
 	private ReferdocServices referdocServices;
+	@Autowired
+	private FileUploadServices fileUploadServices;
 	
 	private SHA1_Encode encrypt = new SHA1_Encode();
 	private User userinfo = new User();
@@ -611,6 +613,12 @@ public class UserServices {
 			}
 		}
 		if (!Tools.isEmpty(picurl) && !picurl.equals(user.getUser_pic_url())) {
+			if (!user.getUser_pic_url().contains("Admin")
+					&& !user.getUser_pic_url().contains("Male")
+					&& !user.getUser_pic_url().contains("Female")
+					&& !user.getUser_pic_url().contains("Default")) { // 不删除内置头像
+				fileUploadServices.deleteFile(user.getUser_pic_url());// 先删除之前的头像文件
+			}
 			user.setUser_pic_url(picurl);
 			changecount++;
 			System.out.println("picurl changed!");

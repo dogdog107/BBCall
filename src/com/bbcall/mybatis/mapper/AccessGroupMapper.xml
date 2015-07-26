@@ -56,6 +56,12 @@
 		accessgroup_name=#{accessgroup_name}
 	</select>
 
+	<select id="getAccessGroupByName" resultMap="AccessGroupResultMap" parameterType="String">
+		select accessgroup_id, accessgroup_name, accessgroup_description, accessgroup_default 
+		FROM ACCESSGROUP 
+		WHERE accessgroup_name=#{accessgroup_name}
+	</select>
+	
 	<select id="getAll" resultMap="AccessGroupResultMap">
 		select accessgroup_id, accessgroup_name, accessgroup_description, accessgroup_default from ACCESSGROUP
 	</select>
@@ -63,6 +69,11 @@
 	<delete id="deleteAccessGroupName" parameterType="String">
 		delete from
 		ACCESSGROUP where accessgroup_name=#{accessgroup_name}
+	</delete>
+	
+	<delete id="deleteAccessGroupById" parameterType="Integer">
+		delete from
+		ACCESSGROUP where accessgroup_id=#{accessgroup_id}
 	</delete>
 	
 	<delete id="deleteAllAccessUnderGroupId" parameterType="Integer">

@@ -3,12 +3,9 @@ package com.bbcall.struts.services;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
-import java.text.SimpleDateFormat;
-import java.util.Date;
 
 import org.springframework.stereotype.Service;
 
-import com.bbcall.functions.RandomCode;
 import com.bbcall.functions.ResultCode;
 import com.bbcall.functions.Tools;
 
@@ -16,7 +13,8 @@ import com.bbcall.functions.Tools;
 public class FileUploadServices {
 	private static final int BUFFER_SIZE = 16 * 1024;
 	private String fileurl;
-
+	private String rootPath = System.getProperty("webApp.root");
+	private String storeRootPath = rootPath.substring(0, rootPath.lastIndexOf("BBCall"));
 	public int uploadFile(File srcFile, String uploadFileName,
 			String storePath, String storeFileName) throws Exception {
 		System.out.println("Here is FileUploadServices.uploadFile()");
@@ -78,8 +76,9 @@ public class FileUploadServices {
 	}
 
 	public int deleteFile(String deleteFilePath) {
-
-		File destFile = new File(deleteFilePath);
+		// Mac: storeRootPath: /Users/apple/Desktop/源构项目/TomcatServer/wtpwebapps/
+		System.out.println("storeRootPath: " + storeRootPath);
+		File destFile = new File(storeRootPath + deleteFilePath);
 		if (destFile.exists()) {
 			destFile.delete();
 		}
