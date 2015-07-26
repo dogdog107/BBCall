@@ -864,12 +864,6 @@ public class OrderlistServices {
 				+ "]Order ID: " + order_id + "; Order type: " + type
 				+ "; Order price: " + price);
 
-		logger.info("gradeOpr:[Tradecomplete][User ID: " + user_id
-				+ "]Order ID: " + order_id + "; Master name: " + mastername
-				+ "; Order type: " + type + "; Order price: " + price
-				+ "; Order Score: " + order_score + "; Order Evaluation: "
-				+ order_evaluation);
-
 		return ResultCode.SUCCESS;
 	}
 
