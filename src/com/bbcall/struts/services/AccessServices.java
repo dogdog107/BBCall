@@ -21,6 +21,7 @@ public class AccessServices {
 	@Autowired
 	private AccessListMapper accessListMapper;
 	
+	private AccessGroup accessGroup;
 	private List<AccessGroup> AGAccessList;
 	
 
@@ -38,13 +39,14 @@ public class AccessServices {
 		if (Tools.isEmpty(UserAccessGroup, requireAccess))
 			return ResultCode.REQUIREINFO_NOTENOUGH;
 
-		List<AccessGroup> accessGroupAccess = accessGroupMapper
+		AccessGroup tempAccessGroup = accessGroupMapper
 				.getAccessByAccessGroupName(UserAccessGroup);
 		System.out.println(requireAccess);
-		if (accessGroupAccess.size() > 0) {
-			for (Iterator<AccessGroup> it = accessGroupAccess.iterator(); it
+		
+		if (tempAccessGroup != null) {
+			for (Iterator<AccessList> it = tempAccessGroup.getAccesslist().iterator(); it
 					.hasNext();) {
-				if (it.next().getAccessgroup_access().equals(requireAccess)) {
+				if (it.next().getAccesslist_name().equals(requireAccess)) {
 					return ResultCode.SUCCESS;	
 				}
 			}
@@ -64,9 +66,9 @@ public class AccessServices {
 	public int getAccessByAccessGroup(String accessgroup) {
 		if (Tools.isEmpty(accessgroup))
 			return ResultCode.REQUIREINFO_NOTENOUGH;
-		AGAccessList = accessGroupMapper
+		accessGroup = accessGroupMapper
 				.getAccessByAccessGroupName(accessgroup);
-		if (AGAccessList.size() > 0) {
+		if (accessGroup != null) {
 			return ResultCode.SUCCESS;
 		} else {
 			return ResultCode.ACCESSGROUP_ERROR;
@@ -77,19 +79,29 @@ public class AccessServices {
 	 * getAccessGroupName
 	 * 得到权限组列表
 	 * 
-	 * @return List<String>
+	 * @return List<AccessGroup>
 	 */
-	public List<String> getAccessGroupName() {
-		return accessGroupMapper.getAccessGroupName();
+	public List<AccessGroup> getAccessGroupName() {
+		return accessGroupMapper.getAll();
 	}
 
 	/**
 	 * getAccessList
-	 * 得到权限列表
+	 * 得到权限名以及描述的列表
+	 * 
+	 * @return List<AccessList>
+	 */
+	public List<AccessList> getAccessList() {
+		return accessListMapper.getAll();
+	}
+	
+	/**
+	 * getAccessNameList
+	 * 得到权限名字的列表
 	 * 
 	 * @return List<String>
 	 */
-	public List<String> getAccessList() {
+	public List<String> getAccessNameList() {
 		return accessListMapper.getAllAccessName();
 	}
 
@@ -99,5 +111,9 @@ public class AccessServices {
 	 */
 	public List<AccessGroup> getAGAccessList() {
 		return AGAccessList;
+	}
+
+	public AccessGroup getAccessGroup() {
+		return accessGroup;
 	}
 }

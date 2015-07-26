@@ -11,10 +11,11 @@
 	<resultMap id="AccessListResultMap" type="com.bbcall.mybatis.table.AccessList" >
     	<id column="accesslist_id" property="accesslist_id" jdbcType="INTEGER" />
     	<result column="accesslist_name" property="accesslist_name" jdbcType="VARCHAR" />
+    	<result column="accesslist_description" property="accesslist_description" jdbcType="VARCHAR" />
 	</resultMap>
 
 	<select id="getAll" resultMap="AccessListResultMap">
-		select accesslist_id, accesslist_name from ACCESSLIST
+		select accesslist_id, accesslist_name, accesslist_description from ACCESSLIST
 	</select>
 	
 	<select id="getAllAccessName" resultMap="AccessListResultMap">

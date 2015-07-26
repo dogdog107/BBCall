@@ -19,7 +19,8 @@ import java.sql.Timestamp;
 //  /* 1=male, 2=female */
 //	user_pic_url VARCHAR (255),
 //	user_language VARCHAR (255),
-//	user_skill text,
+//	user_skill VARCHAR (255),
+//	user_skill_name VARCHAR (255),
 //	user_address_code INT,
 //	user_address text,
 //	user_description text,
@@ -50,6 +51,7 @@ public class User implements Serializable{
 	private Integer user_address_code;
 	private String user_address;
 	private String user_skill;
+	private String user_skill_name;
 	private String user_description;
 	private String user_access_group;
 	private Integer user_status;
@@ -216,6 +218,14 @@ public class User implements Serializable{
 
 	public void setUser_grade(Double user_grade) {
 		this.user_grade = user_grade;
+	}
+
+	public String getUser_skill_name() {
+		return user_skill_name;
+	}
+
+	public void setUser_skill_name(String user_skill_name) {
+		this.user_skill_name = user_skill_name;
 	}
 
 }

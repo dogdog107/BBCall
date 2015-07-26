@@ -27,6 +27,7 @@
     	<result column="user_address_code" property="user_address_code" jdbcType="INTEGER" />
     	<result column="user_address" property="user_address" jdbcType="VARCHAR" />
     	<result column="user_skill" property="user_skill" jdbcType="VARCHAR" />
+    	<result column="user_skill_name" property="user_skill_name" jdbcType="VARCHAR" />
     	<result column="user_description" property="user_description" jdbcType="VARCHAR" />
     	<result column="user_access_group" property="user_access_group" jdbcType="VARCHAR" />
     	<result column="user_grade" property="user_grade" jdbcType="DOUBLE" />
@@ -46,16 +47,16 @@
 		useGeneratedKeys="true" keyProperty="user_id">
 		insert into USER(user_account,
 		user_password, user_type, user_status, user_name, user_pic_url,
-		user_mobile, user_gender, user_email, user_language, user_skill, user_description, user_access_group, user_address, user_address_code)
+		user_mobile, user_gender, user_email, user_language, user_skill, user_skill_name, user_description, user_access_group, user_address, user_address_code)
 		values(#{user_account}, #{user_password}, #{user_type},
 		#{user_status}, #{user_name}, #{user_pic_url}, #{user_mobile},
-		#{user_gender}, #{user_email}, #{user_language}, #{user_skill}, #{user_description}, #{user_access_group}, #{user_address}, #{user_address_code})
+		#{user_gender}, #{user_email}, #{user_language}, #{user_skill}, #{user_skill_name}, #{user_description}, #{user_access_group}, #{user_address}, #{user_address_code})
 	</insert>
 
 	<select id="getUserByAccount" parameterType="String" resultMap="UserResultMap">
 		select user_id, user_account, user_password, user_email, user_mobile,
 		user_type, user_name, user_gender, user_pic_url, user_language, user_address_code,
-		user_address, user_skill, user_description, user_access_group, user_grade,
+		user_address, user_skill, user_skill_name, user_description, user_access_group, user_grade,
 		user_status, user_login_time, user_create_time, user_token
 		from USER
 		where
@@ -64,7 +65,7 @@
 	<select id="getUserByEmail" parameterType="String" resultMap="UserResultMap">
 		select user_id, user_account, user_password, user_email, user_mobile,
 		user_type, user_name, user_gender, user_pic_url, user_language, user_address_code,
-		user_address, user_skill, user_description, user_access_group, user_grade,
+		user_address, user_skill, user_skill_name, user_description, user_access_group, user_grade,
 		user_status, user_login_time, user_create_time, user_token
 		from USER
 		where
@@ -73,7 +74,7 @@
 	<select id="getUserByMobile" parameterType="String" resultMap="UserResultMap">
 		select user_id, user_account, user_password, user_email, user_mobile,
 		user_type, user_name, user_gender, user_pic_url, user_language, user_address_code,
-		user_address, user_skill, user_description, user_access_group, user_grade,
+		user_address, user_skill, user_skill_name, user_description, user_access_group, user_grade,
 		user_status, user_login_time, user_create_time, user_token
 		from USER
 		where
@@ -83,7 +84,7 @@
 	<select id="getUserById" parameterType="int" resultMap="UserResultMap">
 		select user_id, user_account, user_password, user_email, user_mobile,
 		user_type, user_name, user_gender, user_pic_url, user_language, user_address_code,
-		user_address, user_skill, user_description, user_access_group, user_grade,
+		user_address, user_skill, user_skill_name, user_description, user_access_group, user_grade,
 		user_status, user_login_time, user_create_time, user_token
 		from USER
 		where
@@ -93,7 +94,7 @@
 	<select id="getUserByToken" parameterType="String" resultMap="UserResultMap">
 		select user_id, user_account, user_password, user_email, user_mobile,
 		user_type, user_name, user_gender, user_pic_url, user_language, user_address_code,
-		user_address, user_skill, user_description, user_access_group, user_grade,
+		user_address, user_skill, user_skill_name, user_description, user_access_group, user_grade,
 		user_status, user_login_time, user_create_time, user_token
 		from USER
 		where
@@ -103,7 +104,7 @@
 	<select id="findAll" resultMap="UserResultMap">
 		select user_id, user_account, user_password, user_email, user_mobile,
 		user_type, user_name, user_gender, user_pic_url, user_language, user_address_code,
-		user_address, user_skill, user_description, user_access_group, user_grade,
+		user_address, user_skill, user_skill_name, user_description, user_access_group, user_grade,
 		user_status, user_login_time, user_create_time, user_token
 		from USER
 	</select>
@@ -111,7 +112,7 @@
 	<select id="listUserWhereOrderBy" resultMap="UserResultMap">
 		select user_id, user_account, user_password, user_email, user_mobile,
 		user_type, user_name, user_gender, user_pic_url, user_language, user_address_code,
-		user_address, user_skill, user_description, user_access_group, user_grade,
+		user_address, user_skill, user_skill_name, user_description, user_access_group, user_grade,
 		user_status, user_login_time, user_create_time, user_token
 		from USER
 		<where>
@@ -127,7 +128,7 @@
 	<select id="listUserOrderBy" resultMap="UserResultMap">
 		select user_id, user_account, user_password, user_email, user_mobile,
 		user_type, user_name, user_gender, user_pic_url, user_language, user_address_code,
-		user_address, user_skill, user_description, user_access_group, user_grade,
+		user_address, user_skill, user_skill_name, user_description, user_access_group, user_grade,
 		user_status, user_login_time, user_create_time, user_token
 		from USER
 		<where>
@@ -156,6 +157,7 @@
 		user_access_group=#{user_access_group},
 		user_grade=#{user_grade},
 		user_status=#{user_status},
+		user_skill_name=#{user_skill_name},
 		user_skill=#{user_skill}
 		where user_id=#{user_id}
 	</update>

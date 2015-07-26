@@ -11,49 +11,97 @@
 	<resultMap id="AccessGroupResultMap" type="com.bbcall.mybatis.table.AccessGroup" >
     	<id column="accessgroup_id" property="accessgroup_id" jdbcType="INTEGER" />
     	<result column="accessgroup_name" property="accessgroup_name" jdbcType="VARCHAR" />
-    	<result column="accessgroup_access" property="accessgroup_access" jdbcType="VARCHAR" />
+    	<result column="accessgroup_description" property="accessgroup_description" jdbcType="VARCHAR" />
+    	<result column="accessgroup_default" property="accessgroup_default" jdbcType="INTEGER" />
+	</resultMap>
+	<resultMap id="AccessGroupWithAccessResultMap" type="com.bbcall.mybatis.table.AccessGroup" extends="AccessGroupResultMap">
+		<collection property="accesslist" ofType="com.bbcall.mybatis.table.AccessList">
+    		<id column="accesslist_id" property="accesslist_id" jdbcType="INTEGER" />
+    		<result column="accesslist_name" property="accesslist_name" jdbcType="VARCHAR" />
+    		<result column="accesslist_description" property="accesslist_description" jdbcType="VARCHAR" />
+    	</collection>
 	</resultMap>
 
 	<insert id="addAccessGroup" parameterType="AccessGroup"
 		useGeneratedKeys="true" keyProperty="accessgroup_id">
 		insert into
-		ACCESSGROUP(accessgroup_name, accessgroup_access)
-		values(#{accessgroup_name}, #{accessgroup_access})
+		ACCESSGROUP(accessgroup_name, accessgroup_description)
+		values(#{accessgroup_name}, #{accessgroup_description})
+	</insert>
+	
+	<insert id="addAccessByAccessGroup" parameterType="List">
+		insert into
+		ACCESSGROUP_ACCESSLIST(ag_id, al_id)
+		values
+		<foreach collection="list" item="item" index="index" separator="," >
+		(#{item.ag_id}, #{item.al_id})
+		</foreach>
 	</insert>
 
-	<select id="getAccess" parameterType="String" resultMap="AccessGroupResultMap">
-		select accessgroup_id, accessgroup_name, accessgroup_access
-		from ACCESSGROUP
-		where accessgroup_access=#{accessgroup_access}
-	</select>
-
-	<select id="getAccessGroupName" resultType="String">
-		select distinct(accessgroup_name) from ACCESSGROUP
-	</select>
-	
-	<select id="getAccessByAccessGroupName" parameterType="String" resultMap="AccessGroupResultMap">
-		select accessgroup_id, accessgroup_name, accessgroup_access
-		from ACCESSGROUP
-		where accessgroup_name=#{accessgroup_name}
+	<select id="getAccessByAccessGroupName" parameterType="String"
+		resultMap="AccessGroupWithAccessResultMap">
+		SELECT
+			accessgroup_id,
+			accessgroup_name,
+			accessgroup_description,
+			accessgroup_default,
+			AL.accesslist_id AS accesslist_id,
+			AL.accesslist_name AS accesslist_name,
+			AL.accesslist_description AS accesslist_description
+		FROM
+			ACCESSGROUP AG
+		LEFT JOIN ACCESSGROUP_ACCESSLIST AGA ON AG.accessgroup_id = AGA.ag_id
+		LEFT JOIN ACCESSLIST AL ON AGA.al_id = AL.accesslist_id
+		WHERE
+		accessgroup_name=#{accessgroup_name}
 	</select>
 
 	<select id="getAll" resultMap="AccessGroupResultMap">
-		select accessgroup_id, accessgroup_name, accessgroup_access from ACCESSGROUP
+		select accessgroup_id, accessgroup_name, accessgroup_description, accessgroup_default from ACCESSGROUP
 	</select>
 
-	
 	<delete id="deleteAccessGroupName" parameterType="String">
 		delete from
 		ACCESSGROUP where accessgroup_name=#{accessgroup_name}
 	</delete>
 	
+	<delete id="deleteAllAccessUnderGroupId" parameterType="Integer">
+		delete from
+		ACCESSGROUP_ACCESSLIST where ag_id=#{accessgroup_id}
+	</delete>
+	
+<!-- 
+	<select id="getAccess" parameterType="String" resultMap="AccessGroupResultMap">
+		select accessgroup_id, accessgroup_name, accessgroup_access
+		from ACCESSGROUP
+		where accessgroup_access=#{accessgroup_access}
+	</select>
+-->
+	 
+<!-- 
+	<select id="getAccessGroupNameList" resultType="String">
+		select distinct(accessgroup_name) from ACCESSGROUP
+	</select>
+ -->
+
+<!-- 	
+	<select id="getAccessByAccessGroupName" parameterType="String" resultMap="AccessGroupResultMap">
+		select accessgroup_id, accessgroup_name, accessgroup_access
+		from ACCESSGROUP
+		where accessgroup_name=#{accessgroup_name}
+	</select>
+-->
+
+<!-- 
 	<delete id="deleteAccess" parameterType="String">
 		delete from
 		ACCESSGROUP where accessgroup_access=#{accessgroup_access}
 	</delete>
-	
+ -->
+<!-- 
 	<delete id="deleteAccessByAccessGroupName">
 		delete from
 		ACCESSGROUP where accessgroup_name=#{accessgroup_name} and accessgroup_access=#{accessgroup_access}
 	</delete>
+ -->
 </mapper>
