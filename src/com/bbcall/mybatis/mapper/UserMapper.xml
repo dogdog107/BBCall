@@ -45,12 +45,49 @@
 
 	<insert id="addUserByAccount" parameterType="User"
 		useGeneratedKeys="true" keyProperty="user_id">
-		insert into USER(user_account,
-		user_password, user_type, user_status, user_name, user_pic_url,
-		user_mobile, user_gender, user_email, user_language, user_skill, user_skill_name, user_description, user_access_group, user_address, user_address_code)
-		values(#{user_account}, #{user_password}, #{user_type},
-		#{user_status}, #{user_name}, #{user_pic_url}, #{user_mobile},
-		#{user_gender}, #{user_email}, #{user_language}, #{user_skill}, #{user_skill_name}, #{user_description}, #{user_access_group}, #{user_address}, #{user_address_code})
+		INSERT INTO USER (
+		<trim suffix="" suffixOverrides=",">
+			<if test="user_account != null">user_account,</if>
+			<if test="user_password != null">user_password,</if>
+			<if test="user_type != null">user_type,</if>
+			<if test="user_status != null">user_status,</if>
+			<if test="user_name != null">user_name,</if>
+			<if test="user_pic_url != null">user_pic_url,</if>
+			<if test="user_mobile != null">user_mobile,</if>
+			<if test="user_gender != null">user_gender,</if>
+			<if test="user_email != null">user_email,</if>
+			<if test="user_language != null">user_language,</if>
+			<if test="user_skill != null">user_skill,</if>
+			<if test="user_skill_name != null">user_skill_name,</if>
+			<if test="user_description != null">user_description,</if>
+			<if test="user_access_group != null">user_access_group,</if>
+			<if test="user_address != null">user_address,</if>
+			<if test="user_address_code != null">user_address_code,</if>
+			<if test="user_grade != null">user_grade,</if>
+		</trim>
+		)
+		VALUES
+		(
+		<trim suffix="" suffixOverrides=",">
+			<if test="user_account != null">#{user_account},</if>
+			<if test="user_password != null">#{user_password},</if>
+			<if test="user_type != null">#{user_type},</if>
+			<if test="user_status != null">#{user_status},</if>
+			<if test="user_name != null">#{user_name},</if>
+			<if test="user_pic_url != null">#{user_pic_url},</if>
+			<if test="user_mobile != null">#{user_mobile},</if>
+			<if test="user_gender != null">#{user_gender},</if>
+			<if test="user_email != null">#{user_email},</if>
+			<if test="user_language != null">#{user_language},</if>
+			<if test="user_skill != null">#{user_skill},</if>
+			<if test="user_skill_name != null">#{user_skill_name},</if>
+			<if test="user_description != null">#{user_description},</if>
+			<if test="user_access_group != null">#{user_access_group},</if>
+			<if test="user_address != null">#{user_address},</if>
+			<if test="user_address_code != null">#{user_address_code},</if>
+			<if test="user_grade != null">#{user_grade},</if>
+		</trim>
+		)
 	</insert>
 
 	<select id="getUserByAccount" parameterType="String" resultMap="UserResultMap">

@@ -11,7 +11,7 @@
  Target Server Version : 50624
  File Encoding         : utf-8
 
- Date: 07/24/2015 03:19:35 AM
+ Date: 07/28/2015 03:14:14 AM
 */
 
 SET NAMES utf8;
@@ -28,13 +28,13 @@ CREATE TABLE `ACCESSGROUP` (
   `accessgroup_default` tinyint(2) DEFAULT '0',
   PRIMARY KEY (`accessgroup_id`),
   UNIQUE KEY `accessgroup_name` (`accessgroup_name`)
-) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=utf8;
 
 -- ----------------------------
 --  Records of `ACCESSGROUP`
 -- ----------------------------
 BEGIN;
-INSERT INTO `ACCESSGROUP` VALUES ('1', 'user_default', 'Default user accessgroup.', '1'), ('2', 'master_default', 'Default master accessgroup.', '1'), ('3', 'admin_default', 'Default admin accessgroup.', '1'), ('4', 'superadmin_default', 'Default superadmin accessgroup.', '1');
+INSERT INTO `ACCESSGROUP` VALUES ('1', 'user_default', 'Default user accessgroup.', '1'), ('2', 'master_default', 'Default master accessgroup.', '1'), ('3', 'admin_default', 'Default admin accessgroup.', '1'), ('4', 'superadmin_default', 'Default superadmin accessgroup.', '1'), ('5', 'user_default2', 'default2 user access group.', '0');
 COMMIT;
 
 -- ----------------------------
@@ -73,7 +73,7 @@ CREATE TABLE `ACCESSLIST` (
 --  Records of `ACCESSLIST`
 -- ----------------------------
 BEGIN;
-INSERT INTO `ACCESSLIST` VALUES ('1', 'user_login', ''), ('2', 'user_register', ''), ('3', 'user_update', ''), ('4', 'user_updateStatus', ''), ('5', 'address_checkChildAdsList', ''), ('6', 'address_checkAdsList', ''), ('7', 'user_checkUserList', ''), ('8', 'user_checkUserName', ''), ('9', 'user_checkToken', ''), ('10', 'user_loginJson', ''), ('11', 'user_registerJson', ''), ('12', 'user_updateJson', ''), ('13', 'user_updateStatusJson', ''), ('14', 'address_checkChildAdsListJson', ''), ('15', 'address_checkAdsListJson', ''), ('16', 'user_checkUserListJson', ''), ('17', 'user_checkUserNameJson', ''), ('18', 'user_checkTokenJson', ''), ('28', 'advert_showAdvert', ''), ('29', 'advert_addAdvert', ''), ('30', 'advert_deleteAdvert', ''), ('31', 'upload_userUpload', ''), ('32', 'upload_orderUpload', ''), ('33', 'upload_advertUpload', ''), ('43', 'advert_showAdvertJson', ''), ('44', 'advert_addAdvertJson', ''), ('45', 'advert_deleteAdvertJson', ''), ('46', 'upload_userUploadJson', ''), ('47', 'upload_orderUploadJson', ''), ('48', 'upload_advertUploadJson', ''), ('49', 'orderlist_getwashorderlist', ''), ('50', 'referdoc_getlist', ''), ('51', 'orderlist_getwashorderlistJson', ''), ('52', 'referdoc_getlistJson', '');
+INSERT INTO `ACCESSLIST` VALUES ('1', 'user_login', 'Login access.'), ('2', 'user_register', ''), ('3', 'user_update', ''), ('4', 'user_updateStatus', ''), ('5', 'address_checkChildAdsList', ''), ('6', 'address_checkAdsList', ''), ('7', 'user_checkUserList', ''), ('8', 'user_checkUserName', ''), ('9', 'user_checkToken', ''), ('10', 'user_loginJson', 'Mobile Apps Login access. If you remove this access, ALL account under this AccessGroup will NOT be able to login via mobile apps.'), ('11', 'user_registerJson', ''), ('12', 'user_updateJson', ''), ('13', 'user_updateStatusJson', ''), ('14', 'address_checkChildAdsListJson', ''), ('15', 'address_checkAdsListJson', ''), ('16', 'user_checkUserListJson', ''), ('17', 'user_checkUserNameJson', ''), ('18', 'user_checkTokenJson', ''), ('28', 'advert_showAdvert', ''), ('29', 'advert_addAdvert', ''), ('30', 'advert_deleteAdvert', ''), ('31', 'upload_userUpload', ''), ('32', 'upload_orderUpload', ''), ('33', 'upload_advertUpload', ''), ('43', 'advert_showAdvertJson', ''), ('44', 'advert_addAdvertJson', ''), ('45', 'advert_deleteAdvertJson', ''), ('46', 'upload_userUploadJson', ''), ('47', 'upload_orderUploadJson', ''), ('48', 'upload_advertUploadJson', ''), ('49', 'orderlist_getwashorderlist', ''), ('50', 'referdoc_getlist', ''), ('51', 'orderlist_getwashorderlistJson', ''), ('52', 'referdoc_getlistJson', '');
 COMMIT;
 
 -- ----------------------------
@@ -203,7 +203,7 @@ CREATE TABLE `PREORDER` (
   `preorder_master_grade` decimal(10,2) DEFAULT NULL,
   `preorder_master_pic` varchar(255) DEFAULT NULL,
   PRIMARY KEY (`preorder_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=10 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=9 DEFAULT CHARSET=utf8;
 
 -- ----------------------------
 --  Records of `PREORDER`
@@ -241,24 +241,24 @@ CREATE TABLE `USER` (
   `user_id` int(11) NOT NULL AUTO_INCREMENT,
   `user_account` varchar(30) NOT NULL,
   `user_password` varchar(255) NOT NULL,
-  `user_email` varchar(30) NOT NULL DEFAULT '',
-  `user_mobile` bigint(20) NOT NULL DEFAULT '0',
-  `user_type` tinyint(2) NOT NULL DEFAULT '0',
-  `user_name` varchar(20) NOT NULL DEFAULT '',
-  `user_gender` tinyint(2) NOT NULL DEFAULT '0',
-  `user_pic_url` varchar(255) NOT NULL DEFAULT '',
-  `user_language` varchar(255) NOT NULL DEFAULT '',
-  `user_skill` varchar(255) NOT NULL DEFAULT '',
-  `user_address_code` mediumint(8) NOT NULL DEFAULT '0',
-  `user_address` text NOT NULL,
-  `user_description` text NOT NULL,
+  `user_email` varchar(30) DEFAULT '',
+  `user_mobile` bigint(20) DEFAULT '0',
+  `user_type` tinyint(4) NOT NULL DEFAULT '0',
+  `user_name` varchar(20) DEFAULT '',
+  `user_gender` tinyint(4) DEFAULT '0',
+  `user_pic_url` varchar(255) DEFAULT '',
+  `user_language` varchar(100) DEFAULT '',
+  `user_skill` varchar(255) DEFAULT '',
+  `user_address_code` mediumint(9) DEFAULT '0',
+  `user_address` varchar(100) DEFAULT '',
+  `user_description` varchar(255) DEFAULT '',
   `user_access_group` varchar(30) NOT NULL DEFAULT '',
-  `user_status` tinyint(2) NOT NULL DEFAULT '0',
+  `user_status` tinyint(4) NOT NULL DEFAULT '0',
   `user_create_time` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
   `user_login_time` timestamp NULL DEFAULT NULL,
-  `user_token` varchar(255) NOT NULL DEFAULT '',
-  `user_grade` double(11,2) NOT NULL DEFAULT '0.00',
-  `user_skill_name` varchar(255) NOT NULL DEFAULT '',
+  `user_token` varchar(255) DEFAULT '',
+  `user_grade` double(11,2) DEFAULT '0.00',
+  `user_skill_name` varchar(255) DEFAULT '',
   PRIMARY KEY (`user_id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=21 DEFAULT CHARSET=utf8;
 
@@ -266,7 +266,7 @@ CREATE TABLE `USER` (
 --  Records of `USER`
 -- ----------------------------
 BEGIN;
-INSERT INTO `USER` VALUES ('1', 'aaa', '7E240DE74FB1ED08FA08D38063F6A6A91462A815', 'aaa@163.com', '13144445555', '4', 'nameaaa', '1', '/BBCall/UserPhoto/1_photo.jpg', 'Chinese;Cantonese;English', '19002;11001;12003;12002;12001', '810101', '香港;香港島;中西區;西區999號', 'I am aaa, I am admin account.', 'admin_default', '1', '2015-06-07 01:08:21', '2015-07-24 03:00:48', 'uWGo9AfFmV4iRdyqg68bKDOiFfNccu31bGdDO4m1fnwtclPbT5', '0.00', '蟑螂防治;鋁窗檢查;到會貼紙相機;到會派對活動;餐飲到會'), ('2', 'bbb', '5CB138284D431ABD6A053A56625EC088BFB88912', 'bbb@qq.com', '13100000000', '1', 'bbb', '1', '/BBCall/UserPhoto/Male_photo.png', 'Chinese;Cantonese;English', '14003;14002;14001;15002;15001', '360202', '江西省;景德镇市;昌江区;123号', 'I am bbb, I am an user.', 'user_default', '1', '2015-06-07 01:10:07', '2015-07-21 23:55:04', '0C5FVhm9FaTFbLbFdYrkTzpFRtLrENM9Hk60b1b1Sa2iN9YgKs', '0.00', '長者護理;家務助理;陪月;洗衣（大）;洗衣（小）'), ('3', 'ccc', 'F36B4825E5DB2CF7DD2D2593B3F5C24C0311D8B2', 'ccc@qq.com', '13100001111', '1', 'ccc', '2', '/BBCall/UserPhoto/Female_photo.png', 'Chinese', '', '0', '', '', 'user_default', '1', '2015-06-07 01:23:52', '2015-07-22 00:19:49', 'YHpdB4jloWHJe0cv8prbtFUUa8DkA6Jy9SYMUTVEShbAJDXlBH', '0.00', ''), ('4', 'ddd', '9C969DDF454079E3D439973BBAB63EA6233E4087', 'ddd@qq.com', '13122001112', '2', 'ddd', '1', '/BBCall/UserPhoto/Male_photo.png', 'Chinese;Cantonese;English', '18002;18003;18001;15002;15001', '440106', '广东省;广州市;天河区;太古汇二座', '', 'master_default', '1', '2015-06-07 05:01:36', '2015-06-20 01:51:13', 'zrgPlfWZXZztONm1JkKwtRwYWI7rdLax66lEHl5WD8L7TBPKv9', '0.00', '節能工程;防盜警報;智能家庭系統;洗衣（大）;洗衣（小）'), ('5', 'eee', '637A81ED8E8217BB01C15C67C39B43B0AB4E20F1', '', '0', '3', '', '1', '/BBCall/UserPhoto/Admin_photo.png', 'Chinese;Cantonese;English', '17001;12002;12001', '440106', '广东省;广州市;天河区;太古汇二座', '', 'admin_default', '1', '2015-06-07 05:08:13', '2015-07-17 18:29:45', '2nrh7VVArd6Pft9IBWacovKNd9SzrQL5Pp3SDugJqtrYjKjy92', '0.00', '上門美容;到會派對活動;餐飲到會'), ('9', 'wwwwww', 'B33B5E3E04DAE7C04D1E4DC759CA5C80E26E576A', 'www@qq.com', '131232323232', '2', 'wwwwww', '2', '/BBCall/UserPhoto/9_photo.png', 'Chinese;Cantonese', '16002;16001', '0', '', '', 'master_default', '1', '2015-07-11 13:14:31', '2015-07-11 16:46:07', '6fV0IApy8UZ8R5dcZKHgseCqxMTJ3H3MgUkjAAONns8kXDQlgx', '0.00', '上門獸醫;寵物美容'), ('11', 'rrrrrr', '5545D9E7B6C914922AD862858F65175656B6F341', 'rrraaa@qq.com', '11122223333', '2', 'rrrrrr', '1', '/BBCall/UserPhoto/11_photo.jpg', 'Chinese;Cantonese', '', '0', '', '', 'master_default', '1', '2015-07-11 14:01:22', null, '', '0.00', ''), ('12', '1234567', '20EABE5D64B0E216796E834F52D61FD0B70332FC', '', '0', '1', '', '0', '/BBCall/UserPhoto/Default_photo.png', '', '', '0', '', '', 'user_default', '3', '2015-07-11 16:06:34', null, '', '0.00', ''), ('13', 'ffffff', 'C81019207890DEB5CBA8CDA1DE0DD6B1C229EEFF', '', '0', '1', '', '0', '/BBCall/UserPhoto/Default_photo.png', '', '', '0', '', '', 'user_default', '2', '2015-07-12 19:51:08', null, '', '0.00', ''), ('14', 'qwerty', 'B1B3773A05C0ED0176787A4F1574FF0075F7521E', 'qwerty@qq.com', '13123232323', '2', 'qwerty', '1', '/BBCall/UserPhoto/GgDNZ0Y0ruiFKNxI_photo.jpg', 'Cantonese;English', '', '810304', '香港;新界;西貢區;qwerty', '', 'master_default', '4', '2015-07-13 02:36:02', null, '', '0.00', ''), ('15', 'tttttt', '3292CCFAD2B02195CDB85F79124B12E476B65AC0', '', '0', '1', '', '0', '/BBCall/UserPhoto/Default_photo.png', '', '', '0', '', '', 'user_default', '1', '2015-07-13 03:05:57', null, '', '0.00', ''), ('16', 'oooooo', '7F8B6B25B3F62699BF073BE153438F81E9A2DC51', '', '0', '1', '', '0', '/BBCall/UserPhoto/Default_photo.png', '', '', '0', '', '', 'user_default', '1', '2015-07-15 02:04:11', null, '', '0.00', ''), ('17', 'pppppp', 'B572DC7BB7E0FF7E2887F32E1B733CFFDC954FAD', '', '0', '1', '', '0', '/BBCall/UserPhoto/Default_photo.png', '', '', '0', '', '', 'user_default', '1', '2015-07-15 02:07:26', null, '', '0.00', ''), ('18', 'kkkkkk', '92FC472E870B9CF61AA2B6F8BD8267F9C14F58F5', '', '0', '4', '', '1', '/BBCall/UserPhoto/Admin_photo.png', '', '', '0', '', '', 'admin_default', '1', '2015-07-17 18:17:25', null, '', '0.00', ''), ('19', 'yyyyyy', '3421ECDE2A5DE6543B48460B867CF323B018BC22', '', '0', '1', '', '0', '/BBCall/UserPhoto/Default_photo.png', '', '', '0', '', '', 'user_default', '1', '2015-07-17 18:45:00', null, '', '0.00', ''), ('20', '159357', '5F079981221CE504832142E9526B623BBFB6E686', '159357@qq.com', '13790701660', '1', '159357', '1', '/BBCall/UserPhoto/20_photo.jpg', 'Cantonese', '20002;17003;17004;17001', '360622', '江西省;鹰潭市;余江县;159357', 'I am 159357, I am an user.', 'user_default', '1', '2015-07-24 02:39:09', '2015-07-24 03:18:09', 'ruDeuSxVYGGu4znNDsSnDVvKw4CEWj6KXjNNZijq41seiRjFBK', '0.00', '運動器材;上門化妝;其他;上門美容');
+INSERT INTO `USER` VALUES ('1', 'aaa', '7E240DE74FB1ED08FA08D38063F6A6A91462A815', 'aaa@163.com', '13144445555', '4', 'nameaaa', '1', '/BBCall/UserPhoto/1_photo.jpg', 'Chinese;Cantonese;English', '12003;12002;12001', '810101', '香港;香港島;中西區;西區999號', 'I am aaa, I am admin account.', 'admin_default', '1', '2015-06-07 01:08:21', '2015-07-28 02:44:28', 'NLDTgC27xJ1cqTEnH9ZAxwGytSEh9d18Z2OT9Qy5TRhaiNEBtA', '0.00', '到會貼紙相機;到會派對活動;餐飲到會'), ('2', 'bbb', '5CB138284D431ABD6A053A56625EC088BFB88912', 'bbb@qq.com', '13100000000', '1', 'bbb', '1', '/BBCall/UserPhoto/Male_photo.png', 'Chinese;Cantonese;English', '14003;14002;14001;15002;15001', '360202', '江西省;景德镇市;昌江区;123号', 'I am bbb, I am an user.', 'user_default', '1', '2015-06-07 01:10:07', '2015-07-21 23:55:04', '0C5FVhm9FaTFbLbFdYrkTzpFRtLrENM9Hk60b1b1Sa2iN9YgKs', '0.00', '長者護理;家務助理;陪月;洗衣（大）;洗衣（小）'), ('3', 'ccc', 'F36B4825E5DB2CF7DD2D2593B3F5C24C0311D8B2', 'ccc@qq.com', '13100001111', '1', 'ccc', '2', '/BBCall/UserPhoto/Female_photo.png', 'Chinese', '', '0', '', '', 'user_default', '1', '2015-06-07 01:23:52', '2015-07-22 00:19:49', 'YHpdB4jloWHJe0cv8prbtFUUa8DkA6Jy9SYMUTVEShbAJDXlBH', '0.00', ''), ('4', 'ddd', '9C969DDF454079E3D439973BBAB63EA6233E4087', 'ddd@qq.com', '13122001112', '2', 'ddd', '1', '/BBCall/UserPhoto/Male_photo.png', 'Chinese;Cantonese;English', '18002;18003;18001;15002;15001', '440106', '广东省;广州市;天河区;太古汇二座', '', 'master_default', '1', '2015-06-07 05:01:36', '2015-06-20 01:51:13', 'zrgPlfWZXZztONm1JkKwtRwYWI7rdLax66lEHl5WD8L7TBPKv9', '0.00', '節能工程;防盜警報;智能家庭系統;洗衣（大）;洗衣（小）'), ('5', 'eee', '637A81ED8E8217BB01C15C67C39B43B0AB4E20F1', '', '0', '3', '', '1', '/BBCall/UserPhoto/Admin_photo.png', 'Chinese;Cantonese;English', '17001;12002;12001', '440106', '广东省;广州市;天河区;太古汇二座', '', 'admin_default', '1', '2015-06-07 05:08:13', '2015-07-17 18:29:45', '2nrh7VVArd6Pft9IBWacovKNd9SzrQL5Pp3SDugJqtrYjKjy92', '0.00', '上門美容;到會派對活動;餐飲到會'), ('9', 'wwwwww', 'B33B5E3E04DAE7C04D1E4DC759CA5C80E26E576A', 'www@qq.com', '131232323232', '2', 'wwwwww', '2', '/BBCall/UserPhoto/9_photo.png', 'Chinese;Cantonese', '16002;16001', '0', '', '', 'master_default', '1', '2015-07-11 13:14:31', '2015-07-11 16:46:07', '6fV0IApy8UZ8R5dcZKHgseCqxMTJ3H3MgUkjAAONns8kXDQlgx', '0.00', '上門獸醫;寵物美容'), ('11', 'rrrrrr', '5545D9E7B6C914922AD862858F65175656B6F341', 'rrraaa@qq.com', '11122223333', '2', 'rrrrrr', '1', '/BBCall/UserPhoto/11_photo.jpg', 'Chinese;Cantonese', '', '0', '', '', 'master_default', '1', '2015-07-11 14:01:22', null, '', '0.00', ''), ('12', '1234567', '20EABE5D64B0E216796E834F52D61FD0B70332FC', '', '0', '1', '', '0', '/BBCall/UserPhoto/Default_photo.png', '', '', '0', '', '', 'user_default', '3', '2015-07-11 16:06:34', null, '', '0.00', ''), ('13', 'ffffff', 'C81019207890DEB5CBA8CDA1DE0DD6B1C229EEFF', '', '0', '1', '', '0', '/BBCall/UserPhoto/Default_photo.png', '', '', '0', '', '', 'user_default', '2', '2015-07-12 19:51:08', null, '', '0.00', ''), ('14', 'qwerty', 'B1B3773A05C0ED0176787A4F1574FF0075F7521E', 'qwerty@qq.com', '13123232323', '2', 'qwerty', '1', '/BBCall/UserPhoto/14_photo.jpg', 'Cantonese;English', '', '810304', '香港;新界;西貢區;qwerty', '', 'master_default', '3', '2015-07-13 02:36:02', '2015-07-24 04:21:31', 'rwKH0CfYNqjzOmwxNvN3nSEMbyUsijjHnCQyZyj2xZijB56JcH', '0.00', ''), ('15', 'tttttt', '3292CCFAD2B02195CDB85F79124B12E476B65AC0', '', '0', '1', '', '0', '/BBCall/UserPhoto/Default_photo.png', '', '', '0', '', '', 'user_default', '1', '2015-07-13 03:05:57', null, '', '0.00', ''), ('16', 'oooooo', '7F8B6B25B3F62699BF073BE153438F81E9A2DC51', '', '0', '1', '', '0', '/BBCall/UserPhoto/Default_photo.png', '', '', '0', '', '', 'user_default', '1', '2015-07-15 02:04:11', null, '', '0.00', ''), ('17', 'pppppp', 'B572DC7BB7E0FF7E2887F32E1B733CFFDC954FAD', '', '0', '1', '', '0', '/BBCall/UserPhoto/Default_photo.png', '', '', '0', '', '', 'user_default', '1', '2015-07-15 02:07:26', null, '', '0.00', ''), ('18', 'kkkkkk', '92FC472E870B9CF61AA2B6F8BD8267F9C14F58F5', '', '0', '4', '', '1', '/BBCall/UserPhoto/Admin_photo.png', '', '', '0', '', '', 'admin_default', '1', '2015-07-17 18:17:25', null, '', '0.00', ''), ('19', 'yyyyyy', '3421ECDE2A5DE6543B48460B867CF323B018BC22', '', '0', '1', '', '0', '/BBCall/UserPhoto/Default_photo.png', '', '', '0', '', '', 'user_default', '3', '2015-07-17 18:45:00', null, '', '0.00', ''), ('20', '159357', '5F079981221CE504832142E9526B623BBFB6E686', '159357@qq.com', '13790701660', '1', '159357', '1', '/BBCall/UserPhoto/20_photo.jpg', 'Cantonese', '20002;17003;17004;17001', '360622', '江西省;鹰潭市;余江县;159357', 'I am 159357, I am an user.', 'user_default', '1', '2015-07-24 02:39:09', '2015-07-24 03:18:09', 'ruDeuSxVYGGu4znNDsSnDVvKw4CEWj6KXjNNZijq41seiRjFBK', '0.00', '運動器材;上門化妝;其他;上門美容');
 COMMIT;
 
 SET FOREIGN_KEY_CHECKS = 1;

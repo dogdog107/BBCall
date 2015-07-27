@@ -99,7 +99,7 @@ public class UserServices {
 		}
 		
 		// ***** 检测 usertype 是否正确 *****
-		if (usertype != 1 && usertype != 2 && usertype != 3 && usertype != 4) {
+		if (usertype == null || (usertype != 1 && usertype != 2 && usertype != 3 && usertype != 4)) {
 			return ResultCode.USERTYPE_ERROR;
 		}
 

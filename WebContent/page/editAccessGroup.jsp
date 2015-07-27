@@ -44,20 +44,21 @@
 			<table class="table_list" border="1" width="100%">
 				<tbody id="datas">
 					<tr  style="font-size: 15px; color: green;">
-						<td style="border-right:none;" colspan="2">
+						<td style="border-right:none;">
 							<span>權限組名字：</span><br/>
 							<span>(AccessGroup Name):</span> 
 						</td>
 						<td style="border-width: 1px 0px 1px 0px;">
 							${accessgroup_name }
 						</td>
-						<td style="border-width: 1px 1px 1px 0px;"></td>
+						<td style="border-width: 1px 1px 1px 0px;" colspan="3"></td>
 					</tr>
 					<tr style="color:#1c94c4">
-						<td width="400px" style="border:none;">現有權限<br/>Current Access</td>
-						<td width="10px" style="border:none;"></td>
-						<td width="400px" style="border:none;">系統權限<br/>System Access</td>
-						<td style="border-width: 0px 1px 0px 0px;"><span>Access Description:</span></td>
+						<td width="300px" style="border:none;">現有權限<br/>Current Access</td>
+						<td width="20px" style="border:none;"></td>
+						<td width="300px" style="border:none;">系統權限<br/>System Access</td>
+						<td width="400px" style="border-width: 0px 0px 1px 1px;">權限說明<br/>Access Description</td>
+						<td style="border-width: 1px 1px 1px 0px;"></td>
 					</tr>
 					<tr style="color: #1c94c4">
 						<td style="border:none;"><select multiple size="20" name="list1" id="list1" style="width:300px"
@@ -70,8 +71,10 @@
 						<td style="border:none;"><select multiple size="20" name="list2" id="list2" style="width:300px"
 							ondblclick="move(this.form.list2,this.form.list1)" onclick="showDesc(this.form.list2)">
 						</select></td>
-						<td valign="top" style="border-width: 0px 1px 0px 0px;">
-							<span id="access_desc" style='color:#CC0000'></span>
+						<td  valign="top" style="border-width: 1px 0px 0px 1px; text-align:left;">
+							<span id="access_desc" style="color:#CC0000;"></span>
+						</td>
+						<td style="border-width: 0px 1px 0px 0px;">
 						</td>
 					</tr>
 				</tbody>
