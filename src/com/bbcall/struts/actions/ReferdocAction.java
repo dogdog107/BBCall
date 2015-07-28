@@ -245,18 +245,18 @@ public class ReferdocAction extends ActionSupport {
 		dataMap = new HashMap<String, Object>(); // 新建dataMap来储存JSON字符串
 		dataMap.clear(); // dataMap中的数据将会被Struts2转换成JSON字符串，所以这里要先清空其中的数据
 
-		List<Referdoc> referdoclist1 = referdocServices.getChildRefer("11000");
-		List<Referdoc> referdoclist2 = referdocServices.getChildRefer("12000");
-		List<Referdoc> referdoclist3 = referdocServices.getChildRefer("13000");
-		List<Referdoc> referdoclist4 = referdocServices.getChildRefer("14000");
-		List<Referdoc> referdoclist5 = referdocServices.getChildRefer("15000");
-		List<Referdoc> referdoclist6 = referdocServices.getChildRefer("16000");
-		List<Referdoc> referdoclist7 = referdocServices.getChildRefer("17000");
-		List<Referdoc> referdoclist8 = referdocServices.getChildRefer("18000");
-		List<Referdoc> referdoclist9 = referdocServices.getChildRefer("19000");
-		List<Referdoc> referdoclist10 = referdocServices.getChildRefer("20000");
-		List<Referdoc> referdoclist11 = referdocServices.getChildRefer("21000");
-		List<Referdoc> referdoclist12 = referdocServices.getChildRefer("22000");
+		List<Referdoc> referdoclist1 = referdocServices.getChildRefer(11000);
+		List<Referdoc> referdoclist2 = referdocServices.getChildRefer(12000);
+		List<Referdoc> referdoclist3 = referdocServices.getChildRefer(13000);
+		List<Referdoc> referdoclist4 = referdocServices.getChildRefer(14000);
+		List<Referdoc> referdoclist5 = referdocServices.getChildRefer(15000);
+		List<Referdoc> referdoclist6 = referdocServices.getChildRefer(16000);
+		List<Referdoc> referdoclist7 = referdocServices.getChildRefer(17000);
+		List<Referdoc> referdoclist8 = referdocServices.getChildRefer(18000);
+		List<Referdoc> referdoclist9 = referdocServices.getChildRefer(19000);
+		List<Referdoc> referdoclist10 = referdocServices.getChildRefer(20000);
+		List<Referdoc> referdoclist11 = referdocServices.getChildRefer(21000);
+		List<Referdoc> referdoclist12 = referdocServices.getChildRefer(22000);
 
 		dataMap.put("referdoclist1", referdoclist1);
 		dataMap.put("referdoclist2", referdoclist2);

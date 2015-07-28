@@ -378,9 +378,9 @@ public class ReferdocServices {
 		return ResultCode.SUCCESS;
 	}
 	
-	public List<Referdoc> getChildRefer(String referdoc_parentno) {
+	public List<Referdoc> getChildRefer(int referdoc_parentno) {
 
-		return referdocMapper.getReferdoclist(referdoc_parentno);
+		return referdocMapper.getReferdoclistByParent(referdoc_parentno);
 	}
 	
 	public int getChildReferdoclist2(String referdoc_parentno, Integer pagenum) {
