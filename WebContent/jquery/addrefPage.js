@@ -1,10 +1,9 @@
 
 
 
-function referdoc_level_change() {
+function onload() {
 	var level = document.getElementById('referdoc_level').value;
 	
-	if (level == 2) {
 		document.getElementById('parentno_tr').style.display="";
 		document.getElementById('price_tr').style.display="";
 		document.getElementById('flag_tr').style.display="";
@@ -26,15 +25,4 @@ function referdoc_level_change() {
 				}
 			}
 		});
-	} else {
-		var op=document.createElement("option"); 
-		op.setAttribute("value",0);        
-		op.appendChild(document.createTextNode("请选择")); 
-		document.getElementById('referdoc_parentno').options.length=0;
-		document.getElementById('referdoc_parentno').appendChild(op);
-		document.getElementById('parentno_tr').style.display="none";
-		document.getElementById('price_tr').style.display="none";
-		document.getElementById('select2').selected="selected";
-		document.getElementById('flag_tr').style.display="none";
-	}
 }

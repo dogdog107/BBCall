@@ -63,7 +63,7 @@
                         <td>訂單類型</td>
                         <td>訂單參考價格</td>
                         <td>固定价格</td>
-                        <td colspan="4" align="center">操作</td>
+                        <td colspan="4" align="left">操作</td>
                     </tr>
                     
 					<tr id="template" style="display:none">
@@ -79,7 +79,7 @@
 							</select>	
 						</td>
 						<td style="display:none"><input type="text" id="referparentno" ></input></td>
-						<td>
+						<td align="left">
 						<input id="referupdate" type="submit" value="修改" onclick=""/>
 						<input id="referdelete" type="submit" value="刪除" onclick=""/>
 						</td>
