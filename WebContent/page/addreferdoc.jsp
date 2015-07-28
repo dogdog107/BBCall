@@ -19,7 +19,7 @@
   String path=request.getContextPath();
 %>
 </head>
-<body>
+<body onload="onload()">
 
 	<table cellspacing=0 cellpadding=0 width="100%" align=center border=0 style="font-size: 12px;">
 		<tr height=28>
@@ -48,8 +48,7 @@
                 	<tr>
                 		<td>
                 			添加 
-                			<select id="referdoc_level" name="referdoc_level" onchange="referdoc_level_change()">
-								<option value="1">一級項</option>
+                			<select id="referdoc_level" name="referdoc_level">
 								<option value="2">二級項</option>
 							</select>
                 		</td>

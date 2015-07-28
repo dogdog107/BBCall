@@ -60,8 +60,10 @@ function getlist(parentno,pagenum) {
 					row.find("#referid").attr("id","referid_"+n.referdoc_id);
 					if (n.referdoc_level == 1) {
 						row.find("#referlevel").text("一級項");
+						row.find("#referdelete").attr("style", "display:none");
 					} else {
 						row.find("#referlevel").text("二級項");
+						row.find("#referdelete").attr("onclick", "location.href='referdoc_delete.action?referdoc_id=" + n.referdoc_id + "&pagenum='");
 					}
 					row.find("#referlevel").attr("id","referlevel_"+n.referdoc_id);
 					row.find("#referparentno").val(n.referdoc_parentno);
@@ -78,7 +80,7 @@ function getlist(parentno,pagenum) {
 					row.find("#referflag").attr("id","referflag_"+n.referdoc_id);
 					
 					row.find("#referupdate").attr("onclick", "referdoclist_update("+n.referdoc_id+")");
-					row.find("#referdelete").attr("onclick", "location.href='referdoc_delete.action?referdoc_id=" + n.referdoc_id + "&pagenum='");
+					
 					row.attr("id", "referdoc_" + n.referdoc_id);// 改变绑定好数据的行的id
 					row.appendTo("#datas");// 添加到模板的容器中
 					row.toggle(300);
@@ -131,8 +133,10 @@ function referdoc_parentno_change() {
 					row.find("#referid").attr("id","referid_"+n.referdoc_id);
 					if (n.referdoc_level == 1) {
 						row.find("#referlevel").text("一級項");
+						row.find("#referdelete").attr("style", "display:none");
 					} else {
 						row.find("#referlevel").text("二級項");
+						row.find("#referdelete").attr("onclick", "location.href='referdoc_delete.action?referdoc_id=" + n.referdoc_id + "&pagenum='");
 					}
 					row.find("#referlevel").attr("id","referlevel_"+n.referdoc_id);
 					row.find("#referparentno").val(n.referdoc_parentno);
@@ -149,7 +153,6 @@ function referdoc_parentno_change() {
 					row.find("#referflag").attr("id","referflag_"+n.referdoc_id);
 					
 					row.find("#referupdate").attr("onclick", "referdoclist_update("+n.referdoc_id+")");
-					row.find("#referdelete").attr("onclick", "location.href='referdoc_delete.action?referdoc_id=" + n.referdoc_id + "&pagenum='");
 					row.attr("id", "referdoc_" + n.referdoc_id);// 改变绑定好数据的行的id
 					row.appendTo("#datas");// 添加到模板的容器中
 					row.toggle(300);
@@ -212,8 +215,10 @@ function referdoclist_update(formnum) {
 					row.find("#referid").attr("id","referid_"+n.referdoc_id);
 					if (n.referdoc_level == 1) {
 						row.find("#referlevel").text("一級項");
+						row.find("#referdelete").attr("style", "display:none");
 					} else {
 						row.find("#referlevel").text("二級項");
+						row.find("#referdelete").attr("onclick", "location.href='referdoc_delete.action?referdoc_id=" + n.referdoc_id + "&pagenum='");
 					}
 					row.find("#referlevel").attr("id","referlevel_"+n.referdoc_id);
 					row.find("#referparentno").val(n.referdoc_parentno);
@@ -230,7 +235,6 @@ function referdoclist_update(formnum) {
 					row.find("#referflag").attr("id","referflag_"+n.referdoc_id);
 					
 					row.find("#referupdate").attr("onclick", "referdoclist_update("+n.referdoc_id+")");
-					row.find("#referdelete").attr("onclick", "location.href='referdoc_delete.action?referdoc_id=" + n.referdoc_id + "&pagenum='");
 					row.attr("id", "referdoc_" + n.referdoc_id);// 改变绑定好数据的行的id
 					row.appendTo("#datas");// 添加到模板的容器中
 					row.toggle(300);
