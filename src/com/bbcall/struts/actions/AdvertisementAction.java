@@ -57,6 +57,7 @@ public class AdvertisementAction extends ActionSupport{
 	
 	// others parameters
 	private String updateResult;
+	
 	/**
 	 * addAdvert Action
 	 * @author Roger Luo

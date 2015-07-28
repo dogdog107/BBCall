@@ -23,6 +23,10 @@ public class ResultCode {
 	public static Integer USERMOBILE_ERROR = 10015;// 请求注册的手机号有误
 	public static Integer USERGENDER_ERROR = 10016;// 请求注册的性别有误
 	public static Integer USEREMAIL_ERROR = 10017;// 请求注册的邮箱地址有误
+	public static Integer USERSKILLINFO_EXIST = 10018;// 用户技能信息已存在
+	public static Integer USERSKILLINFO_NOTEXIST = 10019;// 用户技能信息不存在
+	public static Integer USERSKILLINFO_ISSAME = 10020;// 用户技能信息相同
+	public static Integer USERSKILLLIST_NULL = 10021;// 用户技能列表为空
 
 	// 用户返回码11XXX
 	public static Integer USERNAME_NOTEXIST = 11001;// 用户名可以使用
@@ -131,6 +135,18 @@ public class ResultCode {
 			break;
 		case 10017:
 			errmsg = "email error";
+			break;
+		case 10018:
+			errmsg = "user Skill Information exist";
+			break;
+		case 10019:
+			errmsg = "user Skill Information not exist";
+			break;
+		case 10020:
+			errmsg = "user Skill Information is same";
+			break;
+		case 10021:
+			errmsg = "user Skill List is empty";
 			break;
 
 		case 11001:

@@ -46,7 +46,9 @@ public class FileUploadServices {
 //		default:
 //			return ResultCode.UNKNOWN_ERROR;
 //		}
+		
 		File destFile = new File(storePath + File.separator + storeFileName);
+		destFile.mkdirs();
 		if (destFile.exists()) {
 			destFile.delete();
 		}

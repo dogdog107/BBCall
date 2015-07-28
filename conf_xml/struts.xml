@@ -86,6 +86,10 @@
 		<!-- User Action -->
 		<action name="user_*" method="{1}" class="userAction">
 
+			<result name="success">
+				<param name="location">/page/defult.jsp</param>
+			</result>
+			
 			<result name="loginSuccess">
 				<param name="location">/page/index.jsp</param>
 			</result>

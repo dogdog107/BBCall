@@ -21,8 +21,6 @@ import com.github.pagehelper.PageHelper;
 public class UserServices {
 
 	private static Logger logger = Logger.getLogger(UserServices.class);  
-	// @Autowired
-	// private UserSkillMapper userSkillMapper;
 	@Autowired
 	private UserMapper userMapper;
 	@Autowired
@@ -109,7 +107,7 @@ public class UserServices {
 		}
 
 		if (usertype == 2) { // usertype=2时为师傅号，检测注册信息是否完整
-			if (Tools.isEmpty(name, picurl, email, language, skill)
+			if (Tools.isEmpty(name, picurl, email, language, description)
 					|| mobile == null || gender == null) {
 				return ResultCode.REGISTERINFO_NOTENOUGH;
 			}
@@ -150,12 +148,12 @@ public class UserServices {
 			
 			// ***** 添加 usertype *****
 			user.setUser_type(usertype);
-			if (usertype == 2 && registermode == 1) {// 当用户在注册师傅账号时，状态转为待审核
-				user.setUser_status(3); // 1=active, 2=pause, 3=pending,
-										// 4=locked
-			} else {
-				user.setUser_status(1);
-			}
+//			if (usertype == 2 && registermode == 1) {// 当用户在注册师傅账号时，状态转为待审核
+//				user.setUser_status(3); // 1=active, 2=pause, 3=pending,
+//										// 4=locked
+//			} else {
+//				user.setUser_status(1);
+//			}
 			
 			// ***** 添加 picurl *****
 			while (Tools.isEmpty(picurl)) {
@@ -214,12 +212,12 @@ public class UserServices {
 					return ResultCode.ADDRESS_NOTMATCH;
 			}
 
-			// ***** 添加姓名 *****
+			// ***** 添加姓名name *****
 			if (!Tools.isEmpty(name)) {
 				user.setUser_name(name);
 			}
 			
-			// ***** 添加手机号 判断格式 *****
+			// ***** 添加手机号mobile 判断格式 *****
 			if (mobile != null) {
 				if (Tools.isNumeric(mobile.toString())
 						&& (mobile.toString().length() >= 8)) {
@@ -234,7 +232,7 @@ public class UserServices {
 				}
 			}
 
-			// ***** 添加性别 *****
+			// ***** 添加性别gender *****
 			if (gender != null) {
 				if ((gender.equals(1) || gender.equals(2))) { // 1=Male,2=Female
 					user.setUser_gender(gender);
@@ -243,7 +241,7 @@ public class UserServices {
 				}
 			}
 			
-			// ***** 添加邮箱 *****
+			// ***** 添加邮箱email *****
 			if (!Tools.isEmpty(email)) {
 				if (email.contains("@")) {
 					int checkEmailResult = checkUserName(email);// 调用checkUserName方法检测邮箱地址是否唯一并得到返回码
@@ -257,7 +255,7 @@ public class UserServices {
 				}
 			}
 
-			// ***** 添加语言 *****
+			// ***** 添加语言language *****
 			if (!Tools.isEmpty(language)) {
 				// 清除开头为;的符号
 				while(language.startsWith(";")){
@@ -270,31 +268,33 @@ public class UserServices {
 				user.setUser_language(language);
 			}
 			
-			// ***** 添加技能 *****
-			if (!Tools.isEmpty(skill)) {
-				// 清除开头为;的符号
-				while(skill.startsWith(";")){
-					skill = skill.substring(1, skill.length());
+			// ***** 添加技能skill *****
+			if (registermode == 2) { // 当管理员注册师傅时才能添加技能
+				if (!Tools.isEmpty(skill)) {
+					// 清除开头为;的符号
+					while(skill.startsWith(";")){
+						skill = skill.substring(1, skill.length());
+					}
+					// 清除结尾为;的符号
+					while(skill.endsWith(";")){
+						skill = skill.substring(0, skill.length() - 1);
+					}
+					user.setUser_skill(skill);
+					
+					String skillName = referdocServices.getReferlist(skill);
+					// 清除开头为;的符号
+					while(skillName.startsWith(";")){
+						skillName = skillName.substring(1, skillName.length());
+					}
+					// 清除结尾为;的符号
+					while(skillName.endsWith(";")){
+						skillName = skillName.substring(0, skillName.length() - 1);
+					}
+					user.setUser_skill_name(skillName);
 				}
-				// 清除结尾为;的符号
-				while(skill.endsWith(";")){
-					skill = skill.substring(0, skill.length() - 1);
-				}
-				user.setUser_skill(skill);
-				
-				String skillName = referdocServices.getReferlist(skill);
-				// 清除开头为;的符号
-				while(skillName.startsWith(";")){
-					skillName = skillName.substring(1, skillName.length());
-				}
-				// 清除结尾为;的符号
-				while(skillName.endsWith(";")){
-					skillName = skillName.substring(0, skillName.length() - 1);
-				}
-				user.setUser_skill_name(skillName);
 			}
 
-			// ***** 添加描述 *****
+			// ***** 添加描述description *****
 			if (!Tools.isEmpty(description)) {
 				user.setUser_description(description);
 			}
@@ -725,34 +725,36 @@ public class UserServices {
 			logger.info("userOpr:[UserUpdate][Updated ID: " + userid + "]grade changed!");
 		}
 		// ***** 检测skill *****
-		if (!Tools.isEmpty(skill) && !skill.equals(user.getUser_skill())) {
-			// 清除开头为;的符号
-			while(skill.startsWith(";")){
-				skill = skill.substring(1, skill.length());
-			}
-			// 清除结尾为;的符号
-			while(skill.endsWith(";")){
-				skill = skill.substring(0, skill.length() - 1);
-			}
-			user.setUser_skill(skill);
-			
-			String skillName = referdocServices.getReferlist(skill);
-			// 清除开头为;的符号
-			while(skillName.startsWith(";")){
-				skillName = skillName.substring(1, skillName.length());
-			}
-			// 清除结尾为;的符号
-			while(skillName.endsWith(";")){
-				skillName = skillName.substring(0, skillName.length() - 1);
-			}
-			user.setUser_skill_name(skillName);
-			changecount++;
-			System.out.println("skill changed!");
-			logger.info("userOpr:[UserUpdate][Updated ID: " + userid + "]skill changed!");
-			if (updatemode == 1 && tokenUserInfo.getUser_type().equals(2)) {// 用户模式时，user状态转为pending 待审核
-				user.setUser_status(3);
-				System.out.println("(skill)status changed due to UpdateMode is 1 (user)!");
-				logger.info("userOpr:[UserUpdate][Updated ID: " + userid + "](skill)status changed due to UpdateMode is 1 (user)!");
+		if (updatemode == 2) {
+			if (!Tools.isEmpty(skill) && !skill.equals(user.getUser_skill())) {
+				// 清除开头为;的符号
+				while(skill.startsWith(";")){
+					skill = skill.substring(1, skill.length());
+				}
+				// 清除结尾为;的符号
+				while(skill.endsWith(";")){
+					skill = skill.substring(0, skill.length() - 1);
+				}
+				user.setUser_skill(skill);
+				
+				String skillName = referdocServices.getReferlist(skill);
+				// 清除开头为;的符号
+				while(skillName.startsWith(";")){
+					skillName = skillName.substring(1, skillName.length());
+				}
+				// 清除结尾为;的符号
+				while(skillName.endsWith(";")){
+					skillName = skillName.substring(0, skillName.length() - 1);
+				}
+				user.setUser_skill_name(skillName);
+				changecount++;
+				System.out.println("skill changed!");
+				logger.info("userOpr:[UserUpdate][Updated ID: " + userid + "]skill changed!");
+//				if (updatemode == 1 && tokenUserInfo.getUser_type().equals(2)) {// 用户模式时，user状态转为pending 待审核
+//					user.setUser_status(3);
+//					System.out.println("(skill)status changed due to UpdateMode is 1 (user)!");
+//					logger.info("userOpr:[UserUpdate][Updated ID: " + userid + "](skill)status changed due to UpdateMode is 1 (user)!");
+//				}
 			}
 		}
 		// ***** 检测usertype *****
@@ -809,7 +811,7 @@ public class UserServices {
 		
 	    //PageHelper.startPage(PageNum, PageSize) 
 		//获取第1页，10条内容，当PageSize=0时会查询出全部的结果
-	    PageHelper.startPage(pagenum, 5);
+	    PageHelper.startPage(pagenum, 20);
 	    
 	    //紧跟着的第一个select方法会被分页
 		List<User> userlist = userMapper.listUserWhereOrderBy(where_col, order_col, where_value, order_value);
@@ -834,7 +836,7 @@ public class UserServices {
 		
 	    //PageHelper.startPage(PageNum, PageSize) 
 		//获取第1页，10条内容，当PageSize=0时会查询出全部的结果
-	    PageHelper.startPage(pagenum, 5);
+	    PageHelper.startPage(pagenum, 20);
 
 	    //紧跟着的第一个select方法会被分页
 		List<User> userlist = userMapper.listUserOrderBy(col_name, specify_value, search_value);
@@ -1083,10 +1085,13 @@ public class UserServices {
 		userMapper.deleteUserById(userid);
 		return ResultCode.SUCCESS;
 	}
-	
-	// ###################
-	// ##  更新用户评分
-	// ###################
+
+	/**
+	 * updateUserGrade 更新用户评分
+	 * @param userid
+	 * @param usergrade
+	 * @return
+	 */
 	public int updateUserGrade (Integer userid, Double usergrade) {
 		System.out.println("Here is UserServices.updateUserGrade method...");
 		if (userid == null)

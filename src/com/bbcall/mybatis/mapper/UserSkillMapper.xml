@@ -11,29 +11,100 @@
 	<resultMap id="UserSkillResultMap" type="com.bbcall.mybatis.table.UserSkill" >
     	<id column="userskill_id" property="userskill_id" jdbcType="INTEGER" />
     	<result column="user_id" property="user_id" jdbcType="INTEGER" />
-    	<result column="user_skill" property="user_skill" jdbcType="VARCHAR" />
+    	<result column="user_account" property="user_account" jdbcType="VARCHAR" />
+    	<result column="user_skill" property="user_skill" jdbcType="INTEGER" />
+    	<result column="user_skill_url" property="user_skill_url" jdbcType="VARCHAR" />
+    	<result column="user_skill_status" property="user_skill_status" jdbcType="INTEGER" />
+    	<result column="user_skill_create_time" property="user_skill_create_time" jdbcType="TIMESTAMP" />
 	</resultMap>
-
 
 	<insert id="addUserSkill" parameterType="UserSkill"
 		useGeneratedKeys="true" keyProperty="userskill_id">
 		insert into USERSKILL(user_id,
-		user_skill)
-		values(#{user_id}, #{user_skill})
+		user_skill, user_skill_url)
+		values(#{user_id}, #{user_skill}, #{user_skill_url})
 	</insert>
 
-	<select id="getUserSkillById" parameterType="int" resultMap="UserSkillResultMap">
-		select userskill_id, user_id, user_skill from USERSKILL
-		where
-		user_id=#{user_id}
+	<select id="getUserSkillByUserId" parameterType="int"
+		resultMap="UserSkillResultMap">
+		SELECT
+		userskill_id,
+		US.user_id AS user_id,
+		U.user_account AS user_account,
+		US.user_skill AS user_skill,
+		user_skill_url,
+		user_skill_status,
+		user_skill_create_time
+		FROM
+		USERSKILL US
+		LEFT JOIN USER U ON US.user_id = U.user_id
+		WHERE
+		US.user_id = #{user_id}
 	</select>
 	
-	<delete id="deleteUserSkill" parameterType="int">
+	<select id="getUserSkillBySkillId" parameterType="int"
+		resultMap="UserSkillResultMap">
+		SELECT
+		userskill_id,
+		US.user_id AS user_id,
+		U.user_account AS user_account,
+		US.user_skill AS user_skill,
+		user_skill_url,
+		user_skill_status,
+		user_skill_create_time
+		FROM
+		USERSKILL US
+		LEFT JOIN USER U ON US.user_id = U.user_id
+		WHERE
+		userskill_id = #{userskill_id}
+	</select>
+	
+	<select id="getAll" resultMap="UserSkillResultMap">
+		SELECT
+		userskill_id,
+		US.user_id AS user_id,
+		U.user_account AS user_account,
+		US.user_skill AS user_skill,
+		user_skill_url,
+		user_skill_status,
+		user_skill_create_time
+		FROM
+		USERSKILL US
+		LEFT JOIN USER U ON US.user_id = U.user_id
+		ORDER BY
+		IF (user_skill_status = 0, 0, 1), user_skill_create_time DESC
+	</select>
+	
+	<select id="getUserSkillByUserIdAndSkill" resultMap="UserSkillResultMap">
+		SELECT
+		userskill_id,
+		US.user_id AS user_id,
+		U.user_account AS user_account,
+		US.user_skill AS user_skill,
+		user_skill_url,
+		user_skill_status,
+		user_skill_create_time
+		FROM
+		USERSKILL US
+		LEFT JOIN USER U ON US.user_id = U.user_id
+		where
+		US.user_id=#{user_id} AND US.user_skill=#{user_skill}
+	</select>
+	
+	<delete id="deleteUserSkillByUserId" parameterType="int">
 		delete from USERSKILL where user_id=#{user_id}
 	</delete>
+	
+	<delete id="deleteUserSkillBySkillId" parameterType="int">
+		delete from USERSKILL where userskill_id=#{userskill_id}
+	</delete>
 
-	<update id="updateUserSkill" parameterType="UserSkill">
-
+	<update id="updateUserSkillById" parameterType="UserSkill">
+		update USERSKILL set
+		user_id=#{user_id}, user_skill_url=#{user_skill_url},
+		user_skill_status=#{user_skill_status}
+		where
+		userskill_id=#{userskill_id}
 	</update>
 
 

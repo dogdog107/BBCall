@@ -117,9 +117,25 @@
 					</td>
 				</tr>
 				<tr>
-					<td>用戶技能 (User Skill)<span id="td_skill" style="color: red; font-weight:bold"></span></td>
-					<td>
-					<input type="text" name="skill" /></td>
+					<td>用戶技能 (User Skill)<span id="td_skill" style="color: red; font-weight:bold"></span>
+						<img type="image" align="center" src="${pageContext.request.contextPath }/page/img/add_1.png" onclick="addSkill()" />
+					</td>
+					<td id="skill_main">
+					<input type="hidden" id="skill" name="skill" value="${sessionScope.user_skill}"/>
+					<div  id="skill_template" style="display: none; padding: 6px 12px;">
+						<div>
+							<select id="skillParentCode"
+								onchange="getChildSkillList(this.options[selectedIndex].value, this.id)">
+								<option value="0">--請選擇技能--</option>
+							</select>
+							<img id="deleteSkill" align="center" src="${pageContext.request.contextPath }/page/img/remove_1.png" onclick="deleteSkillbtn(this.id)"/>
+						</div>
+						<div id="skillChildList">
+						
+						</div>
+					</div>
+
+					</td>
 				</tr>
 				<tr>
 					<td>默認地址 (User Address)<span id="td_address" style="color: red; font-weight:bold"></span></td>
@@ -138,6 +154,12 @@
 					
 					<input type="text" onfocus="this.value=''" id="lastads" />
 					<input type="hidden" name="address" id="address" value=""/>	
+					</td>
+				</tr>
+				<tr>
+					<td>用戶簡介 (Description)<span id="td_description" style="color: red; font-weight:bold"></span></td>
+					<td><textarea rows="5" name="description"
+							style="width: 400px;"></textarea>
 					</td>
 				</tr>
 				<tr>
