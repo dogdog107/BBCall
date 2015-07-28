@@ -45,6 +45,12 @@
 		where
 		referdoc_parentno=#{referdoc_parentno}
 	</select>
+	<select id="getReferdoclistByLevel" parameterType="int"
+		resultType="com.bbcall.mybatis.table.Referdoc">
+		select * from REFERDOC 
+		where
+		referdoc_level=#{referdoc_level} order by referdoc_id
+	</select>
 	<select id="getParentReferdoc" parameterType="int"
 		resultType="com.bbcall.mybatis.table.Referdoc">
 		select * from REFERDOC 

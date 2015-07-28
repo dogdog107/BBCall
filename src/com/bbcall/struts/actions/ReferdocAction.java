@@ -49,10 +49,10 @@ public class ReferdocAction extends ActionSupport {
 		if (referdoc_price != null && !referdoc_price.equals("")) {
 			price = Double.parseDouble(referdoc_price);
 		}
-		
+
 		int result = referdocServices.addReferdoc(referdoc_type,
-				referdoc_parentno, referdoc_level, price,
-				referdoc_flag, pagenum);
+				referdoc_parentno, referdoc_level, price, referdoc_flag,
+				pagenum);
 
 		if (result == ResultCode.SUCCESS) {
 			List<Referdoc> referdoclist = referdocServices.referdocinfos();
@@ -83,7 +83,7 @@ public class ReferdocAction extends ActionSupport {
 		dataMap.clear(); // dataMap中的数据将会被Struts2转换成JSON字符串，所以这里要先清空其中的数据
 
 		int referdocid = Integer.parseInt(referdoc_id);
-		
+
 		double price = 0;
 		if (referdoc_price != null && !referdoc_price.equals("")) {
 			price = Double.parseDouble(referdoc_price);
@@ -240,12 +240,55 @@ public class ReferdocAction extends ActionSupport {
 		getchildlist();
 		return "json";
 	}
-	
+
+	public String getsubskill() throws Exception {
+		dataMap = new HashMap<String, Object>(); // 新建dataMap来储存JSON字符串
+		dataMap.clear(); // dataMap中的数据将会被Struts2转换成JSON字符串，所以这里要先清空其中的数据
+
+		List<Referdoc> referdoclist1 = referdocServices.getChildRefer("11000");
+		List<Referdoc> referdoclist2 = referdocServices.getChildRefer("12000");
+		List<Referdoc> referdoclist3 = referdocServices.getChildRefer("13000");
+		List<Referdoc> referdoclist4 = referdocServices.getChildRefer("14000");
+		List<Referdoc> referdoclist5 = referdocServices.getChildRefer("15000");
+		List<Referdoc> referdoclist6 = referdocServices.getChildRefer("16000");
+		List<Referdoc> referdoclist7 = referdocServices.getChildRefer("17000");
+		List<Referdoc> referdoclist8 = referdocServices.getChildRefer("18000");
+		List<Referdoc> referdoclist9 = referdocServices.getChildRefer("19000");
+		List<Referdoc> referdoclist10 = referdocServices.getChildRefer("20000");
+		List<Referdoc> referdoclist11 = referdocServices.getChildRefer("21000");
+		List<Referdoc> referdoclist12 = referdocServices.getChildRefer("22000");
+
+		dataMap.put("referdoclist1", referdoclist1);
+		dataMap.put("referdoclist2", referdoclist2);
+		dataMap.put("referdoclist3", referdoclist3);
+		dataMap.put("referdoclist4", referdoclist4);
+		dataMap.put("referdoclist5", referdoclist5);
+		dataMap.put("referdoclist6", referdoclist6);
+		dataMap.put("referdoclist7", referdoclist7);
+		dataMap.put("referdoclist8", referdoclist8);
+		dataMap.put("referdoclist9", referdoclist9);
+		dataMap.put("referdoclist10", referdoclist10);
+		dataMap.put("referdoclist11", referdoclist11);
+		dataMap.put("referdoclist12", referdoclist12);
+		dataMap.putAll(Tools.JsonHeadMap(0, true));
+		// dataMap.put("resultcode", result);
+		// dataMap.put("errmsg", ResultCode.getErrmsg(result));
+		// dataMap.put("getchildlistResult", true);
+
+		return "getsuccess";
+	}
+
+	public String getsubskillJson() throws Exception {
+		getsubskill();
+		return "json";
+	}
+
 	public String getchildlist2() throws Exception {
 		dataMap = new HashMap<String, Object>(); // 新建dataMap来储存JSON字符串
 		dataMap.clear(); // dataMap中的数据将会被Struts2转换成JSON字符串，所以这里要先清空其中的数据
 
-		int result = referdocServices.getChildReferdoclist2(referdoc_parentno,pagenum);
+		int result = referdocServices.getChildReferdoclist2(referdoc_parentno,
+				pagenum);
 
 		if (result == ResultCode.SUCCESS) {
 			List<Referdoc> referdoclist = referdocServices.referdocinfos();

@@ -33,5 +33,8 @@ public interface ReferdocMapper {
 
 	// 删除参考数据
 	public void deleteReferdoc(int referdoc_id);
+	
+	// 取得所有的参考数据列表
+	public List<Referdoc> getReferdoclistByLevel(@Param("referdoc_level") int referdoc_level);
 
 }

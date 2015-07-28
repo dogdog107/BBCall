@@ -217,6 +217,13 @@ public class ReferdocServices {
 		return ResultCode.SUCCESS;
 	}
 	
+	public int getReferdocBylevel(int referdoc_level) {
+
+		referdocinfos = referdocMapper.getReferdoclistByLevel(referdoc_level);
+
+		return ResultCode.SUCCESS;
+	}
+	
 	public String getReferlist(String referdoclist) {
 
 		String referskill = "";
@@ -369,6 +376,11 @@ public class ReferdocServices {
 				.getReferdoclistByParent(referdoc_parentno));
 
 		return ResultCode.SUCCESS;
+	}
+	
+	public List<Referdoc> getChildRefer(String referdoc_parentno) {
+
+		return referdocMapper.getReferdoclist(referdoc_parentno);
 	}
 	
 	public int getChildReferdoclist2(String referdoc_parentno, Integer pagenum) {
