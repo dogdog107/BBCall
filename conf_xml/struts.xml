@@ -171,6 +171,7 @@
 			<result name="deleteAdvertFailed">/page/advertList.jsp</result>
 			<result name="showAdvertSuccess">/page/showAdvert.jsp</result>
 			<result name="editAdvertPageSuccess">/page/editAdvert.jsp</result>
+			<result name="showAddAdvertPage">/page/addAdvert.jsp</result>
 			
 			<result name="updateAdvertByIdSuccess" type="redirectAction">
 				<param name="actionName">advert_showAdvert</param>
@@ -218,7 +219,11 @@
 
 		<!-- Access Action -->
 		<action name="access_*" method="{1}" class="accessAction">
-			
+			<result name="addAccessGroupSuccess">/page/accessGroupList.jsp</result>
+			<result name="addAccessGroupFailed">/page/addAccessGroup.jsp</result>
+			<result name="showAddAccessGroupPage">/page/addAccessGroup.jsp</result>
+			<result name="showAccessGroupDetailsPage">/page/showAccessGroup.jsp</result>
+			<result name="showEditAccessGroupPage">/page/editAccessGroup.jsp</result>
 			<result type="json" name="json">
 				<param name="root">dataMap</param>
 			</result>

@@ -15,7 +15,7 @@
 		style="font-size: 12px;">
 		<tr height="28">
 			<td background="${pageContext.request.contextPath }/page/img/title_bg1.jpg">當前位置:<a href="defult.jsp"
-				target="main">主頁(Home)</a> -> 師傅列表(User List)
+				target="main">主頁(Home)</a> -> 師傅列表(Master List)
 			</td>
 		</tr>
 		<tr>
@@ -53,14 +53,14 @@
 			<table class="table_list" border="1" width="100%">
 				<tbody id="datas">
 					<tr style="color:#1c94c4">
-						<td width="80px">用戶序號<br/>User ID</td>
-						<td width="100px">頭像<br/>User Pic</td>
+						<td width="60px">用戶序號<br/>User ID</td>
+						<td width="80px">頭像<br/>User Pic</td>
 						<td width="150px">帳戶<br/>Account</td>
 						<td width="150px">姓名<br/>Name</td>
-						<td width="80px">身份<br/>Type</td>
-						<td width="80px">狀態<br/>Status</td>
-						<td width="200px">登陸時間<br/>Login Time</td>
-						<td width="200px">註冊時間<br/>Create Time</td>
+						<td width="75px">身份<br/>Type</td>
+						<td width="50px">狀態<br/>Status</td>
+						<td width="150px">登陸時間<br/>Login Time</td>
+						<td width="150px">註冊時間<br/>Create Time</td>
 						<td  colspan="2" align="center">操作<br/>Operations</td>
 					</tr>
 					<tr id="template" style="display: none; font-size: 12px;">

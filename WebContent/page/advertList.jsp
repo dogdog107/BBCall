@@ -41,37 +41,22 @@
 	<div class="div_content">
 		<div class="div_search">
 			<span>
-			<input id="btnNew" type="submit" value="增加廣告/New AD" onclick="location.href='addAdvert.jsp'"/>
+			<input id="btnNew" type="submit" value="增加廣告/New AD" onclick="location.href='advert_showAddAdvertPage.action'"/>
 			</span>
 			<div id="div_message" class="div_message" style="display: none">
 				<span id="message"> </span>
 			</div>
 		</div>
-<%-- 		<div id="div_message" class="div_message" style="display: none">
-			<span id="message"> </span>
-			<div style="font-size: 13px; margin: 10px 5px">
-				<span> <s:if test="dataMap.result">
-						<p align="center" style="font-size: 15px; color: green">##
-							成功！${ dataMap.errmsg} ##</p>
-					</s:if> <s:else>
-						<s:if test="!dataMap.result">
-							<p align="center" style="font-size: 15px; color: red">##
-								失敗！${ dataMap.errmsg} ##</p>
-						</s:if>
-					</s:else>
-				</span>
-			</div>
-		</div> --%>
 		<div style="font-size: 12px; margin: 10px 5px;">
 			<table class="table_list" border="1" width="100%">
 				<tbody id="datas">
 					<tr style="color:#1c94c4">
-						<td width="80px">廣告序號<br/>AD ID</td>
-						<td width="100px">小圖像<br/>AD Small Pic</td>
-						<td width="300px">標題<br/>Title</td>
-						<td width="300px">概要<br/>Summary</td>
+						<td width="60px">廣告序號<br/>AD ID</td>
+						<td width="80px">小圖像<br/>Small Pic</td>
+						<td width="280px">標題<br/>Title</td>
+						<td width="280px">概要<br/>Summary</td>
 						<td width="80px">廣告類別<br/>Type</td>
-						<td width="150px">創建時間<br/>Create Time</td>
+						<td width="100px">創建時間<br/>Create Time</td>
 						<td colspan="2" align="center">操作<br/>Operations</td>
 					</tr>
 					<tr id="template" style="display: none; font-size: 12px;">

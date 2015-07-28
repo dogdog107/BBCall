@@ -84,10 +84,12 @@ public class AdvertisementAction extends ActionSupport{
 			return "addAdvertFailed";
 		}
 	}
-
 	public String addAdvertJson() throws Exception {
 		addAdvert();
 		return "json";
+	}
+	public String showAddAdvertPage() throws Exception {
+		return "showAddAdvertPage";
 	}
 	
 	/**

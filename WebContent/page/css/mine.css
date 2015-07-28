@@ -67,7 +67,8 @@ TEXTAREA {
 }
 .table_list td{
     line-height: 25px;
-/*     padding-left: 10px; */
+    padding-left: 10px;
+    padding-right: 10px;
     text-align: center;
 }
 .div_head{
