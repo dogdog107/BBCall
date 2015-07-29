@@ -187,7 +187,7 @@
 					</td>
 				</tr>
 				<tr>
-					<td colspan="2" align="center"><input type="submit" value="修改&#10;(Submit)" onclick="return validate();" class="btn btn-default" /><input
+					<td colspan="2"><input type="submit" value="修改&#10;(Submit)" onclick="return validate();" class="btn btn-default" />&nbsp;&nbsp;<input
 						type="button" value="取消&#10;(Cancel)" onclick="location.href='defult.jsp'" class="btn btn-default" /></td>
 				</tr>
 			</table>

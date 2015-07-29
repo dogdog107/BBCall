@@ -177,7 +177,7 @@ public class AdvertisementServices {
 		
 	    //PageHelper.startPage(PageNum, PageSize) 
 		//获取第1页，10条内容，当PageSize=0时会查询出全部的结果
-	    PageHelper.startPage(pagenum, 5);
+	    PageHelper.startPage(pagenum, 10);
 
 	    //紧跟着的第一个select方法会被分页
 		advertList = advertisementMapper.getAllAdvert();
@@ -193,7 +193,7 @@ public class AdvertisementServices {
 	    //PageHelper.startPage(PageNum, PageSize, "order by") 
 		//获取第1页，10条内容，当PageSize=0时会查询出全部的结果
 //	    PageHelper.startPage(pagenum, 5, "advertisement_create_time desc");
-	    PageHelper.startPage(pagenum, 5);
+	    PageHelper.startPage(pagenum, 10);
 
 	    //紧跟着的第一个select方法会被分页
 		advertList = advertisementMapper.getAllAdvertSummary();
@@ -208,7 +208,7 @@ public class AdvertisementServices {
 		
 		//PageHelper.startPage(PageNum, PageSize) 
 		//获取第1页，10条内容，当PageSize=0时会查询出全部的结果
-		PageHelper.startPage(pagenum, 5);
+		PageHelper.startPage(pagenum, 10);
 		
 		//紧跟着的第一个select方法会被分页
 		advertList = advertisementMapper.getActiveAdvert();
@@ -224,7 +224,7 @@ public class AdvertisementServices {
 		//PageHelper.startPage(PageNum, PageSize, "order by") 
 		//获取第1页，10条内容，当PageSize=0时会查询出全部的结果
 //	    PageHelper.startPage(pagenum, 5, "advertisement_create_time desc");
-		PageHelper.startPage(pagenum, 5);
+		PageHelper.startPage(pagenum, 10);
 		
 		//紧跟着的第一个select方法会被分页
 		advertList = advertisementMapper.getActiveAdvertSummary();

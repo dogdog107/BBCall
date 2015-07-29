@@ -17,7 +17,9 @@ import com.bbcall.functions.ResultCode;
 import com.bbcall.functions.ObjectToMap;
 import com.bbcall.functions.Tools;
 import com.bbcall.mybatis.table.User;
+import com.bbcall.mybatis.table.UserSkill;
 import com.bbcall.struts.services.UserServices;
+import com.bbcall.struts.services.UserSkillServices;
 import com.opensymphony.xwork2.ActionSupport;
 
 @Scope("prototype")
@@ -29,6 +31,8 @@ public class UserAction extends ActionSupport implements SessionAware{
 	
 	@Autowired
 	private UserServices userServices;
+	@Autowired
+	private UserSkillServices userSkillServices;
 	private Map<String, Object> dataMap = new LinkedHashMap<String, Object>(); // 新建dataMap来储存JSON字符串
 	private ObjectToMap obj2map = new ObjectToMap();// 新建ObjectToMap对象
 	private PageInfoToMap pageinfo2map = new PageInfoToMap();// 新建PageInfoToMap对象
@@ -45,6 +49,10 @@ public class UserAction extends ActionSupport implements SessionAware{
 	private String email;
 	private String language;
 	private String skill;
+	private Integer skillid;
+	private Integer skillcode;
+	private Integer skillstatus;
+	private String skillurl;
 	private String skillname;
 	private String token;
 	private String description;
@@ -294,6 +302,182 @@ public class UserAction extends ActionSupport implements SessionAware{
 		return "json";
 	}
 
+	/**
+	 * getUserSkillByUserId 拿用户技能列表
+	 * @return
+	 * @throws Exception
+	 */
+	public String getUserSkillByUserId() throws Exception{
+		dataMap.clear(); // dataMap中的数据将会被Struts2转换成JSON字符串，所以这里要先清空其中的数据
+		int result = userSkillServices.getUserSkillByUserId(userid);
+		if (result == ResultCode.SUCCESS) {
+			dataMap.put("skilllist", userSkillServices.getUserSkillList()); // 把addresslist对象放入dataMap
+			dataMap.putAll(Tools.JsonHeadMap(result, true));
+			logger.info("userOpr:[getUserSkillByUserId]" + Tools.JsonHeadMap(result, true));
+		} else {
+			dataMap.putAll(Tools.JsonHeadMap(result, false));
+			logger.info("userOpr:[getUserSkillByUserId]" + Tools.JsonHeadMap(result, false));
+		}
+		return SUCCESS;
+	}
+	public String getUserSkillByUserIdJson() throws Exception{
+		getUserSkillByUserId();
+		return "json";
+	}
+	
+	/**
+	 * getAllUserSkill 拿取全部用户技能列表
+	 * @return
+	 * @throws Exception
+	 */
+	public String getAllUserSkill() throws Exception{
+		List<UserSkill> userSkill = userSkillServices.getAllUserSkill(pagenum);
+		dataMap.clear(); // dataMap中的数据将会被Struts2转换成JSON字符串，所以这里要先清空其中的数据
+		dataMap.put("skilllist", userSkill);
+		dataMap.putAll(pageinfo2map.pageInfoMap(userSkill));// 把分页信息放进dataMap
+		dataMap.putAll(Tools.JsonHeadMap(ResultCode.SUCCESS, true));
+		return SUCCESS;
+	}
+	public String getAllUserSkillJson() throws Exception{
+		getAllUserSkill();
+		return "json";
+	}
+	
+	/**
+	 * addUserSkill 添加技能
+	 * @return
+	 * @throws Exception
+	 */
+	public String addUserSkill() throws Exception{
+		dataMap.clear(); // dataMap中的数据将会被Struts2转换成JSON字符串，所以这里要先清空其中的数据
+		int result = userSkillServices.addUserSkill(userid, skillcode, skillurl);
+		if (result == ResultCode.SUCCESS) {
+			dataMap.putAll(Tools.JsonHeadMap(result, true));
+			logger.info("userOpr:[addUserSkill]" + Tools.JsonHeadMap(result, true));
+		} else {
+			dataMap.putAll(Tools.JsonHeadMap(result, false));
+			System.out.println(dataMap);
+			logger.info("userOpr:[addUserSkill]" + Tools.JsonHeadMap(result, false));
+		}
+		return SUCCESS;
+	}
+	public String addUserSkillJson() throws Exception{
+		addUserSkill();
+		return "json";
+	}
+	
+	/**
+	 * updateUserSkill 更新技能
+	 * @return
+	 * @throws Exception
+	 */
+	public String updateUserSkill() throws Exception{
+		dataMap.clear(); // dataMap中的数据将会被Struts2转换成JSON字符串，所以这里要先清空其中的数据
+		int result = userSkillServices.updateUserSkill(userid, skillcode, skillurl);
+		if (result == ResultCode.SUCCESS) {
+			dataMap.putAll(Tools.JsonHeadMap(result, true));
+			logger.info("userOpr:[updateUserSkill]" + Tools.JsonHeadMap(result, true));
+		} else {
+			dataMap.putAll(Tools.JsonHeadMap(result, false));
+			System.out.println(dataMap);
+			logger.info("userOpr:[updateUserSkill]" + Tools.JsonHeadMap(result, false));
+		}
+		return SUCCESS;
+	}
+	public String updateUserSkillJson() throws Exception{
+		updateUserSkill();
+		return "json";
+	}
+	
+	/**
+	 * verifyUserSkill 审核技能
+	 * @return
+	 * @throws Exception
+	 */
+	public String verifyUserSkill() throws Exception{
+		dataMap.clear(); // dataMap中的数据将会被Struts2转换成JSON字符串，所以这里要先清空其中的数据
+		int result = userSkillServices.verifyUserSkill(userid, skillcode, skillstatus);
+		if (result == ResultCode.SUCCESS) {
+			dataMap.putAll(Tools.JsonHeadMap(result, true));
+			logger.info("userOpr:[verifyUserSkill]" + Tools.JsonHeadMap(result, true));
+		} else {
+			dataMap.putAll(Tools.JsonHeadMap(result, false));
+			logger.info("userOpr:[verifyUserSkill]" + Tools.JsonHeadMap(result, false));
+		}
+		return SUCCESS;
+	}
+	public String verifyUserSkillJson() throws Exception{
+		verifyUserSkill();
+		return "json";
+	}
+	
+	/**
+	 * verifyUserSkillBySkillId 通过skillid审批用户技能
+	 * @return
+	 * @throws Exception
+	 */
+	public String verifyUserSkillBySkillId() throws Exception{
+		dataMap.clear(); // dataMap中的数据将会被Struts2转换成JSON字符串，所以这里要先清空其中的数据
+		int result = userSkillServices.verifyUserSkillBySkillId(skillid, skillstatus);
+		if (result == ResultCode.SUCCESS) {
+			dataMap.putAll(Tools.JsonHeadMap(result, true));
+			logger.info("userOpr:[verifyUserSkillBySkillId]" + Tools.JsonHeadMap(result, true));
+		} else {
+			dataMap.putAll(Tools.JsonHeadMap(result, false));
+			logger.info("userOpr:[verifyUserSkillBySkillId]" + Tools.JsonHeadMap(result, false));
+		}
+		return SUCCESS;
+	}
+	public String verifyUserSkillBySkillIdJson() throws Exception{
+		verifyUserSkillBySkillId();
+		return "json";
+	}
+	
+	/**
+	 * deleteUserSkillBySkillId 刪除一個技能
+	 * @return
+	 * @throws Exception
+	 */
+	public String deleteUserSkillBySkillId() throws Exception{
+		dataMap.clear(); // dataMap中的数据将会被Struts2转换成JSON字符串，所以这里要先清空其中的数据
+		int result = userSkillServices.deleteUserSkillBySkillId(skillid);
+		if (result == ResultCode.SUCCESS) {
+			dataMap.putAll(Tools.JsonHeadMap(result, true));
+			logger.info("userOpr:[deleteUserSkillBySkillId]" + Tools.JsonHeadMap(result, true));
+		} else {
+			dataMap.putAll(Tools.JsonHeadMap(result, false));
+			logger.info("userOpr:[deleteUserSkillBySkillId]" + Tools.JsonHeadMap(result, false));
+		}
+		return SUCCESS;
+	}
+	public String deleteUserSkillBySkillIdJson() throws Exception{
+		deleteUserSkillBySkillId();
+		return "json";
+	}
+	
+	/**
+	 * deleteUserSkillByUserId 刪除userid下的全部技能
+	 * @return
+	 * @throws Exception
+	 */
+	public String deleteUserSkillByUserId() throws Exception{
+		dataMap.clear(); // dataMap中的数据将会被Struts2转换成JSON字符串，所以这里要先清空其中的数据
+		int result = userSkillServices.deleteUserSkillByUserId(userid);
+		if (result == ResultCode.SUCCESS) {
+			dataMap.putAll(Tools.JsonHeadMap(result, true));
+			logger.info("userOpr:[deleteUserSkillByUserId]" + Tools.JsonHeadMap(result, true));
+		} else {
+			dataMap.putAll(Tools.JsonHeadMap(result, false));
+			logger.info("userOpr:[deleteUserSkillByUserId]" + Tools.JsonHeadMap(result, false));
+		}
+		return SUCCESS;
+	}
+	public String deleteUserSkillByUserIdJson() throws Exception{
+		deleteUserSkillByUserId();
+		return "json";
+	}
+	
+	
 	public String checkUserListWhereOrderBy() throws Exception {
 		System.out.println("Here is UserAction.checkUserListWhereOrderBy");
 		dataMap.clear(); // dataMap中的数据将会被Struts2转换成JSON字符串，所以这里要先清空其中的数据
@@ -812,5 +996,29 @@ public class UserAction extends ActionSupport implements SessionAware{
 	}
 	public void setSkillname(String skillname) {
 		this.skillname = skillname;
+	}
+	public String getSkillurl() {
+		return skillurl;
+	}
+	public void setSkillurl(String skillurl) {
+		this.skillurl = skillurl;
+	}
+	public Integer getSkillcode() {
+		return skillcode;
+	}
+	public void setSkillcode(Integer skillcode) {
+		this.skillcode = skillcode;
+	}
+	public Integer getSkillstatus() {
+		return skillstatus;
+	}
+	public void setSkillstatus(Integer skillstatus) {
+		this.skillstatus = skillstatus;
+	}
+	public Integer getSkillid() {
+		return skillid;
+	}
+	public void setSkillid(Integer skillid) {
+		this.skillid = skillid;
 	}
 }

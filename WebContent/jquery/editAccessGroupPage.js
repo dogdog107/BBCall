@@ -85,3 +85,9 @@ function showDesc(box){
 		}
 	}
 }
+
+function validate(){
+	$("#list1 option").attr("selected","selected");
+	$("#list2 option").attr("selected",false);
+	return true;
+}

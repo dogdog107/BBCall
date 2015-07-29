@@ -35,6 +35,7 @@ public class AccessAction extends ActionSupport {
 	private List<String> accessGroupNameList;
 	private List<AccessGroup> accessGroupList;
 
+	private int list1[];
 	private String accessgroup_name;
 	private String accessgroup_description;
 	private Integer accessgroup_id;
@@ -84,6 +85,16 @@ public class AccessAction extends ActionSupport {
 	}
 	public String showAddAccessGroupPage() throws Exception {
 		return "showAddAccessGroupPage";
+	}
+	/**
+	 * updateAccessByAccessGroup 修改权限组的权限
+	 * 
+	 * @return
+	 * @throws Exception
+	 */
+	public String updateAccessByAccessGroup() throws Exception {
+		System.out.println("list1: " + list1[0]);
+		return SUCCESS;
 	}
 	
 	/**
@@ -228,5 +239,11 @@ public class AccessAction extends ActionSupport {
 	}
 	public void setAccessgroup_description(String accessgroup_description) {
 		this.accessgroup_description = accessgroup_description;
+	}
+	public int[] getList1() {
+		return list1;
+	}
+	public void setList1(int[] list1) {
+		this.list1 = list1;
 	}
 }

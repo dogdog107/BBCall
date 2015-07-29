@@ -110,6 +110,13 @@
 						<td align=middle width=30><img height=9
 							src="./img/menu_icon.gif" width=9></td>
 						<td><a class=menuchild
+							href="${pageContext.request.contextPath }/page/skillList.jsp"
+							target=main>技能審批列表</a></td>
+					</tr>
+					<tr height=20>
+						<td align=middle width=30><img height=9
+							src="./img/menu_icon.gif" width=9></td>
+						<td><a class=menuchild
 							href="${pageContext.request.contextPath }/page/register.jsp"
 							target=main>添加新帳戶</a></td>
 					</tr>

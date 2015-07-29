@@ -40,11 +40,13 @@
 			<span id="message"> </span>
 		</div>
 		<div style="font-size: 12px; margin: 10px 5px;">
-		<form id="update_form" action="" method="post" enctype="multipart/form-data">
+		<form id="update_form" action="access_updateAccessByAccessGroup" method="post" enctype="multipart/form-data">
 			<table class="table_list" border="1" width="100%">
 				<tbody id="datas">
 					<tr  style="font-size: 15px; color: green;">
 						<td style="border-right:none;">
+							<input type="hidden" id="token" name="token" value="${sessionScope.user_token}" />
+							<input type="hidden" id="accessgroup_id" name="accessgroup_id" value="${accessgroup_id}" />
 							<span>權限組名字：</span><br/>
 							<span>(AccessGroup Name):</span> 
 						</td>
@@ -79,9 +81,8 @@
 					</tr>
 				</tbody>
 				<tr>
-					<td colspan="20" align="center">
-
-					</td>
+					<td colspan="5" style="text-align:left;"><input type="submit" value="修改&#10;(Submit)" onclick="return validate();" class="btn btn-default" />&nbsp;&nbsp;<input
+						type="button" value="取消&#10;(Cancel)" onclick="location.href='defult.jsp'" class="btn btn-default" /></td>
 				</tr>
 			</table>
 			</form>

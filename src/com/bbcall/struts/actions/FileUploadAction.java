@@ -91,6 +91,46 @@ public class FileUploadAction extends ActionSupport {
 		}
 	}
 	
+	/**
+	 * skillUpload
+	 * @return
+	 * @throws Exception
+	 */
+	public String skillUpload() throws Exception {
+		if (userid == null || !upload.isFile()) {
+			dataMap.putAll(Tools.JsonHeadMap(ResultCode.REQUIREINFO_NOTENOUGH, false));
+			System.out.println(dataMap);
+			return "skillUploadFailed";
+		}
+		savePath = "SkillPhoto";
+		String storePath = ServletActionContext.getServletContext()
+				.getRealPath(savePath); // 得到保存文件的路径
+		String uploadFileType = uploadFileName.substring(uploadFileName
+				.lastIndexOf(".") + 1); // 封装上传文件后缀
+		String storeFileName = userid + "_" + randomCode.getNoncestr() + "." + uploadFileType; // 封装保存文件名
+		
+		int result = fileUploadServices.uploadFile(upload, uploadFileName, storePath, storeFileName);
+		dataMap.clear(); // dataMap中的数据将会被Struts2转换成JSON字符串，所以这里要先清空其中的数据
+		
+		if (result == ResultCode.SUCCESS) {
+			picurl = fileUploadServices.getFileurl();
+			dataMap.put("picurl", picurl); // 放入一个是否操作成功的标识
+			dataMap.putAll(Tools.JsonHeadMap(result, true));
+			System.out.println(dataMap);
+			return "skillUploadSuccess";
+		} else {
+			fileUploadServices.deleteFile(storePath);
+			dataMap.putAll(Tools.JsonHeadMap(result, false));
+			System.out.println(dataMap);
+			return "skillUploadFailed";
+		}
+	}
+	public String skillUploadJson() throws Exception {
+		skillUpload();
+		return "json";
+	}
+	
+	
 	public String orderUpload() throws Exception {
 		System.out.println("Here is FileUploadAction.orderUpload()");
 		savePath = "OrderPhoto";
@@ -118,18 +158,14 @@ public class FileUploadAction extends ActionSupport {
 		dataMap.clear(); // dataMap中的数据将会被Struts2转换成JSON字符串，所以这里要先清空其中的数据
 
 		if (result == ResultCode.SUCCESS) {
-			dataMap.put("resultcode", result); // 放入一个是否操作成功的标识
-			dataMap.put("errmsg", ResultCode.getErrmsg(result));
-			dataMap.put("orderUploadResult", true); // 放入registerResult
 			dataMap.put("orderpicurl", orderpicurl);
+			dataMap.putAll(Tools.JsonHeadMap(result, true));
 			System.out.println(dataMap);
 			System.out.println(orderpicurl);
 			return orderpicurl;
 		} else {
 			fileUploadServices.deleteFile(storePath);
-			dataMap.put("resultcode", result); // 放入一个是否操作成功的标识
-			dataMap.put("errmsg", ResultCode.getErrmsg(result));
-			dataMap.put("orderUploadResult", false); // 放入registerResult
+			dataMap.putAll(Tools.JsonHeadMap(result, false));
 			System.out.println(dataMap);
 			System.out.println("orderUpload Failed");
 			return "orderUploadFailed";

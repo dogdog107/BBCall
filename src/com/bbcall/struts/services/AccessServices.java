@@ -169,6 +169,18 @@ public class AccessServices {
 	}
 	
 	/**
+	 * deleteAllAccessUnderGroupId 删除权限组下面的全部权限
+	 * @param accessgroup_id
+	 * @return
+	 */
+	public int deleteAllAccessUnderGroupId(Integer accessgroup_id) {
+		if (accessgroup_id == null || accessgroup_id == 0)
+			return ResultCode.REQUIREINFO_NOTENOUGH;
+		accessGroupMapper.deleteAllAccessUnderGroupId(accessgroup_id);
+		return ResultCode.SUCCESS;
+	}
+	
+	/**
 	 * getter & setter
 	 * 
 	 * @return
