@@ -47,6 +47,7 @@
 						<td style="border-right:none;">
 							<input type="hidden" id="token" name="token" value="${sessionScope.user_token}" />
 							<input type="hidden" id="accessgroup_id" name="accessgroup_id" value="${accessgroup_id}" />
+							<input type="hidden" id="accessgroup_name" name="accessgroup_name" value="${accessgroup_name}" />
 							<span>權限組名字：</span><br/>
 							<span>(AccessGroup Name):</span> 
 						</td>
@@ -56,21 +57,21 @@
 						<td style="border-width: 1px 1px 1px 0px;" colspan="3"></td>
 					</tr>
 					<tr style="color:#1c94c4">
-						<td width="300px" style="border:none;">現有權限<br/>Current Access</td>
-						<td width="20px" style="border:none;"></td>
-						<td width="300px" style="border:none;">系統權限<br/>System Access</td>
+						<td width="350px" style="border:none;">現有權限<br/>Current Access</td>
+						<td width="10px" style="border:none;"></td>
+						<td width="350px" style="border:none;">系統權限<br/>System Access</td>
 						<td width="400px" style="border-width: 0px 0px 1px 1px;">權限說明<br/>Access Description</td>
 						<td style="border-width: 1px 1px 1px 0px;"></td>
 					</tr>
 					<tr style="color: #1c94c4">
-						<td style="border:none;"><select multiple size="20" name="list1" id="list1" style="width:300px"
+						<td style="border:none;"><select multiple size="20" name="list1" id="list1" style="width:350px"
 							ondblclick="move(this.form.list1,this.form.list2)" onclick="showDesc(this.form.list1)">
 						</select></td>
 						<td style="border:none;"><input type="button" value="   >>   "
 							onclick="move(this.form.list1,this.form.list2)" name="B1" /><br />
 							<input type="button" value="   <<   "
 							onclick="move(this.form.list2,this.form.list1)" name="B2" /></td>
-						<td style="border:none;"><select multiple size="20" name="list2" id="list2" style="width:300px"
+						<td style="border:none;"><select multiple size="20" name="list2" id="list2" style="width:350px"
 							ondblclick="move(this.form.list2,this.form.list1)" onclick="showDesc(this.form.list2)">
 						</select></td>
 						<td  valign="top" style="border-width: 1px 0px 0px 1px; text-align:left;">

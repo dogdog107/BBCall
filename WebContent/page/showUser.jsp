@@ -71,6 +71,10 @@
 				<td>${account}</td>
 			</tr>
 			<tr>
+				<td>權限組 (AccessGroup)</td>
+				<td>${accessgroup}</td>
+			</tr>
+			<tr>
 				<td>用戶姓名 (User Name)</td>
 				<td>${name}</td>
 			</tr>

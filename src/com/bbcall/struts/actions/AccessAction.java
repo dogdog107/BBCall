@@ -35,7 +35,7 @@ public class AccessAction extends ActionSupport {
 	private List<String> accessGroupNameList;
 	private List<AccessGroup> accessGroupList;
 
-	private int list1[];
+	private Integer list1[];
 	private String accessgroup_name;
 	private String accessgroup_description;
 	private Integer accessgroup_id;
@@ -68,13 +68,12 @@ public class AccessAction extends ActionSupport {
 	 */
 	public String addAccessGroup() throws Exception {
 		int result = accessServices.addAccessGroup(accessgroup_name, accessgroup_description);
+		dataMap.clear(); // dataMap中的数据将会被Struts2转换成JSON字符串，所以这里要先清空其中的数据
 		if (result == ResultCode.SUCCESS) {
-			dataMap.clear(); // dataMap中的数据将会被Struts2转换成JSON字符串，所以这里要先清空其中的数据
 			dataMap.put("addresult", true);
 			dataMap.putAll(Tools.JsonHeadMap(result, true));
 			return "addAccessGroupSuccess";
 		} else {
-			dataMap.clear(); // dataMap中的数据将会被Struts2转换成JSON字符串，所以这里要先清空其中的数据
 			dataMap.putAll(Tools.JsonHeadMap(result, false));
 			return "addAccessGroupFailed";
 		}
@@ -93,8 +92,27 @@ public class AccessAction extends ActionSupport {
 	 * @throws Exception
 	 */
 	public String updateAccessByAccessGroup() throws Exception {
-		System.out.println("list1: " + list1[0]);
-		return SUCCESS;
+		dataMap.clear(); // dataMap中的数据将会被Struts2转换成JSON字符串，所以这里要先清空其中的数据
+		if (accessgroup_id == null || list1.length <= 0){ // 检测参数是否为空
+			dataMap.putAll(Tools.JsonHeadMap(ResultCode.REQUIREINFO_NOTENOUGH, false));
+			System.out.println(dataMap);
+			return INPUT;
+		}
+		System.out.println("accessgroup ID:" + accessgroup_id);
+		System.out.println("list1 Length:" + list1.length);
+		accessServices.deleteAllAccessUnderGroupId(accessgroup_id);
+		int result = accessServices.addAccessByAccessGroup(accessgroup_id, list1);
+		if (result == ResultCode.SUCCESS) {
+			dataMap.putAll(Tools.JsonHeadMap(result, true));
+			return "updateAccessByAccessGroupSuccess";
+		} else {
+			dataMap.putAll(Tools.JsonHeadMap(result, false));
+			return "updateAccessByAccessGroupFailed";
+		}
+	}
+	public String updateAccessByAccessGroupJson() throws Exception {
+		updateAccessByAccessGroup();
+		return "json";
 	}
 	
 	/**
@@ -162,6 +180,7 @@ public class AccessAction extends ActionSupport {
 		int result = accessServices.getAccessByAccessGroupName(accessgroup_name);
 		if (result == ResultCode.SUCCESS) {
 			accessgroup_name = accessServices.getAccessGroup().getAccessgroup_name();
+			accessgroup_id = accessServices.getAccessGroup().getAccessgroup_id();
 			dataMap.clear(); // dataMap中的数据将会被Struts2转换成JSON字符串，所以这里要先清空其中的数据
 			dataMap = obj2map.getValueMap(accessServices.getAccessGroup()); // 将对象转换成Map
 			dataMap.putAll(Tools.JsonHeadMap(result, true));
@@ -240,10 +259,10 @@ public class AccessAction extends ActionSupport {
 	public void setAccessgroup_description(String accessgroup_description) {
 		this.accessgroup_description = accessgroup_description;
 	}
-	public int[] getList1() {
+	public Integer[] getList1() {
 		return list1;
 	}
-	public void setList1(int[] list1) {
+	public void setList1(Integer[] list1) {
 		this.list1 = list1;
 	}
 }

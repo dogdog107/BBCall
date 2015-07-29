@@ -229,6 +229,32 @@ $(document).ready(function() {
 	});
 });  
 
+function checkAGList(){
+	$
+	.ajax({
+		type : "post",
+		url : "${pageContext.request.contextPath}/access_getAccessGroupJson.action",
+		data : {
+			"token" : token
+		},
+		success : function(data) {
+			if (data.result) {
+				var accessGroupList = data.accessGroupList;
+				var accessgroupid = $("#accessgroup");
+				$.each(accessGroupList, function(i, n) {
+					var row = $("<option value='"+ n.accessgroup_name + "' title='" + n.accessgroup_description + "'>"+ n.accessgroup_name + "</option>");
+					accessgroupid.append(row);
+				});
+				accessgroupid.val(accessgroup);
+			} else {
+				$("#message").html(
+						"<font color=red>Page Fail ! " + data.errmsg
+								+ "</font>");
+				$("#div_message").show(300).delay(10000).hide(300);
+			}
+		}
+	});
+}
 function onload() {
 	$("#user_photo").attr("src", photourl + "?" + Math.random());
 	
@@ -259,6 +285,9 @@ function onload() {
 	
 	if (gender != '') {
 		document.getElementById('gender')[gender].selected = true;
+	}
+	if (accessgroup != '') {
+		checkAGList();
 	}
 
 	if (language != '') {

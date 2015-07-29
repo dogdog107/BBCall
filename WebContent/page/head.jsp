@@ -14,8 +14,9 @@
 	<table cellspacing=0 cellpadding=0 width="100%"
 		background="./img/header_bg.jpg" border=0>
 		<tr height=56>
-			<td width=260><img height=56 src="./img/header_left.jpg"
-				width=260></td>
+			<td width='260'><a href="user_homePage.action" title="返回主頁 Home" target="_parent"> <img height="56"
+					src="./img/header_left.jpg" width="260" />
+			</a></td>
 			<td style="font-weight: bold; color: #fff; padding-top: 20px"
 				align=middle>當前用戶：${sessionScope.user_account}&nbsp;&nbsp;
 				<a style="color: #fff" href="${pageContext.request.contextPath }/page/update.jsp" target=main>修改個人信息</a> &nbsp;&nbsp; <a

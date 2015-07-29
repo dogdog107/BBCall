@@ -25,6 +25,7 @@
 		var userid = "${userid}";
 		var photourl = "${picurl}";
 		var addresscode = "${addresscode}";
+		var accessgroup = "${accessgroup}";
 		var language = "${language}";
 		var skill = "${skill}";
 		var updateResult = "${updateResult}";
@@ -84,6 +85,12 @@
 							<option value="2">Master</option>
 							<option value="3">Admin</option>
 							<option value="4">SuperAdmin</option>
+					</select></td>
+				</tr>
+				<tr>
+					<td>權限組 (AccessGroup)</td>
+					<td><select name="accessgroup" id="accessgroup">
+							<option value="">請選擇(Choose)</option>
 					</select></td>
 				</tr>
 				<tr>

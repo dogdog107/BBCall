@@ -35,7 +35,6 @@ function showAGA(){
 				}
 			} else {
 				//隐藏分页条
-				$("#page_bar").hide(300);
 				$("#message").html(
 						"<font color=red>Page Fail ! " + data.errmsg
 								+ "</font>");

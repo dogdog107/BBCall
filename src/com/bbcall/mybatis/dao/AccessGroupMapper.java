@@ -21,6 +21,9 @@ public interface AccessGroupMapper {
 	// 查找权限组
 	public AccessGroup getAccessGroupByName(String accessgroup_name);
 	
+	// 查找权限组
+	public AccessGroup getAccessGroupById(Integer accessgroup_id);
+	
 	// 查找全部权限组与权限说明
 	public List<AccessGroup> getAll();
 	

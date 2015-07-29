@@ -54,12 +54,19 @@
 		LEFT JOIN ACCESSLIST AL ON AGA.al_id = AL.accesslist_id
 		WHERE
 		accessgroup_name=#{accessgroup_name}
+		ORDER BY accesslist_name
 	</select>
 
 	<select id="getAccessGroupByName" resultMap="AccessGroupResultMap" parameterType="String">
 		select accessgroup_id, accessgroup_name, accessgroup_description, accessgroup_default 
 		FROM ACCESSGROUP 
 		WHERE accessgroup_name=#{accessgroup_name}
+	</select>
+	
+	<select id="getAccessGroupById" resultMap="AccessGroupResultMap" parameterType="Integer">
+		select accessgroup_id, accessgroup_name, accessgroup_description, accessgroup_default 
+		FROM ACCESSGROUP 
+		WHERE accessgroup_id=#{accessgroup_id}
 	</select>
 	
 	<select id="getAll" resultMap="AccessGroupResultMap">

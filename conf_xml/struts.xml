@@ -24,9 +24,9 @@
 			<!-- 自定义 登录验证 拦截器 -->
 			<interceptor name="loginInterceptor" class="com.bbcall.struts.interceptor.LoginInterceptor">
 				<!-- 停用(true)/启用(false) 登录验证拦截器 -->
-				<param name="disable">true</param>
+				<param name="disable">false</param>
 				<param name="excludeAction">
-					user_login,user_loginJson,user_loginByMaster,user_loginByMasterJson,user_loginByUser,user_loginByUserJson,user_loginByAdmin,user_loginByAdminJson,user_register,user_registerJson,user_logout
+					user_register,user_registerJson,user_logout
 				</param>
 				<param name="sessionCheckName">user_token</param>
 			</interceptor>  
@@ -50,7 +50,7 @@
 		<global-results>
 			<result name="exception">/error.jsp</result>
 			<result name="login" type="redirect">/page/login.jsp</result>
-			<result name="accessReject" type="redirect">
+			<result name="accessReject">
 				<param name="location">/error.jsp</param>
 			</result>
 			<result name="interceptorjson" type="json">
@@ -86,6 +86,10 @@
 		<!-- User Action -->
 		<action name="user_*" method="{1}" class="userAction">
 
+			<result name="homePage">
+				<param name="location">/page/index.jsp</param>
+			</result>
+			
 			<result name="success">
 				<param name="location">/page/defult.jsp</param>
 			</result>
@@ -228,6 +232,8 @@
 			<result name="showAddAccessGroupPage">/page/addAccessGroup.jsp</result>
 			<result name="showAccessGroupDetailsPage">/page/showAccessGroup.jsp</result>
 			<result name="showEditAccessGroupPage">/page/editAccessGroup.jsp</result>
+			<result name="updateAccessByAccessGroupSuccess">/page/showAccessGroup.jsp</result>
+			<result name="updateAccessByAccessGroupFailed">/page/editAccessGroup.jsp</result>
 			<result type="json" name="json">
 				<param name="root">dataMap</param>
 			</result>

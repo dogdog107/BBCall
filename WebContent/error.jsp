@@ -103,7 +103,7 @@
 		程 式 出 現 異 常
 		<span class="showErrWrap"><a
 			href="javascript:void(0);" id="showErrBtn">查看詳情</a><span>|</span><a
-			href="javascript:void(0);" onclick="javascript:history.go(-1);">返回上一頁</a></span>
+			href="javascript:void(0);" onclick="location.href='user_homePage.action'">返回上一頁</a></span>
 	</div>
 	<div class="errMsg">
 		<s:property value="exception.message" />

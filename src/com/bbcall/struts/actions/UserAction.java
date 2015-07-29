@@ -171,6 +171,10 @@ public class UserAction extends ActionSupport implements SessionAware{
 		return "login";
 	}
 	
+	public String homePage() throws Exception {
+		return "homePage";
+	}
+	
 	// Register Action
 	public String register() throws Exception {
 		System.out.println("Here is UserAction.register");
@@ -720,7 +724,7 @@ public class UserAction extends ActionSupport implements SessionAware{
 			return INPUT;
 		}
 
-		int result = userServices.deleteUserById(userid);
+		int result = userServices.deleteUserById(token, userid);
 		if (result == ResultCode.SUCCESS) {
 			dataMap.putAll(Tools.JsonHeadMap(result, true));
 			logger.info("userOpr:[DeleteUser]" + Tools.JsonHeadMap(result, true));

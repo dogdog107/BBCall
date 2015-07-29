@@ -26,7 +26,7 @@
 				</ul>
 			</dd>
 			<dd id="user_main">
-				<form action="user_login" method="post">
+				<form action="user_loginByAdmin" method="post">
 					<ul>
 						<li class="user_main_l"></li>
 						<li class="user_main_c">

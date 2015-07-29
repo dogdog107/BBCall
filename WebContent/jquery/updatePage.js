@@ -229,10 +229,36 @@ $(document).ready(function() {
 	});
 });  
 
+function checkAGList(){
+	$
+	.ajax({
+		type : "post",
+		url : "${pageContext.request.contextPath}/access_getAccessGroupJson.action",
+		data : {
+			"token" : token
+		},
+		success : function(data) {
+			var accessgroupid = $("#accessgroup");
+			if (data.result) {
+				var accessGroupList = data.accessGroupList;
+				$.each(accessGroupList, function(i, n) {
+					var row = $("<option value='"+ n.accessgroup_name + "' title='" + n.accessgroup_description + "'>"+ n.accessgroup_name + "</option>");
+					accessgroupid.append(row);
+				});
+				accessgroupid.val(accessgroup);
+			} else {
+				var row = $("<option value='"+ accessgroup + "'>"+ accessgroup + "</option>");
+				accessgroupid.append(row);
+				accessgroupid.val(accessgroup);
+			}
+		}
+	});
+}
 function onload() {
 	$("#user_photo").attr("src", photourl + "?" + Math.random());
 	
 	if (usertype == 1 || usertype == 2) {
+		document.getElementById('usertype').options[value = '4'].remove();
 		document.getElementById('usertype').options[value = '3'].remove();
 	}
 
@@ -250,7 +276,9 @@ function onload() {
 	if (gender != '') {
 		document.getElementById('gender')[gender].selected = true;
 	}
-
+	if (accessgroup != '') {
+		checkAGList();
+	}
 	if (language != '') {
 		var lgestr = language.split(";");
 		for ( var i = 0; i < lgestr.length; i++) {

@@ -124,7 +124,16 @@ public class UserServices {
 				if (userinfo.getUser_type().equals(3)) {
 					return ResultCode.ACCESS_REJECT; // register的模式为用户模式模式时，拒绝注册。
 				}
-				defaultaccess = "admin_default"; // 当权限组参数为空时，分配admin_default权限
+				switch (usertype) {
+				case 3:
+					defaultaccess = "admin_default"; // 当权限组参数为空时，分配admin_default权限
+					break;
+				case 4:
+					defaultaccess = "superadmin_default"; // 当权限组参数为空时，分配admin_default权限
+					break;
+				default:
+					return ResultCode.USERTYPE_ERROR;
+				}
 			} else {
 				return ResultCode.ACCESS_REJECT; // register的模式为用户模式模式时，拒绝注册。
 			}
@@ -1080,12 +1089,17 @@ public class UserServices {
 	 * @param userid
 	 * @return
 	 */
-	public int deleteUserById(Integer userid) {
+	public int deleteUserById(String token, Integer userid) {
 		System.out.println("Here is UserServices.deleteUserById method...");
 		if (userid == null)
 			return ResultCode.REQUIREINFO_NOTENOUGH;
-		userMapper.deleteUserById(userid);
-		return ResultCode.SUCCESS;
+		int result = checkUpdateAccess(token, userid);
+		if (result == ResultCode.SUCCESS) {
+			userMapper.deleteUserById(userid);
+			return ResultCode.SUCCESS;
+		} else {
+			return result;
+		}
 	}
 
 	/**

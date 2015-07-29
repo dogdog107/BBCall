@@ -1,5 +1,6 @@
 package com.bbcall.struts.services;
 
+import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
@@ -11,6 +12,7 @@ import com.bbcall.functions.Tools;
 import com.bbcall.mybatis.dao.AccessGroupMapper;
 import com.bbcall.mybatis.dao.AccessListMapper;
 import com.bbcall.mybatis.table.AccessGroup;
+import com.bbcall.mybatis.table.AccessGroup_AccessList;
 import com.bbcall.mybatis.table.AccessList;
 import com.github.pagehelper.PageHelper;
 
@@ -85,6 +87,30 @@ public class AccessServices {
 		tempAG.setAccessgroup_name(accessgroup_name);
 		tempAG.setAccessgroup_description(accessgroup_description);
 		accessGroupMapper.addAccessGroup(tempAG);
+		return ResultCode.SUCCESS;
+	}
+	
+	/**
+	 * addAccessByAccessGroup 为权限组增加权限
+	 * @param accessgroup_id
+	 * @param access_id_list
+	 * @return
+	 */
+	public int addAccessByAccessGroup(Integer accessgroup_id,
+			Integer access_id_list[]) {
+		if (accessgroup_id == null || access_id_list.length <= 0) // 检测参数是否为空
+			return ResultCode.REQUIREINFO_NOTENOUGH;
+		if (accessGroupMapper.getAccessGroupById(accessgroup_id) == null) { // 检测accessgroup_id是否存在
+			return ResultCode.ACCESSGROUP_ERROR;
+		}
+		List<AccessGroup_AccessList> tempagalList = new ArrayList<AccessGroup_AccessList>();
+		for (int i = 0; i < access_id_list.length; i++) {
+			AccessGroup_AccessList tempagal = new AccessGroup_AccessList();
+			tempagal.setAg_id(accessgroup_id);
+			tempagal.setAl_id(access_id_list[i]);
+			tempagalList.add(tempagal);
+		}
+		accessGroupMapper.addAccessByAccessGroup(tempagalList);
 		return ResultCode.SUCCESS;
 	}
 	

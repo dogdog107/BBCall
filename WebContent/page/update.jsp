@@ -18,8 +18,10 @@
 	var usertype = "${sessionScope.user_type}";
 	var gender = "${sessionScope.user_gender}";
 	var addresscode = "${sessionScope.user_address_code}";
+	var accessgroup = "${sessionScope.user_access_group}";
 	var language = "${sessionScope.user_language}";
 	var skill = "${sessionScope.user_skill}";
+	var token = "${sessionScope.user_token}";
 </script>
 <script type="text/javascript"
 	src="${pageContext.request.contextPath }/jquery/jquery-1.8.3.js"></script>
@@ -81,6 +83,12 @@
 							<option value="2">Master</option>
 							<option value="3">Admin</option>
 							<option value="4">SuperAdmin</option>
+					</select></td>
+				</tr>
+				<tr>
+					<td>權限組 (AccessGroup)</td>
+					<td><select name="accessgroup" id="accessgroup">
+							<option value="">請選擇(Choose)</option>
 					</select></td>
 				</tr>
 				<tr>

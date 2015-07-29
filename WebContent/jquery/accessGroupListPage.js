@@ -47,7 +47,7 @@ function checkAGList(pagenum){
 					row.find("#accessgroup_id").text(n.accessgroup_id);
 					row.find("#accessgroup_name").text(n.accessgroup_name);
 					row.find("#accessgroup_description").text(n.accessgroup_description);
-					row.find("#btnDetail").attr("onclick", "location.href='access_showAccessGroupDetailsPage.action?token=" + token + "&accessgroup_name=" + n.accessgroup_name + "'");
+					row.find("#btnDetail").attr("onclick", "location.href='access_showAccessGroupDetailsPage.action?token=" + token + "&accessgroup_name=" + n.accessgroup_name + "&accessgroup_id=" + n.accessgroup_id +"'");
 					row.find("#btnDelete").attr("onclick", "deleteAG(" + n.accessgroup_id + ")");
 					if (n.accessgroup_default == 1) {
 						row.find("#btnDelete").attr("disabled", true);

@@ -37,13 +37,16 @@ public class LoginInterceptor extends AbstractInterceptor {
 		System.out.println("Here is Login Validation Intercepter.");
 		String actionName = invocation.getProxy().getActionName();
 		System.out.println("Requesting : " + actionName);
-		if (disable) {
+		if (disable) { // 被停用时，放行。
 			System.out.println("Login Validation Intercepter is Disabled.");
-			// 被停用时，放行。
 			return invocation.invoke();
 		}
 		
-		if (list.contains(actionName)) {
+		if (actionName.contains("login")){ // 如果是请求登录action
+			return accessValidate(invocation,"accessgroup");
+		}
+		
+		if (list.contains(actionName)) {// 检测struts.xml 放行的action
 			// 请求的是合法
 			return invocation.invoke();
 		} else {
@@ -51,31 +54,32 @@ public class LoginInterceptor extends AbstractInterceptor {
 			// 查看session
 			session = invocation.getInvocationContext().getSession();
 			System.out.println("session:" + session);
-			while (session.size() != 0 && !Tools.isEmpty(session.get(sessionCheckName).toString())) {
+			while (session.size() != 0 && session.get(sessionCheckName) != null && !Tools.isEmpty(session.get(sessionCheckName).toString())) {
 				// 输出 log4j 信息
 				logger.info("userOpr:[" + session.get("user_id") + "]" + session.get("user_account") + " - " + actionName);  
 				// 检测到sessionCheckName,放行 并进入access Validation.
 				return accessValidate(invocation,"session");
 //				return invocation.invoke();
 			}
-
 			// 查看token
 			String[] tokenParam = (String[]) invocation.getInvocationContext().getParameters().get("token");
-			token = tokenParam[0];
-			System.out.println("token:" + token);
-			while (!Tools.isEmpty(token)) {
-				dataMap.clear(); // dataMap中的数据将会被Struts2转换成JSON字符串，所以这里要先清空其中的数据
-				int result = userServices.checkUserToken(token); // 调用userServices.checkUserTokenes
-				if (result == ResultCode.SUCCESS) {
-					// 输出 log4j 信息
-					logger.info("userOpr:[" + userServices.getUserinfo().getUser_id() + "]" + userServices.getUserinfo().getUser_account() + " - " + actionName);  
-					// 检测到token,放行 并进入access Validation.
-					return accessValidate(invocation,"token");
-				} else {
-					ValueStack stack = invocation.getStack();
-					stack.set("dataMap", dataMap);
-					dataMap.putAll(Tools.JsonHeadMap(result, false));
-					return "interceptorjson";
+			if (tokenParam != null) {
+				token = tokenParam[0];
+				System.out.println("token:" + token);
+				while (!Tools.isEmpty(token)) {
+					dataMap.clear(); // dataMap中的数据将会被Struts2转换成JSON字符串，所以这里要先清空其中的数据
+					int result = userServices.checkUserToken(token); // 调用userServices.checkUserTokenes
+					if (result == ResultCode.SUCCESS) {
+						// 输出 log4j 信息
+						logger.info("userOpr:[" + userServices.getUserinfo().getUser_id() + "]" + userServices.getUserinfo().getUser_account() + " - " + actionName);  
+						// 检测到token,放行 并进入access Validation.
+						return accessValidate(invocation,"token");
+					} else {
+						ValueStack stack = invocation.getStack();
+						stack.set("dataMap", dataMap);
+						dataMap.putAll(Tools.JsonHeadMap(result, false));
+						return "interceptorjson";
+					}
 				}
 			}
 			// 判断是否Json请求
@@ -109,17 +113,49 @@ public class LoginInterceptor extends AbstractInterceptor {
 		String errmsg; // 返回给session的参数
 
 		switch (inputflag) {
+		case "accessgroup": // session check access
+			// 查看username
+			String[] usernameParam = (String[]) invocation
+					.getInvocationContext().getParameters().get("username");
+			String username = usernameParam[0];
+			if (!Tools.isEmpty(username)) {
+				int checkUserNameResult = userServices.checkUserName(username);// 调用checkUserName方法并得到返回码
+				if (checkUserNameResult != ResultCode.USERNAME_NOTEXIST) {
+					String accessgroup = userServices.getUserinfo()
+							.getUser_access_group(); // 引用user对象
+					accessResult = accessServices.checkUserAccess(accessgroup,
+							actionName);
+					if (accessResult == ResultCode.SUCCESS) {
+						return invocation.invoke();
+					} else {
+						errmsg = "(Login) Access Reject, Please contact your Admin.";
+						logger.info("userOpr:[" + username + "][" + actionName + "]" + errmsg);
+						System.out.println(errmsg);
+					}
+				} else {
+					accessResult = ResultCode.USERNAME_NOTEXIST;
+					errmsg = "(Login) Username is invalid, Please contact your Admin.";
+					logger.info("userOpr:[" + username + "][" + actionName + "]" + errmsg);
+					System.out.println(errmsg);
+				}
+			} else {
+				accessResult =ResultCode.REQUIREINFO_NOTENOUGH;
+				errmsg = "(Login) Require information not enough.";
+				logger.info("userOpr:[" + username + "][" + actionName + "]" + errmsg);
+				System.out.println(errmsg);
+			}
+			break;
 		case "session": // session check access
 			if (session.get("user_access_group") == null
-					|| Tools.isEmpty(session.get("user_access_group")
-							.toString())) {
+			|| Tools.isEmpty(session.get("user_access_group")
+					.toString())) {
 				accessResult = ResultCode.ACCESSGROUP_ERROR;
 				errmsg = "(session) Access_group NULL, Please contact your Admin.";
 				logger.info("userOpr:" + errmsg);
 				System.out.println(errmsg);
 				break;
 			}
-
+			
 			accessResult = accessServices.checkUserAccess(
 					session.get("user_access_group").toString(), actionName);
 			if (accessResult == ResultCode.SUCCESS) {
