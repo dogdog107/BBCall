@@ -143,25 +143,25 @@ function showPendingSkill() {
 			if (data.result) {
 				// 拿出列表
 				var skilllist = data.skilllist;
+				var count = 0;
 				$.each(skilllist, function(i, n) {
-					var count = 0;
 					if (n.user_skill_status == 0) {
 						var row = $("#template").clone();
 						row.find("#PSkill").attr("href", n.user_skill_url);// 改变绑定好数据的行的id
 						row.find("#PSkill").attr("data-lightbox", "pendingSkill_" + n.user_skill);// 改变绑定好数据的行的id
 						row.find("#PSkill").attr("id", "pendingSkill_" + n.user_skill);// 改变绑定好数据的行的id
-						row.find("#statusOpr").val(n.user_skill_status);
-						row.find("#statusOpr").attr("id", "statusOpr_" + n.userskill_id);
+						row.find("#skillStatusOpr").val(n.user_skill_status);
+						row.find("#skillStatusOpr").attr("id", "skillStatusOpr_" + n.userskill_id);
 						row.appendTo("#pendingSkill");// 添加到模板的容器中
 						checkPendingSkill(n.user_skill, "pendingSkill_" + n.user_skill, function(){
 							row.toggle(300);
 						});
 						count++;
 					}
-					if (count == 0) {
-						$("#pendingSkill").text("無");
-					}
 				});
+				if (count == 0) {
+					$("#pendingSkill").text("無");
+				}
 			} else {
 				//隐藏分页条
 				$("#page_bar").hide(300);
@@ -176,7 +176,6 @@ function showPendingSkill() {
 
 function updateSkillStatus(idname, value) {
 	var skillid = idname.split("_")[1];
-	var defaultStatusName = "skillstatus_" + skillid;
 	if (confirm('確定要修改技能(ID:'+ skillid +')的狀態嗎？\n Confirm to change the status for skill (ID:'+ skillid +')?')) {
 		$.ajax({
 			type : "post",

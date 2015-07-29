@@ -159,18 +159,14 @@ public class FileUploadAction extends ActionSupport {
 		dataMap.clear(); // dataMap中的数据将会被Struts2转换成JSON字符串，所以这里要先清空其中的数据
 
 		if (result == ResultCode.SUCCESS) {
-			dataMap.put("resultcode", result); // 放入一个是否操作成功的标识
-			dataMap.put("errmsg", ResultCode.getErrmsg(result));
-			dataMap.put("orderUploadResult", true); // 放入registerResult
 			dataMap.put("orderpicurl", orderpicurl);
+			dataMap.putAll(Tools.JsonHeadMap(result, true));
 			System.out.println(dataMap);
 			System.out.println(orderpicurl);
 			return orderpicurl;
 		} else {
 			fileUploadServices.deleteFile(storePath);
-			dataMap.put("resultcode", result); // 放入一个是否操作成功的标识
-			dataMap.put("errmsg", ResultCode.getErrmsg(result));
-			dataMap.put("orderUploadResult", false); // 放入registerResult
+			dataMap.putAll(Tools.JsonHeadMap(result, false));
 			System.out.println(dataMap);
 			System.out.println("orderUpload Failed");
 			return "orderUploadFailed";
