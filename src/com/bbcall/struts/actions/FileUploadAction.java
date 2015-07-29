@@ -38,7 +38,6 @@ public class FileUploadAction extends ActionSupport {
 	private String uploadContentType; // 封装上传文件类型
 	private String uploadFileName; // 封装上传文件名
 	private Integer userid;
-	private Integer orderid;
 	private String token;
 	private String picurl;
 	private String orderpicurl;
@@ -144,7 +143,7 @@ public class FileUploadAction extends ActionSupport {
 
 		System.out.println(uploadlist.size());
 		for (int i = 0; i < uploadlist.size(); i++) {
-			String storeFileName = orderid + "_photo_" + uploadlistFileName.get(i); // 封装保存文件名
+			String storeFileName = userid + "_photo_" + uploadlistFileName.get(i); // 封装保存文件名
 			result = fileUploadServices.uploadFile(uploadlist.get(i), uploadlistFileName.get(i),
 					storePath, storeFileName);
 			System.out.println(result);
@@ -311,14 +310,6 @@ public class FileUploadAction extends ActionSupport {
 
 	public void setUploadlist(List<File> uploadlist) {
 		this.uploadlist = uploadlist;
-	}
-
-	public Integer getOrderid() {
-		return orderid;
-	}
-
-	public void setOrderid(Integer orderid) {
-		this.orderid = orderid;
 	}
 
 	public String getOrderpicurl() {

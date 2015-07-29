@@ -33,6 +33,12 @@
 		from BLACKLIST where
 		blacklist_id=#{blacklist_id}
 	</select>
+	<select id="getBlacklistByOrder" parameterType="int"
+		resultMap="BlacklistResultMap">
+		select *
+		from BLACKLIST where
+		blacklist_order_id=#{blacklist_order_id}
+	</select>
 	<select id="getBlacklistByMaster" parameterType="int"
 		resultMap="BlacklistResultMap">
 		select *
