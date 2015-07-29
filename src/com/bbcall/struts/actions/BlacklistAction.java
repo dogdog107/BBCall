@@ -64,9 +64,13 @@ public class BlacklistAction extends ActionSupport {
 			// dataMap.put("errmsg", ResultCode.getErrmsg(result));
 			// dataMap.put("insertResult", true);
 			// System.out.println(dataMap);
+			return SUCCESS;
+		} else {
+			dataMap.putAll(Tools.JsonHeadMap(result, false));
+			return "insertfail";
 		}
 
-		return SUCCESS;
+		
 	}
 
 	public String insertJson() throws Exception {

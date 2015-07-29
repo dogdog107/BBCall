@@ -54,6 +54,9 @@ public class ResultCode {
 	public static Integer REFERDOC_TYPE_EMPTY = 16001;// 参数订单类型为空
 	public static Integer REFERDOC_ADD_FAILED = 16002;// 添加订单失败
 
+	// 黑名单返回码17XXX
+	public static Integer BLACKLIST_EXIST = 17001;// 黑名单存在
+
 	// 广告错误码20XXX
 	public static Integer ADVERTID_ERROR = 20001;// 广告id不存在
 
@@ -179,7 +182,7 @@ public class ResultCode {
 			errmsg = "accessgroup exist";
 			break;
 
-		//参数表
+		// 参数表
 		case 15001:
 			errmsg = "reference type not exist";
 			break;
@@ -191,11 +194,15 @@ public class ResultCode {
 		case 16001:
 			errmsg = "reference type is empty";
 			break;
-			
+
 		case 16002:
 			errmsg = "reference add failed";
 			break;
 			
+		case 17001:
+			errmsg = "blacklist exist";
+			break;
+
 		// 新闻类
 		case 20001:
 			errmsg = "invalid advertisement_id";

@@ -15,6 +15,9 @@ public interface BlacklistMapper {
 	// 取得详细黑名单
 	public Blacklist getBlacklistById(int blacklist_id);
 
+	// 取得详细黑名单
+	public Blacklist getBlacklistByOrder(int blacklist_order_id);
+
 	// 获取用户的黑名单列表
 	public List<Blacklist> getBlacklistByUser(int blacklist_user_id);
 
