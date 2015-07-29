@@ -117,8 +117,8 @@
 				</td>
 				<td id="pendingSkill">
 					<div id="template" style="display: none;">
-						<select id="statusOpr"
-							onchange="updateStatus(this.id, this.value)">
+						<select id="skillStatusOpr"
+							onchange="updateSkillStatus(this.id, this.value)">
 							<option value="0">待審核</option>
 							<option value="1">審核通過</option>
 							<option value="2">審核不通過</option>

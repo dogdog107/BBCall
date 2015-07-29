@@ -107,7 +107,7 @@ public class UserServices {
 		}
 
 		if (usertype == 2) { // usertype=2时为师傅号，检测注册信息是否完整
-			if (Tools.isEmpty(name, picurl, email, language, description)
+			if (Tools.isEmpty(name, email, language, description)
 					|| mobile == null || gender == null) {
 				return ResultCode.REGISTERINFO_NOTENOUGH;
 			}
@@ -148,6 +148,7 @@ public class UserServices {
 			
 			// ***** 添加 usertype *****
 			user.setUser_type(usertype);
+			user.setUser_status(1);
 //			if (usertype == 2 && registermode == 1) {// 当用户在注册师傅账号时，状态转为待审核
 //				user.setUser_status(3); // 1=active, 2=pause, 3=pending,
 //										// 4=locked
@@ -787,18 +788,19 @@ public class UserServices {
 		if (changecount > 0)
 			userMapper.updateUser(user);// 把用户信息插入数据表
 		
-		switch (updatemode) {
-		case 1:
-			userinfo = user;// 返回更新后的user对象给userinfo
-			break;
-		case 2:
-			if (user.getUser_id().equals(userinfo.getUser_id())){
-				userinfo = user;// 返回更新的user对象给userinfo
-			} else {
-				updateduserinfo = user;// 返回更新后的user对象给updateduserinfo
-			}
-			break;
-		}
+		userinfo = user;// 返回更新后的user对象给userinfo
+//		switch (updatemode) {
+//		case 1:
+//			userinfo = user;// 返回更新后的user对象给userinfo
+//			break;
+//		case 2:
+//			if (user.getUser_id().equals(userinfo.getUser_id())){
+//				userinfo = user;// 返回更新的user对象给userinfo
+//			} else {
+//				updateduserinfo = user;// 返回更新后的user对象给updateduserinfo
+//			}
+//			break;
+//		}
 		return ResultCode.SUCCESS;
 
 	}

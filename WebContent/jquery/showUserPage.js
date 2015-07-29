@@ -174,7 +174,7 @@ function showPendingSkill() {
 	});
 }
 
-function updateStatus(idname, value) {
+function updateSkillStatus(idname, value) {
 	var skillid = idname.split("_")[1];
 	var defaultStatusName = "skillstatus_" + skillid;
 	if (confirm('確定要修改技能(ID:'+ skillid +')的狀態嗎？\n Confirm to change the status for skill (ID:'+ skillid +')?')) {
