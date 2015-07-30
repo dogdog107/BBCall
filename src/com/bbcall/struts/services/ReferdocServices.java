@@ -370,10 +370,9 @@ public class ReferdocServices {
 
 	public int getChildReferdoclist(int referdoc_parentno) {
 
-		referdocinfos.clear();
 
-		referdocinfos.addAll(referdocMapper
-				.getReferdoclistByParent(referdoc_parentno));
+		referdocinfos = referdocMapper
+				.getReferdoclistByParent(referdoc_parentno);
 
 		return ResultCode.SUCCESS;
 	}

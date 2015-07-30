@@ -258,9 +258,9 @@ function checkAGList(){
 function onload() {
 	$("#user_photo").attr("src", photourl + "?" + Math.random());
 	
-	if (usertype == 1 || usertype == 2) {
-		document.getElementById('usertype').options[value = '3'].remove();
-	}
+//	if (usertype == 1 || usertype == 2) {
+//		document.getElementById('usertype').options[value = '3'].remove();
+//	}
 
 	if (updateResult != '') {
 		if(updateResult == 'true'){
