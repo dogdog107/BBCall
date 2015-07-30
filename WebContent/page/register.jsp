@@ -47,11 +47,14 @@
 	<div id="div_main" style="font-size: 13px; margin: 10px 5px">
 		<form id="register_form" action="user_register" method="post" enctype="multipart/form-data">
 			<table border="1" width="100%" class="table_update">
-				<input type="hidden" id="token" name="token"
-					value="${sessionScope.user_token}" />
 				<tr>
-					<td width="300px">用戶類型 (UserType)<span style="color: red; font-weight:bold">*</span></td>
-					<td><select name="usertype" id="usertype" onchange="changeUserType(this.value)">
+					<td width="300px">用戶類型 (UserType)<span
+						style="color: red; font-weight: bold">*</span> <input
+						type="hidden" id="token" name="token"
+						value="${sessionScope.user_token}" />
+					</td>
+					<td><select name="usertype" id="usertype"
+						onchange="changeUserType(this.value)">
 							<option value="0">請選擇(Choose)</option>
 							<option value="1">Customer</option>
 							<option value="2">Master</option>
@@ -76,7 +79,7 @@
 				</tr>
 				<tr>
 					<td>輸入密碼 (Enter Password)<span style="color: red; font-weight:bold">*</span></td>
-					<td><input type="password" id="prepassword" /></td>
+					<td><input type="password" id="prepassword" /><span id="checkPrepasswordResult"></span></td>
 				</tr>
 				<tr id="repwd" style="display: none">
 					<td style="color:#55AA00">再輸一次 (Enter Password Again)<span style="color: red; font-weight:bold">*</span></td>

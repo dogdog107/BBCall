@@ -1,5 +1,15 @@
 
 function onload() {
+	if (token == "" || token == null) {
+		if (confirm('Session has been expired! Please re-login again.\n Click "OK" to return login page.')) {
+			window.parent.frames.location.href="./login.jsp";
+		}
+		$("#message").html("<font color=red> Session has been expired! Please re-login again. </font>");
+		$("#div_main").hide(300);
+		$("#div_message").show(300).delay(10000).hide(300);
+		return;
+	}
+	
 	$('#statusOpr').val(status);
 	$('#statusOpr').attr("id", "statusOpr_" + userid);
 	if (userskill != ''){

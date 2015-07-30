@@ -12,7 +12,8 @@ function showaddresslist(times, childcode, parentcode) {
 				type : "post",
 				url : "${pageContext.request.contextPath}/address_checkChildAdsListJson.action",
 				data : {
-					"addresscode" : parentcode
+					"addresscode" : parentcode,
+					"token" : token
 				},
 				success : function(data) {
 					if (data.result) {
@@ -48,7 +49,8 @@ function getChildSkillList(parentcode, idname, skillvalue, callback) {
 		type : "post",
 		url : "${pageContext.request.contextPath}/referdoc_getchildlistJson.action",
 		data : {
-			"referdoc_parentno" : parentcode
+			"referdoc_parentno" : parentcode,
+			"token" : token
 		},
 		success : function(data) {
 			if (data.result) {
@@ -77,6 +79,9 @@ function getParentSkillList(idname, skillvalue, callback) {
 	$.ajax({
 		type : "post",
 		url : "${pageContext.request.contextPath}/referdoc_getparentlistJson.action",
+		data : {
+			"token" : token
+		},
 		success : function(skilldata) {
 			if (skilldata.result) {
 				for ( var j = 0; j < skilldata.parentreferdoclist.length; j++) {
@@ -185,7 +190,8 @@ function getaddresslist(parentcode, idno) {
 				type : "post",
 				url : "${pageContext.request.contextPath}/address_checkChildAdsListJson.action",
 				data : {
-					"addresscode" : parentcode
+					"addresscode" : parentcode,
+					"token" : token
 				},
 				success : function(data) {
 					if (data.result) {
@@ -256,6 +262,16 @@ function checkAGList(){
 	});
 }
 function onload() {
+	if (token == "" || token == null) {
+		if (confirm('Session has been expired! Please re-login again.\n Click "OK" to return login page.')) {
+			window.parent.frames.location.href="./login.jsp";
+		}
+		$("#message").html("<font color=red> Session has been expired! Please re-login again. </font>");
+		$("#div_main").hide(300);
+		$("#div_message").show(300).delay(10000).hide(300);
+		return;
+	}
+	
 	$("#user_photo").attr("src", photourl + "?" + Math.random());
 	
 //	if (usertype == 1 || usertype == 2) {

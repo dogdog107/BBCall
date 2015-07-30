@@ -125,6 +125,9 @@ function getParentSkillList(idname) {
 	$.ajax({
 		type : "post",
 		url : "${pageContext.request.contextPath}/referdoc_getparentlistJson.action",
+		data : {
+			"token" : token
+		},
 		success : function(data) {
 			if (data.result) {
 				for ( var j = 0; j < data.parentreferdoclist.length; j++) {
@@ -146,7 +149,8 @@ function getChildSkillList(parentcode) {
 		type : "post",
 		url : "${pageContext.request.contextPath}/referdoc_getchildlistJson.action",
 		data : {
-			"referdoc_parentno" : parentcode
+			"referdoc_parentno" : parentcode,
+			"token" : token
 		},
 		success : function(data) {
 			if (data.result) {
@@ -164,6 +168,15 @@ function getChildSkillList(parentcode) {
 }
 
 function onload(){
+	if (token == "" || token == null) {
+		if (confirm('Session has been expired! Please re-login again.\n Click "OK" to return login page.')) {
+			window.parent.frames.location.href="./login.jsp";
+		}
+		$("#message").html("<font color=red> Session has been expired! Please re-login again. </font>");
+		$("#div_main").hide(300);
+		$("#div_message").show(300).delay(10000).hide(300);
+		return;
+	}
 	getParentSkillList("skillParentCode");
 }
 
@@ -178,19 +191,19 @@ function validateAdd() {
 		}
 	}
 	if ($("#skillcode").val() == '' || $("#skillcode").val() == null) {
-		alert("skillcode is empty, please varify!");
+		alert("skillcode is empty, please verify and sumbit again.");
 		return false;
 	}
 	if ($("#token").val() == '' || $("#token").val() == null) {
-		alert("token is empty, please varify!");
+		alert("token is empty, please verify and sumbit again.");
 		return false;
 	}
 	if ($("#userid").val() == '' || $("#userid").val() == null) {
-		alert("userid is empty, please varify!");
+		alert("userid is empty, please verify and sumbit again.");
 		return false;
 	}
 	if ($("#skillurl").val() == '' || $("#skillurl").val() == null) {
-		alert("userid is empty, please varify!");
+		alert("userid is empty, please verify and sumbit again.");
 		return false;
 	}
 	$('#addSkill_form').attr('action', 'user_addUserSkill');
@@ -207,19 +220,19 @@ function validateUpdate() {
 		}
 	}
 	if ($("#skillcode").val() == '' || $("#skillcode").val() == null) {
-		alert("skillcode is empty, please varify!");
+		alert("skillcode is empty, please verify and sumbit again.");
 		return false;
 	}
 	if ($("#token").val() == '' || $("#token").val() == null) {
-		alert("token is empty, please varify!");
+		alert("token is empty, please verify and sumbit again.");
 		return false;
 	}
 	if ($("#userid").val() == '' || $("#userid").val() == null) {
-		alert("userid is empty, please varify!");
+		alert("userid is empty, please verify and sumbit again.");
 		return false;
 	}
 	if ($("#skillurl").val() == '' || $("#skillurl").val() == null) {
-		alert("userid is empty, please varify!");
+		alert("userid is empty, please verify and sumbit again.");
 		return false;
 	}
 	

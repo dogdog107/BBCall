@@ -362,7 +362,8 @@ function getChildSkillList(parentcode, childcode) {
 		type : "post",
 		url : "${pageContext.request.contextPath}/referdoc_getchildlistJson.action",
 		data : {
-			"referdoc_parentno" : parentcode
+			"referdoc_parentno" : parentcode,
+			"token" : token
 		},
 		success : function(data) {
 			if (data.result) {
@@ -388,6 +389,9 @@ function getParentSkillList(idname, skillvalue, callback) {
 	$.ajax({
 		type : "post",
 		url : "${pageContext.request.contextPath}/referdoc_getparentlistJson.action",
+		data : {
+			"token" : token
+		},
 		success : function(skilldata) {
 			if (skilldata.result) {
 				for ( var j = 0; j < skilldata.parentreferdoclist.length; j++) {
@@ -411,6 +415,15 @@ function getParentSkillList(idname, skillvalue, callback) {
 
 
 function onload(){
+	if (token == "" || token == null) {
+		if (confirm('Session has been expired! Please re-login again.\n Click "OK" to return login page.')) {
+			window.parent.frames.location.href="./login.jsp";
+		}
+		$("#message").html("<font color=red> Session has been expired! Please re-login again. </font>");
+		$("#div_main").hide(300);
+		$("#div_message").show(300).delay(10000).hide(300);
+		return;
+	}
 	
 	if (updateResult != '') {
 		if(updateResult == 'true'){
@@ -445,5 +458,31 @@ function validate() {
 			}
 		}
 	}
+	
+	if ($("#advertisement_title").val() == '' || $("#advertisement_title").val() == null) {
+		alert("Title is empty, please verify and sumbit again.");
+		return false;
+	}
+	if ($("#advertisement_summary").val() == '' || $("#advertisement_summary").val() == null) {
+		alert("Summary is empty, please verify and sumbit again.");
+		return false;
+	}
+	if ($("#advertisement_type").val() == '' || $("#advertisement_type").val() == null) {
+		alert("Advertisement type is empty, please verify and sumbit again.");
+		return false;
+	}
+	if ($("#advertisement_bigphoto_url").val() == '' || $("#advertisement_bigphoto_url").val() == null) {
+		alert("Big photo is empty, please verify and sumbit again.");
+		return false;
+	}
+	if ($("#advertisement_smallphoto_url").val() == '' || $("#advertisement_smallphoto_url").val() == null) {
+		alert("Small photo is empty, please verify and sumbit again.");
+		return false;
+	}
+	if ($("#advertisement_content").val() == '' || $("#advertisement_content").val() == null) {
+		alert("Advertisement content is empty, please verify and sumbit again.");
+		return false;
+	}
+	
 	return true;
 }

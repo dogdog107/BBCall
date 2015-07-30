@@ -1,4 +1,13 @@
 function onload() {
+	if (token == "" || token == null) {
+		if (confirm('Session has been expired! Please re-login again.\n Click "OK" to return login page.')) {
+			window.parent.frames.location.href="./login.jsp";
+		}
+		$("#message").html("<font color=red> Session has been expired! Please re-login again. </font>");
+		$("#div_main").hide(300);
+		$("#div_message").show(300).delay(10000).hide(300);
+		return;
+	}
 	if (addResult == 'true'){
 		$("#message").html("<font color=green> Add AccessGroup Success ! </font>");
 		$("#span_message").html("<p align='center' style='font-size: 16px; color: green'>##添加成功！" + addMsg + " ##</p>");

@@ -24,7 +24,7 @@
 			<!-- 自定义 登录验证 拦截器 -->
 			<interceptor name="loginInterceptor" class="com.bbcall.struts.interceptor.LoginInterceptor">
 				<!-- 停用(true)/启用(false) 登录验证拦截器 -->
-				<param name="disable">true</param>
+				<param name="disable">false</param>
 				<param name="excludeAction">
 					user_register,user_registerJson,user_logout
 				</param>
@@ -49,9 +49,9 @@
 		<!-- 全局跳转页面 -->
 		<global-results>
 			<result name="exception">/error.jsp</result>
-			<result name="login" type="redirect">/page/login.jsp</result>
+			<result name="login" type="redirect">/page/login_full.jsp</result>
 			<result name="accessReject">
-				<param name="location">/error.jsp</param>
+				<param name="location">/page/error.jsp</param>
 			</result>
 			<result name="interceptorjson" type="json">
 				<param name="root">dataMap</param>

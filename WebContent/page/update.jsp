@@ -22,6 +22,9 @@
 	var language = "${sessionScope.user_language}";
 	var skill = "${sessionScope.user_skill}";
 	var token = "${sessionScope.user_token}";
+	var account = "${sessionScope.user_account}";
+	var mobile = "${sessionScope.user_mobile}";
+	var email = "${sessionScope.user_email}";
 </script>
 <script type="text/javascript"
 	src="${pageContext.request.contextPath }/jquery/jquery-1.8.3.js"></script>
@@ -49,13 +52,18 @@
 	<div style="font-size: 13px; margin: 10px 5px">
 		<form id="update_form" action="user_update" method="post" enctype="multipart/form-data">
 			<div style="font-size: 13px; margin: 10px 5px">
-				<span> <s:if test="dataMap.result">
-							<p align="center" style="font-size: 15px;color: green"> ## 修改成功！${ dataMap.errmsg} ## </p>
-					</s:if> <s:else>
-						<s:if test="!dataMap.result">
-								<p align="center" style="font-size: 15px;color: red"> ## 修改失敗！${ dataMap.errmsg} ## </p>
+				<span> <s:if test="dataMap.result != null">
+						<s:if test="dataMap.result">
+							<p align="center" style="font-size: 15px; color: green">##
+								修改成功！${ dataMap.errmsg} ##</p>
 						</s:if>
-					</s:else>
+						<s:else>
+							<s:if test="!dataMap.result">
+								<p align="center" style="font-size: 15px; color: red">##
+									修改失敗！${ dataMap.errmsg} ##</p>
+							</s:if>
+						</s:else>
+					</s:if>
 				</span>
 			</div>
 			<table border="1" width="100%" class="table_update">
@@ -93,14 +101,12 @@
 				</tr>
 				<tr>
 					<td>帳號 (Account)</td>
-					<td><input type="text" name="account" onfocus="this.value=''"
-						onblur="if(this.value==''){this.value='${sessionScope.user_account}'}"
-						value="${sessionScope.user_account}" /></td>
+					<td><input type="text" name="account" id="account"
+						value="${sessionScope.user_account}" /><span id="checkAccountResult"></span></td>
 				</tr>
 				<tr>
 					<td>修改密碼 (Change Password)</td>
-					<td><input type="password" id="prepassword"
-						onblur="if(this.value!=''){document.getElementById('repwd').style.display=''}" /></td>
+					<td><input type="password" id="prepassword"/><span id="checkPrepasswordResult"></span></td>
 				</tr>
 				<tr id="repwd" style="display: none">
 					<td>再輸一次 (Enter Password Again)</td>
@@ -109,8 +115,7 @@
 				</tr>
 				<tr>
 					<td>用戶姓名 (User Name)</td>
-					<td><input type="text" name="name" onfocus="this.value=''"
-						onblur="if(this.value==''){this.value='${sessionScope.user_name}'}"
+					<td><input type="text" name="name" id="name"
 						value="${sessionScope.user_name}" /></td>
 				</tr>
 				<tr>
@@ -123,15 +128,13 @@
 				</tr>
 				<tr>
 					<td>手機號碼 (User Mobile)</td>
-					<td><input type="text" name="mobile" onfocus="this.value=''"
-						onblur="if(this.value==''){this.value='${sessionScope.user_mobile}'}"
-						value="${sessionScope.user_mobile}" /></td>
+					<td><input type="text" name="mobile" id="mobile"
+						value="${sessionScope.user_mobile}" /><span id="checkMobileResult"></span></td>
 				</tr>
 				<tr>
 					<td>電子郵箱 (User Email)</td>
-					<td><input type="text" name="email" onfocus="this.value=''"
-						onblur="if(this.value==''){this.value='${sessionScope.user_email}'}"
-						value="${sessionScope.user_email}" /></td>
+					<td><input type="text" name="email" id="email"
+						value="${sessionScope.user_email}" /><span id="checkEmailResult"></span></td>
 				</tr>
 				<tr>
 					<td>用戶語言 (User Language)</td>
@@ -182,8 +185,7 @@
 					<s:if test="%{#session.user_address!=null}">
 						<s:set name="lastadsset" value="%{#session.user_address.split(';')[#session.user_address.split(';').length-1]}"/>
 					</s:if>
-					<input type="text" onfocus="this.value=''" id="lastads"
-						onblur="if(this.value==''){this.value='${lastadsset}'}"
+					<input type="text" id="lastads"
 						value="${lastadsset}" />
 					<input type="hidden" name="address" id="address" value="${sessionScope.user_address}"/>	
 					</td>

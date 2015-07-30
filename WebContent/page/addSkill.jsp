@@ -33,15 +33,18 @@
 	</table>
 	<div></div>
 	<div style="font-size: 13px; margin: 10px 5px">
-		<span> <s:if test="dataMap.result">
-				<p align="center" style="font-size: 15px; color: green">##
-					成功！${ dataMap.errmsg} ##</p>
-			</s:if> <s:else>
-				<s:if test="!dataMap.result">
-					<p align="center" style="font-size: 15px; color: red">##
-						失敗！${ dataMap.errmsg} ##</p>
+		<span> <s:if test="dataMap.result != null">
+				<s:if test="dataMap.result">
+					<p align="center" style="font-size: 15px; color: green">##
+						成功！${ dataMap.errmsg} ##</p>
 				</s:if>
-			</s:else>
+				<s:else>
+					<s:if test="!dataMap.result">
+						<p align="center" style="font-size: 15px; color: red">## 失敗！${ dataMap.errmsg}
+							##</p>
+					</s:if>
+				</s:else>
+			</s:if>
 		</span>
 	</div>
 	<div style="font-size: 13px; margin: 10px 5px">

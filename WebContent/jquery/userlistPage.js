@@ -3,6 +3,15 @@ var global_specify_value = '';
 var global_search_value = '';
 
 function onload() {
+	if (token == "" || token == null) {
+		if (confirm('Session has been expired! Please re-login again.\n Click "OK" to return login page.')) {
+			window.parent.frames.location.href="./login.jsp";
+		}
+		$("#message").html("<font color=red> Session has been expired! Please re-login again. </font>");
+		$("#div_main").hide(300);
+		$("#div_message").show(300).delay(10000).hide(300);
+		return;
+	}
 	checkUserList();
 }
 
@@ -35,7 +44,7 @@ function checkUserList(col_name, specify_value, search_value, pagenum){
 					//当前页页码
 					$("#xiye").html(data.currentPageNum);
 					//尾页页码
-					$("#mo").html(data.lastPageNum);
+					$("#mo").html(data.totalpagesNum);
 				}
 				// 清除现有列表
 //				$("#datas").hide();

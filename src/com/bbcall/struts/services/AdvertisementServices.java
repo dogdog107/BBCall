@@ -29,7 +29,7 @@ public class AdvertisementServices {
 		if (Tools.isEmpty(advertisement_title, advertisement_bigphoto_url,
 				advertisement_smallphoto_url, advertisement_summary,
 				advertisement_content)
-				&& advertisement_type != null)
+				|| advertisement_type == null)
 			return ResultCode.REQUIREINFO_NOTENOUGH;
 		
 		Advertisement advert = new Advertisement();

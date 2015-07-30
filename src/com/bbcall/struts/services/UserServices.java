@@ -633,11 +633,11 @@ public class UserServices {
 			changecount++;
 			System.out.println("picurl changed!");
 			logger.info("userOpr:[UserUpdate][Updated ID: " + userid + "]picurl changed!");
-			if (updatemode == 1 && tokenUserInfo.getUser_type().equals(2)) {// 用户模式时，user状态转为pending 待审核
-				user.setUser_status(3);
-				System.out.println("(picurl)status changed due to UpdateMode is 1 (user)!");
-				logger.info("userOpr:[UserUpdate][Updated ID: " + userid + "](picurl)status changed due to UpdateMode is 1 (user)!");
-			}
+//			if (updatemode == 1 && tokenUserInfo.getUser_type().equals(2)) {// 用户模式时，user状态转为pending 待审核
+//				user.setUser_status(3);
+//				System.out.println("(picurl)status changed due to UpdateMode is 1 (user)!");
+//				logger.info("userOpr:[UserUpdate][Updated ID: " + userid + "](picurl)status changed due to UpdateMode is 1 (user)!");
+//			}
 		}
 		// ***** 检测mobile *****
 		if (mobile != null && !mobile.equals(user.getUser_mobile())) {
@@ -822,7 +822,7 @@ public class UserServices {
 		
 	    //PageHelper.startPage(PageNum, PageSize) 
 		//获取第1页，10条内容，当PageSize=0时会查询出全部的结果
-	    PageHelper.startPage(pagenum, 20);
+	    PageHelper.startPage(pagenum, 10);
 	    
 	    //紧跟着的第一个select方法会被分页
 		List<User> userlist = userMapper.listUserWhereOrderBy(where_col, order_col, where_value, order_value);
@@ -847,7 +847,7 @@ public class UserServices {
 		
 	    //PageHelper.startPage(PageNum, PageSize) 
 		//获取第1页，10条内容，当PageSize=0时会查询出全部的结果
-	    PageHelper.startPage(pagenum, 20);
+	    PageHelper.startPage(pagenum, 1);
 
 	    //紧跟着的第一个select方法会被分页
 		List<User> userlist = userMapper.listUserOrderBy(col_name, specify_value, search_value);

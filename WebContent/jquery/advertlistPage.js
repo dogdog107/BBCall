@@ -1,6 +1,15 @@
 
 
 function onload() {
+	if (token == "" || token == null) {
+		if (confirm('Session has been expired! Please re-login again.\n Click "OK" to return login page.')) {
+			window.parent.frames.location.href="./login.jsp";
+		}
+		$("#message").html("<font color=red> Session has been expired! Please re-login again. </font>");
+		$("#div_main").hide(300);
+		$("#div_message").show(300).delay(10000).hide(300);
+		return;
+	}
 	checkAdvertList();
 }
 
@@ -30,7 +39,7 @@ function checkAdvertList(pagenum){
 					//当前页页码
 					$("#xiye").html(data.currentPageNum);
 					//尾页页码
-					$("#mo").html(data.lastPageNum);
+					$("#mo").html(data.totalpagesNum);
 				}
 				// 清除现有列表
 //				$("#datas").hide();

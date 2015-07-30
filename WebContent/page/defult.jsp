@@ -11,6 +11,7 @@
 	var photourl = "${sessionScope.user_pic_url}";
 	var usertype = "${sessionScope.user_type}";
 	var status = "${sessionScope.user_status}";
+	var token = "${sessionScope.user_token}";
 </script>
 <script type="text/javascript"
 	src="${pageContext.request.contextPath }/jquery/jquery-1.8.3.js"></script>

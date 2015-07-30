@@ -33,7 +33,7 @@ function getwashorder(status,section,mastername,pagenumber) {
 					//当前页页码
 					$("#xiye").html(data.currentPageNum);
 					//尾页页码
-					$("#mo").html(data.lastPageNum);
+					$("#mo").html(data.totalpagesNum);
 				}
 				// 清除现有列表
 //				$("#datas").hide();

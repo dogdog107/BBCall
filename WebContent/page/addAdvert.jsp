@@ -33,15 +33,18 @@
 	</table>
 	<div></div>
 	<div style="font-size: 13px; margin: 10px 5px">
-		<span> <s:if test="dataMap.result">
-				<p align="center" style="font-size: 15px; color: green">##
-					成功！${ dataMap.errmsg} ##</p>
-			</s:if> <s:else>
-				<s:if test="!dataMap.result">
-					<p align="center" style="font-size: 15px; color: red">##
-						失敗！${ dataMap.errmsg} ##</p>
+		<span> <s:if test="dataMap.result != null">
+				<s:if test="dataMap.result">
+					<p align="center" style="font-size: 15px; color: green">##
+						成功！${ dataMap.errmsg} ##</p>
 				</s:if>
-			</s:else>
+				<s:else>
+					<s:if test="!dataMap.result">
+						<p align="center" style="font-size: 15px; color: red">## 失敗！${ dataMap.errmsg}
+							##</p>
+					</s:if>
+				</s:else>
+			</s:if>
 		</span>
 	</div>
 	<div style="font-size: 13px; margin: 10px 5px">
@@ -52,11 +55,11 @@
 
 				<tr>
 					<td style="width:250px">廣告標題 (AD Title)</td>
-					<td><input type="text" name="advertisement_title" style="width:400px;height:20px;"/></td>
+					<td><input type="text" name="advertisement_title" id="advertisement_title" style="width:400px;height:20px;"/></td>
 				</tr>
 				<tr>
 					<td>廣告概要 (AD Summary)</td>
-					<td><textarea rows="3" name="advertisement_summary" style="width:400px;"></textarea></td>
+					<td><textarea rows="3" name="advertisement_summary" id="advertisement_summary" style="width:400px;"></textarea></td>
 				</tr>
 				<tr>
 					<td>廣告類型 (Advertisement Types)
@@ -101,13 +104,13 @@
 				<tr>
 					<td colspan="2">
 						<input type="hidden" id="advertisement_content" name="advertisement_content" value="" />
-						<script id="editor" type="text/plain" style="width:99%;height:400px;">在這裡輸入廣告內容 (Enter AD contents here)</script>
+						<script id="editor" type="text/plain" style="width:99%;height:400px;"></script>
 					</td>
 				</tr>
 				<tr>
 					<td colspan="2">
 						<input type="submit" value="提交(Submit)" onclick="return validate();" class="btn btn-default" />
-						<input type="button" value="重置(Reset)" onclick="location.href='addAdvert.jsp'" class="btn btn-default" />
+						<input type="button" value="重置(Reset)" onclick="location.href='advert_showAddAdvertPage.action'" class="btn btn-default" />
 						<input type="button" value="取消(Cancel)" onclick="location.href='defult.jsp'" class="btn btn-default" />
 					</td>
 				</tr>
