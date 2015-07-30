@@ -68,6 +68,7 @@
 			</table>
 		</form>
 	</div>
+	<div class="footer"></div>
 	<script type="text/javascript">
 		// 添加全局站点信息
 		var BASE_URL = '${pageContext.request.contextPath }';

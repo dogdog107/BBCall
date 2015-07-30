@@ -73,6 +73,7 @@
 			</table>
 		</div>
 	</div>
+	<div class="footer"></div>
 	<script type="text/javascript">
 		var token = "${sessionScope.user_token}";
 		var link = "${pageContext.request.contextPath }";

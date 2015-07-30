@@ -117,6 +117,7 @@
 			</table>
 		</form>
 	</div>
+	<div class="footer"></div>
 	<div style="width:100%;height:100px;"></div>
 	<script type="text/javascript">
 		// 添加全局站点信息

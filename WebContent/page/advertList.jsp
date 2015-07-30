@@ -101,6 +101,7 @@
 			</div>
 		</div>
 	</div>
+	<div class="footer"></div>
 <script type="text/javascript">
 	var BASE_URL = '${pageContext.request.contextPath }';
 	var token = "${sessionScope.user_token}";

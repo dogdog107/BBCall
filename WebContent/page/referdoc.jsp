@@ -105,11 +105,12 @@
 				</div>
 			</div>
         </div>
-        <script type="text/javascript"
-	src="${pageContext.request.contextPath }/jquery/jquery-1.8.3.js"></script>
-<script type="text/javascript"
-	src="${pageContext.request.contextPath }/jquery/referdocPage.js?token=${sessionScope.user.user_token}"></script>
-<script type="text/javascript"
+	<div class="footer"></div>
+	<script type="text/javascript"
+		src="${pageContext.request.contextPath }/jquery/jquery-1.8.3.js"></script>
+	<script type="text/javascript"
+		src="${pageContext.request.contextPath }/jquery/referdocPage.js?token=${sessionScope.user.user_token}"></script>
+	<script type="text/javascript"
 		src="${pageContext.request.contextPath }/jquery/paging.js"></script>
 </body>
 </html>

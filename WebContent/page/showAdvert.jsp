@@ -58,6 +58,7 @@
 			<div class="advert_content">${advertisement_content }</div>
 		</div>
 	</div>
+	<div class="footer"></div>
 <script type="text/javascript"
 	src="${pageContext.request.contextPath }/jquery/jquery-1.8.3.js"></script>
 <script type="text/javascript">
@@ -68,7 +69,15 @@ var updateResult = "${updateResult}";
 var updateErrmsg = "${dataMap.errmsg}";
 
 function onload(){
-	checkAdvertType(advert_type);
+	if (token == "" || token == null) {
+		if (confirm('Session has been expired! Please re-login again.\n Click "OK" to return login page.')) {
+			window.parent.frames.location.href="./login.jsp";
+		}
+		$("#message").html("<font color=red> Session has been expired! Please re-login again. </font>");
+		$("#div_main").hide(300);
+		$("#div_message").show(300).delay(10000).hide(300);
+		return;
+	}
 	if (updateResult != '') {
 		if(updateResult == 'true'){
 			$("#message").html("<font color=green> Edit Advertisement Success! </font>");
@@ -79,6 +88,7 @@ function onload(){
 			$("#div_message").show(300).delay(5000).hide(300);
 		}
 	}
+	checkAdvertType(advert_type);
 }
 
 function checkAdvertType(typecode){

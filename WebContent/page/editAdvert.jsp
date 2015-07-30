@@ -102,14 +102,15 @@
 				<tr>
 					<td colspan="2">
 						<input type="submit" value="提交(Submit)" onclick="return validate();" class="btn btn-default" />
-						<input type="button" value="重置(Reset)" onclick="location.href='addAdvert.jsp'" class="btn btn-default" />
+						<input type="button" value="重置(Reset)" onclick="location.href='advert_editAdvertPage.action?token=${sessionScope.user_token}&advertisement_id=${advertisement_id}'" class="btn btn-default" />
 						<input type="button" value="取消(Cancel)" onclick="location.href='defult.jsp'" class="btn btn-default" />
 					</td>
 				</tr>
 			</table>
 		</form>
 	</div>
-	<div style="width:100%;height:100px;"></div>
+<!-- 	<div style="width:100%;height:100px;"></div> -->
+	<div class="footer"></div>
 	<script type="text/javascript">
 		// 添加全局站点信息
 		var BASE_URL = '${pageContext.request.contextPath }';

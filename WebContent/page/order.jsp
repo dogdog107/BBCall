@@ -95,6 +95,7 @@
 				</div>
 			</div>
 	</div>
+	<div class="footer"></div>
 	<script type="text/javascript"
 	src="${pageContext.request.contextPath }/jquery/jquery-1.8.3.js"></script>
 	<script type="text/javascript">
