@@ -43,7 +43,7 @@ public class LoginInterceptor extends AbstractInterceptor {
 		}
 		
 		if (actionName.contains("login")){ // 如果是请求登录action
-			return accessValidate(invocation,"accessgroup");
+			return accessValidate(invocation,"login");
 		}
 		
 		if (list.contains(actionName)) {// 检测struts.xml 放行的action
@@ -113,7 +113,7 @@ public class LoginInterceptor extends AbstractInterceptor {
 		String errmsg; // 返回给session的参数
 
 		switch (inputflag) {
-		case "accessgroup": // session check access
+		case "login": // session check access
 			// 查看username
 			String[] usernameParam = (String[]) invocation
 					.getInvocationContext().getParameters().get("username");
@@ -137,12 +137,14 @@ public class LoginInterceptor extends AbstractInterceptor {
 					errmsg = "(Login) Username is invalid, Please contact your Admin.";
 					logger.info("userOpr:[" + username + "][" + actionName + "]" + errmsg);
 					System.out.println(errmsg);
+					return invocation.invoke();
 				}
 			} else {
 				accessResult =ResultCode.REQUIREINFO_NOTENOUGH;
 				errmsg = "(Login) Require information not enough.";
 				logger.info("userOpr:[" + username + "][" + actionName + "]" + errmsg);
 				System.out.println(errmsg);
+				return invocation.invoke();
 			}
 			break;
 		case "session": // session check access
