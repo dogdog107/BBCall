@@ -126,7 +126,8 @@
 							<option value="0">待審核</option>
 							<option value="1">審核通過</option>
 							<option value="2">審核不通過</option>
-						</select>&nbsp;&nbsp;<a id="PSkill" href="" title=""></a> <br />
+						</select><span>&nbsp;&nbsp;</span>
+						<a id="PSkill" href="" title=""></a>
 					</div>
 				</td>
 			</tr>
