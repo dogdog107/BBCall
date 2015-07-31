@@ -912,15 +912,25 @@ public class OrderlistAction extends ActionSupport {
 
 		if (result == ResultCode.SUCCESS) {
 			Orderlist orderlist = orderlistServices.orderlistinfo();
+			System.out.println(orderlist.getOrder_price());
 
 			// referdocServices.getReferdoc(orderlist.getOrder_type_code());
+
 			// referdoclist = referdocServices.referdocinfo();
 
-			String[] url = orderlist.getOrder_pic_url().split(";");
+			String[] url = null;
+			String picurl = orderlist.getOrder_pic_url();
 
-			for (int i = 0; i < url.length; i++) {
-				orderFileFileName.add(url[i]);
+			if (picurl != null) {
+				url = orderlist.getOrder_pic_url().split(";");
+				for (int i = 0; i < url.length; i++) {
+					orderFileFileName.add(url[i]);
+				}
 			}
+
+			System.out.println("url");
+
+			System.out.println("orderFileFileName");
 
 			dataMap.put("orderlist", orderlist);
 			// dataMap.put("referdoclist", referdoclist);
@@ -928,7 +938,7 @@ public class OrderlistAction extends ActionSupport {
 			dataMap.putAll(Tools.JsonHeadMap(result, true));
 			// dataMap.put("resultcode", result);
 			// dataMap.put("errmsg", ResultCode.getErrmsg(result));
-			// dataMap.put("changeResult", true);
+			// dataMap.put("selectResult", true);
 		}
 
 		return "selectsuccess";
