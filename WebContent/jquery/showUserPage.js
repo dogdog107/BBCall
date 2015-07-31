@@ -132,7 +132,7 @@ function checkPendingSkill(skillCode, idname, callback){
 		},
 		success : function(data) {
 			if (data.result) {
-				$("#" + idname).text(">>" + data.referdoc.referdoc_type + "<<");
+				$("#" + idname).text(">> " + data.referdoc.referdoc_type + " <<");
 			}
 			if (typeof (callback) == "function") {
 				callback();
@@ -157,14 +157,25 @@ function showPendingSkill() {
 				$.each(skilllist, function(i, n) {
 					if (n.user_skill_status == 0) {
 						var row = $("#template").clone();
-						row.find("#PSkill").attr("href", n.user_skill_url);// 改变绑定好数据的行的id
-						row.find("#PSkill").attr("data-lightbox", "pendingSkill_" + n.user_skill);// 改变绑定好数据的行的id
-						row.find("#PSkill").attr("id", "pendingSkill_" + n.user_skill);// 改变绑定好数据的行的id
+						var fullurl = n.user_skill_url.split(";");
+						if(fullurl.length > 0){
+							for (var j = 0; j < fullurl.length; j++) {
+								var tempPSkill = $("#PSkill").clone();
+								tempPSkill.attr("href", fullurl[j]);// 改变绑定好数据的行的id
+								tempPSkill.attr("data-lightbox", "pendingSkill_" + n.user_skill);// 改变绑定好数据的行的id
+								tempPSkill.attr("id", "pendingSkill_" + n.user_skill + "_" + j);
+								if (j > 0) {
+									tempPSkill.attr("display","none");
+								}
+								tempPSkill.appendTo(row);
+							}
+						}
 						row.find("#skillStatusOpr").val(n.user_skill_status);
 						row.find("#skillStatusOpr").attr("id", "skillStatusOpr_" + n.userskill_id);
+						row.attr("id", "template_" + n.userskill_id);
 						row.appendTo("#pendingSkill");// 添加到模板的容器中
-						checkPendingSkill(n.user_skill, "pendingSkill_" + n.user_skill, function(){
-							row.toggle(300);
+						checkPendingSkill(n.user_skill, "pendingSkill_" + n.user_skill + "_0", function(){
+						row.toggle(300);
 						});
 						count++;
 					}

@@ -27,6 +27,9 @@ public class ResultCode {
 	public static Integer USERSKILLINFO_NOTEXIST = 10019;// 用户技能信息不存在
 	public static Integer USERSKILLINFO_ISSAME = 10020;// 用户技能信息相同
 	public static Integer USERSKILLLIST_NULL = 10021;// 用户技能列表为空
+	public static Integer USERSKILL_PENDING = 10022;// 用户技能审核中
+	public static Integer USERSKILL_REJECT = 10023;// 用户技能审核不通过
+	public static Integer USERSKILL_ACTIVE = 10024;// 用户技能已通过
 
 	// 用户返回码11XXX
 	public static Integer USERNAME_NOTEXIST = 11001;// 用户名可以使用
@@ -150,6 +153,15 @@ public class ResultCode {
 			break;
 		case 10021:
 			errmsg = "user Skill List is empty";
+			break;
+		case 10022:
+			errmsg = "user Skill is pending approve";
+			break;
+		case 10023:
+			errmsg = "user Skill is rejected";
+			break;
+		case 10024:
+			errmsg = "user Skill is active";
 			break;
 
 		case 11001:

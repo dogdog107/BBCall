@@ -78,15 +78,33 @@ public class UserSkillServices {
 		referdocServices.getReferdoc(userskill); // 检测userskill是否正确
 		if (referdocServices.referdocinfo() == null) 
 			return ResultCode.REQUIREINFO_ERROR;
-		if (userSkillMapper.getUserSkillByUserIdAndSkill(userid, userskill) == null) {
+		UserSkill existUserSkill = userSkillMapper.getUserSkillByUserIdAndSkill(userid, userskill);
+		if (existUserSkill == null || existUserSkill.getUser_skill_status().equals(2)) {
 			UserSkill tempUserSkill = new UserSkill();
 			tempUserSkill.setUser_id(userid);
 			tempUserSkill.setUser_skill(userskill);
+			// 清除开头为;的符号
+			while(userskillurl.startsWith(";")){
+				userskillurl = userskillurl.substring(1, userskillurl.length());
+			}
+			// 清除结尾为;的符号
+			while(userskillurl.endsWith(";")){
+				userskillurl = userskillurl.substring(0, userskillurl.length() - 1);
+			}
 			tempUserSkill.setUser_skill_url(userskillurl);
 			userSkillMapper.addUserSkill(tempUserSkill);
 			return ResultCode.SUCCESS;
 		} else {
-			return ResultCode.USERSKILLINFO_EXIST;
+			switch (existUserSkill.getUser_skill_status()) {
+			case 0:
+				return ResultCode.USERSKILL_PENDING;
+			case 1:
+				return ResultCode.USERSKILL_ACTIVE;
+			case 2:
+				return ResultCode.USERSKILL_REJECT;
+			default:
+				return ResultCode.UNKNOWN_ERROR;
+			}
 		}
 	}
 	
