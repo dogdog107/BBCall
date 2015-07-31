@@ -27,7 +27,7 @@ import com.opensymphony.xwork2.ActionSupport;
 public class OrderlistAction extends ActionSupport {
 
 	private static Logger logger = Logger.getLogger(OrderlistAction.class);
-	
+
 	@Autowired
 	private OrderlistServices orderlistServices;
 
@@ -231,16 +231,16 @@ public class OrderlistAction extends ActionSupport {
 
 		orderlistServices.getOrderById(orderid);
 		Orderlist order = orderlistServices.orderlistinfo();
-		
-		
+
 		int result = orderlistServices.completeOrder(score, order_evaluation,
 				orderid, pagenum);
 		// List<Referdoc> referdoclist = new ArrayList<Referdoc>();
-		logger.info("gradeOpr:[Tradecomplete][User ID: " + order.getOrder_user_id()
-				+ "]Order ID: " + order_id + "; Master name: " + order.getOrder_master_name()
-				+ "; Order type: " + order.getOrder_type() + "; Order price: " + order.getOrder_price()
-				+ "; Order Score: " + order_score + "; Order Evaluation: "
-				+ order_evaluation);
+		logger.info("gradeOpr:[Tradecomplete][User ID: "
+				+ order.getOrder_user_id() + "]Order ID: " + order_id
+				+ "; Master name: " + order.getOrder_master_name()
+				+ "; Order type: " + order.getOrder_type() + "; Order price: "
+				+ order.getOrder_price() + "; Order Score: " + order_score
+				+ "; Order Evaluation: " + order_evaluation);
 
 		if (result == ResultCode.SUCCESS) {
 			List<Orderlist> orderlist = orderlistServices.orderlistinfos();
@@ -610,10 +610,14 @@ public class OrderlistAction extends ActionSupport {
 
 			// referdoclist = referdocServices.referdocinfo();
 
-			String[] url = orderlist.getOrder_pic_url().split(";");
+			String[] url = null;
+			String picurl = orderlist.getOrder_pic_url();
 
-			for (int i = 0; i < url.length; i++) {
-				orderFileFileName.add(url[i]);
+			if (picurl != null) {
+				url = orderlist.getOrder_pic_url().split(";");
+				for (int i = 0; i < url.length; i++) {
+					orderFileFileName.add(url[i]);
+				}
 			}
 
 			dataMap.put("orderlist", orderlist);
