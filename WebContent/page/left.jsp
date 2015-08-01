@@ -152,6 +152,11 @@
 							src="./img/menu_icon.gif" width=9></td>
 						<td><a class=menuchild href="" target=main>推送管理</a></td>
 					</tr>
+					<tr height=20>
+						<td align=middle width=30><img height=9
+							src="./img/menu_icon.gif" width=9></td>
+						<td><a class=menuchild href="${pageContext.request.contextPath }/page/downloadLogList.jsp" target=main>日誌下載</a></td>
+					</tr>
 					<tr height=4>
 						<td colspan=2></td>
 					</tr>

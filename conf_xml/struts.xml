@@ -283,7 +283,7 @@
 				<param name="root">dataMap</param>
 			</result>
 		</action>
-		
+
 		<!-- FileDownload Action -->
 		<!-- Reference: http://blog.csdn.net/laozhan1028/article/details/7892155 -->
 		<action name="download_*" method="{1}" class="fileDownloadAction">
@@ -298,6 +298,9 @@
 				<param name="contentDisposition">attachment;filename="${downloadFileName}"</param>
 				<!-- 设置缓冲大小 -->
 				<param name="bufferSize">2048</param>
+			</result>
+			<result type="json" name="json">
+				<param name="root">dataMap</param>
 			</result>
 		</action>
 	</package>
