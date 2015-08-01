@@ -102,7 +102,8 @@
 	<select id="getProOrdersByUserAccount" parameterType="int"
 		resultMap="OrderResultMap">
 		select * from ORDERLIST 
-		where order_status="2" and 
+		where (order_status=2 or 
+		 order_status=4 or order_status=5 or order_status=6) and 
 		order_user_id=#{order_user_id} order by order_book_time asc 
 	</select>
 	<select id="getComOrdersByUserAccount" parameterType="int"
