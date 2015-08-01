@@ -20,19 +20,21 @@
 
 		<!--注册拦截器 -->
 		<interceptors>
-		
+
 			<!-- 自定义 登录验证 拦截器 -->
-			<interceptor name="loginInterceptor" class="com.bbcall.struts.interceptor.LoginInterceptor">
+			<interceptor name="loginInterceptor"
+				class="com.bbcall.struts.interceptor.LoginInterceptor">
 				<!-- 停用(true)/启用(false) 登录验证拦截器 -->
 				<param name="disable">false</param>
 				<param name="excludeAction">
 					user_register,user_registerJson,user_logout
 				</param>
 				<param name="sessionCheckName">user_token</param>
-			</interceptor>  
-        
+			</interceptor>
+
 			<!-- 自定义 异常 拦截器 -->
-			<interceptor name="businessInterceptor" class="com.bbcall.struts.interceptor.BusinessInterceptor" />
+			<interceptor name="businessInterceptor"
+				class="com.bbcall.struts.interceptor.BusinessInterceptor" />
 
 			<!-- 自定义拦截器堆栈 -->
 			<interceptor-stack name="mystack">
@@ -48,7 +50,7 @@
 
 		<!-- 全局跳转页面 -->
 		<global-results>
-			<result name="exception">/error.jsp</result>
+			<result name="exception">/page/error.jsp</result>
 			<result name="login" type="redirect">/page/login_full.jsp</result>
 			<result name="accessReject">
 				<param name="location">/page/error.jsp</param>
@@ -64,7 +66,8 @@
 
 		<!-- 全局异常 -->
 		<global-exception-mappings>
-			<!-- <exception-mapping result="error" exception="com.bbcall.struts.exception.BusinessException" /> -->
+			<!-- <exception-mapping result="error" exception="com.bbcall.struts.exception.BusinessException" 
+				/> -->
 			<exception-mapping result="exception" exception="java.lang.Exception" />
 		</global-exception-mappings>
 
@@ -82,18 +85,18 @@
 				<param name="excludeProperties">\w+\[\d+\]\.\w+password</param>
 			</result>
 		</action>
-		
+
 		<!-- User Action -->
 		<action name="user_*" method="{1}" class="userAction">
 
 			<result name="homePage">
 				<param name="location">/page/index.jsp</param>
 			</result>
-			
+
 			<result name="success">
 				<param name="location">/page/defult.jsp</param>
 			</result>
-			
+
 			<result name="loginSuccess">
 				<param name="location">/page/index.jsp</param>
 			</result>
@@ -122,18 +125,18 @@
 				<param name="userid">${userid}</param>
 				<param name="updateResult">true</param>
 			</result>
-			
+
 			<result name="updateUserFailed" type="redirectAction">
 				<param name="actionName">user_editUser</param>
 				<param name="token">${token}</param>
 				<param name="userid">${userid}</param>
 				<param name="updateResult">false</param>
 			</result>
-			
+
 			<result name="getUserByIdSuccess">
 				<param name="location">/page/showUser.jsp</param>
 			</result>
-			
+
 			<result name="getUserByIdFailed">
 				<param name="location">/page/userlist.jsp</param>
 			</result>
@@ -150,7 +153,7 @@
 		<!-- Order Action -->
 		<action name="orderlist_*" method="{1}" class="orderlistAction">
 			<!-- 限制图片的格式和图片的大小 -->
-			
+
 			<interceptor-ref name="fileUpload">
 				<param name="allowedTypes">
 					image/bmp,image/png,image/gif,image/jpeg,image/pjpeg
@@ -170,7 +173,7 @@
 			</result>
 		</action>
 
-		
+
 		<!-- Advertisement Action -->
 		<action name="advert_*" method="{1}" class="advertisementAction">
 			<result name="addAdvertSuccess">/page/advertList.jsp</result>
@@ -180,7 +183,7 @@
 			<result name="showAdvertSuccess">/page/showAdvert.jsp</result>
 			<result name="editAdvertPageSuccess">/page/editAdvert.jsp</result>
 			<result name="showAddAdvertPage">/page/addAdvert.jsp</result>
-			
+
 			<result name="updateAdvertByIdSuccess" type="redirectAction">
 				<param name="actionName">advert_showAdvert</param>
 				<param name="token">${token}</param>
@@ -197,20 +200,20 @@
 				<param name="root">dataMap</param>
 			</result>
 		</action>
-		
+
 		<!-- Preorder Action -->
 		<action name="preorder_*" method="{1}" class="preorderAction">
 			<result name="success">/page/preorder.jsp</result>
-			
+
 			<result type="json" name="json">
 				<param name="root">dataMap</param>
 			</result>
 		</action>
-		
+
 		<!-- Blacklist Action -->
 		<action name="blacklist_*" method="{1}" class="blacklistAction">
 			<result name="success">/page/blacklist.jsp</result>
-			
+
 			<result type="json" name="json">
 				<param name="root">dataMap</param>
 			</result>
@@ -218,7 +221,7 @@
 
 		<!-- Address Action -->
 		<action name="address_*" method="{1}" class="addressAction">
-			
+
 			<result type="json" name="json">
 				<param name="root">dataMap</param>
 			</result>
@@ -246,11 +249,8 @@
 			<interceptor-ref name="fileUpload">
 
 				<!-- 配置允许上传的文件类型 -->
-<!-- 				
-				<param name="allowedTypes">
-					image/bmp,image/png,image/gif,image/jpeg,image/pjpeg,image/x-png
-				</param>
- -->
+				<!-- <param name="allowedTypes"> image/bmp,image/png,image/gif,image/jpeg,image/pjpeg,image/x-png 
+					</param> -->
 				<!-- 配置允许上传文件的大小(单位字节) -->
 				<!-- <param name="maximumSize">80000</param> -->
 			</interceptor-ref>
@@ -271,7 +271,7 @@
 				<param name="token">${token}</param>
 				<param name="userid">${userid}</param>
 			</result>
-			
+
 			<result name="userUploadByIdSuccess" type="redirectAction">
 				<param name="actionName">user_updateUserById</param>
 				<param name="picurl">${picurl}</param>
@@ -284,6 +284,22 @@
 			</result>
 		</action>
 		
+		<!-- FileDownload Action -->
+		<!-- Reference: http://blog.csdn.net/laozhan1028/article/details/7892155 -->
+		<action name="download_*" method="{1}" class="fileDownloadAction">
+			<param name="inputPath">/WEB-INF/logs</param>
+			<!-- result type设置为stream -->
+			<result name="download_success" type="stream">
+				<!-- MIME类型 -->
+				<param name="contentType">application/octet-stream</param>
+				<!-- inputName的值与action获取输入流资源的方法名相对应(action中定义getInputStream方法,并且返回类型为InputStream) -->
+				<param name="inputName">inputStream</param>
+				<!-- 设置带附件的文件 动态获取文件名(action中定义getDownloadFileName方法) -->
+				<param name="contentDisposition">attachment;filename="${downloadFileName}"</param>
+				<!-- 设置缓冲大小 -->
+				<param name="bufferSize">2048</param>
+			</result>
+		</action>
 	</package>
 
 	<!-- Add packages here -->
