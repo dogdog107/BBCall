@@ -37,7 +37,7 @@ function getlist(parentno,pagenum) {
 		success : function(data) {
 			if (data.result) {
 				//*初始化分页条
-				if (data.lastPageNum == 1){
+				if (data.lastPageNum <= 1){
 					//当只有一页时隐藏分页条
 					$("#page_bar").hide(300);
 				} else {
@@ -110,7 +110,7 @@ function referdoc_parentno_change() {
 		success : function(data) {
 			if (data.result) {
 				//*初始化分页条
-				if (data.lastPageNum == 1){
+				if (data.lastPageNum <= 1){
 					//当只有一页时隐藏分页条
 					$("#page_bar").hide(300);
 				} else {
@@ -119,7 +119,7 @@ function referdoc_parentno_change() {
 					//当前页页码
 					$("#xiye").html(data.currentPageNum);
 					//尾页页码
-					$("#mo").html(data.lastPageNum);
+					$("#mo").html(data.totalpagesNum);
 				}
 				// 清除现有列表
 //				$("#datas").hide();
@@ -192,7 +192,7 @@ function referdoclist_update(formnum) {
 		success : function(data) {
 			if (data.result) {
 				//*初始化分页条
-				if (data.lastPageNum == 1){
+				if (data.lastPageNum <= 1){
 					//当只有一页时隐藏分页条
 					$("#page_bar").hide(300);
 				} else {
@@ -201,7 +201,7 @@ function referdoclist_update(formnum) {
 					//当前页页码
 					$("#xiye").html(data.currentPageNum);
 					//尾页页码
-					$("#mo").html(data.lastPageNum);
+					$("#mo").html(data.totalpagesNum);
 				}
 				// 清除现有列表
 //				$("#datas").hide();

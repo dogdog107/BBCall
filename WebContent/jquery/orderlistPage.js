@@ -20,7 +20,7 @@ function getorderlist(status,pagenumber) {
 		success : function(data) {
 			if (data.result) {
 				//*初始化分页条
-				if (data.lastPageNum == 1){
+				if (data.lastPageNum <= 1){
 					//当只有一页时隐藏分页条
 					$("#page_bar").hide(300);
 				} else {

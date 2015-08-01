@@ -237,8 +237,7 @@
 	<select id="getProOrders" resultMap="OrderResultMap">
 		select * from ORDERLIST 
 		where 
-		(order_status=2 or 
-		 order_status=4 or order_status=5 or order_status=6) order by order_book_time 
+		order_status="2" order by order_book_time 
 	</select>
 
 	<select id="getComOrders" resultMap="OrderResultMap">
