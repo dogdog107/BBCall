@@ -5,6 +5,7 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Controller;
@@ -35,7 +36,7 @@ public class AdvertisementAction extends ActionSupport{
 	private Map<String, Object> dataMap = new LinkedHashMap<String, Object>(); // 新建dataMap来储存JSON字符串
 	private ObjectToMap obj2map = new ObjectToMap();// 新建ObjectToMap对象
 	private PageInfoToMap pageinfo2map = new PageInfoToMap();// 新建PageInfoToMap对象
-	
+	private static Logger logger = Logger.getLogger(AdvertisementAction.class);  
 	// User-related parameters
 	private String token;
 	
@@ -77,11 +78,13 @@ public class AdvertisementAction extends ActionSupport{
 		if (result == ResultCode.SUCCESS) {
 			dataMap.putAll(Tools.JsonHeadMap(result, true));
 			System.out.println(dataMap);
+			logger.info("userOpr:[addAdvert]" + dataMap);  
 			return "addAdvertSuccess";
 		} else {
 			dataMap.putAll(Tools.JsonHeadMap(result, false));
 			System.out.println(dataMap);
 			System.out.println("addAdvert Failed");
+			logger.info("userOpr:[addAdvert]" + dataMap);  
 			return "addAdvertFailed";
 		}
 	}
@@ -120,11 +123,13 @@ public class AdvertisementAction extends ActionSupport{
 			dataMap = obj2map.getValueMap(advertisementServices.getAdvertisement());
 			dataMap.putAll(Tools.JsonHeadMap(result, true));
 			System.out.println(dataMap);
+			logger.info("userOpr:[showAdvert][" + advertisement_id + "]" + dataMap);  
 			return "showAdvertSuccess";
 		} else {
 			dataMap.putAll(Tools.JsonHeadMap(result, false));
 			System.out.println(dataMap);
 			System.out.println("showAdvert Failed");
+			logger.info("userOpr:[showAdvert][" + advertisement_id + "]" + dataMap);  
 			return "showAdvertFailed";
 		}
 	}
@@ -232,11 +237,13 @@ public class AdvertisementAction extends ActionSupport{
 		if (result == ResultCode.SUCCESS) {
 			dataMap.putAll(Tools.JsonHeadMap(result, true));
 			System.out.println(dataMap);
+			logger.info("userOpr:[deleteAdvert][" + advertisement_id + "]" + dataMap);  
 			return "deleteAdvertSuccess";
 		} else {
 			dataMap.putAll(Tools.JsonHeadMap(result, false));
 			System.out.println(dataMap);
 			System.out.println("deleteAdvert Failed");
+			logger.info("userOpr:[deleteAdvert][" + advertisement_id + "]" + dataMap);  
 			return "deleteAdvertFailed";
 		}
 	}
@@ -261,11 +268,13 @@ public class AdvertisementAction extends ActionSupport{
 		if (result == ResultCode.SUCCESS) {
 			dataMap.putAll(Tools.JsonHeadMap(result, true));
 			System.out.println(dataMap);
+			logger.info("userOpr:[updateAdvertById][" + advertisement_id + "]" + dataMap);  
 			return "updateAdvertByIdSuccess";
 		} else {
 			dataMap.putAll(Tools.JsonHeadMap(result, false));
 			System.out.println(dataMap);
 			System.out.println("updateAdvertById Failed");
+			logger.info("userOpr:[updateAdvertById][" + advertisement_id + "]" + dataMap);  
 			return "updateAdvertByIdFailed";
 		}
 	}
@@ -285,11 +294,13 @@ public class AdvertisementAction extends ActionSupport{
 		if (result == ResultCode.SUCCESS) {
 			dataMap.putAll(Tools.JsonHeadMap(result, true));
 			System.out.println(dataMap);
+			logger.info("userOpr:[updateAdvertIsTop][" + advertisement_id + "]" + dataMap);  
 			return "updateAdvertIsTopSuccess";
 		} else {
 			dataMap.putAll(Tools.JsonHeadMap(result, false));
 			System.out.println(dataMap);
 			System.out.println("updateAdvertIsTop Failed");
+			logger.info("userOpr:[updateAdvertIsTop][" + advertisement_id + "]" + dataMap);  
 			return "updateAdvertIsTopFailed";
 		}
 	}
@@ -309,11 +320,13 @@ public class AdvertisementAction extends ActionSupport{
 		if (result == ResultCode.SUCCESS) {
 			dataMap.putAll(Tools.JsonHeadMap(result, true));
 			System.out.println(dataMap);
+			logger.info("userOpr:[updateAdvertStatus][" + advertisement_id + "]" + dataMap); 
 			return "updateAdvertStatusSuccess";
 		} else {
 			dataMap.putAll(Tools.JsonHeadMap(result, false));
 			System.out.println(dataMap);
 			System.out.println("updateAdvertStatus Failed");
+			logger.info("userOpr:[updateAdvertStatus][" + advertisement_id + "]" + dataMap); 
 			return "updateAdvertStatusFailed";
 		}
 	}

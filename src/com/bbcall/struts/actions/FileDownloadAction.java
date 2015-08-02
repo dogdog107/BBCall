@@ -14,6 +14,7 @@ import java.util.Map;
 
 import javax.servlet.ServletContext;
 
+import org.apache.log4j.Logger;
 import org.apache.struts2.ServletActionContext;
 import org.apache.struts2.json.annotations.JSON;
 import org.springframework.context.annotation.Scope;
@@ -29,6 +30,7 @@ import com.opensymphony.xwork2.ActionSupport;
 public class FileDownloadAction extends ActionSupport {
 
 	private Map<String, Object> dataMap = new LinkedHashMap<String, Object>(); // 新建dataMap来储存JSON字符串
+	private static Logger logger = Logger.getLogger(FileDownloadAction.class);  
 	private String fileName;// 用户请求的文件名
 	private String inputPath;// 下载资源的路径(在struts配置文件中设置)
 	private String fileType;// 文件类型 （Grade, Trade, User）
@@ -38,17 +40,17 @@ public class FileDownloadAction extends ActionSupport {
 
 		String downloadDir = context.getRealPath("/WEB-INF/logs");
 		String downloadFile = context.getRealPath(inputPath);
-		System.out.println("downloadDir: " + downloadDir);
-		System.out.println("downloadFile: " + downloadFile);
 		// 防止用户请求不安全的资源
 		if (!downloadFile.startsWith(downloadDir)) {
 			System.out.println("path incorrect.");
+			logger.info("userOpr:[downloadFile]Download reject. Download path incorrect.");  
 			return null;
 		}
 		
         File file = new File(downloadFile + File.separatorChar + fileName);
         if (!file.isFile()) {
         	System.out.println("File not exist.");
+        	logger.info("userOpr:[downloadFile]Download reject. Download file not exist.");  
         	return null;
         }
 		return "download_success";
@@ -85,6 +87,7 @@ public class FileDownloadAction extends ActionSupport {
 			e.printStackTrace();
 		}
 		System.out.println(downloadFileName);
+		logger.info("userOpr:[downloadFile]File be downloaded: " + fileName);  
 		return downloadFileName;
 	}
 
@@ -93,6 +96,7 @@ public class FileDownloadAction extends ActionSupport {
 		System.out.println(fileType);
 		if (fileType == null || (!fileType.equals("Grade") && !fileType.equals("Trade") && !fileType.equals("User"))) {
 			dataMap.putAll(Tools.JsonHeadMap(ResultCode.REQUIREINFO_ERROR, false));
+			logger.info("userOpr:[getFileList]" + Tools.JsonHeadMap(ResultCode.REQUIREINFO_ERROR, false));  
 			return null;
 		}
 		
@@ -110,11 +114,11 @@ public class FileDownloadAction extends ActionSupport {
 		}
 		//升序排列；
 //		Collections.sort(tempList);
-
 		//逆序输出
 		Collections.reverse(tempList); 
 		dataMap.put("fileList", tempList);
 		dataMap.putAll(Tools.JsonHeadMap(ResultCode.SUCCESS, true));
+		logger.info("userOpr:[getFileList]" + Tools.JsonHeadMap(ResultCode.SUCCESS, true));  
 		return null;
 	}
 	public String getFileListJson() throws Exception {
