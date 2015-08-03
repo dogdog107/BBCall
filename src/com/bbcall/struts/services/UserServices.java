@@ -1,6 +1,7 @@
 package com.bbcall.struts.services;
 
 import java.math.BigInteger;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.sql.Timestamp;
@@ -832,69 +833,6 @@ public class UserServices {
 
 	}
 
-	public int checkUserListWhereOrderBy(String order_col, String order_value,String where_col, String where_value, Integer pagenum) {
-		System.out.println("Here is UserServices.checkUserListWhereOrderBy method...");
-		//当传进来的pagenum为空 或者 pagenum == 0 时，显示第一页
-		if (pagenum == null || pagenum == 0)
-			pagenum = 1;
-		
-	    //PageHelper.startPage(PageNum, PageSize) 
-		//获取第1页，10条内容，当PageSize=0时会查询出全部的结果
-	    PageHelper.startPage(pagenum, 20);
-	    
-	    //紧跟着的第一个select方法会被分页
-		List<User> userlist = userMapper.listUserWhereOrderBy(where_col, order_col, where_value, order_value);
-		if (userlist.size() > 0) {
-			this.userlist = userlist;
-			return ResultCode.SUCCESS;
-		} else {
-			return ResultCode.USERLIST_NULL;
-		}
-	}
-	
-	// ###################
-	// ## 拉取User表
-	// ###################
-
-	public int checkUserList(String col_name, String specify_value, String search_value, Integer pagenum) {
-		System.out.println("Here is UserServices.checkUserList method...");
-		
-		//当传进来的pagenum为空 或者 pagenum == 0 时，显示第一页
-		if (pagenum == null || pagenum == 0)
-			pagenum = 1;
-		
-	    //PageHelper.startPage(PageNum, PageSize) 
-		//获取第1页，10条内容，当PageSize=0时会查询出全部的结果
-	    PageHelper.startPage(pagenum, 20);
-
-	    //紧跟着的第一个select方法会被分页
-		List<User> userlist = userMapper.listUserOrderBy(col_name, specify_value, search_value);
-
-		
-		if (userlist.size() > 0) {
-			this.userlist = userlist;
-			return ResultCode.SUCCESS;
-		} else {
-			return ResultCode.USERLIST_NULL;
-		}
-		
-//		int checkTokenResult = checkUserToken(token);
-//		if (checkTokenResult == ResultCode.SUCCESS) {
-//			if (userinfo.getUser_type() != 3) {
-//				return ResultCode.ACCESS_REJECT;
-//			}
-//			List<User> userlist = userMapper.listUserOrderBy(col_name, specify_value, search_value);
-//			if (userlist.size() > 0) {
-//				this.userlist = userlist;
-//				return ResultCode.SUCCESS;
-//			} else {
-//				return ResultCode.USERLIST_NULL;
-//			}
-//		} else {
-//			return checkTokenResult;
-//		}
-	}
-
 	// ###################
 	// ## 检测用户 token
 	// ###################
@@ -1139,9 +1077,99 @@ public class UserServices {
 			return ResultCode.USERID_ERROR;
 		}
 	}
+
+	public int checkUserListWhereOrderBy(String order_col, String order_value,String where_col, String where_value, Integer pagenum) {
+		System.out.println("Here is UserServices.checkUserListWhereOrderBy method...");
+		int pageSize = 0;
+		//当传进来的pagenum为空 或者 pagenum == 0 时，显示第一页
+		if (pagenum == null || pagenum == 0)
+			pagenum = 1;
+		
+		if (pagenum >= 0) {
+			pageSize = 20; // 默认显示内容条数
+		}
+		
+	    //PageHelper.startPage(PageNum, PageSize) 
+		//获取第1页，10条内容，当PageSize=0时会查询出全部的结果
+	    PageHelper.startPage(pagenum, pageSize);
+	    
+	    //紧跟着的第一个select方法会被分页
+		List<User> userlist = userMapper.listUserWhereOrderBy(where_col, order_col, where_value, order_value);
+		if (userlist.size() > 0) {
+			this.userlist = userlist;
+			return ResultCode.SUCCESS;
+		} else {
+			return ResultCode.USERLIST_NULL;
+		}
+	}
 	
-	//getter & setter
+	// ###################
+	// ## 拉取User表
+	// ###################
+
+	public int checkUserList(String col_name, String specify_value, String search_value, Integer pagenum) {
+		System.out.println("Here is UserServices.checkUserList method...");
+		
+		//当传进来的pagenum为空 或者 pagenum == 0 时，显示第一页
+		if (pagenum == null || pagenum == 0)
+			pagenum = 1;
+		
+	    //PageHelper.startPage(PageNum, PageSize) 
+		//获取第1页，10条内容，当PageSize=0时会查询出全部的结果
+	    PageHelper.startPage(pagenum, 20);
+
+	    //紧跟着的第一个select方法会被分页
+		List<User> userlist = userMapper.listUserOrderBy(col_name, specify_value, search_value);
+
+		
+		if (userlist.size() > 0) {
+			this.userlist = userlist;
+			return ResultCode.SUCCESS;
+		} else {
+			return ResultCode.USERLIST_NULL;
+		}
+	}
 	
+	/**
+	 * getPushTokenByDriver 按照driver获取push token
+	 * @param driver
+	 * @return
+	 */
+	public List<String> getPushTokenByDriver(Integer driver) {
+		List<String> userlist = new ArrayList<String>();
+		if (driver == null || (driver.equals(1) && driver.equals(2)))
+			return null;
+
+		checkUserListWhereOrderBy(null, null, "user_driver", driver.toString(), -1);
+		for (int i = 0; i < this.userlist.size(); i++) {
+			if (!Tools.isEmpty(this.userlist.get(i).getUser_push_token())) {
+				userlist.add(this.userlist.get(i).getUser_push_token());
+			}
+		}
+		return userlist;
+	}
+	
+	/**
+	 * getWashMasterList 獲取有洗衣技能的师傅
+	 * @return
+	 */
+	public List<User> getWashMasterList() {
+		List<User> tempuserlist = userMapper.findAll();
+		List<User> returnuserlist = new ArrayList<User>();
+		for (int i = 0; i < tempuserlist.size(); i++) {
+			if (tempuserlist.get(i).getUser_type().equals(2) // usertype=2 师傅
+					&& !Tools.isEmpty(tempuserlist.get(i).getUser_skill_name()) // 判断技能名字不为空
+					&& tempuserlist.get(i).getUser_skill_name().contains("洗衣")) { // 判断是否含“洗衣”关键字
+				returnuserlist.add(tempuserlist.get(i));
+			}
+		}
+		return returnuserlist;
+	}
+
+	/**
+	 * getter & setter
+	 * @return
+	 */
 	public User getUserinfo() {
 		return userinfo;
 	}
