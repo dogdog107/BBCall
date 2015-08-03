@@ -23,6 +23,7 @@ public class Advertisement {
 	private Integer advertisement_status;
 	private String advertisement_title;
 	private Integer advertisement_type;
+	private String advertisement_type_name;
 	private String advertisement_bigphoto_url;
 	private String advertisement_smallphoto_url;
 	private String advertisement_summary;
@@ -108,6 +109,14 @@ public class Advertisement {
 
 	public void setAdvertisement_status(Integer advertisement_status) {
 		this.advertisement_status = advertisement_status;
+	}
+
+	public String getAdvertisement_type_name() {
+		return advertisement_type_name;
+	}
+
+	public void setAdvertisement_type_name(String advertisement_type_name) {
+		this.advertisement_type_name = advertisement_type_name;
 	}
 
 }

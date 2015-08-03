@@ -7,6 +7,7 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.apache.log4j.Logger;
 import org.apache.struts2.ServletActionContext;
 import org.apache.struts2.json.annotations.JSON;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,7 +29,7 @@ public class FileUploadAction extends ActionSupport {
 	private FileUploadServices fileUploadServices;
 	private Map<String, Object> dataMap = new LinkedHashMap<String, Object>(); // 新建dataMap来储存JSON字符串
 	RandomCode randomCode = new RandomCode();
-	
+	private static Logger logger = Logger.getLogger(FileUploadAction.class);  
 	private String savePath; // 封装保存文件的路径目录
 	private String title; // 封装上传文件的标题
 	private File upload; // 封装上传文件的内容
@@ -66,12 +67,14 @@ public class FileUploadAction extends ActionSupport {
 			dataMap.put("picurl", picurl); // 放入一个是否操作成功的标识
 			dataMap.putAll(Tools.JsonHeadMap(result, true));
 			System.out.println(dataMap);
+			logger.info("userOpr:[userUpload]" + dataMap);  
 			return "userUploadSuccess";
 		} else {
 			fileUploadServices.deleteFile(storePath);
 			dataMap.putAll(Tools.JsonHeadMap(result, false));
 			System.out.println(dataMap);
 			System.out.println("userUpload Failed");
+			logger.info("userOpr:[userUpload]" + dataMap);  
 			return "userUploadFailed";
 		}
 	}
@@ -100,6 +103,7 @@ public class FileUploadAction extends ActionSupport {
 		if (userid == null || !upload.isFile()) {
 			dataMap.putAll(Tools.JsonHeadMap(ResultCode.REQUIREINFO_NOTENOUGH, false));
 			System.out.println(dataMap);
+			logger.info("userOpr:[skillUpload]" + dataMap);  
 			return "skillUploadFailed";
 		}
 		savePath = "SkillPhoto";
@@ -116,12 +120,14 @@ public class FileUploadAction extends ActionSupport {
 			picurl = fileUploadServices.getFileurl();
 			dataMap.put("picurl", picurl); // 放入一个是否操作成功的标识
 			dataMap.putAll(Tools.JsonHeadMap(result, true));
+			logger.info("userOpr:[skillUpload]" + dataMap);  
 			System.out.println(dataMap);
 			return "skillUploadSuccess";
 		} else {
 			fileUploadServices.deleteFile(storePath);
 			dataMap.putAll(Tools.JsonHeadMap(result, false));
 			System.out.println(dataMap);
+			logger.info("userOpr:[skillUpload]" + dataMap);  
 			return "skillUploadFailed";
 		}
 	}
@@ -162,12 +168,14 @@ public class FileUploadAction extends ActionSupport {
 			dataMap.putAll(Tools.JsonHeadMap(result, true));
 			System.out.println(dataMap);
 			System.out.println(orderpicurl);
+			logger.info("userOpr:[orderUpload]" + dataMap);  
 			return orderpicurl;
 		} else {
 			fileUploadServices.deleteFile(storePath);
 			dataMap.putAll(Tools.JsonHeadMap(result, false));
 			System.out.println(dataMap);
 			System.out.println("orderUpload Failed");
+			logger.info("userOpr:[orderUpload]" + dataMap);  
 			return "orderUploadFailed";
 		}
 	}
@@ -198,12 +206,14 @@ public class FileUploadAction extends ActionSupport {
 			dataMap.put("picurl", picurl); // 放入一个是否操作成功的标识
 			dataMap.putAll(Tools.JsonHeadMap(result, true));
 			System.out.println(dataMap);
+			logger.info("userOpr:[advertUpload]" + dataMap);  
 			return "advertUploadSuccess";
 		} else {
 			fileUploadServices.deleteFile(storePath);
 			dataMap.putAll(Tools.JsonHeadMap(result, false));
 			System.out.println(dataMap);
 			System.out.println("advertUpload Failed");
+			logger.info("userOpr:[advertUpload]" + dataMap);  
 			return "advertUploadFailed";
 		}
 	}

@@ -4,6 +4,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Controller;
@@ -37,7 +38,7 @@ public class BlacklistAction extends ActionSupport {
 
 	private Map<String, Object> dataMap;
 	private PageInfoToMap pageinfo2map = new PageInfoToMap();// 新建PageInfoToMap对象
-
+	private static Logger logger = Logger.getLogger(BlacklistAction.class);  
 	@Override
 	public String execute() throws Exception {
 		return super.execute();
@@ -64,9 +65,11 @@ public class BlacklistAction extends ActionSupport {
 			// dataMap.put("errmsg", ResultCode.getErrmsg(result));
 			// dataMap.put("insertResult", true);
 			// System.out.println(dataMap);
+			logger.info("userOpr:[insert]" + dataMap);  
 			return SUCCESS;
 		} else {
 			dataMap.putAll(Tools.JsonHeadMap(result, false));
+			logger.info("userOpr:[insert]" + dataMap);  
 			return "insertfail";
 		}
 
@@ -95,6 +98,7 @@ public class BlacklistAction extends ActionSupport {
 			dataMap.put("blacklists", blacklists);
 			dataMap.putAll(pageinfo2map.pageInfoMap(blacklists));// 把分页信息放进dataMap
 			dataMap.putAll(Tools.JsonHeadMap(result, true));
+			logger.info("userOpr:[delete]" + dataMap);  
 			// dataMap.put("resultcode", result);
 			// dataMap.put("errmsg", ResultCode.getErrmsg(result));
 			// dataMap.put("deleteResult", true);
@@ -149,6 +153,8 @@ public class BlacklistAction extends ActionSupport {
 			// dataMap.put("errmsg", ResultCode.getErrmsg(result));
 			// dataMap.put("getBlacklistResult", true);
 			// System.out.println(dataMap);
+			logger.info("userOpr:[getBlacklist]" + dataMap);  
+			
 		}
 
 		return SUCCESS;
@@ -177,6 +183,7 @@ public class BlacklistAction extends ActionSupport {
 //			dataMap.put("errmsg", ResultCode.getErrmsg(result));
 //			dataMap.put("getBlacklistByIdResult", true);
 //			System.out.println(dataMap);
+			logger.info("userOpr:[getBlacklistById]" + dataMap);  
 		}
 
 		return SUCCESS;

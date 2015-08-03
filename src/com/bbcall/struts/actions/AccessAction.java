@@ -4,6 +4,7 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.apache.log4j.Logger;
 import org.apache.struts2.json.annotations.JSON;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
@@ -28,7 +29,8 @@ public class AccessAction extends ActionSupport {
 	private Map<String, Object> dataMap = new LinkedHashMap<String, Object>(); // 新建dataMap来储存JSON字符串
 	private PageInfoToMap pageinfo2map = new PageInfoToMap();// 新建PageInfoToMap对象
 	private ObjectToMap obj2map = new ObjectToMap();// 新建ObjectToMap对象
-
+	private static Logger logger = Logger.getLogger(AccessAction.class);
+	
 	private AccessGroup accessGroupTemp;
 	private List<AccessList> accessListTemp;
 	private List<String> accessNameList;
@@ -72,9 +74,11 @@ public class AccessAction extends ActionSupport {
 		if (result == ResultCode.SUCCESS) {
 			dataMap.put("addresult", true);
 			dataMap.putAll(Tools.JsonHeadMap(result, true));
+			logger.info("userOpr:[addAccessGroup][" + accessgroup_name + "]" + dataMap);  
 			return "addAccessGroupSuccess";
 		} else {
 			dataMap.putAll(Tools.JsonHeadMap(result, false));
+			logger.info("userOpr:[addAccessGroup][" + accessgroup_name + "]" + dataMap);  
 			return "addAccessGroupFailed";
 		}
 	}
@@ -98,15 +102,15 @@ public class AccessAction extends ActionSupport {
 			System.out.println(dataMap);
 			return INPUT;
 		}
-		System.out.println("accessgroup ID:" + accessgroup_id);
-		System.out.println("list1 Length:" + list1.length);
 		accessServices.deleteAllAccessUnderGroupId(accessgroup_id);
 		int result = accessServices.addAccessByAccessGroup(accessgroup_id, list1);
 		if (result == ResultCode.SUCCESS) {
 			dataMap.putAll(Tools.JsonHeadMap(result, true));
+			logger.info("userOpr:[updateAccessByAccessGroup][" + accessgroup_id + "]" + dataMap);  
 			return "updateAccessByAccessGroupSuccess";
 		} else {
 			dataMap.putAll(Tools.JsonHeadMap(result, false));
+			logger.info("userOpr:[updateAccessByAccessGroup][" + accessgroup_id + "]" + dataMap);  
 			return "updateAccessByAccessGroupFailed";
 		}
 	}
@@ -213,10 +217,12 @@ public class AccessAction extends ActionSupport {
 		if (result == ResultCode.SUCCESS) {
 			dataMap.clear(); // dataMap中的数据将会被Struts2转换成JSON字符串，所以这里要先清空其中的数据
 			dataMap.putAll(Tools.JsonHeadMap(result, true));
+			logger.info("userOpr:[deleteAccessGroupById][" + accessgroup_id + "]" + dataMap);  
 			return SUCCESS;
 		} else {
 			dataMap.clear(); // dataMap中的数据将会被Struts2转换成JSON字符串，所以这里要先清空其中的数据
 			dataMap.putAll(Tools.JsonHeadMap(result, false));
+			logger.info("userOpr:[deleteAccessGroupById][" + accessgroup_id + "]" + dataMap);  
 			return INPUT;
 		}
 	}

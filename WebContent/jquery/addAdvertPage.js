@@ -396,7 +396,6 @@ function onload(){
 function validate() {
 	var ADContent = UE.getEditor('editor').getContent();
 	$( '#advertisement_content' ).val(ADContent);
-	
 	var objs2 = document.getElementsByName('skillcodepart');
 	for(var i=0;i<objs2.length;i++){
 		if (objs2[i].type == 'radio'){

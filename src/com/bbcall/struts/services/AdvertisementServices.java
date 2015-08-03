@@ -39,6 +39,16 @@ public class AdvertisementServices {
 		advert.setAdvertisement_summary(advertisement_summary);
 		advert.setAdvertisement_title(advertisement_title);
 		advert.setAdvertisement_type(advertisement_type);
+//		String advertisement_type_name = referdocServices.getReferlist(advertisement_type.toString());
+//		// 清除开头为;的符号
+//		while(advertisement_type_name.startsWith(";")){
+//			advertisement_type_name = advertisement_type_name.substring(1, advertisement_type_name.length());
+//		}
+//		// 清除结尾为;的符号
+//		while(advertisement_type_name.endsWith(";")){
+//			advertisement_type_name = advertisement_type_name.substring(0, advertisement_type_name.length() - 1);
+//		}
+//		advert.setAdvertisement_type_name(advertisement_type_name);
 		advertisementMapper.addAdvert(advert);
 		return ResultCode.SUCCESS;
 	}
@@ -75,6 +85,16 @@ public class AdvertisementServices {
 			// ***** 检测type *****
 			if(advertisement_type != null && !advertisement_type.equals(tempAdvert.getAdvertisement_type())) {
 				tempAdvert.setAdvertisement_type(advertisement_type);
+//				String advertisement_type_name = referdocServices.getReferlist(advertisement_type.toString());
+//				// 清除开头为;的符号
+//				while(advertisement_type_name.startsWith(";")){
+//					advertisement_type_name = advertisement_type_name.substring(1, advertisement_type_name.length());
+//				}
+//				// 清除结尾为;的符号
+//				while(advertisement_type_name.endsWith(";")){
+//					advertisement_type_name = advertisement_type_name.substring(0, advertisement_type_name.length() - 1);
+//				}
+//				tempAdvert.setAdvertisement_type_name(advertisement_type_name);
 				System.out.println("Type changed!");
 				updateCount++;
 			}
@@ -177,7 +197,7 @@ public class AdvertisementServices {
 		
 	    //PageHelper.startPage(PageNum, PageSize) 
 		//获取第1页，10条内容，当PageSize=0时会查询出全部的结果
-	    PageHelper.startPage(pagenum, 10);
+	    PageHelper.startPage(pagenum, 20);
 
 	    //紧跟着的第一个select方法会被分页
 		advertList = advertisementMapper.getAllAdvert();
@@ -193,7 +213,7 @@ public class AdvertisementServices {
 	    //PageHelper.startPage(PageNum, PageSize, "order by") 
 		//获取第1页，10条内容，当PageSize=0时会查询出全部的结果
 //	    PageHelper.startPage(pagenum, 5, "advertisement_create_time desc");
-	    PageHelper.startPage(pagenum, 10);
+	    PageHelper.startPage(pagenum, 20);
 
 	    //紧跟着的第一个select方法会被分页
 		advertList = advertisementMapper.getAllAdvertSummary();
@@ -208,7 +228,7 @@ public class AdvertisementServices {
 		
 		//PageHelper.startPage(PageNum, PageSize) 
 		//获取第1页，10条内容，当PageSize=0时会查询出全部的结果
-		PageHelper.startPage(pagenum, 10);
+		PageHelper.startPage(pagenum, 20);
 		
 		//紧跟着的第一个select方法会被分页
 		advertList = advertisementMapper.getActiveAdvert();
@@ -224,7 +244,7 @@ public class AdvertisementServices {
 		//PageHelper.startPage(PageNum, PageSize, "order by") 
 		//获取第1页，10条内容，当PageSize=0时会查询出全部的结果
 //	    PageHelper.startPage(pagenum, 5, "advertisement_create_time desc");
-		PageHelper.startPage(pagenum, 10);
+		PageHelper.startPage(pagenum, 20);
 		
 		//紧跟着的第一个select方法会被分页
 		advertList = advertisementMapper.getActiveAdvertSummary();
