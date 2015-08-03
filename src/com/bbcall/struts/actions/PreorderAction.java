@@ -13,7 +13,10 @@ import com.bbcall.functions.PageInfoToMap;
 import com.bbcall.functions.ResultCode;
 import com.bbcall.functions.Tools;
 import com.bbcall.mybatis.table.Preorder;
+import com.bbcall.struts.services.GcmServices;
+import com.bbcall.struts.services.OrderlistServices;
 import com.bbcall.struts.services.PreorderServices;
+import com.bbcall.struts.services.UserServices;
 import com.opensymphony.xwork2.ActionSupport;
 
 @Scope("prototype")
@@ -22,7 +25,16 @@ import com.opensymphony.xwork2.ActionSupport;
 public class PreorderAction extends ActionSupport {
 
 	@Autowired
-	PreorderServices preorderServices;
+	private PreorderServices preorderServices;
+	
+	@Autowired
+	private GcmServices gcmServices;
+	
+	@Autowired
+	private OrderlistServices orderlistServices;
+	
+	@Autowired
+	private UserServices userServices;
 
 	private String preorder_id;
 	private String preorder_master_account;
@@ -57,19 +69,40 @@ public class PreorderAction extends ActionSupport {
 		int preorderid = Integer.parseInt(preorder_order_id);
 		int preordermasterid = Integer.parseInt(preorder_master_id);
 
-		int result = preorderServices.addPreorder(preordermasterid, price,
-				preorderid,pagenum);
+		try {
+			orderlistServices.getOrderById(preorderid);
+			
+			int user_id = orderlistServices.orderlistinfo().getOrder_user_id();
+			
+			userServices.getUserById(user_id);
+			
+			String registerid = userServices.getUserinfo().toString();
+			
+			gcmServices.sendtouser("BBCall通知 - 有新的師傅對您的訂單出價", registerid);
+			
+		} catch (Exception e) {
+			// TODO: handle exception
+			e.printStackTrace();
+		} finally {
+			
+			int result = preorderServices.addPreorder(preordermasterid, price,
+					preorderid,pagenum);
 
-		if (result == ResultCode.SUCCESS) {
-			List<Preorder> preorderlist = preorderServices.preorderinfos();
+			if (result == ResultCode.SUCCESS) {
+				List<Preorder> preorderlist = preorderServices.preorderinfos();
 
-			dataMap.put("preorderlist", preorderlist);
-			dataMap.putAll(pageinfo2map.pageInfoMap(preorderlist));// 把分页信息放进dataMap
-			dataMap.putAll(Tools.JsonHeadMap(result, true));
-			// dataMap.put("resultcode", result);
-			// dataMap.put("errmsg", ResultCode.getErrmsg(result));
-			// dataMap.put("addResult", true);
+				dataMap.put("preorderlist", preorderlist);
+				dataMap.putAll(pageinfo2map.pageInfoMap(preorderlist));// 把分页信息放进dataMap
+				dataMap.putAll(Tools.JsonHeadMap(result, true));
+				// dataMap.put("resultcode", result);
+				// dataMap.put("errmsg", ResultCode.getErrmsg(result));
+				// dataMap.put("addResult", true);
+			} else {
+				dataMap.putAll(Tools.JsonHeadMap(result, false));
+			}
 		}
+		
+		
 		return SUCCESS;
 	}
 
@@ -293,6 +326,30 @@ public class PreorderAction extends ActionSupport {
 
 	public void setSortparm(String sortparm) {
 		this.sortparm = sortparm;
+	}
+
+	public GcmServices getGcmServices() {
+		return gcmServices;
+	}
+
+	public void setGcmServices(GcmServices gcmServices) {
+		this.gcmServices = gcmServices;
+	}
+
+	public OrderlistServices getOrderlistServices() {
+		return orderlistServices;
+	}
+
+	public void setOrderlistServices(OrderlistServices orderlistServices) {
+		this.orderlistServices = orderlistServices;
+	}
+
+	public UserServices getUserServices() {
+		return userServices;
+	}
+
+	public void setUserServices(UserServices userServices) {
+		this.userServices = userServices;
 	}
 
 	

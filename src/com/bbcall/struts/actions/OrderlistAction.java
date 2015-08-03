@@ -17,6 +17,7 @@ import com.bbcall.functions.ResultCode;
 import com.bbcall.functions.Tools;
 import com.bbcall.mybatis.table.Orderlist;
 import com.bbcall.mybatis.table.User;
+import com.bbcall.struts.services.GcmServices;
 import com.bbcall.struts.services.OrderlistServices;
 import com.bbcall.struts.services.UserServices;
 import com.opensymphony.xwork2.ActionSupport;
@@ -33,6 +34,9 @@ public class OrderlistAction extends ActionSupport {
 
 	@Autowired
 	private UserServices userServices;
+
+	@Autowired
+	private GcmServices gcmServices;
 
 	private Map<String, Object> dataMap;
 	private PageInfoToMap pageinfo2map = new PageInfoToMap();// 新建PageInfoToMap对象
@@ -188,24 +192,35 @@ public class OrderlistAction extends ActionSupport {
 
 		int orderid = Integer.parseInt(order_id);
 		int order_user_id = Integer.parseInt(user_id);
+		
+		try {
+		userServices.getUserById(order_user_id);
+		String registerid = userServices.getUserinfo().toString();
 
-		int result = orderlistServices.ChangeOrderStatus(order_user_id,
-				orderid, pagenum);
+		
+			gcmServices.sendtouser("BBCall通知 - 用戶確認接收你的order請求", registerid);
+		} catch (Exception e) {
+			// TODO: handle exception
+			e.printStackTrace();
+		} finally {
+			int result = orderlistServices.ChangeOrderStatus(order_user_id,
+					orderid, pagenum);
 
-		if (result == ResultCode.SUCCESS) {
-			List<Orderlist> orderlist = orderlistServices.orderlistinfos();
-			// for (int j = 0; j < orderlist.size(); j++) {
-			// referdocServices.getReferdoc(orderlist.get(j)
-			// .getOrder_type_code());
-			// referdoclist.add(referdocServices.referdocinfo());
-			// }
-			dataMap.put("orderlist", orderlist);
-			dataMap.putAll(pageinfo2map.pageInfoMap(orderlist));// 把分页信息放进dataMap
-			// dataMap.put("referdoclist", referdoclist);
-			dataMap.putAll(Tools.JsonHeadMap(result, true));
-			// dataMap.put("resultcode", result);
-			// dataMap.put("errmsg", ResultCode.getErrmsg(result));
-			// dataMap.put("dealResult", true);
+			if (result == ResultCode.SUCCESS) {
+				List<Orderlist> orderlist = orderlistServices.orderlistinfos();
+				// for (int j = 0; j < orderlist.size(); j++) {
+				// referdocServices.getReferdoc(orderlist.get(j)
+				// .getOrder_type_code());
+				// referdoclist.add(referdocServices.referdocinfo());
+				// }
+				dataMap.put("orderlist", orderlist);
+				dataMap.putAll(pageinfo2map.pageInfoMap(orderlist));// 把分页信息放进dataMap
+				// dataMap.put("referdoclist", referdoclist);
+				dataMap.putAll(Tools.JsonHeadMap(result, true));
+				// dataMap.put("resultcode", result);
+				// dataMap.put("errmsg", ResultCode.getErrmsg(result));
+				// dataMap.put("dealResult", true);
+			}
 		}
 
 		return SUCCESS;
@@ -231,33 +246,46 @@ public class OrderlistAction extends ActionSupport {
 
 		orderlistServices.getOrderById(orderid);
 		Orderlist order = orderlistServices.orderlistinfo();
+		
+		try {
+			int master_id = order.getOrder_master_id();
+			
+			userServices.getUserById(master_id);
+			
+			String registerid = userServices.getUserinfo().toString();
+			
+			gcmServices.sendtouser("BBCall通知 - 你有新的已完成訂單", registerid);
+		} catch (Exception e) {
+			// TODO: handle exception
+			e.printStackTrace();
+		} finally {
+			int result = orderlistServices.completeOrder(score, order_evaluation,
+					orderid, pagenum);
+			// List<Referdoc> referdoclist = new ArrayList<Referdoc>();
+			logger.info("gradeOpr:[Tradecomplete][User ID: "
+					+ order.getOrder_user_id() + "]Order ID: " + order_id
+					+ "; Master name: " + order.getOrder_master_name()
+					+ "; Order type: " + order.getOrder_type() + "; Order price: "
+					+ order.getOrder_price() + "; Order Score: " + order_score
+					+ "; Order Evaluation: " + order_evaluation);
 
-		int result = orderlistServices.completeOrder(score, order_evaluation,
-				orderid, pagenum);
-		// List<Referdoc> referdoclist = new ArrayList<Referdoc>();
-		logger.info("gradeOpr:[Tradecomplete][User ID: "
-				+ order.getOrder_user_id() + "]Order ID: " + order_id
-				+ "; Master name: " + order.getOrder_master_name()
-				+ "; Order type: " + order.getOrder_type() + "; Order price: "
-				+ order.getOrder_price() + "; Order Score: " + order_score
-				+ "; Order Evaluation: " + order_evaluation);
-
-		if (result == ResultCode.SUCCESS) {
-			List<Orderlist> orderlist = orderlistServices.orderlistinfos();
-			// for (int j = 0; j < orderlist.size(); j++) {
-			// referdocServices.getReferdoc(orderlist.get(j)
-			// .getOrder_type_code());
-			// referdoclist.add(referdocServices.referdocinfo());
-			// }
-			dataMap.put("orderlist", orderlist);
-			dataMap.putAll(pageinfo2map.pageInfoMap(orderlist));// 把分页信息放进dataMap
-			// dataMap.put("referdoclist", referdoclist);
-			dataMap.putAll(Tools.JsonHeadMap(result, true));
-			// dataMap.put("resultcode", result);
-			// dataMap.put("errmsg", ResultCode.getErrmsg(result));
-			// dataMap.put("completeResult", true);
+			if (result == ResultCode.SUCCESS) {
+				List<Orderlist> orderlist = orderlistServices.orderlistinfos();
+				// for (int j = 0; j < orderlist.size(); j++) {
+				// referdocServices.getReferdoc(orderlist.get(j)
+				// .getOrder_type_code());
+				// referdoclist.add(referdocServices.referdocinfo());
+				// }
+				dataMap.put("orderlist", orderlist);
+				dataMap.putAll(pageinfo2map.pageInfoMap(orderlist));// 把分页信息放进dataMap
+				// dataMap.put("referdoclist", referdoclist);
+				dataMap.putAll(Tools.JsonHeadMap(result, true));
+				// dataMap.put("resultcode", result);
+				// dataMap.put("errmsg", ResultCode.getErrmsg(result));
+				// dataMap.put("completeResult", true);
+			}
 		}
-
+		
 		return SUCCESS;
 	}
 
@@ -1185,6 +1213,14 @@ public class OrderlistAction extends ActionSupport {
 
 	public void setUserServices(UserServices userServices) {
 		this.userServices = userServices;
+	}
+
+	public GcmServices getGcmServices() {
+		return gcmServices;
+	}
+
+	public void setGcmServices(GcmServices gcmServices) {
+		this.gcmServices = gcmServices;
 	}
 
 }

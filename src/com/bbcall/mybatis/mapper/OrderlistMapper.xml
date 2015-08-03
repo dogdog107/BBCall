@@ -135,6 +135,7 @@
 				#{order_type_code}
 			</foreach>
 		</if>
+		 and order_book_time >= CURRENT_TIMESTAMP 
 		 and order_user_id not in (select blacklist_user_id from 
 		BLACKLIST where 
 		blacklist_master_id=#{order_master_id,jdbcType=INTEGER}) 
@@ -190,7 +191,8 @@
 
 		 and order_book_location_code=#{order_book_location_code} 
 		</if>
-		and order_user_id 
+		 and order_book_time >= CURRENT_TIMESTAMP
+		 and order_user_id 
 		not in (select blacklist_user_id from 
 		BLACKLIST where 
 		blacklist_master_id=#{order_master_id,jdbcType=INTEGER}) 
