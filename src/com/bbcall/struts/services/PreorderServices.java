@@ -61,63 +61,74 @@ public class PreorderServices {
 			int preorder_order_id, Integer pagenum) {
 		System.out.println("Here is PreorderServices.add method...");
 
-		Preorder preorder = new Preorder();
-		User user = userMapper.getUserById(preorder_master_id);
-		Orderlist orderlist = orderlistMapper.getOrder(preorder_order_id);
+		Preorder preorder = preorderMapper.getPreoder(preorder_master_id,
+				preorder_order_id);
 
-		String userskill = "";
-		if (user.getUser_skill() != null && !user.getUser_skill().equals("")) {
+		if (preorder == null) {
+			User user = userMapper.getUserById(preorder_master_id);
+			Orderlist orderlist = orderlistMapper.getOrder(preorder_order_id);
 
-			String[] skilllist = user.getUser_skill().split(";");
+			String userskill = "";
+			if (user.getUser_skill() != null
+					&& !user.getUser_skill().equals("")) {
 
-			int referdoc_code_num = 0;
+				String[] skilllist = user.getUser_skill().split(";");
 
-			for (int i = 0; i < skilllist.length; i++) {
+				int referdoc_code_num = 0;
 
-				referdoc_code_num = Integer.parseInt(skilllist[i]);
+				for (int i = 0; i < skilllist.length; i++) {
 
-				userskill = userskill
-						+ referdocMapper.getReferdoc(referdoc_code_num)
-								.getReferdoc_type() + " ";
+					referdoc_code_num = Integer.parseInt(skilllist[i]);
+
+					userskill = userskill
+							+ referdocMapper.getReferdoc(referdoc_code_num)
+									.getReferdoc_type() + " ";
+				}
 			}
+
+			System.out.println("userskill" + userskill);
+
+			preorder = new Preorder();
+
+			preorder.setPreorder_master_id(preorder_master_id);
+			preorder.setPreorder_master_account(user.getUser_account());
+			preorder.setPreorder_create_time(new Timestamp(System
+					.currentTimeMillis()));
+			preorder.setPreorder_master_name(user.getUser_name());
+			System.out.println("user.getUser_name()" + user.getUser_name());
+			preorder.setPreorder_master_grade(user.getUser_grade());
+			System.out.println("user.getUser_grade()" + user.getUser_grade());
+			preorder.setPreorder_master_pic(user.getUser_pic_url());
+			System.out.println("user.getUser_pic_url()"
+					+ user.getUser_pic_url());
+			preorder.setPreorder_price(preorder_price);
+			preorder.setPreorder_master_skill(userskill);
+			preorder.setPreorder_order_id(preorder_order_id);
+
+			preorderMapper.addPreorder(preorder);
+			System.out.println("addsuccess");
+
+			orderlist.setOrder_status(7);
+
+			orderlistMapper.updateOrder(orderlist);
+
+			// 当传进来的pagenum为空 或者 pagenum == 0 时，显示第一页
+			if (pagenum == null || pagenum == 0)
+				pagenum = 1;
+
+			// PageHelper.startPage(PageNum, PageSize)
+			// 获取第1页，10条内容，当PageSize=0时会查询出全部的结果
+			PageHelper.startPage(pagenum, 10);
+
+			preorderinfos = preorderMapper
+					.getPreordersByAccount(preorder_master_id);
+			System.out.println("getsuccess");
+
+			return ResultCode.SUCCESS;
+		} else {
+			return ResultCode.PREORDER_EXIST;
 		}
 
-		System.out.println("userskill" + userskill);
-
-		preorder.setPreorder_master_id(preorder_master_id);
-		preorder.setPreorder_master_account(user.getUser_account());
-		preorder.setPreorder_create_time(new Timestamp(System
-				.currentTimeMillis()));
-		preorder.setPreorder_master_name(user.getUser_name());
-		System.out.println("user.getUser_name()" + user.getUser_name());
-		preorder.setPreorder_master_grade(user.getUser_grade());
-		System.out.println("user.getUser_grade()" + user.getUser_grade());
-		preorder.setPreorder_master_pic(user.getUser_pic_url());
-		System.out.println("user.getUser_pic_url()" + user.getUser_pic_url());
-		preorder.setPreorder_price(preorder_price);
-		preorder.setPreorder_master_skill(userskill);
-		preorder.setPreorder_order_id(preorder_order_id);
-
-		preorderMapper.addPreorder(preorder);
-		System.out.println("addsuccess");
-
-		orderlist.setOrder_status(7);
-
-		orderlistMapper.updateOrder(orderlist);
-
-		// 当传进来的pagenum为空 或者 pagenum == 0 时，显示第一页
-		if (pagenum == null || pagenum == 0)
-			pagenum = 1;
-
-		// PageHelper.startPage(PageNum, PageSize)
-		// 获取第1页，10条内容，当PageSize=0时会查询出全部的结果
-		PageHelper.startPage(pagenum, 10);
-
-		preorderinfos = preorderMapper
-				.getPreordersByAccount(preorder_master_id);
-		System.out.println("getsuccess");
-
-		return ResultCode.SUCCESS;
 	}
 
 	// ################################################################################
@@ -140,18 +151,19 @@ public class PreorderServices {
 	// ## 4. Return: NONE
 	// ##
 	// ################################################################################
-	public int deletePreorder(int preorder_id, int preorder_master_id, Integer pagenum) {
+	public int deletePreorder(int preorder_id, int preorder_master_id,
+			Integer pagenum) {
 		System.out.println("Here is PreorderServices.delete method...");
 
 		preorderMapper.deletePreorder(preorder_id);
 
 		// 当传进来的pagenum为空 或者 pagenum == 0 时，显示第一页
-				if (pagenum == null || pagenum == 0)
-					pagenum = 1;
+		if (pagenum == null || pagenum == 0)
+			pagenum = 1;
 
-				// PageHelper.startPage(PageNum, PageSize)
-				// 获取第1页，10条内容，当PageSize=0时会查询出全部的结果
-				PageHelper.startPage(pagenum, 10);
+		// PageHelper.startPage(PageNum, PageSize)
+		// 获取第1页，10条内容，当PageSize=0时会查询出全部的结果
+		PageHelper.startPage(pagenum, 10);
 		preorderinfos = preorderMapper
 				.getPreordersByAccount(preorder_master_id);
 
@@ -179,7 +191,7 @@ public class PreorderServices {
 	// ## (1) preorderinfos
 	// ##
 	// ################################################################################
-	public int getPreorderByAccount(int preorder_master_id,Integer pagenum) {
+	public int getPreorderByAccount(int preorder_master_id, Integer pagenum) {
 		System.out.println("Here is PreorderServices.get method...");
 
 		// 当传进来的pagenum为空 或者 pagenum == 0 时，显示第一页

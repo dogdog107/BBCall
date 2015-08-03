@@ -63,7 +63,15 @@ public class ResultCode {
 
 	// 黑名单返回码17XXX
 	public static Integer BLACKLIST_EXIST = 17001;// 黑名单存在
-
+	
+	// 推送返回码18XXX
+	public static Integer DEVICE_NOT_REGISTERED = 18001;// 设备未注册
+	public static Integer REGISTER_ID_UPDATE_SUCCSESS = 18002;// register ID 更新成功
+	public static Integer SEND_MESSAGE_FAILED = 18003;// 推送发送失败
+	
+	// 预处理订单返回码19XXX
+	public static Integer PREORDER_EXIST = 19001;// 预处理订单存在
+	
 	// 广告错误码20XXX
 	public static Integer ADVERTID_ERROR = 20001;// 广告id不存在
 
@@ -229,6 +237,22 @@ public class ResultCode {
 			
 		case 17001:
 			errmsg = "blacklist exist";
+			break;
+			
+		case 18001:
+			errmsg = "device unregistered";
+			break;
+			
+		case 18002:
+			errmsg = "register ID updates successful";
+			break;
+			
+		case 18003:
+			errmsg = "send message failed";
+			break;
+			
+		case 19001:
+			errmsg = "preorder existed";
 			break;
 
 		// 新闻类
