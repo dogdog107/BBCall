@@ -83,7 +83,7 @@ public class UserServices {
 			String address, Double grade, Integer driver, String pushtoken) {
 		System.out.println("Here is UserServices.register method...");
 
-		int registermode = 0; // 记录register的模式: 1=user,2=admin
+		int registermode = 0; // 记录register的模式: 1=user,2=admin,3=guest
 		String defaultaccess = "";
 		
 		// ***** 检测 account & password 是否符合格式 *****
@@ -98,7 +98,7 @@ public class UserServices {
 		}
 		
 		// ***** 检测 usertype 是否正确 *****
-		if (usertype == null || (usertype != 1 && usertype != 2 && usertype != 3 && usertype != 4)) {
+		if (usertype == null || (usertype != 1 && usertype != 2 && usertype != 3 && usertype != 4 && usertype != 5)) {
 			return ResultCode.USERTYPE_ERROR;
 		}
 
