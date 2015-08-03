@@ -79,7 +79,7 @@ public class UserServices {
 			Integer usertype, String name, String picurl, BigInteger mobile,
 			Integer gender, String email, String language, String skill,
 			String description, String accessgroup, Integer addresscode,
-			String address, Double grade) {
+			String address, Double grade, Integer driver, String pushtoken) {
 		System.out.println("Here is UserServices.register method...");
 
 		int registermode = 0; // 记录register的模式: 1=user,2=admin
@@ -319,6 +319,7 @@ public class UserServices {
 			} else {
 				user.setUser_access_group(defaultaccess);
 			}
+			
 			// ***** 添加用户分值 *****
 			if (registermode == 2) { // 判断register的模式:1=user,2=admin
 				if(grade == null) {
@@ -330,6 +331,13 @@ public class UserServices {
 				user.setUser_grade((double) 0);
 			}
 			
+			// ***** 添加用户推送信息 *****
+			if(driver != null && (driver.equals(1) || driver.equals(2))) {
+				if (!Tools.isEmpty(pushtoken)) {
+					user.setUser_driver(driver);
+					user.setUser_push_token(pushtoken);
+				}
+			}
 			
 			userMapper.addUserByAccount(user);// 把用户信息插入数据表
 			// ** user_skill子表的逻辑部分
@@ -380,7 +388,7 @@ public class UserServices {
 	// ##
 	// ################################################################################
 
-	public int login(String username, String password) {
+	public int login(String username, String password, Integer driver, String pushtoken) {
 		System.out.println("Here is UserServices.login method...");
 
 		if (Tools.isEmpty(username, password))// 检测参数是否为空、null
@@ -399,9 +407,19 @@ public class UserServices {
 					while (null != userMapper.getUserByToken(token)) {// 确保token唯一
 						token = randomCode.getToken();
 					}
+					// ***** 更新用户token *****
 					user.setUser_token(token);
 					userMapper.updateToken(user);// 插入 token 值
-
+					
+					// ***** 添加用户推送信息 *****
+					if(driver != null && (driver.equals(1) || driver.equals(2))) {
+						if (!Tools.isEmpty(pushtoken) && !pushtoken.equals(user.getUser_push_token())) {
+							user.setUser_driver(driver);
+							user.setUser_push_token(pushtoken);
+							userMapper.updatePushToken(user);
+						}
+					}
+					
 					user.setUser_login_time(new Timestamp(new Date().getTime()));
 					userMapper.updateLoginTime(user);// 插入 login 时间
 

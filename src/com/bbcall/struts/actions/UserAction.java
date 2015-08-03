@@ -55,6 +55,8 @@ public class UserAction extends ActionSupport implements SessionAware{
 	private String skillurl;
 	private String skillname;
 	private String token;
+	private Integer driver;
+	private String pushtoken;
 	private String description;
 	private Integer addresscode;
 	private String address;
@@ -104,7 +106,7 @@ public class UserAction extends ActionSupport implements SessionAware{
 	public String login() throws Exception {
 		System.out.println("Here is UserAction.login");
 		dataMap.clear(); // dataMap中的数据将会被Struts2转换成JSON字符串，所以这里要先清空其中的数据
-		int result = userServices.login(username, password); // 调用userServices.login
+		int result = userServices.login(username, password, driver, pushtoken); // 调用userServices.login
 
 		if (result == ResultCode.SUCCESS) {
 //			Object userinfo = userServices.getUserinfo(); // 调用userInfo对象
@@ -180,7 +182,7 @@ public class UserAction extends ActionSupport implements SessionAware{
 		System.out.println("Here is UserAction.register");
 
 		dataMap.clear(); // dataMap中的数据将会被Struts2转换成JSON字符串，所以这里要先清空其中的数据
-		int result = userServices.register(token, account, password, usertype, name, picurl, mobile, gender, email, language, skill, description, accessgroup, addresscode, address, grade); // 调用userServices.register
+		int result = userServices.register(token, account, password, usertype, name, picurl, mobile, gender, email, language, skill, description, accessgroup, addresscode, address, grade, driver, pushtoken); // 调用userServices.register
 
 		if (result == ResultCode.SUCCESS) {
 //			Integer newuserid = userServices.getUserinfo().getUser_id();
@@ -1024,5 +1026,17 @@ public class UserAction extends ActionSupport implements SessionAware{
 	}
 	public void setSkillid(Integer skillid) {
 		this.skillid = skillid;
+	}
+	public Integer getDriver() {
+		return driver;
+	}
+	public void setDriver(Integer driver) {
+		this.driver = driver;
+	}
+	public String getPushtoken() {
+		return pushtoken;
+	}
+	public void setPushtoken(String pushtoken) {
+		this.pushtoken = pushtoken;
 	}
 }

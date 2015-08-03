@@ -30,6 +30,9 @@ import java.sql.Timestamp;
 //	/* 1=active, 2=pause, 3=pending, 4=locked */
 //	user_create_time TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
 //	user_login_time TIMESTAMP NULL DEFAULT NULL,
+//	user_driver tinyint DEFAULT 0,
+//  /* 1=android, 2=ios
+//	user_push_token VARCHAR (255),
 //	user_token VARCHAR (255)
 //) DEFAULT CHARSET = utf8;
 
@@ -59,6 +62,9 @@ public class User implements Serializable{
 	private Timestamp user_login_time;
 	private Timestamp user_create_time;
 	private String user_token;
+	private Integer user_driver;
+	private String user_push_token;
+	
 
 	public Integer getUser_id() {
 		return user_id;
@@ -226,6 +232,22 @@ public class User implements Serializable{
 
 	public void setUser_skill_name(String user_skill_name) {
 		this.user_skill_name = user_skill_name;
+	}
+
+	public Integer getUser_driver() {
+		return user_driver;
+	}
+
+	public void setUser_driver(Integer user_driver) {
+		this.user_driver = user_driver;
+	}
+
+	public String getUser_push_token() {
+		return user_push_token;
+	}
+
+	public void setUser_push_token(String user_push_token) {
+		this.user_push_token = user_push_token;
 	}
 
 }

@@ -64,6 +64,9 @@ public interface UserMapper {
 	// 更新登录token
 	public void updateToken(User user);
 	
+	// 更新push token
+	public void updatePushToken(User user);
+	
 	// 更新登录loginTime
 	public void updateLoginTime(User user);
 	
