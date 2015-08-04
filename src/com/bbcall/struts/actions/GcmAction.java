@@ -1,6 +1,5 @@
 package com.bbcall.struts.actions;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
@@ -10,7 +9,6 @@ import org.springframework.stereotype.Controller;
 
 import com.bbcall.functions.ResultCode;
 import com.bbcall.functions.Tools;
-import com.bbcall.mybatis.table.User;
 import com.bbcall.struts.services.GcmServices;
 import com.bbcall.struts.services.UserServices;
 import com.opensymphony.xwork2.ActionSupport;
@@ -37,9 +35,7 @@ public class GcmAction extends ActionSupport {
 
 	public String sendmsg() throws Exception {
 
-		List<String> registeridList = new ArrayList<String>();
-		
-//		List<User> userList = userServices.listUserWhereOrderBy(null,null,"user_driver", 1);
+		List<String> registeridList = userServices.getPushTokenByDriver(1);
 
 		int result = gcmServices.sendtogoogle(datamsg, registeridList);
 
