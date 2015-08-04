@@ -9,6 +9,14 @@ public class RandomCode {
 			'W', 'X', 'Y', 'Z', '1', '2', '3', '4', '5', '6', '7', '8', '9',
 			'0' };
 	
+	public String getSmallChar(){
+		String str = "";
+		for(Integer i=0;i<8;i++){
+			str += code[(int)(Math.random()*62)];
+		}
+		return str;
+	}
+	
 	public String getNoncestr(){
 		String str = "";
 		for(Integer i=0;i<16;i++){

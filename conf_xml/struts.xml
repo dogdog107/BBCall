@@ -57,7 +57,7 @@
 			</result>
 			<result name="interceptorjson" type="json">
 				<param name="root">dataMap</param>
-				<param name="excludeProperties">\w+\[\d+\]\.\w+password</param>
+				<param name="excludeProperties">\w+\[\d+\]\.\w+password|\w+password</param>
 			</result>
 			<result name="exceptionjson" type="json">
 				<param name="root">dataMap</param>
@@ -82,7 +82,7 @@
 			<result type="json" name="json">
 				<param name="root">dataMap</param>
 				<!-- <param name="excludeProperties">userinfo.user_password</param> -->
-				<param name="excludeProperties">\w+\[\d+\]\.\w+password</param>
+				<param name="excludeProperties">\w+\[\d+\]\.\w+password|\w+password</param>
 			</result>
 		</action>
 
@@ -146,7 +146,7 @@
 
 			<result type="json" name="json">
 				<param name="root">dataMap</param>
-				<param name="excludeProperties">\w+\[\d+\]\.\w+password</param>
+				<param name="excludeProperties">\w+\[\d+\]\.\w+password|\w+password</param>
 			</result>
 		</action>
 
@@ -228,7 +228,7 @@
 			<result type="json" name="json">
 				<param name="root">dataMap</param>
 				<!-- <param name="excludeProperties">userinfo.user_password</param> -->
-				<param name="excludeProperties">\w+\[\d+\]\.\w+password</param>
+				<param name="excludeProperties">\w+\[\d+\]\.\w+password|\w+password</param>
 			</result>
 		</action>
 

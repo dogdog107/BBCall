@@ -86,6 +86,69 @@ public class UserServices {
 		int registermode = 0; // 记录register的模式: 1=user,2=admin,3=guest
 		String defaultaccess = "";
 		
+		// ***** 检测 usertype 是否正确 *****
+		if (usertype == null || (usertype != 1 && usertype != 2 && usertype != 3 && usertype != 4 && usertype != 5)) {
+			return ResultCode.USERTYPE_ERROR;
+		}
+		
+		if(usertype == 5) { // usertype=5时为临时客户号，检测注册信息是否完整
+			// ***** 添加手机号mobile 判断格式 *****
+			if (mobile != null) {
+				if (Tools.isNumeric(mobile.toString())
+						&& (mobile.toString().length() >= 8)) {
+					int checkMobileResult = checkUserName(mobile.toString()); // 调用checkUserName方法检测手机号是否唯一并得到返回码
+					User tempuser = new User();
+					if (checkMobileResult == ResultCode.USERNAME_NOTEXIST) { // 检测用户名是否存在
+						tempuser.setUser_type(usertype);
+						tempuser.setUser_mobile(mobile);
+						tempuser.setUser_account("guest_" + mobile.toString());
+						tempuser.setUser_password(encrypt.getDigestOfString(mobile.toString().getBytes()));
+						tempuser.setUser_access_group("guest_default");
+						tempuser.setUser_status(1);
+						// ***** 添加用户推送信息 *****
+						if(driver != null && (driver.equals(1) || driver.equals(2))) {
+							if (!Tools.isEmpty(pushtoken)) {
+								tempuser.setUser_driver(driver);
+								tempuser.setUser_push_token(pushtoken);
+							}
+						}
+						userMapper.addUserByAccount(tempuser);
+						tempuser = userMapper.getUserByMobile(mobile);
+						// ***** 更新用户token *****
+						RandomCode randomCode = new RandomCode();
+						String newtoken = randomCode.getToken();// 正确则创建新token，并更新数据库
+						while (null != userMapper.getUserByToken(newtoken)) {// 确保token唯一
+							newtoken = randomCode.getToken();
+						}
+						tempuser.setUser_token(newtoken);
+						userMapper.updateToken(tempuser);
+						
+						tempuser.setUser_login_time(new Timestamp(new Date().getTime()));
+						userMapper.updateLoginTime(tempuser);// 插入 login 时间
+
+						userinfo = tempuser;// 返回更新的user对象给userinfo
+						
+						return ResultCode.SUCCESS;
+					} else {
+						// ***** 检测 account & password 是否符合格式 *****
+						if (!Tools.isEmpty(account, password)) {
+							if (account.length() < 6) {
+								return ResultCode.USERACCOUNT_ERROR;
+							} else if (password.length() < 6) {
+								return ResultCode.USERPASSWORD_ERROR;
+							}
+						} else {
+							return ResultCode.USERNAME_EXIST;
+						}
+					}
+				} else {
+					return ResultCode.USERMOBILE_ERROR;
+				}
+			} else {
+				return ResultCode.REQUIREINFO_NOTENOUGH;
+			}
+		}
+		
 		// ***** 检测 account & password 是否符合格式 *****
 		if (!Tools.isEmpty(account, password)) {
 			if (account.length() < 6) {
@@ -95,11 +158,6 @@ public class UserServices {
 			}
 		} else {
 			return ResultCode.REGISTERINFO_NOTENOUGH;
-		}
-		
-		// ***** 检测 usertype 是否正确 *****
-		if (usertype == null || (usertype != 1 && usertype != 2 && usertype != 3 && usertype != 4 && usertype != 5)) {
-			return ResultCode.USERTYPE_ERROR;
 		}
 
 		if (usertype == 1) { // usertype=1时为用户号，检测注册信息是否完整
@@ -148,7 +206,30 @@ public class UserServices {
 		int checkUserNameResult = checkUserName(account);// 调用checkUserName方法并得到返回码
 
 		if (checkUserNameResult == ResultCode.USERNAME_NOTEXIST) {// 检测用户名是否存在
+			
 			User user = new User(); // 实例化用户对象
+			
+			// ***** 添加手机号mobile 判断格式 *****
+			if (mobile != null) {
+				if (Tools.isNumeric(mobile.toString())
+						&& (mobile.toString().length() >= 8)) {
+					int checkMobileResult = checkUserName(mobile.toString());// 调用checkUserName方法检测手机号是否唯一并得到返回码
+					if (checkMobileResult == ResultCode.USERNAME_NOTEXIST) {// 检测用户名是否存在
+						user.setUser_mobile(mobile);
+					} else {
+						if (usertype == 5) {
+							user = userinfo;
+							user.setUser_mobile(mobile);
+							registermode = 1;
+							defaultaccess = "user_default"; // 分配user_default权限
+						} else {
+							return checkMobileResult;
+						}
+					}
+				} else {
+					return ResultCode.USERMOBILE_ERROR;
+				}
+			}
 			
 			// ***** 添加account *****
 			user.setUser_account(account);
@@ -226,21 +307,6 @@ public class UserServices {
 			// ***** 添加姓名name *****
 			if (!Tools.isEmpty(name)) {
 				user.setUser_name(name);
-			}
-			
-			// ***** 添加手机号mobile 判断格式 *****
-			if (mobile != null) {
-				if (Tools.isNumeric(mobile.toString())
-						&& (mobile.toString().length() >= 8)) {
-					int checkMobileResult = checkUserName(mobile.toString());// 调用checkUserName方法检测手机号是否唯一并得到返回码
-					if (checkMobileResult == ResultCode.USERNAME_NOTEXIST) {// 检测用户名是否存在
-						user.setUser_mobile(mobile);
-					} else {
-						return checkMobileResult;
-					}
-				} else {
-					return ResultCode.USERMOBILE_ERROR;
-				}
 			}
 
 			// ***** 添加性别gender *****
@@ -339,8 +405,12 @@ public class UserServices {
 					user.setUser_push_token(pushtoken);
 				}
 			}
-			
-			userMapper.addUserByAccount(user);// 把用户信息插入数据表
+			if (usertype == 5) {
+				user.setUser_type(1);
+				userMapper.updateUser(user);
+			} else {
+				userMapper.addUserByAccount(user);// 把用户信息插入数据表
+			}
 			// ** user_skill子表的逻辑部分
 			// if (!isEmpty(skill)) {
 			// UserSkill userskill = new UserSkill();

@@ -186,6 +186,7 @@ public class UserAction extends ActionSupport implements SessionAware{
 
 		if (result == ResultCode.SUCCESS) {
 //			Integer newuserid = userServices.getUserinfo().getUser_id();
+			dataMap = obj2map.getValueMap(userServices.getUserinfo()); //将对象转换成Map
 			dataMap.putAll(Tools.JsonHeadMap(result, true));
 			System.out.println(dataMap);
 			logger.info("userOpr:[Register][" + account + "]" + Tools.JsonHeadMap(result, true));
