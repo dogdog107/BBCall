@@ -195,7 +195,7 @@ public class OrderlistAction extends ActionSupport {
 		
 		try {
 		userServices.getUserById(order_user_id);
-		String registerid = userServices.getUserinfo().toString();
+		String registerid = userServices.getUserinfo().getUser_push_token();
 
 		
 			gcmServices.sendtouser("BBCall通知 - 用戶確認接收你的order請求", registerid);
@@ -252,7 +252,7 @@ public class OrderlistAction extends ActionSupport {
 			
 			userServices.getUserById(master_id);
 			
-			String registerid = userServices.getUserinfo().toString();
+			String registerid = userServices.getUserinfo().getUser_push_token();
 			
 			gcmServices.sendtouser("BBCall通知 - 你有新的已完成訂單", registerid);
 		} catch (Exception e) {

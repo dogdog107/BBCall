@@ -43,7 +43,16 @@ public class GcmServices {
 		int size = registeridList.size() / constant1 + constant2;
 
 		System.out.println("size : " + size);
+		
+		JSONObject notification = new JSONObject();
+		notification.put("title", "BBCall notification");
+		notification.put("text", datamsg);
+		notification.put("body", datamsg);
 
+		
+		JSONObject data = new JSONObject();
+		data.put("message", datamsg);
+		
 		for (int i = 0; i < size; i++) {
 
 			constant3 = i * constant1;
@@ -55,11 +64,6 @@ public class GcmServices {
 
 			System.out.println("constant3 : " + constant3);
 			System.out.println("constant4 : " + constant4);
-
-			JSONObject notification = new JSONObject();
-			notification.put("title", "BBCall notification");
-			notification.put("text", datamsg);
-			notification.put("body", datamsg);
 
 			list = registeridList.subList(constant3, constant4);
 
@@ -73,6 +77,7 @@ public class GcmServices {
 			JSONObject jsonObject = new JSONObject();
 			jsonObject.put("notification", notification);
 			jsonObject.put("registration_ids", jsonArray);
+			jsonObject.put("data", data);
 
 			try {
 				URL url = new URL("https://gcm-http.googleapis.com/gcm/send");
