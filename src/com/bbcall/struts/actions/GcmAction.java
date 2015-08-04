@@ -1,6 +1,5 @@
 package com.bbcall.struts.actions;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
@@ -11,6 +10,7 @@ import org.springframework.stereotype.Controller;
 import com.bbcall.functions.ResultCode;
 import com.bbcall.functions.Tools;
 import com.bbcall.struts.services.GcmServices;
+import com.bbcall.struts.services.UserServices;
 import com.opensymphony.xwork2.ActionSupport;
 
 @Scope("prototype")
@@ -20,6 +20,9 @@ public class GcmAction extends ActionSupport {
 
 	@Autowired
 	private GcmServices gcmServices;
+
+	@Autowired
+	private UserServices userServices;
 
 	private Map<String, Object> dataMap;
 
@@ -31,17 +34,23 @@ public class GcmAction extends ActionSupport {
 	}
 
 	public String sendmsg() throws Exception {
-		
-		List<String> registeridList = new ArrayList<String>();
-		
-		int result = gcmServices.sendtogoogle(datamsg,registeridList);
-		
+
+		List<String> registeridList = userServices.getPushTokenByDriver(1);
+
+		int result = gcmServices.sendtogoogle(datamsg, registeridList);
+
 		if (result == ResultCode.SUCCESS) {
 			dataMap.putAll(Tools.JsonHeadMap(result, true));
 		} else {
 			dataMap.putAll(Tools.JsonHeadMap(result, false));
 		}
 		return SUCCESS;
+	}
+
+	public String sendmsgJson() throws Exception {
+		System.out.println("sendmsgJson");
+		sendmsg();
+		return "json";
 	}
 
 	public Map<String, Object> getDataMap() {
@@ -62,6 +71,14 @@ public class GcmAction extends ActionSupport {
 
 	public void setGcmServices(GcmServices gcmServices) {
 		this.gcmServices = gcmServices;
+	}
+
+	public UserServices getUserServices() {
+		return userServices;
+	}
+
+	public void setUserServices(UserServices userServices) {
+		this.userServices = userServices;
 	}
 
 }

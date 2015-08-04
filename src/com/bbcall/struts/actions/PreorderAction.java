@@ -76,7 +76,7 @@ public class PreorderAction extends ActionSupport {
 			
 			userServices.getUserById(user_id);
 			
-			String registerid = userServices.getUserinfo().toString();
+			String registerid = userServices.getUserinfo().getUser_push_token();
 			
 			gcmServices.sendtouser("BBCall通知 - 有新的師傅對您的訂單出價", registerid);
 			
