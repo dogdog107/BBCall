@@ -308,14 +308,16 @@ public class OrderlistAction extends ActionSupport {
 
 		Integer usertype = tempuUser.getUser_type();
 
-		if (usertype.equals(1)) {
+		if (usertype.equals(1) || usertype.equals(5)) {
 			result = orderlistServices.getUnOrdersForCustomer(order_user_id,
 					pagenum);
 		} else if (usertype.equals(2)) {
 			result = orderlistServices.getUnOrdersForMaster(order_user_id,
 					pagenum);
-		} else {
+		} else if (usertype.equals(3) || usertype.equals(4)){
 			result = orderlistServices.getUnOrdersForAdm(pagenum);
+		} else {
+			result = ResultCode.ORDER_READ_FAIL;
 		}
 
 		if (result == ResultCode.SUCCESS) {
@@ -491,14 +493,16 @@ public class OrderlistAction extends ActionSupport {
 
 		Integer usertype = tempuUser.getUser_type();
 
-		if (usertype.equals(1)) {
+		if (usertype.equals(1) || usertype.equals(5)) {
 			result = orderlistServices.getProOrdersForCustomer(order_user_id,
 					pagenum);
 		} else if (usertype.equals(2)) {
 			result = orderlistServices.getProOrdersForMaster(order_user_id,
 					pagenum);
-		} else {
+		} else if (usertype.equals(3) || usertype.equals(4)){
 			result = orderlistServices.getProOrdersForAdm(pagenum);
+		} else {
+			result = ResultCode.ORDER_READ_FAIL;
 		}
 
 		if (result == ResultCode.SUCCESS) {
@@ -540,14 +544,16 @@ public class OrderlistAction extends ActionSupport {
 
 		Integer usertype = tempuUser.getUser_type();
 
-		if (usertype.equals(1)) {
+		if (usertype.equals(1) || usertype.equals(5)) {
 			result = orderlistServices.getComOrdersForCustomer(order_user_id,
 					pagenum);
 		} else if (usertype.equals(2)) {
 			result = orderlistServices.getComOrdersForMaster(order_user_id,
 					pagenum);
-		} else {
+		} else if (usertype.equals(3) || usertype.equals(4)){
 			result = orderlistServices.getComOrdersForAdm(pagenum);
+		} else {
+			result = ResultCode.ORDER_READ_FAIL;
 		}
 
 		if (result == ResultCode.SUCCESS) {

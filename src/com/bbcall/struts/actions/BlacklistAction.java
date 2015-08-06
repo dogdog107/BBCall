@@ -128,12 +128,14 @@ public class BlacklistAction extends ActionSupport {
 
 		Integer usertype = tempuUser.getUser_type();
 
-		if (usertype.equals(1)) {
+		if (usertype.equals(1) || usertype.equals(5)) {
 			result = blacklistServices.getBlacklistForCustomer(userid, pagenum);
 		} else if (usertype.equals(2)) {
 			result = blacklistServices.getBlacklistForMaster(userid, pagenum);
-		} else {
+		} else if (usertype.equals(3) || usertype.equals(4)) {
 			result = blacklistServices.getBlacklistForAdm(pagenum);
+		} else {
+			result = ResultCode.SUCCESS;
 		}
 		
 //		if (blacklist_user_id != null) {

@@ -63,6 +63,7 @@ public class ResultCode {
 
 	// 黑名单返回码17XXX
 	public static Integer BLACKLIST_EXIST = 17001;// 黑名单存在
+	public static Integer BLACKLIST_READ_FAIL = 17002;// 黑名单读取失败
 	
 	// 推送返回码18XXX
 	public static Integer DEVICE_NOT_REGISTERED = 18001;// 设备未注册
@@ -78,6 +79,9 @@ public class ResultCode {
 	// 视频错误码21XXX
 	public static Integer VIDEOID_ERROR = 21001;// 视频id不存在
 	public static Integer VIDEOCATEGORY_ERROR = 21002;// 视频分类id不存在
+	
+	// 订单返回码22XXX
+	public static Integer ORDER_READ_FAIL = 22001;// 订单读取失败
 
 	// 论坛错误码3XXXX
 	public static Integer NODEID_ERROR = 30001;// 论坛id不存在
@@ -239,6 +243,10 @@ public class ResultCode {
 			errmsg = "blacklist exist";
 			break;
 			
+		case 17002:
+			errmsg = "blacklist read fail";
+			break;
+			
 		case 18001:
 			errmsg = "device unregistered";
 			break;
@@ -266,6 +274,10 @@ public class ResultCode {
 			break;
 		case 21002:
 			errmsg = "invalid video_category";
+			break;
+			
+		case 22001:
+			errmsg = "unable to read orderlist";
 			break;
 
 		// 论坛类
