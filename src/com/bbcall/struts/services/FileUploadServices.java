@@ -4,11 +4,12 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 
+import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Service;
 
 import com.bbcall.functions.ResultCode;
 import com.bbcall.functions.Tools;
-
+@Scope("prototype")
 @Service("fileUploadServices")
 public class FileUploadServices {
 	private static final int BUFFER_SIZE = 16 * 1024;

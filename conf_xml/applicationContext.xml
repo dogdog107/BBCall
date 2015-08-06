@@ -112,5 +112,30 @@
 		<bean id="loginAction" class="com.bbcall.struts.actions.LoginAction" scope="prototype"> 
 		<property name="userServices" ref="userServices"></property> </bean> 
 	-->
+
+	<!-- javaMail 发送邮件的配置bean -->
+	<bean id="mailSender" class="org.springframework.mail.javamail.JavaMailSenderImpl">
+		<property name="host" value="smtp.qq.com" />
+		<property name="port" value="465" />
+		<!-- <property name="protocol" value="smtps" /> -->
+		<property name="username" value="xxxxx@qq.com" />
+		<property name="password" value="xxxx" />
+		<!-- SMTP服务器验证 -->
+		<property name="javaMailProperties">
+			<props>
+				<!-- 验证身份 -->
+				<prop key="mail.smtps.auth">true</prop>
+				<prop key="mail.smtp.ssl.enable">true</prop>
+				<prop key="mail.transport.protocol">smtps</prop>
+			</props>
+		</property>
+	</bean>
 	
+	<bean id="simpleMail" class="org.springframework.mail.SimpleMailMessage">
+		<!-- <property name="to" value="${mail.to}" /> -->
+		<!-- <property name="from" value="${mail.from}" /> -->
+		<!-- <property name="subject" value="${mail.subject}" /> -->
+		<property name="from" value="xxxxx@qq.com" />
+		<property name="subject" value="BBCall Forget Password" />
+	</bean>
 </beans>

@@ -4,6 +4,7 @@ import java.util.List;
 
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Service;
 
 import com.bbcall.functions.ResultCode;
@@ -13,7 +14,7 @@ import com.bbcall.mybatis.dao.UserSkillMapper;
 import com.bbcall.mybatis.table.User;
 import com.bbcall.mybatis.table.UserSkill;
 import com.github.pagehelper.PageHelper;
-
+@Scope("prototype")
 @Service("userSkillServices")
 public class UserSkillServices {
 	

@@ -3,13 +3,14 @@ package com.bbcall.struts.services;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Service;
 
 import com.bbcall.functions.ResultCode;
 import com.bbcall.mybatis.dao.ReferdocMapper;
 import com.bbcall.mybatis.table.Referdoc;
 import com.github.pagehelper.PageHelper;
-
+@Scope("prototype")
 @Service("referdocServices")
 public class ReferdocServices {
 
