@@ -520,29 +520,6 @@ public class UserAction extends ActionSupport implements SessionAware{
 	public String checkUserList() throws Exception {
 		System.out.println("Here is UserAction.checkUserList");
 		dataMap.clear(); // dataMap中的数据将会被Struts2转换成JSON字符串，所以这里要先清空其中的数据
-		
-//		String requireAccess = "UserCheckList";
-//
-//		/*
-//		 * Token Validation
-//		 */
-//		int tokenResult = userServices.checkUserToken(token);
-//		while (tokenResult != ResultCode.SUCCESS) {
-//			dataMap.putAll(Tools.JsonHeadMap(tokenResult, false));
-//			System.out.println(dataMap);
-//			return INPUT;
-//		}
-//		
-//		/*
-//		 * access Validation
-//		 */
-//		int accessResult = userServices.checkUserAccess(userServices.getUserinfo().getUser_access_group(), requireAccess);
-//		while (accessResult != ResultCode.SUCCESS) {
-//			dataMap.putAll(Tools.JsonHeadMap(accessResult, false));
-//			System.out.println(dataMap);
-//			return INPUT;
-//		}
-		
 		int result = userServices.checkUserList(col_name, specify_value, search_value, pagenum);// 调用userServices.checkAddressList
 		if (result == ResultCode.SUCCESS) {
 			List<User> userlist = userServices.getUserlist();

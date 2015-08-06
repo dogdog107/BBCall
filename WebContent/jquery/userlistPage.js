@@ -74,6 +74,9 @@ function checkUserList(col_name, specify_value, search_value, pagenum){
 					case 4:
 						row.find("#usertype").html("<span style='color:#CC0000'>SuperAdmin</span>");
 						break;
+					case 5:
+						row.find("#usertype").html("<span style='color:#996600'>Guest</span>");
+						break;
 					}
 					
 					switch (n.user_status) {
@@ -253,6 +256,7 @@ function col_name_change(colname_value) {
 		$("#specify_value").append("<option value='2'>師傅排頭(Master on Top)</option>");
 		$("#specify_value").append("<option value='3'>管理員排頭(Admin on Top)</option>");
 		$("#specify_value").append("<option value='4'>超級管理員排頭(SuperAdmin on Top)</option>");
+		$("#specify_value").append("<option value='5'>訪客排頭(Guest on Top)</option>");
 		break;
 	case "user_status":
 		validateResult = true;
@@ -293,6 +297,7 @@ function specify_value_change(specify_value) {
 	case "2":
 	case "3":
 	case "4":
+	case "5":
 		validateResult = true;
 		new_col_name = $("#col_name").val();
 		new_specify_value = specify_value;

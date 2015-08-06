@@ -15,6 +15,9 @@ $(function() {
 	case "4":
 		$("#usertype").html("SuperAdmin");
 		break;
+	case "5":
+		$("#usertype").html("Guest");
+		break;
 	}
 
 	switch (status) {

@@ -76,6 +76,9 @@ function checkUserList(order_col, order_value, where_col, where_value, pagenum){
 					case 4:
 						row.find("#usertype").html("<span style='color:#CC0000'>SuperAdmin</span>");
 						break;
+					case 5:
+						row.find("#usertype").html("<span style='color:#996600'>Guest</span>");
+						break;
 					}
 					
 					switch (n.user_status) {

@@ -45,6 +45,9 @@ $(function() {
 	case "4":
 		$('#usertype').text("SuperAdmin");
 		break;
+	case "5":
+		$('#usertype').text("Guest");
+		break;
 	}
 	switch (gender) {
 	case "1":

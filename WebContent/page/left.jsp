@@ -89,8 +89,8 @@
 						<td align=middle width=30><img height=9
 							src="./img/menu_icon.gif" width=9></td>
 						<td><a class=menuchild
-							href="${pageContext.request.contextPath }/page/masterlist.jsp"
-							target=main>師傅列表</a></td>
+							href="${pageContext.request.contextPath }/page/guestlist.jsp"
+							target=main>訪客列表</a></td>
 					</tr>
 					<tr height=20>
 						<td align=middle width=30><img height=9
@@ -98,6 +98,13 @@
 						<td><a class=menuchild
 							href="${pageContext.request.contextPath }/page/customerlist.jsp"
 							target=main>顧客列表</a></td>
+					</tr>
+					<tr height=20>
+						<td align=middle width=30><img height=9
+							src="./img/menu_icon.gif" width=9></td>
+						<td><a class=menuchild
+							href="${pageContext.request.contextPath }/page/masterlist.jsp"
+							target=main>師傅列表</a></td>
 					</tr>
 					<tr height=20>
 						<td align=middle width=30><img height=9
@@ -111,7 +118,7 @@
 							src="./img/menu_icon.gif" width=9></td>
 						<td><a class=menuchild
 							href="${pageContext.request.contextPath }/page/skillList.jsp"
-							target=main>技能審批列表</a></td>
+							target=main>技能審批</a></td>
 					</tr>
 					<tr height=20>
 						<td align=middle width=30><img height=9
