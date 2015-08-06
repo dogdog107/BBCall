@@ -23,7 +23,7 @@ public class MailServices {
 		String header = "Dear " + username + ",\n";
 		String body_pwd = "Your new password is : " + password + "\n";
 		String body_reminder = "Please use this password to login BBCall and change your password IMMEDIATELY!\n";
-		String footer = "Best Regards, \nBBCall Admin";
+		String footer = "\nBest Regards, \nBBCall Admin";
 		String text = header + body_pwd + body_reminder + footer;
 		simpleMail.setText(text);
 		mailSender.send(simpleMail);
