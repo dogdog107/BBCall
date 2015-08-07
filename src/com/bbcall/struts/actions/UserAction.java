@@ -13,14 +13,17 @@ import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Controller;
 
 import com.bbcall.functions.PageInfoToMap;
+import com.bbcall.functions.RandomCode;
 import com.bbcall.functions.ResultCode;
 import com.bbcall.functions.ObjectToMap;
 import com.bbcall.functions.Tools;
 import com.bbcall.mybatis.table.User;
 import com.bbcall.mybatis.table.UserSkill;
+import com.bbcall.struts.services.MailServices;
 import com.bbcall.struts.services.UserServices;
 import com.bbcall.struts.services.UserSkillServices;
 import com.opensymphony.xwork2.ActionSupport;
+
 
 @Scope("prototype")
 @Controller("userAction")
@@ -33,9 +36,13 @@ public class UserAction extends ActionSupport implements SessionAware{
 	private UserServices userServices;
 	@Autowired
 	private UserSkillServices userSkillServices;
+	@Autowired
+	private MailServices mailservices;
+	
 	private Map<String, Object> dataMap = new LinkedHashMap<String, Object>(); // 新建dataMap来储存JSON字符串
 	private ObjectToMap obj2map = new ObjectToMap();// 新建ObjectToMap对象
 	private PageInfoToMap pageinfo2map = new PageInfoToMap();// 新建PageInfoToMap对象
+	private RandomCode randomCode = new RandomCode();
 	private Map<String, Object> session;
 	
 	private String username;
@@ -513,29 +520,6 @@ public class UserAction extends ActionSupport implements SessionAware{
 	public String checkUserList() throws Exception {
 		System.out.println("Here is UserAction.checkUserList");
 		dataMap.clear(); // dataMap中的数据将会被Struts2转换成JSON字符串，所以这里要先清空其中的数据
-		
-//		String requireAccess = "UserCheckList";
-//
-//		/*
-//		 * Token Validation
-//		 */
-//		int tokenResult = userServices.checkUserToken(token);
-//		while (tokenResult != ResultCode.SUCCESS) {
-//			dataMap.putAll(Tools.JsonHeadMap(tokenResult, false));
-//			System.out.println(dataMap);
-//			return INPUT;
-//		}
-//		
-//		/*
-//		 * access Validation
-//		 */
-//		int accessResult = userServices.checkUserAccess(userServices.getUserinfo().getUser_access_group(), requireAccess);
-//		while (accessResult != ResultCode.SUCCESS) {
-//			dataMap.putAll(Tools.JsonHeadMap(accessResult, false));
-//			System.out.println(dataMap);
-//			return INPUT;
-//		}
-		
 		int result = userServices.checkUserList(col_name, specify_value, search_value, pagenum);// 调用userServices.checkAddressList
 		if (result == ResultCode.SUCCESS) {
 			List<User> userlist = userServices.getUserlist();
@@ -745,10 +729,48 @@ public class UserAction extends ActionSupport implements SessionAware{
 		return "json";
 	}
 	
+	/**
+	 * forgetPassword Action
+	 * @return
+	 * @throws Exception
+	 */
+	public String forgetPassword() throws Exception {
+		dataMap.clear(); // dataMap中的数据将会被Struts2转换成JSON字符串，所以这里要先清空其中的数据
+		int chkUsernameResult = userServices.checkUserName(username);// 调用userServices.checkUserName
+		if (chkUsernameResult == ResultCode.REQUIREINFO_NOTENOUGH || chkUsernameResult == ResultCode.USERNAME_NOTEXIST) {
+			dataMap.putAll(Tools.JsonHeadMap(chkUsernameResult, false));
+			logger.info("userOpr:[forgetPassword][" + username + "]" + Tools.JsonHeadMap(chkUsernameResult, false));
+			return null;
+		} else {
+			User tempUser = new User();
+			tempUser = userServices.getUserinfo();
+			if (Tools.isEmpty(tempUser.getUser_email())) {
+				dataMap.putAll(Tools.JsonHeadMap(ResultCode.USEREMAIL_NULL, false));
+				logger.info("userOpr:[forgetPassword][" + username + "]" + Tools.JsonHeadMap(ResultCode.USEREMAIL_NULL, false));
+				return null;
+			}
+			String newPwd = randomCode.getSmallChar();
+			int updateResult = userServices.updateUserPassword(tempUser.getUser_id(), newPwd);
+			if (updateResult == ResultCode.SUCCESS) {
+				int result = mailservices.sendSimpleMail(tempUser.getUser_email(), username, newPwd);
+				dataMap.putAll(Tools.JsonHeadMap(result, true));
+				logger.info("userOpr:[forgetPassword][" + username + "]Change password success." + Tools.JsonHeadMap(result, true));
+				return null;
+			} else {
+				dataMap.putAll(Tools.JsonHeadMap(updateResult, false));
+				logger.info("userOpr:[forgetPassword][" + username + "]" + Tools.JsonHeadMap(updateResult, false));
+				return null;
+			}
+		}
+	}
+	public String forgetPasswordJson() throws Exception {
+		forgetPassword();
+		return "json";
+	}
+	
 //	public void setTest(int test) {
 //		this.test = test;
 //	}
-
 	
 	// Json Format Return 
 	@JSON(format="yyyy-MM-dd HH:mm:ss")

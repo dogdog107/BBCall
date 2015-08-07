@@ -4,6 +4,7 @@ import java.sql.Timestamp;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Service;
 
 import com.bbcall.functions.ResultCode;
@@ -13,7 +14,7 @@ import com.bbcall.mybatis.dao.UserMapper;
 import com.bbcall.mybatis.table.Blacklist;
 import com.bbcall.mybatis.table.User;
 import com.github.pagehelper.PageHelper;
-
+@Scope("prototype")
 @Service("blacklistServices")
 public class BlacklistServices {
 

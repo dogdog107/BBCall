@@ -3,6 +3,7 @@ package com.bbcall.struts.services;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Service;
 
 import com.bbcall.functions.ResultCode;
@@ -10,7 +11,7 @@ import com.bbcall.functions.Tools;
 import com.bbcall.mybatis.dao.AdvertisementMapper;
 import com.bbcall.mybatis.table.Advertisement;
 import com.github.pagehelper.PageHelper;
-
+@Scope("prototype")
 @Service("advertisementServices")
 public class AdvertisementServices {
 	@Autowired

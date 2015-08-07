@@ -8,6 +8,7 @@ import java.sql.Timestamp;
 
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Service;
 
 import com.bbcall.functions.RandomCode;
@@ -18,6 +19,7 @@ import com.bbcall.mybatis.dao.UserMapper;
 import com.bbcall.mybatis.table.User;
 import com.github.pagehelper.PageHelper;
 
+@Scope("prototype")
 @Service("userServices")
 public class UserServices {
 
@@ -1148,6 +1150,26 @@ public class UserServices {
 		}
 	}
 
+	/**
+	 * updateUserPassword 更新用户密码
+	 * @param userid
+	 * @param password
+	 * @return
+	 */
+	public int updateUserPassword(Integer userid, String password) {
+		System.out.println("Here is UserServices.updateUserPassword method...");
+		if (userid == null)
+			return ResultCode.REQUIREINFO_NOTENOUGH;
+		User tempUser = userMapper.getUserById(userid);
+		if (tempUser != null) {
+			tempUser.setUser_password(encrypt.getDigestOfString(password.getBytes()));
+			userMapper.updateUser(tempUser);
+			return ResultCode.SUCCESS;
+		} else {
+			return ResultCode.USERID_ERROR;
+		}
+	}
+	
 	public int checkUserListWhereOrderBy(String order_col, String order_value,String where_col, String where_value, Integer pagenum) {
 		System.out.println("Here is UserServices.checkUserListWhereOrderBy method...");
 		int pageSize = 0;
