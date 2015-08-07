@@ -332,7 +332,10 @@ jQuery(function() {
 //实例化UEditor编辑器
 //建议使用工厂方法getEditor创建和引用编辑器实例，如果在某个闭包下引用该编辑器，直接调用UE.getEditor('editor')就能拿到相关的实例
 var ue = UE.getEditor('editor');
-
+//ue.ready(function(){
+//    //需要ready后执行，否则可能报错
+//    editor.setContent("欢迎使用UEditor！");
+//})
 //拿一级项技能表
 function getParentSkillList(idname) {
 	$.ajax({

@@ -1170,6 +1170,30 @@ public class UserServices {
 		}
 	}
 	
+	/**
+	 * updateUserPushToken
+	 * @param userid
+	 * @param pushtoken
+	 * @return
+	 */
+	public int updateUserPushToken(Integer userid, String pushtoken) {
+		System.out.println("Here is UserServices.updateUserPushToken method...");
+		if (userid == null)
+			return ResultCode.REQUIREINFO_NOTENOUGH;
+		User tempUser = userMapper.getUserById(userid);
+		if (tempUser != null) {
+			if (tempUser.getUser_driver() != null && (tempUser.getUser_driver().equals(1) || tempUser.getUser_driver().equals(2))) {
+				tempUser.setUser_push_token(pushtoken);
+				userMapper.updatePushToken(tempUser);
+				return ResultCode.SUCCESS;
+			} else {
+				return ResultCode.USERDRIVER_NULL;
+			}
+		} else {
+			return ResultCode.USERID_ERROR;
+		}
+	}
+	
 	public int checkUserListWhereOrderBy(String order_col, String order_value,String where_col, String where_value, Integer pagenum) {
 		System.out.println("Here is UserServices.checkUserListWhereOrderBy method...");
 		int pageSize = 0;

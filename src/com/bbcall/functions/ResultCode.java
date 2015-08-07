@@ -31,6 +31,7 @@ public class ResultCode {
 	public static Integer USERSKILL_REJECT = 10023;// 用户技能审核不通过
 	public static Integer USERSKILL_ACTIVE = 10024;// 用户技能已通过
 	public static Integer USEREMAIL_NULL = 10025;// 用户邮箱地址为空
+	public static Integer USERDRIVER_NULL = 10026;// 用户机型为空
 
 	// 用户返回码11XXX
 	public static Integer USERNAME_NOTEXIST = 11001;// 用户名可以使用
@@ -178,6 +179,9 @@ public class ResultCode {
 			break;
 		case 10025:
 			errmsg = "Email address is null";
+			break;
+		case 10026:
+			errmsg = "User driver is null";
 			break;
 
 		case 11001:
