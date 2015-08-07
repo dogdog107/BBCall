@@ -92,14 +92,7 @@
 			href="javascript:void(0);" onclick="location.href='user_homePage.action'">返回上一頁</a></span>
 	</div>
 	<div class="errMsg">
-		<s:property value="exception.message" />
-		${accessMsg }
-	</div>
-	<div class="errStack" style="display: none;">
-		<pre>  
-<s:property value="exceptionStack" />
-			<!-- 异常信息 -->  
-</pre>
+		发送成功
 	</div>
 </body>
 </html>
