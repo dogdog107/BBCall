@@ -49,11 +49,11 @@
 
 				<tr>
 					<td style="width:250px">廣告標題 (AD Title)</td>
-					<td><input type="text" name="advertisement_title" style="width:400px;height:20px;" value="${advertisement_title }"/></td>
+					<td><input type="text" id="advertisement_title" name="advertisement_title" style="width:400px;height:20px;" value="${advertisement_title }"/></td>
 				</tr>
 				<tr>
 					<td>廣告概要 (AD Summary)</td>
-					<td><textarea rows="3" name="advertisement_summary" style="width:400px;">${advertisement_summary }</textarea></td>
+					<td><textarea rows="3" id="advertisement_summary" name="advertisement_summary" style="width:400px;">${advertisement_summary }</textarea></td>
 				</tr>
 				<tr>
 					<td>用戶技能 (User Skill)
@@ -76,7 +76,8 @@
 				</tr>
 				<tr>
 					<td>廣告大標圖 (AD Big Photo)</td>
-					<td> 
+					<td>
+						<input type="hidden" id="advertisement_bigphoto_url" name="advertisement_bigphoto_url" value="${advertisement_bigphoto_url }" />
 						<img id="big_photo" name="advertisement_bigphoto_url" src="${advertisement_bigphoto_url }" height="200" width="400" /><br/>
 						<span style="color:red">圖片不能編輯</span>
 						<!-- <input type="file" name="upload" id="upload" onchange="" class="" /> -->
@@ -85,6 +86,7 @@
 				<tr>
 					<td>廣告小標圖 (AD Small Photo)</td>
 					<td>
+						<input type="hidden" id="advertisement_smallphoto_url" name="advertisement_smallphoto_url" value="${advertisement_smallphoto_url }" />
 						<img id="small_photo" name="advertisement_smallphoto_url" src="${advertisement_smallphoto_url }" height="100" width="100" /><br/>
 						<span style="color:red">圖片不能編輯</span>
 						<!-- <input type="file" name="upload" id="upload" onchange="" class="" /> -->

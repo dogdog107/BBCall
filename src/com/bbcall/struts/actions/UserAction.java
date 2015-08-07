@@ -175,9 +175,21 @@ public class UserAction extends ActionSupport implements SessionAware{
 	// Logout Action
 	public String logout() throws Exception {
 		System.out.println("Here is UserAction.logout");
+		dataMap.clear();
 		logger.info("userOpr:[Logout][" + session.get("user_id") + "]" + session.get("user_account") + " - Logout Success.");  
 		session.clear(); // 清空session
+		int result = userServices.updateUserPushToken(userid, "");
+		if (userid != null) {
+			dataMap.putAll(Tools.JsonHeadMap(result, true));
+		} else {
+			dataMap.putAll(Tools.JsonHeadMap(result, false));
+		}
+		
 		return "login";
+	}
+	public String logoutJson() throws Exception {
+		logout();
+		return "json";
 	}
 	
 	public String homePage() throws Exception {
