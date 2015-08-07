@@ -40,6 +40,7 @@ public class GcmAction extends ActionSupport {
 		System.out.println(datamsg);
 		int result = gcmServices.sendtogoogle(datamsg, registeridList);
 
+		System.out.println("result : " + result);
 		if (result == ResultCode.SUCCESS) {
 			dataMap.putAll(Tools.JsonHeadMap(result, true));
 			System.out.println(datamsg);

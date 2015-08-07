@@ -46,7 +46,7 @@ public class GcmServices {
 		data.put("message", datamsg);
 		data.put("msg", datamsg);
 
-		List<String> list = new ArrayList<String>();
+		List<String> reslist = new ArrayList<String>();
 		List<String> nullString = new ArrayList<String>();
 		nullString.add(null);
 
@@ -68,9 +68,13 @@ public class GcmServices {
 			System.out.println("constant3 : " + constant3);
 			System.out.println("constant4 : " + constant4);
 			
-			list = registeridList.subList(constant3, constant4);
+			reslist = registeridList.subList(constant3, constant4);
 			
-			JSONArray jsonArray = new JSONArray(list);
+			for (int k=0; k<reslist.size(); k++) {
+				System.out.println("k : " + reslist.get(k));
+			}
+			
+			JSONArray jsonArray = new JSONArray(reslist);
 	    	
 	    	
 	    	JSONObject jsonObject = new JSONObject();
@@ -78,6 +82,7 @@ public class GcmServices {
 	    	jsonObject.put("registration_ids", jsonArray);
 	    	jsonObject.put("data", data);
 	    	
+	    	System.out.println(jsonObject);
 	    	
 	        URL url = new URL("https://gcm-http.googleapis.com/gcm/send");
 	        HttpURLConnection httpUrlConnection = (HttpURLConnection) url.openConnection();
@@ -93,8 +98,11 @@ public class GcmServices {
 	        OutputStream outSteam = httpUrlConnection.getOutputStream();
 	        DataOutputStream dos = new DataOutputStream(outSteam);
 	        dos.writeBytes(jsonObject.toString());
+	        System.out.println("dos : " + dos);
 	        dos.flush();
+	        System.out.println("dos.flush()");
 	        dos.close();
+	        System.out.println("dos.close()");
 	        InputStream inputStream = httpUrlConnection.getInputStream();
 	        System.out.println("result : " + httpUrlConnection.getResponseCode());
 	        byte[] buffer = new byte[1024 * 100];

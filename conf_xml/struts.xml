@@ -223,7 +223,8 @@
 
 			<result name="success">/page/sendsuccess.jsp</result>
 			
-
+			<result name="exception">/page/senderror.jsp</result>
+			
 			<result type="json" name="json">
 				<param name="root">dataMap</param>
 				<!-- <param name="excludeProperties">userinfo.user_password</param> -->
