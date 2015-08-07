@@ -37,10 +37,13 @@ public class GcmAction extends ActionSupport {
 
 		List<String> registeridList = userServices.getPushTokenByDriver(1);
 
+		System.out.println(datamsg);
 		int result = gcmServices.sendtogoogle(datamsg, registeridList);
 
 		if (result == ResultCode.SUCCESS) {
 			dataMap.putAll(Tools.JsonHeadMap(result, true));
+			System.out.println(datamsg);
+			System.out.println(dataMap);
 		} else {
 			dataMap.putAll(Tools.JsonHeadMap(result, false));
 		}

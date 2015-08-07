@@ -52,7 +52,8 @@ public class GcmServices {
 
 		
 		JSONObject data = new JSONObject();
-		data.put("message", datamsg);
+		data.put("data", datamsg);
+		
 		
 		for (int i = 0; i < size; i++) {
 
@@ -79,6 +80,8 @@ public class GcmServices {
 			jsonObject.put("notification", notification);
 			jsonObject.put("registration_ids", jsonArray);
 			jsonObject.put("data", data);
+			
+			System.out.println(jsonObject);
 
 			try {
 				URL url = new URL("https://gcm-http.googleapis.com/gcm/send");
@@ -92,10 +95,14 @@ public class GcmServices {
 						+ API_KEY);
 				httpUrlConnection.setConnectTimeout(5000);
 				httpUrlConnection.setDoOutput(true);
+				
+				System.out.println(httpUrlConnection);
 
 				httpUrlConnection.connect();
 				OutputStream outSteam = httpUrlConnection.getOutputStream();
+				System.out.println("outSteam: " + outSteam);
 				DataOutputStream dos = new DataOutputStream(outSteam);
+				System.out.println("dos: " + dos);
 				dos.writeBytes(jsonObject.toString());
 				dos.flush();
 				dos.close();
@@ -115,45 +122,6 @@ public class GcmServices {
 
 		return ResultCode.SUCCESS;
 
-		// Sender sender = new Sender(API_KEY);
-		// Message message = new Message.Builder().addData("sendmessage",
-		// datamsg)
-		// .build();
-		//
-		// Result result = null;
-		//
-		// try {
-		// result = sender.send(message, deviceRegId, 5);
-		//
-		// System.out.println(result.getMessageId());
-		// System.out.println(result.getCanonicalRegistrationId());
-		// System.out.println(result.getErrorCodeName());
-		//
-		// } catch (Exception e) {
-		// // TODO: handle exception
-		// e.printStackTrace();
-		// }
-		//
-		// // 为空，则消息未发送给任何设备
-		// if (result.getMessageId() != null) {
-		// String canonicalRegId = result.getCanonicalRegistrationId();
-		// // 用户注册了新的注册id，或者谷歌服务器刷新了注册id。
-		// // 用户注册了新id，旧的id会被保存一段时间。此时使用旧id发送消息，设备即使已使用新id，依然可以收到
-		// if (canonicalRegId != null) {
-		// // same device has more than on registration ID: update database
-		// return ResultCode.REGISTER_ID_UPDATE_SUCCSESS;
-		// }
-		// return ResultCode.SUCCESS;
-		// } else {
-		// String error = result.getErrorCodeName();
-		// if (error.equals(Constants.ERROR_NOT_REGISTERED)) {
-		// // application has been removed from device - unregister
-		// // database
-		// return ResultCode.DEVICE_NOT_REGISTERED;
-		// }
-		// return ResultCode.SEND_MESSAGE_FAILED;
-		// }
-		//
 	}
 
 	public int sendtouser(String datamsg, String registerid) {
@@ -162,10 +130,16 @@ public class GcmServices {
 		notification.put("title", "BBCall notification");
 		notification.put("text", datamsg);
 		notification.put("body", datamsg);
+		
+		JSONObject data = new JSONObject();
+		data.put("data", datamsg);
 
 		JSONObject jsonObject = new JSONObject();
 		jsonObject.put("notification", notification);
 		jsonObject.put("to", registerid);
+		jsonObject.put("data", data);
+		
+		System.out.println(jsonObject);
 
 		try {
 			URL url = new URL("https://gcm-http.googleapis.com/gcm/send");

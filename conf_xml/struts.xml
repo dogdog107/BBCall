@@ -223,7 +223,6 @@
 
 			<result name="success">/page/sendsuccess.jsp</result>
 			
-			<result name="exception">/page/error.jsp</result>
 
 			<result type="json" name="json">
 				<param name="root">dataMap</param>

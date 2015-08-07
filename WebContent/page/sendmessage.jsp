@@ -49,12 +49,12 @@
        
 					<tr id="template">
 						<td align="left">
-							<textarea rows="5" cols="100" id="datamsg" ></textarea>
+							<textarea rows="5" cols="100" id="datamsg" name="datamsg"></textarea>
 						</td>
 					</tr>
 					<tr id="template">
 						<td>
-							<input id="sendmsg" type="submit" value="發送"/>
+							<input type="submit" value="發送"/>
 						</td>
 					</tr>
 						
