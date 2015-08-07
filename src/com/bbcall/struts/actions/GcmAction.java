@@ -1,5 +1,6 @@
 package com.bbcall.struts.actions;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -34,6 +35,9 @@ public class GcmAction extends ActionSupport {
 	}
 
 	public String sendmsg() throws Exception {
+		
+		dataMap = new HashMap<String, Object>(); // 新建dataMap来储存JSON字符串
+		dataMap.clear(); // dataMap中的数据将会被Struts2转换成JSON字符串，所以这里要先清空其中的数据
 
 		List<String> registeridList = userServices.getPushTokenByDriver(1);
 
@@ -45,10 +49,11 @@ public class GcmAction extends ActionSupport {
 			dataMap.putAll(Tools.JsonHeadMap(result, true));
 			System.out.println(datamsg);
 			System.out.println(dataMap);
+			return SUCCESS;
 		} else {
 			dataMap.putAll(Tools.JsonHeadMap(result, false));
+			return "exception";
 		}
-		return SUCCESS;
 	}
 
 	public String sendmsgJson() throws Exception {

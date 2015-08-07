@@ -43,7 +43,7 @@
                 <tbody id="datas">
                 	<tr style="font-weight: bold;">
                 		
-                        <td>推送失败 </td>
+                        <td>推送失敗 </td>
                     </tr>
                     
                 </tbody>
