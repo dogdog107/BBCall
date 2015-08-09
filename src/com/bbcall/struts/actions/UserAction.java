@@ -230,27 +230,10 @@ public class UserAction extends ActionSupport implements SessionAware{
 		System.out.println("Here is UserAction.update");
 		dataMap.clear(); // dataMap中的数据将会被Struts2转换成JSON字符串，所以这里要先清空其中的数据
 		
-//		String requireAccess = "UserUpdate";
-//		/*
-//		 * Token Validation
-//		 */
-//		int tokenResult = userServices.checkUserToken(token);
-//		while (tokenResult != ResultCode.SUCCESS) {
-//			dataMap.putAll(Tools.JsonHeadMap(tokenResult, false));
-//			System.out.println(dataMap);
-//			return INPUT;
-//		}
-//		
-//		/*
-//		 * access Validation
-//		 */
-//		int accessResult = userServices.checkUserAccess(userServices.getUserinfo().getUser_access_group(), requireAccess);
-//		while (accessResult != ResultCode.SUCCESS) {
-//			dataMap.putAll(Tools.JsonHeadMap(accessResult, false));
-//			System.out.println(dataMap);
-//			return INPUT;
-//		}
-		
+//****************************************************************************
+// ** if URL have problem, 如果中文字有乱码，可以用下面的方法转换
+//		String tempAds = new String(address.getBytes("ISO-8859-1"), "UTF-8");
+//****************************************************************************
 		int result = userServices.update(account, password, usertype, name, picurl, mobile, gender, addresscode, address, email, language, skill, description, accessgroup, status, token, userid, grade); // 调用userServices.login
 
 		if (result == ResultCode.SUCCESS) {

@@ -215,7 +215,7 @@ function updateSkillStatus(idname, value) {
 					$("#div_message").show(300).delay(5000).hide(300);
 					setTimeout(function() {
 						window.location.reload();
-					}, 2000); // how long do you want the delay to be?
+					}, 1500); // how long do you want the delay to be?
 				} else {
 					$("#message").html("<font color=red> (ID:"+ skillid +") Status Update Failed ! " + data.errmsg + "</font>");
 					$("#div_message").show(300).delay(5000).hide(300);

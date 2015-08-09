@@ -1,3 +1,88 @@
+$(function() {
+	$("#account").blur(function(){
+		if (this.value != '' && this.value != account) {
+			if (this.value.toString().length < 6) {
+				$("#checkAccountResult").hide();
+				$("#checkAccountResult").html("<font color=red>Error: 用戶名少於6位數</font>").show(300);
+				return;
+			}
+			$.post("${pageContext.request.contextPath}/user_checkUserNameJson.action",{"username": $(this).val()}, function(data){
+				if(data.result){
+					$("#checkAccountResult").hide();
+					$("#checkAccountResult").html("<font color=green>用戶名可以使用</font>").show(300);
+				}else{
+					$("#checkAccountResult").hide();
+					$("#checkAccountResult").html("<font color=red>Error: 用戶名已存在</font>").show(300);
+				}
+			});
+		} else {
+			$("#checkAccountResult").hide(300);
+		}
+	});
+});
+
+$(function() {
+	$("#mobile").blur(function(){
+		if (this.value != '' && this.value != mobile) {
+			if (isNaN(this.value.toString())) {
+				$("#checkMobileResult").hide();
+				$("#checkMobileResult").html("<font color=red>Error: 手機號碼只能為數字</font>").show(300);
+				return;
+			}
+			if (this.value.toString().length < 8) {
+				$("#checkMobileResult").hide();
+				$("#checkMobileResult").html("<font color=red>Error: 手機號碼少於8位數</font>").show(300);
+				return;
+			}
+			$.post("${pageContext.request.contextPath}/user_checkUserNameJson.action",{"username": $(this).val()}, function(data){
+				if(data.result){
+					$("#checkMobileResult").hide();
+					$("#checkMobileResult").html("<font color=green>手機號碼可以使用</font>").show(300);
+				}else{
+					$("#checkMobileResult").hide();
+					$("#checkMobileResult").html("<font color=red>Error: 手機號碼已被使用</font>").show(300);
+				}
+			});
+		} else {
+			$("#checkMobileResult").hide(300);
+		}
+	});
+});
+$(function() {
+	$("#email").blur(function(){
+		if (this.value != '' && this.value != email) {
+			if (this.value.toString().indexOf("@") < 0 || this.value.toString().indexOf(".") < 0) {
+				$("#checkEmailResult").hide();
+				$("#checkEmailResult").html("<font color=red>Error: 郵箱地址格式不正確</font>").show(300);
+				return;
+			}
+			$.post("${pageContext.request.contextPath}/user_checkUserNameJson.action",{"username": $(this).val()}, function(data){
+				if(data.result){
+					$("#checkEmailResult").hide();
+					$("#checkEmailResult").html("<font color=green>郵箱地址可以使用</font>").show(300);
+				}else{
+					$("#checkEmailResult").hide();
+					$("#checkEmailResult").html("<font color=red>郵箱地址已被使用</font>").show(300);
+				}
+			});
+		} else {
+			$("#checkEmailResult").hide(300);
+		}
+	});
+});
+$(function() {
+	$("#prepassword").blur(function() {
+		if (this.value != '') {
+			if (this.value.toString().length < 6) {
+				$("#checkPrepasswordResult").hide();
+				$("#checkPrepasswordResult").html("<font color=red>Error: 密碼不能少於6位數</font>").show(300);
+				return;
+			}
+			$("#checkPrepasswordResult").hide(300);
+			$("#repwd").hide().show(300);
+		}
+	});
+});
 function showaddresslist(times, childcode, parentcode) {
 	if (times < 1) {
 		if ($("#adscode_3").val() == "0") {

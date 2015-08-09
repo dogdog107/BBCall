@@ -95,9 +95,17 @@
 				</tr>
 				<tr>
 					<td>帳號 (Account)</td>
-					<td><input type="text" name="account" onfocus="this.value=''"
-						onblur="if(this.value==''){this.value='${account}'}"
-						value="${account}" /></td>
+					<td><input type="text" name="account" id="account"
+						value="${sessionScope.user_account}" /><span id="checkAccountResult"></span></td>
+				</tr>
+				<tr>
+					<td>修改密碼 (Change Password)</td>
+					<td><input type="password" id="prepassword"/><span id="checkPrepasswordResult"></span></td>
+				</tr>
+				<tr id="repwd" style="display: none">
+					<td>再輸一次 (Enter Password Again)</td>
+					<td><input type="password" name="password" id="password"
+						onblur="checkpwd('password')" /> <span id="pwdnotice"></span></td>
 				</tr>
 				<tr>
 					<td>用戶姓名 (User Name)</td>
@@ -115,15 +123,13 @@
 				</tr>
 				<tr>
 					<td>手機號碼 (User Mobile)</td>
-					<td><input type="text" name="mobile" onfocus="this.value=''"
-						onblur="if(this.value==''){this.value='${mobile}'}"
-						value="${mobile}" /></td>
+					<td><input type="text" name="mobile" id="mobile"
+						value="${sessionScope.user_mobile}" /><span id="checkMobileResult"></span></td>
 				</tr>
 				<tr>
 					<td>電子郵箱 (User Email)</td>
-					<td><input type="text" name="email" onfocus="this.value=''"
-						onblur="if(this.value==''){this.value='${email}'}"
-						value="${email}" /></td>
+					<td><input type="text" name="email" id="email"
+						value="${sessionScope.user_email}" /><span id="checkEmailResult"></span></td>
 				</tr>
 				<tr>
 					<td>用戶語言 (User Language)</td>

@@ -129,6 +129,9 @@ function updateIsTop(idname, value) {
 					$("#" + titleid).show(300);
 					$("#message").html("<font color=green> (ID:"+ advertid +") TOP Update Success ! </font>");
 					$("#div_message").show(300).delay(5000).hide(300);
+					setTimeout(function() {
+						window.location.reload();
+					}, 1500); // how long do you want the delay to be?
 				} else {
 					$("#message").html("<font color=red> (ID:"+ advertid +") TOP Update Failed ! " + data.errmsg + "</font>");
 					$("#div_message").show(300).delay(5000).hide(300);
@@ -188,6 +191,9 @@ function updateStatus(idname, value) {
 					$("#" + titleid).show(300);
 					$("#message").html("<font color=green> (ID:"+ advertid +") Status Update Success ! </font>");
 					$("#div_message").show(300).delay(5000).hide(300);
+					setTimeout(function() {
+						window.location.reload();
+					}, 1500); // how long do you want the delay to be?
 				} else {
 					$("#message").html("<font color=red> (ID:"+ advertid +") Status Update Failed ! " + data.errmsg + "</font>");
 					$("#div_message").show(300).delay(5000).hide(300);
