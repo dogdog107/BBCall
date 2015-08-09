@@ -26,13 +26,13 @@ public class PreorderAction extends ActionSupport {
 
 	@Autowired
 	private PreorderServices preorderServices;
-	
+
 	@Autowired
 	private GcmServices gcmServices;
-	
+
 	@Autowired
 	private OrderlistServices orderlistServices;
-	
+
 	@Autowired
 	private UserServices userServices;
 
@@ -48,10 +48,9 @@ public class PreorderAction extends ActionSupport {
 	private double preorder_master_grade;
 	private Integer pagenum; // 页面页数
 	private String sortparm;
-	
+
 	private Map<String, Object> dataMap;
 	private PageInfoToMap pageinfo2map = new PageInfoToMap();// 新建PageInfoToMap对象
-
 
 	public String add() throws Exception {
 		dataMap = new HashMap<String, Object>(); // 新建dataMap来储存JSON字符串
@@ -59,34 +58,38 @@ public class PreorderAction extends ActionSupport {
 
 		System.out.println("inin");
 		double price = 0;
-		
+
 		if (preorder_price != null && !preorder_price.equals("")) {
 			price = Double.parseDouble(preorder_price);
 		}
-		
-		
+
 		System.out.println("preorder_price " + preorder_price);
 		int preorderid = Integer.parseInt(preorder_order_id);
 		int preordermasterid = Integer.parseInt(preorder_master_id);
 
 		try {
 			orderlistServices.getOrderById(preorderid);
-			
+
 			int user_id = orderlistServices.orderlistinfo().getOrder_user_id();
-			
+
 			userServices.getUserById(user_id);
-			
+
+			Integer drivetype = userServices.getUserinfo().getUser_driver();
 			String registerid = userServices.getUserinfo().getUser_push_token();
-			
-			gcmServices.sendtouser("BBCall通知 - 有新的師傅對您的訂單出價", registerid);
-			
+
+			if (drivetype.equals(1)) {
+				gcmServices.sendtouser("BBCall notification - New Master wants to apply your Order", registerid);
+			} else if (drivetype.equals(2)) {
+				// 苹果推送
+			}
+
 		} catch (Exception e) {
 			// TODO: handle exception
 			e.printStackTrace();
 		} finally {
-			
+
 			int result = preorderServices.addPreorder(preordermasterid, price,
-					preorderid,pagenum);
+					preorderid, pagenum);
 
 			if (result == ResultCode.SUCCESS) {
 				List<Preorder> preorderlist = preorderServices.preorderinfos();
@@ -101,8 +104,7 @@ public class PreorderAction extends ActionSupport {
 				dataMap.putAll(Tools.JsonHeadMap(result, false));
 			}
 		}
-		
-		
+
 		return SUCCESS;
 	}
 
@@ -117,7 +119,8 @@ public class PreorderAction extends ActionSupport {
 
 		int preorderid = Integer.parseInt(preorder_order_id);
 
-		int result = preorderServices.getPreorderBySortparm(preorderid,sortparm,pagenum);
+		int result = preorderServices.getPreorderBySortparm(preorderid,
+				sortparm, pagenum);
 
 		if (result == ResultCode.SUCCESS) {
 			List<Preorder> preorderlist = preorderServices.preorderinfos();
@@ -137,38 +140,39 @@ public class PreorderAction extends ActionSupport {
 		return "json";
 	}
 
-//	public String showbyprice() throws Exception {
-//		dataMap = new HashMap<String, Object>(); // 新建dataMap来储存JSON字符串
-//		dataMap.clear(); // dataMap中的数据将会被Struts2转换成JSON字符串，所以这里要先清空其中的数据
-//
-//		int preorderid = Integer.parseInt(preorder_order_id);
-//
-//		int result = preorderServices.getPreorderAsc(preorderid);
-//
-//		if (result == ResultCode.SUCCESS) {
-//			List<Preorder> preorderlist = preorderServices.preorderinfos();
-//
-//			dataMap.put("preorderlist", preorderlist);
-//			dataMap.putAll(Tools.JsonHeadMap(result, true));
-//			// dataMap.put("resultcode", result);
-//			// dataMap.put("errmsg", ResultCode.getErrmsg(result));
-//			// dataMap.put("showbyidResult", true);
-//		}
-//		return SUCCESS;
-//	}
-//
-//	public String showbypriceJson() throws Exception {
-//		showbyprice();
-//		return "json";
-//	}
+	// public String showbyprice() throws Exception {
+	// dataMap = new HashMap<String, Object>(); // 新建dataMap来储存JSON字符串
+	// dataMap.clear(); // dataMap中的数据将会被Struts2转换成JSON字符串，所以这里要先清空其中的数据
+	//
+	// int preorderid = Integer.parseInt(preorder_order_id);
+	//
+	// int result = preorderServices.getPreorderAsc(preorderid);
+	//
+	// if (result == ResultCode.SUCCESS) {
+	// List<Preorder> preorderlist = preorderServices.preorderinfos();
+	//
+	// dataMap.put("preorderlist", preorderlist);
+	// dataMap.putAll(Tools.JsonHeadMap(result, true));
+	// // dataMap.put("resultcode", result);
+	// // dataMap.put("errmsg", ResultCode.getErrmsg(result));
+	// // dataMap.put("showbyidResult", true);
+	// }
+	// return SUCCESS;
+	// }
+	//
+	// public String showbypriceJson() throws Exception {
+	// showbyprice();
+	// return "json";
+	// }
 
 	public String showbyaccount() throws Exception {
 		dataMap = new HashMap<String, Object>(); // 新建dataMap来储存JSON字符串
 		dataMap.clear(); // dataMap中的数据将会被Struts2转换成JSON字符串，所以这里要先清空其中的数据
 
 		int preordermasterid = Integer.parseInt(preorder_master_id);
-		
-		int result = preorderServices.getPreorderByAccount(preordermasterid,pagenum);
+
+		int result = preorderServices.getPreorderByAccount(preordermasterid,
+				pagenum);
 
 		if (result == ResultCode.SUCCESS) {
 			List<Preorder> preorderlist = preorderServices.preorderinfos();
@@ -194,9 +198,9 @@ public class PreorderAction extends ActionSupport {
 
 		int preorderid = Integer.parseInt(preorder_id);
 		int preordermasterid = Integer.parseInt(preorder_master_id);
-		
+
 		int result = preorderServices.deletePreorder(preorderid,
-				preordermasterid,pagenum);
+				preordermasterid, pagenum);
 
 		if (result == ResultCode.SUCCESS) {
 			List<Preorder> preorderlist = preorderServices.preorderinfos();
@@ -352,5 +356,4 @@ public class PreorderAction extends ActionSupport {
 		this.userServices = userServices;
 	}
 
-	
 }

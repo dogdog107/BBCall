@@ -192,13 +192,19 @@ public class OrderlistAction extends ActionSupport {
 
 		int orderid = Integer.parseInt(order_id);
 		int order_user_id = Integer.parseInt(user_id);
-		
-		try {
-		userServices.getUserById(order_user_id);
-		String registerid = userServices.getUserinfo().getUser_push_token();
 
-		
-			gcmServices.sendtouser("BBCall通知 - 用戶確認接收你的order請求", registerid);
+		try {
+			userServices.getUserById(order_user_id);
+			Integer drivetype = userServices.getUserinfo().getUser_driver();
+			String registerid = userServices.getUserinfo().getUser_push_token();
+
+			if (drivetype.equals(1)) {
+				gcmServices
+						.sendtouser("BBCall notification - Your order request has been accepted", registerid);
+			} else if (drivetype.equals(2)) {
+				// 苹果推送
+			}
+
 		} catch (Exception e) {
 			// TODO: handle exception
 			e.printStackTrace();
@@ -246,28 +252,35 @@ public class OrderlistAction extends ActionSupport {
 
 		orderlistServices.getOrderById(orderid);
 		Orderlist order = orderlistServices.orderlistinfo();
-		
+
 		try {
 			int master_id = order.getOrder_master_id();
-			
+
 			userServices.getUserById(master_id);
-			
+
+			Integer drivetype = userServices.getUserinfo().getUser_driver();
 			String registerid = userServices.getUserinfo().getUser_push_token();
+
+			if (drivetype.equals(1)) {
+				gcmServices.sendtouser("BBCall notification - You have new completed Order", registerid);
+			} else if (drivetype.equals(2)) {
+				// 苹果推送
+			}
 			
-			gcmServices.sendtouser("BBCall通知 - 你有新的已完成訂單", registerid);
 		} catch (Exception e) {
 			// TODO: handle exception
 			e.printStackTrace();
 		} finally {
-			int result = orderlistServices.completeOrder(score, order_evaluation,
-					orderid, pagenum);
+			int result = orderlistServices.completeOrder(score,
+					order_evaluation, orderid, pagenum);
 			// List<Referdoc> referdoclist = new ArrayList<Referdoc>();
 			logger.info("gradeOpr:[Tradecomplete][User ID: "
 					+ order.getOrder_user_id() + "]Order ID: " + order_id
 					+ "; Master name: " + order.getOrder_master_name()
-					+ "; Order type: " + order.getOrder_type() + "; Order price: "
-					+ order.getOrder_price() + "; Order Score: " + order_score
-					+ "; Order Evaluation: " + order_evaluation);
+					+ "; Order type: " + order.getOrder_type()
+					+ "; Order price: " + order.getOrder_price()
+					+ "; Order Score: " + order_score + "; Order Evaluation: "
+					+ order_evaluation);
 
 			if (result == ResultCode.SUCCESS) {
 				List<Orderlist> orderlist = orderlistServices.orderlistinfos();
@@ -285,7 +298,7 @@ public class OrderlistAction extends ActionSupport {
 				// dataMap.put("completeResult", true);
 			}
 		}
-		
+
 		return SUCCESS;
 	}
 
@@ -314,7 +327,7 @@ public class OrderlistAction extends ActionSupport {
 		} else if (usertype.equals(2)) {
 			result = orderlistServices.getUnOrdersForMaster(order_user_id,
 					pagenum);
-		} else if (usertype.equals(3) || usertype.equals(4)){
+		} else if (usertype.equals(3) || usertype.equals(4)) {
 			result = orderlistServices.getUnOrdersForAdm(pagenum);
 		} else {
 			result = ResultCode.ORDER_READ_FAIL;
@@ -499,7 +512,7 @@ public class OrderlistAction extends ActionSupport {
 		} else if (usertype.equals(2)) {
 			result = orderlistServices.getProOrdersForMaster(order_user_id,
 					pagenum);
-		} else if (usertype.equals(3) || usertype.equals(4)){
+		} else if (usertype.equals(3) || usertype.equals(4)) {
 			result = orderlistServices.getProOrdersForAdm(pagenum);
 		} else {
 			result = ResultCode.ORDER_READ_FAIL;
@@ -550,7 +563,7 @@ public class OrderlistAction extends ActionSupport {
 		} else if (usertype.equals(2)) {
 			result = orderlistServices.getComOrdersForMaster(order_user_id,
 					pagenum);
-		} else if (usertype.equals(3) || usertype.equals(4)){
+		} else if (usertype.equals(3) || usertype.equals(4)) {
 			result = orderlistServices.getComOrdersForAdm(pagenum);
 		} else {
 			result = ResultCode.ORDER_READ_FAIL;
