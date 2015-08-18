@@ -11,6 +11,7 @@ import org.springframework.stereotype.Controller;
 import com.bbcall.functions.ResultCode;
 import com.bbcall.functions.Tools;
 import com.bbcall.struts.services.GcmServices;
+import com.bbcall.struts.services.IosPushServices;
 import com.bbcall.struts.services.UserServices;
 import com.opensymphony.xwork2.ActionSupport;
 
@@ -23,11 +24,15 @@ public class GcmAction extends ActionSupport {
 	private GcmServices gcmServices;
 
 	@Autowired
+	private IosPushServices iosPushServices;
+	
+	@Autowired
 	private UserServices userServices;
 
 	private Map<String, Object> dataMap;
 
 	private String datamsg;
+	private Integer usertype;
 
 	@Override
 	public String execute() throws Exception {
@@ -61,6 +66,34 @@ public class GcmAction extends ActionSupport {
 		sendmsg();
 		return "json";
 	}
+	
+	public String sendmsgIos() throws Exception {
+		
+		dataMap = new HashMap<String, Object>(); // 新建dataMap来储存JSON字符串
+		dataMap.clear(); // dataMap中的数据将会被Struts2转换成JSON字符串，所以这里要先清空其中的数据
+		
+		List<String> registeridList = userServices.getPushTokenByDriver(2);
+		
+		System.out.println(datamsg);
+		int result = iosPushServices.iosPush(registeridList, datamsg, usertype);
+		
+		System.out.println("result : " + result);
+		if (result == ResultCode.SUCCESS) {
+			dataMap.putAll(Tools.JsonHeadMap(result, true));
+			System.out.println(datamsg);
+			System.out.println(dataMap);
+			return SUCCESS;
+		} else {
+			dataMap.putAll(Tools.JsonHeadMap(result, false));
+			return "exception";
+		}
+	}
+	
+	public String sendmsgIosJson() throws Exception {
+		System.out.println("sendmsgIosJson");
+		sendmsgIos();
+		return "json";
+	}
 
 	public Map<String, Object> getDataMap() {
 		return dataMap;
@@ -88,6 +121,14 @@ public class GcmAction extends ActionSupport {
 
 	public void setUserServices(UserServices userServices) {
 		this.userServices = userServices;
+	}
+
+	public Integer getUsertype() {
+		return usertype;
+	}
+
+	public void setUsertype(Integer usertype) {
+		this.usertype = usertype;
 	}
 
 }
