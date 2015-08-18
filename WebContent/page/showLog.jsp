@@ -55,7 +55,7 @@
 		}
 	%>
 	</textarea>
-			<span id="rowcount"></span><span id="refresh"></span><a id="refreshBtn" href="javascript:void(0);" onclick="stoptime()" style="display:none">stop</a>
+			<span id="rowcount"></span><span id="refresh"></span><a id="refreshBtn" href="javascript:void(0);" onclick="stoptime()" style="display:none">[stop]</a>
 		</div>
 	</div>
 	<script type="text/javascript"
@@ -82,12 +82,12 @@
 		}
 		function stoptime() {
 			clearTimeout(timeout);
-			$("#refreshBtn").text("resume");
+			$("#refreshBtn").text("[resume]");
 			$("#refreshBtn").attr("onclick", "resume()");
 		}
 		function resume() {
 			refresh();
-			$("#refreshBtn").text("stop");
+			$("#refreshBtn").text("[stop]");
 			$("#refreshBtn").attr("onclick", "stoptime()");
 		}
 	</script>
