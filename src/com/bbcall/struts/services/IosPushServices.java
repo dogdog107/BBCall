@@ -65,7 +65,6 @@ public class IosPushServices {
 		PushNotificationManager pushManager = new PushNotificationManager();
 		// true：表示的是产品发布推送服务 false：表示的是产品测试推送服务
 		pushManager.initializeConnection(new AppleNotificationServerBasicImpl(p12FilePath, p12Password, false));
-		System.out.println(p12FilePath);
 		List<PushedNotification> notifications = new ArrayList<PushedNotification>();
 		// 发送push消息
 		if (deviceTokens.size() == 1) {
