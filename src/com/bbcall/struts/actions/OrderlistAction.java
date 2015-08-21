@@ -212,7 +212,7 @@ public class OrderlistAction extends ActionSupport {
 								registerid);
 			} else if (drivetype.equals(2)) {
 				// 苹果推送
-				iosPushServices.iosPush(iosList, "BBCall notification - Your order request has been accepted");
+//				iosPushServices.iosPush(iosList, "BBCall notification - Your order request has been accepted");
 			}
 
 		} catch (Exception e) {
@@ -279,7 +279,7 @@ public class OrderlistAction extends ActionSupport {
 						registerid);
 			} else if (drivetype.equals(2)) {
 				// 苹果推送
-				iosPushServices.iosPush(iosList, "BBCall notification - You have new completed Order");
+//				iosPushServices.iosPush(iosList, "BBCall notification - You have new completed Order");
 			}
 
 		} catch (Exception e) {

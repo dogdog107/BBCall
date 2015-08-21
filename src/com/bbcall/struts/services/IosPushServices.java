@@ -12,6 +12,8 @@ import javapns.notification.PushedNotification;
 
 import org.springframework.stereotype.Service;
 
+import com.bbcall.functions.ResultCode;
+
 @Service("iosPushServices")
 public class IosPushServices {
 
@@ -21,8 +23,12 @@ public class IosPushServices {
 	 * 
 	 * 需要javaPNS_2.2.jar包
 	 ***************************************************/
-	private static final String p12FilePath = "";
-	private static final String p12Password = ""; //此处注意导出的证书密码不能为空因为空密码会报错
+	private static String rootPath = System.getProperty("webApp.root");
+	private static String storeRootPath = rootPath.substring(0, rootPath.lastIndexOf("BBCall"));
+	private static final String p12FilePath_customer = storeRootPath + "/WEB-INF/IosCert/customer.p12";
+	private static final String p12Password_customer = "4753"; //此处注意导出的证书密码不能为空因为空密码会报错
+	private static final String p12FilePath_master = storeRootPath + "/WEB-INF/IosCert/master.p12";
+	private static final String p12Password_master = "4753"; //此处注意导出的证书密码不能为空因为空密码会报错
 	
 	/**
 	 * iosPush ios推送服务
@@ -30,7 +36,29 @@ public class IosPushServices {
 	 * @param msg
 	 * @throws Exception
 	 */
-	public static void iosPush(List<String> deviceTokens, String msg) throws Exception {
+	public int iosPush(List<String> deviceTokens, String msg, Integer usertype) throws Exception {
+		
+		if (usertype == null) {
+			return ResultCode.REQUIREINFO_NOTENOUGH;
+		}
+		
+		String p12FilePath = null;
+		String p12Password = null;
+		
+		switch (usertype) {
+		case 1:
+			p12FilePath = p12FilePath_customer;
+			p12Password = p12Password_customer;
+			break;
+		case 2:
+			p12FilePath = p12FilePath_master;
+			p12Password = p12Password_master;
+			break;
+
+		default:
+			return ResultCode.USERTYPE_ERROR;
+		}
+		
 		PushNotificationPayload payLoad = new PushNotificationPayload();
 		payLoad.addAlert(msg); // 消息内容
 		payLoad.addBadge(1); // iphone应用图标上小红圈上的数值
@@ -57,5 +85,6 @@ public class IosPushServices {
 		int failed = failedNotifications.size();
 		int successful = successfulNotifications.size();
 		pushManager.stopConnection();
+		return ResultCode.SUCCESS;
 	}
 }
