@@ -84,6 +84,7 @@ public class ResultCode {
 	
 	// 订单返回码22XXX
 	public static Integer ORDER_READ_FAIL = 22001;// 订单读取失败
+	public static Integer ORDER_INVALID_DATETIME = 22002;// 订单日期错误
 
 	// 论坛错误码3XXXX
 	public static Integer NODEID_ERROR = 30001;// 论坛id不存在
@@ -286,6 +287,10 @@ public class ResultCode {
 			
 		case 22001:
 			errmsg = "unable to read orderlist";
+			break;
+			
+		case 22002:
+			errmsg = "invalid datetime for order";
 			break;
 
 		// 论坛类

@@ -159,5 +159,10 @@ public interface OrderlistMapper {
 	public void change(@Param("order_id") int order_id,
 			@Param("order_status") int order_status,
 			@Param("order_remark") String order_remark);
+	
+	public void changeForMaster(@Param("order_id") int order_id,
+			@Param("order_remark") String order_remark,
+			@Param("order_master_id") String order_master_id,
+			@Param("order_master_name") String order_master_name);
 
 }

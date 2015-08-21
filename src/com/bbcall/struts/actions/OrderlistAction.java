@@ -18,6 +18,7 @@ import com.bbcall.functions.Tools;
 import com.bbcall.mybatis.table.Orderlist;
 import com.bbcall.mybatis.table.User;
 import com.bbcall.struts.services.GcmServices;
+import com.bbcall.struts.services.IosPushServices;
 import com.bbcall.struts.services.OrderlistServices;
 import com.bbcall.struts.services.UserServices;
 import com.opensymphony.xwork2.ActionSupport;
@@ -34,6 +35,9 @@ public class OrderlistAction extends ActionSupport {
 
 	@Autowired
 	private UserServices userServices;
+
+	@Autowired
+	private IosPushServices iosPushServices;
 
 	@Autowired
 	private GcmServices gcmServices;
@@ -131,6 +135,7 @@ public class OrderlistAction extends ActionSupport {
 			// dataMap.put("addResult", true);
 			return "addordersuccess";
 		} else {
+			dataMap.putAll(Tools.JsonHeadMap(result, false));
 			return "addorderfailed";
 		}
 
@@ -197,12 +202,17 @@ public class OrderlistAction extends ActionSupport {
 			userServices.getUserById(order_user_id);
 			Integer drivetype = userServices.getUserinfo().getUser_driver();
 			String registerid = userServices.getUserinfo().getUser_push_token();
+			List<String> iosList = new ArrayList<String>();
+			iosList.add(registerid);
 
 			if (drivetype.equals(1)) {
 				gcmServices
-						.sendtouser("BBCall notification - Your order request has been accepted", registerid);
+						.sendtouser(
+								"BBCall notification - Your order request has been accepted",
+								registerid);
 			} else if (drivetype.equals(2)) {
 				// 苹果推送
+//				iosPushServices.iosPush(iosList, "BBCall notification - Your order request has been accepted");
 			}
 
 		} catch (Exception e) {
@@ -260,13 +270,18 @@ public class OrderlistAction extends ActionSupport {
 
 			Integer drivetype = userServices.getUserinfo().getUser_driver();
 			String registerid = userServices.getUserinfo().getUser_push_token();
+			List<String> iosList = new ArrayList<String>();
+			iosList.add(registerid);
 
 			if (drivetype.equals(1)) {
-				gcmServices.sendtouser("BBCall notification - You have new completed Order", registerid);
+				gcmServices.sendtouser(
+						"BBCall notification - You have new completed Order",
+						registerid);
 			} else if (drivetype.equals(2)) {
 				// 苹果推送
+//				iosPushServices.iosPush(iosList, "BBCall notification - You have new completed Order");
 			}
-			
+
 		} catch (Exception e) {
 			// TODO: handle exception
 			e.printStackTrace();
@@ -953,7 +968,7 @@ public class OrderlistAction extends ActionSupport {
 		int orderstatus = Integer.parseInt(order_status);
 		int orderid = Integer.parseInt(order_id);
 		int result = orderlistServices.change(orderid, orderstatus,
-				order_remark);
+				order_remark, null);
 
 		// Referdoc referdoclist = new Referdoc();
 
@@ -1240,6 +1255,14 @@ public class OrderlistAction extends ActionSupport {
 
 	public void setGcmServices(GcmServices gcmServices) {
 		this.gcmServices = gcmServices;
+	}
+
+	public IosPushServices getIosPushServices() {
+		return iosPushServices;
+	}
+
+	public void setIosPushServices(IosPushServices iosPushServices) {
+		this.iosPushServices = iosPushServices;
 	}
 
 }

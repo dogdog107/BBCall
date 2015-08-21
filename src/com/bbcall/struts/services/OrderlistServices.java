@@ -23,6 +23,7 @@ import com.bbcall.mybatis.table.Preorder;
 import com.bbcall.mybatis.table.Referdoc;
 import com.bbcall.mybatis.table.User;
 import com.github.pagehelper.PageHelper;
+
 @Scope("prototype")
 @Service("orderlistServices")
 public class OrderlistServices {
@@ -114,44 +115,48 @@ public class OrderlistServices {
 
 		}
 
-		orderlist
-				.setOrder_create_time(new Timestamp(System.currentTimeMillis()));
-		orderlist.setOrder_book_time(ts);
-		orderlist.setOrder_book_location(order_book_location);
-		orderlist.setOrder_book_location_code(order_book_location_code);
-		orderlist.setOrder_contact_mobile(order_contact_mobile);
-		orderlist.setOrder_contact_name(order_contact_name);
-		orderlist.setOrder_pic_url(order_pic_url);
-		orderlist.setOrder_description(order_description);
-		orderlist.setOrder_urgent(Boolean.parseBoolean(order_urgent));
-		orderlist.setOrder_urgent_bonus(order_urgent_bonus);
-		orderlist.setOrder_user_id(order_user_id);
-		orderlist.setOrder_type_code(order_type_code);
-		orderlist.setOrder_status(1);
-		orderlist.setOrder_section(order_section);
-		orderlist.setOrder_type(referdoc.getReferdoc_type());
-		orderlist.setOrder_refer_price(referdoc.getReferdoc_price());
-		orderlist.setOrder_score(0);
-		if (referdoc.isReferdoc_flag()) {
-			orderlist.setOrder_price(referdoc.getReferdoc_price());
+		if (ts.after(new Timestamp(System.currentTimeMillis()))) {
+			orderlist.setOrder_create_time(new Timestamp(System
+					.currentTimeMillis()));
+			orderlist.setOrder_book_time(ts);
+			orderlist.setOrder_book_location(order_book_location);
+			orderlist.setOrder_book_location_code(order_book_location_code);
+			orderlist.setOrder_contact_mobile(order_contact_mobile);
+			orderlist.setOrder_contact_name(order_contact_name);
+			orderlist.setOrder_pic_url(order_pic_url);
+			orderlist.setOrder_description(order_description);
+			orderlist.setOrder_urgent(Boolean.parseBoolean(order_urgent));
+			orderlist.setOrder_urgent_bonus(order_urgent_bonus);
+			orderlist.setOrder_user_id(order_user_id);
+			orderlist.setOrder_type_code(order_type_code);
+			orderlist.setOrder_status(1);
+			orderlist.setOrder_section(order_section);
+			orderlist.setOrder_type(referdoc.getReferdoc_type());
+			orderlist.setOrder_refer_price(referdoc.getReferdoc_price());
+			orderlist.setOrder_score(0);
+			if (referdoc.isReferdoc_flag()) {
+				orderlist.setOrder_price(referdoc.getReferdoc_price());
+			} else {
+				orderlist.setOrder_price(order_price);
+			}
+
+			orderlistMapper.addOrder(orderlist);
+
+			// 当传进来的pagenum为空 或者 pagenum == 0 时，显示第一页
+			if (pagenum == null || pagenum == 0)
+				pagenum = 1;
+
+			// PageHelper.startPage(PageNum, PageSize)
+			// 获取第1页，10条内容，当PageSize=0时会查询出全部的结果
+			PageHelper.startPage(pagenum, 10);
+
+			orderlistinfos = orderlistMapper
+					.getUnOrdersByUserAccount(order_user_id);
+
+			return ResultCode.SUCCESS;
 		} else {
-			orderlist.setOrder_price(order_price);
+			return ResultCode.ORDER_INVALID_DATETIME;
 		}
-
-		orderlistMapper.addOrder(orderlist);
-
-		// 当传进来的pagenum为空 或者 pagenum == 0 时，显示第一页
-		if (pagenum == null || pagenum == 0)
-			pagenum = 1;
-
-		// PageHelper.startPage(PageNum, PageSize)
-		// 获取第1页，10条内容，当PageSize=0时会查询出全部的结果
-		PageHelper.startPage(pagenum, 10);
-
-		orderlistinfos = orderlistMapper
-				.getUnOrdersByUserAccount(order_user_id);
-
-		return ResultCode.SUCCESS;
 
 	}
 
@@ -770,15 +775,26 @@ public class OrderlistServices {
 	// ## (1) orderlistinfos
 	// ##
 	// ################################################################################
-	public int change(int order_id, int order_status, String order_remark) {
+	public int change(int order_id, int order_status, String order_remark,
+			String order_master_name) {
 
 		System.out.println(order_remark);
+
+		// if (order_status == 2) {
+
+		// User user = userMapper.
+
+		// return ResultCode.SUCCESS;
+
+		// } else {
 		orderlistMapper.change(order_id, order_status, order_remark);
 
 		orderlistinfo = orderlistMapper.getOrder(order_id);
 		System.out.println("orderlistinfo " + orderlistinfo.getOrder_status());
 
 		return ResultCode.SUCCESS;
+		// }
+
 	}
 
 	// ################################################################################
