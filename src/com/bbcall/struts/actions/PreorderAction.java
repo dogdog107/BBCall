@@ -1,6 +1,7 @@
 package com.bbcall.struts.actions;
 
 import java.sql.Timestamp;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -14,6 +15,7 @@ import com.bbcall.functions.ResultCode;
 import com.bbcall.functions.Tools;
 import com.bbcall.mybatis.table.Preorder;
 import com.bbcall.struts.services.GcmServices;
+import com.bbcall.struts.services.IosPushServices;
 import com.bbcall.struts.services.OrderlistServices;
 import com.bbcall.struts.services.PreorderServices;
 import com.bbcall.struts.services.UserServices;
@@ -29,6 +31,9 @@ public class PreorderAction extends ActionSupport {
 
 	@Autowired
 	private GcmServices gcmServices;
+	
+	@Autowired
+	private IosPushServices iosPushServices;
 
 	@Autowired
 	private OrderlistServices orderlistServices;
@@ -76,11 +81,14 @@ public class PreorderAction extends ActionSupport {
 
 			Integer drivetype = userServices.getUserinfo().getUser_driver();
 			String registerid = userServices.getUserinfo().getUser_push_token();
+			List<String> iosList = new ArrayList<String>();
+			iosList.add(registerid);
 
 			if (drivetype.equals(1)) {
 				gcmServices.sendtouser("BBCall notification - New Master wants to apply your Order", registerid);
 			} else if (drivetype.equals(2)) {
 				// 苹果推送
+				iosPushServices.iosPush(iosList, "BBCall notification - New Master wants to apply your Order");
 			}
 
 		} catch (Exception e) {
@@ -91,7 +99,7 @@ public class PreorderAction extends ActionSupport {
 			int result = preorderServices.addPreorder(preordermasterid, price,
 					preorderid, pagenum);
 
-			if (result == ResultCode.SUCCESS) {
+			if (result == ResultCode.SUCCESS || result == ResultCode.PREORDER_EXIST) {
 				List<Preorder> preorderlist = preorderServices.preorderinfos();
 
 				dataMap.put("preorderlist", preorderlist);

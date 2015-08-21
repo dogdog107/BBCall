@@ -7,10 +7,6 @@
 <meta http-equiv=content-type content="text/html; charset=utf-8" />
 <link rel="shortcut icon" href="${pageContext.request.contextPath }/page/img/BBCallicon_32X32.ico" type="image/x-icon" />
 <link href="${pageContext.request.contextPath }/page/css/mine.css" type="text/css" rel="stylesheet" />
-<script type="text/javascript"
-	src="${pageContext.request.contextPath }/jquery/jquery-1.8.3.js"></script>
-<script type="text/javascript"
-	src="${pageContext.request.contextPath }/jquery/viewwashorderPage.js"></script>
 <script type="text/javascript">
 	var order_status = "${dataMap.orderlist.order_status}";
 	var order_id = "${dataMap.orderlist.order_id}";
@@ -55,10 +51,14 @@
 			</div>
 			
 			<table border="1" width="100%" class="table_update">
-				<tr id="orderid_tr" style="display:none">
+				<tr id="orderid_tr">
 					<td>訂單ID (OrderID)</td>
-					<td>
-					<input name="order_id" id="order_id" />
+					<td  id="orderid">
+					</td>
+				</tr>
+				<tr style="display:none">
+					<td id="orderinput">
+						<input id="order_id" name="order_id" value="${dataMap.orderlist.order_id}"></input>
 					</td>
 				</tr>
 				<tr>
@@ -72,32 +72,27 @@
 				</tr>
 				<tr>
 					<td>預約時間  (Order Book Time)</td>
-					<td>
-					<input readonly="true" id="order_book_time" />
+					<td id="order_book_time">
 					</td>
 				</tr>
 				<tr>
 					<td>預約地點 (Order Book Location)</td>
-					<td>
-					<input readonly="true" id="order_book_location" />
+					<td id="order_book_location">
 					</td>
 				</tr>
 				<tr>
 					<td>創建時間 (Order Create Time)</td>
-					<td>
-					<input readonly="true" id="order_create_time" />
+					<td id="order_create_time">
 					</td>
 				</tr>
 				<tr>
 					<td>聯繫人 (Contact Point)</td>
-					<td>
-					<input readonly="true" id="order_contact_name" />
+					<td id="order_contact_name">
 					</td>
 				</tr>
 				<tr>
 					<td>聯繫電話 (Telephone Number)</td>
-					<td>
-					<input readonly="true" id="order_contact_mobile" />
+					<td id="order_contact_mobile">
 					</td>
 				</tr>
 				
@@ -115,7 +110,7 @@
 				
 				<tr>
 					<td>備註 (Remark)</td>
-					<td><input type="text" name="order_remark" id="order_remark"/></td>
+					<td><input type="text" name="order_remark" id="order_remark" value="${dataMap.orderlist.order_remark}"/></td>
 				</tr>
 				 
 				<tr>
@@ -126,5 +121,9 @@
 		</form>
 	</div>
 	<div class="footer"></div>
+	<script type="text/javascript"
+	src="${pageContext.request.contextPath }/jquery/jquery-1.8.3.js"></script>
+<script type="text/javascript"
+	src="${pageContext.request.contextPath }/jquery/viewwashorderPage.js"></script>
 </body>
 </html>

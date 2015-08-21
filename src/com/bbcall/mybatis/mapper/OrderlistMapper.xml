@@ -403,6 +403,15 @@
 		where 
 		order_id=#{order_id,jdbcType=INTEGER}
 	</update>
+	<update id="changeForMaster">
+		update ORDERLIST set 
+		order_status="2",
+		order_remark=#{order_remark,jdbcType=LONGVARCHAR}, 
+        order_master_id=#{order_master_id,jdbcType=INTEGER},
+		order_master_name=#{order_master_name,jdbcType=VARCHAR} 
+		where 
+		order_id=#{order_id,jdbcType=INTEGER}
+	</update>
 
 	<delete id="deleteOrder" parameterType="int">
 		delete from ORDERLIST  

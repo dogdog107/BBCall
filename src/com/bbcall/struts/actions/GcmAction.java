@@ -11,6 +11,7 @@ import org.springframework.stereotype.Controller;
 import com.bbcall.functions.ResultCode;
 import com.bbcall.functions.Tools;
 import com.bbcall.struts.services.GcmServices;
+import com.bbcall.struts.services.IosPushServices;
 import com.bbcall.struts.services.UserServices;
 import com.opensymphony.xwork2.ActionSupport;
 
@@ -21,6 +22,9 @@ public class GcmAction extends ActionSupport {
 
 	@Autowired
 	private GcmServices gcmServices;
+	
+	@Autowired
+	private IosPushServices iosPushServices;
 
 	@Autowired
 	private UserServices userServices;
@@ -40,9 +44,11 @@ public class GcmAction extends ActionSupport {
 		dataMap.clear(); // dataMap中的数据将会被Struts2转换成JSON字符串，所以这里要先清空其中的数据
 
 		List<String> registeridList = userServices.getPushTokenByDriver(1);
+		List<String> iosregisteridList = userServices.getPushTokenByDriver(2);
 
 		System.out.println(datamsg);
 		int result = gcmServices.sendtogoogle(datamsg, registeridList);
+		iosPushServices.iosPush(iosregisteridList, datamsg);
 
 		System.out.println("result : " + result);
 		if (result == ResultCode.SUCCESS) {
@@ -90,4 +96,13 @@ public class GcmAction extends ActionSupport {
 		this.userServices = userServices;
 	}
 
+	public IosPushServices getIosPushServices() {
+		return iosPushServices;
+	}
+
+	public void setIosPushServices(IosPushServices iosPushServices) {
+		this.iosPushServices = iosPushServices;
+	}
+
+	
 }
