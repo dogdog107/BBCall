@@ -1,5 +1,7 @@
 var global_order_col = '';
 var global_order_value = '';
+var global_where_col = '';
+var global_where_value = '';
 
 function onload() {
 	if (token == "" || token == null) {
@@ -11,15 +13,15 @@ function onload() {
 		$("#div_message").show(300).delay(10000).hide(300);
 		return;
 	}
-	checkUserList(global_order_col, global_order_value, where_col, where_value); // where user_type = 2
+	checkUserList(global_order_col, global_order_value, where_col, where_value, global_where_col, global_where_value); // where user_type = 2
 }
 
 //调用pagechange方法
 function pagechange(pagenum){
-	checkUserList(global_order_col, global_order_value, where_col, where_value, pagenum);
+	checkUserList(global_order_col, global_order_value, where_col, where_value, global_where_col, global_where_value, pagenum);
 }
 
-function checkUserList(order_col, order_value, where_col, where_value, pagenum){
+function checkUserList(order_col, order_value, where_col, where_value, where_col2, where_value2, pagenum){
 	$
 	.ajax({
 		type : "post",
@@ -30,6 +32,8 @@ function checkUserList(order_col, order_value, where_col, where_value, pagenum){
 			"order_value" : order_value,
 			"where_col" : where_col,
 			"where_value" : where_value,
+			"where_col2" : where_col2,
+			"where_value2" : where_value2,
 			"pagenum" : pagenum
 		},
 		success : function(data) {
@@ -229,6 +233,48 @@ function updateStatus(idname, value) {
 	}
 }
 
+function col_name_change(colname_value) {
+	var validateResult = false;
+	$("#search_value_span").hide();
+	$("#order_value").empty();
+	switch (colname_value) {
+	case "user_id":
+	case "user_create_time":
+	case "user_login_time":
+		validateResult = true;
+		$("#order_value").append("<option value='ASC'>升序(ASC)</option>");
+		$("#order_value").append("<option value='DESC'>降序(DESC)</option>");
+		break;
+	case "user_account":
+	case "user_name":
+		validateResult = true;
+		$("#order_value").append("<option value='ASC'>升序(ASC)</option>");
+		$("#order_value").append("<option value='DESC'>降序(DESC)</option>");
+		$("#order_value").append("<option value='custom'>自定義搜索(Search)</option>");
+		break;
+	case "user_status":
+		validateResult = true;
+		$("#order_value").append("<option value='ASC'>升序(ASC)</option>");
+		$("#order_value").append("<option value='DESC'>降序(DESC)</option>");
+		$("#order_value").append("<option value='1'>Active排頭(Active on Top)</option>");
+		$("#order_value").append("<option value='2'>Pause排頭(Pause on Top)</option>");
+		$("#order_value").append("<option value='3'>Pending排頭(Pending on Top)</option>");
+		$("#order_value").append("<option value='4'>Locked排頭(Locked on Top)</option>");
+		break;
+	}
+	if (validateResult){
+		$("#order_value").val("ASC");
+		checkUserList(colname_value, "", where_col, where_value);
+		global_order_col = colname_value;
+		global_order_value = "";
+		$("#message").html("<font color=green> Sorting by " + colname_value + " </font>");
+		$("#div_message").show(300).delay(3000).hide(300);
+	}else{
+		$("#message").html("<font color=red> Invalid value : " + colname_value + " </font>");
+		$("#div_message").show(300).delay(5000).hide(300);
+	}
+}
+
 function order_value_change(order_value) {
 	var validateResult = false;
 	var new_order_col = "";
@@ -238,12 +284,13 @@ function order_value_change(order_value) {
 	case "ASC":
 	case "DESC":
 		validateResult = true;
-		new_order_col = $("#order_col").val();
+		new_order_col = $("#order_col").val() + " " + order_value;
 		break;
 	case "1":
 	case "2":
 	case "3":
 	case "4":
+	case "5":
 		validateResult = true;
 		new_order_col = $("#order_col").val();
 		new_order_value = order_value;
@@ -254,9 +301,9 @@ function order_value_change(order_value) {
 	}
 	if (validateResult){
 		if(order_value == 'custom'){
-			$("#order_value").val("");
-			$("#order_value_message").text(" | " + $("#order_col").find("option:selected").text() + "搜索(Search): "); 
-			$("#order_value_span").show();
+			$("#search_value").val("");
+			$("#search_value_message").text(" | " + $("#col_name").find("option:selected").text() + "搜索(Search): "); 
+			$("#search_value_span").show();
 		}else{
 			checkUserList(new_order_col, new_order_value, where_col, where_value);
 			global_order_col = new_order_col;
@@ -269,4 +316,10 @@ function order_value_change(order_value) {
 		$("#message").html("<font color=red> Invalid value : " + order_value + " </font>");
 		$("#div_message").show(300).delay(5000).hide(300);
 	}
+}
+
+function search_value() {
+	global_where_col = $("#order_col").val();
+	global_where_value = $("#search_value").val();
+	checkUserList(global_order_col, global_order_value, where_col, where_value, global_where_col, global_where_value);
 }

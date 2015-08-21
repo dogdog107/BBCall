@@ -158,13 +158,19 @@
 		user_address, user_skill, user_skill_name, user_description, user_access_group, user_grade,
 		user_status, user_login_time, user_create_time, user_token, user_driver, user_push_token
 		from USER
-		<where>
+		<trim prefix="where" prefixOverrides="AND |OR ">
 			<if test="where_col!=null and where_value!=null and where_col!='' and where_value!=''">  
-            	${where_col}=#{where_value}
-        	</if>  
-		</where>
+           		AND ${where_col}=#{where_value}
+        	</if>
+			<if test="where_col2!=null and where_value2!=null and where_col2!='' and where_value2!=''">  
+           		AND ${where_col2}=#{where_value2}
+        	</if>
+        </trim>
 		<if test="order_col!=null and order_value!=null and order_col!='' and order_value!=''">  
             order by if(${order_col}=#{order_value},0,1),${order_col}
+        </if>
+        <if test="order_col!=null and order_col!='' and (order_value==null or order_value=='')">  
+            order by ${order_col}
         </if>  
 	</select>
 	

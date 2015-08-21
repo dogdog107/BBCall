@@ -48,8 +48,10 @@ public interface UserMapper {
 	// 查找全部user
 	public List<User> listUserWhereOrderBy(
 			@Param("where_col") String where_col, 
-			@Param("order_col") String order_col, 
 			@Param("where_value") String where_value, 
+			@Param("where_col2") String where_col2, 
+			@Param("where_value2") String where_value2, 
+			@Param("order_col") String order_col, 
 			@Param("order_value") String order_value);
 	
 	// 查找全部user

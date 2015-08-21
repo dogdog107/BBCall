@@ -278,8 +278,6 @@ function col_name_change(colname_value) {
 		$("#message").html("<font color=red> Invalid value : " + colname_value + " </font>");
 		$("#div_message").show(300).delay(5000).hide(300);
 	}
-	
-
 }
 
 function specify_value_change(specify_value) {

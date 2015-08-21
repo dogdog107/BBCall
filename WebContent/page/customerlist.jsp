@@ -30,14 +30,17 @@
 		<div class="div_search">
 			<span>
 					<span>排序(Order By):</span>
-					<select name="order_col" id="order_col" onchange="order_col_change(this.value)">
+					<select name="order_col" id="order_col" onchange="col_name_change(this.value)">
+						<option value="user_id">默認排序(ID)</option>
+						<option value="user_account">按用戶帳號(Account)</option>
+						<option value="user_name">按用戶姓名(Name)</option>
 						<option value="user_status">按用戶狀態(Status)</option>
+						<option value="user_create_time">按註冊時間(CreateTime)</option>
+						<option value="user_login_time">按登錄時間(LoginTime)</option>
 					</select>
 					<select name="order_value" id="order_value" onchange="order_value_change(this.value)">
-						<option value='1'>Active排頭(Active on Top)</option>
-						<option value='2'>Pause排頭(Pause on Top)</option>
-						<option value='3'>Pending排頭(Pending on Top)</option>
-						<option value='4'>Locked排頭(Locked on Top)</option>
+						<option value='ASC'>升序(ASC)</option>
+						<option value='DESC'>降序(DESC)</option>
 					</select>
 					<span id="search_value_span" style="display: none">
 						<font color=#1c94c4 id="search_value_message"></font>

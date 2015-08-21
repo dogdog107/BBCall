@@ -78,12 +78,15 @@ public class UserAction extends ActionSupport implements SessionAware{
 	private String order_value;
 	private String where_col;
 	private String where_value;
+	private String where_col2;
+	private String where_value2;
 	
 	// page related parameters
 	private Integer pagenum; // 页面页数
 	
 	// others parameters
 	private String updateResult;
+
 	
 	
 //	private int test;
@@ -490,7 +493,7 @@ public class UserAction extends ActionSupport implements SessionAware{
 	public String checkUserListWhereOrderBy() throws Exception {
 		System.out.println("Here is UserAction.checkUserListWhereOrderBy");
 		dataMap.clear(); // dataMap中的数据将会被Struts2转换成JSON字符串，所以这里要先清空其中的数据
-		int result = userServices.checkUserListWhereOrderBy(order_col, order_value, where_col, where_value, pagenum);// 调用userServices.checkAddressList
+		int result = userServices.checkUserListWhereOrderBy(order_col, order_value, where_col, where_value, where_col2, where_value2, pagenum);// 调用userServices.checkAddressList
 		if (result == ResultCode.SUCCESS) {
 			List<User> userlist = userServices.getUserlist();
 			dataMap.put("userlist", userlist); // 把addresslist对象放入dataMap
@@ -950,11 +953,9 @@ public class UserAction extends ActionSupport implements SessionAware{
 		this.specify_value = specify_value;
 	}
 
-
 	public String getSearch_value() {
 		return search_value;
 	}
-
 
 	public void setSearch_value(String search_value) {
 		this.search_value = search_value;
@@ -1056,5 +1057,17 @@ public class UserAction extends ActionSupport implements SessionAware{
 	}
 	public void setPushtoken(String pushtoken) {
 		this.pushtoken = pushtoken;
+	}
+	public String getWhere_value2() {
+		return where_value2;
+	}
+	public void setWhere_value2(String where_value2) {
+		this.where_value2 = where_value2;
+	}
+	public String getWhere_col2() {
+		return where_col2;
+	}
+	public void setWhere_col2(String where_col2) {
+		this.where_col2 = where_col2;
 	}
 }

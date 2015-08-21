@@ -1194,7 +1194,7 @@ public class UserServices {
 		}
 	}
 	
-	public int checkUserListWhereOrderBy(String order_col, String order_value,String where_col, String where_value, Integer pagenum) {
+	public int checkUserListWhereOrderBy(String order_col, String order_value, String where_col, String where_value, String where_col2, String where_value2, Integer pagenum) {
 		System.out.println("Here is UserServices.checkUserListWhereOrderBy method...");
 		int pageSize = 0;
 		//当传进来的pagenum为空 或者 pagenum == 0 时，显示第一页
@@ -1210,7 +1210,7 @@ public class UserServices {
 	    PageHelper.startPage(pagenum, pageSize);
 	    
 	    //紧跟着的第一个select方法会被分页
-		List<User> userlist = userMapper.listUserWhereOrderBy(where_col, order_col, where_value, order_value);
+		List<User> userlist = userMapper.listUserWhereOrderBy(where_col, where_value, where_col2, where_value2, order_col, order_value);
 		if (userlist.size() > 0) {
 			this.userlist = userlist;
 			return ResultCode.SUCCESS;
@@ -1256,7 +1256,7 @@ public class UserServices {
 		if (driver == null || (driver.equals(1) && driver.equals(2)))
 			return null;
 
-		checkUserListWhereOrderBy(null, null, "user_driver", driver.toString(), -1);
+		checkUserListWhereOrderBy(null, null, "user_driver", driver.toString(), null, null, -1);
 		for (int i = 0; i < this.userlist.size(); i++) {
 			if (!Tools.isEmpty(this.userlist.get(i).getUser_push_token())) {
 				userlist.add(this.userlist.get(i).getUser_push_token());
