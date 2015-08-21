@@ -404,7 +404,7 @@ public class UserServices {
 			if(driver != null && (driver.equals(1) || driver.equals(2))) {
 				if (!Tools.isEmpty(pushtoken)) {
 					user.setUser_driver(driver);
-					user.setUser_push_token(pushtoken);
+					user.setUser_push_token(pushtoken.replaceAll(" ", ""));
 				}
 			}
 			if (usertype == 5) {
@@ -488,7 +488,7 @@ public class UserServices {
 					if(driver != null && (driver.equals(1) || driver.equals(2))) {
 						if (!Tools.isEmpty(pushtoken) && !pushtoken.equals(user.getUser_push_token())) {
 							user.setUser_driver(driver);
-							user.setUser_push_token(pushtoken);
+							user.setUser_push_token(pushtoken.replaceAll(" ", ""));
 							userMapper.updatePushToken(user);
 						}
 					}
@@ -1251,15 +1251,24 @@ public class UserServices {
 	 * @param driver
 	 * @return
 	 */
-	public List<String> getPushTokenByDriver(Integer driver) {
+	public List<String> getPushTokenByDriver(Integer driver, Integer usertype) {
+		System.out.println("Here userServices.getPushTokenByDriver");
 		List<String> userlist = new ArrayList<String>();
 		if (driver == null || (driver.equals(1) && driver.equals(2)))
 			return null;
 
-		checkUserListWhereOrderBy(null, null, "user_driver", driver.toString(), null, null, -1);
-		for (int i = 0; i < this.userlist.size(); i++) {
-			if (!Tools.isEmpty(this.userlist.get(i).getUser_push_token())) {
-				userlist.add(this.userlist.get(i).getUser_push_token());
+		int result;
+		if (usertype == null) {
+			result = checkUserListWhereOrderBy(null, null, "user_driver", driver.toString(), null, null, -1);
+		} else {
+			result = checkUserListWhereOrderBy(null, null, "user_driver", driver.toString(), "user_type", usertype.toString(), -1);
+		}
+		
+		if (result == ResultCode.SUCCESS) {
+			for (int i = 0; i < this.userlist.size(); i++) {
+				if (!Tools.isEmpty(this.userlist.get(i).getUser_push_token())) {
+					userlist.add(this.userlist.get(i).getUser_push_token());
+				}
 			}
 		}
 		return userlist;

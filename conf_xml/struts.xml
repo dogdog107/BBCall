@@ -25,7 +25,7 @@
 			<interceptor name="loginInterceptor"
 				class="com.bbcall.struts.interceptor.LoginInterceptor">
 				<!-- 停用(true)/启用(false) 登录验证拦截器 -->
-				<param name="disable">false</param>
+				<param name="disable">true</param>
 				<param name="excludeAction">
 					user_register,user_registerJson,user_logout,user_forgetPassword,user_forgetPasswordJson,address_checkChildAdsList,address_checkChildAdsListJson,address_checkAdsList,address_checkAdsListJson,advert_showAdvertJson,advert_showActiveAdvertSummaryListJson,upload_orderUploadJson,referdoc_getsubskillJson,referdoc_getchildlistJson
 				</param>

@@ -24,10 +24,9 @@ public class IosPushServices {
 	 * 需要javaPNS_2.2.jar包
 	 ***************************************************/
 	private static String rootPath = System.getProperty("webApp.root");
-	private static String storeRootPath = rootPath.substring(0, rootPath.lastIndexOf("BBCall"));
-	private static final String p12FilePath_customer = storeRootPath + "/WEB-INF/IosCert/customer.p12";
+	private static final String p12FilePath_customer = rootPath + "WEB-INF/IosCert/customer.p12";
 	private static final String p12Password_customer = "4753"; //此处注意导出的证书密码不能为空因为空密码会报错
-	private static final String p12FilePath_master = storeRootPath + "/WEB-INF/IosCert/master.p12";
+	private static final String p12FilePath_master = rootPath + "WEB-INF/IosCert/master.p12";
 	private static final String p12Password_master = "4753"; //此处注意导出的证书密码不能为空因为空密码会报错
 	
 	/**
@@ -66,6 +65,7 @@ public class IosPushServices {
 		PushNotificationManager pushManager = new PushNotificationManager();
 		// true：表示的是产品发布推送服务 false：表示的是产品测试推送服务
 		pushManager.initializeConnection(new AppleNotificationServerBasicImpl(p12FilePath, p12Password, false));
+		System.out.println(p12FilePath);
 		List<PushedNotification> notifications = new ArrayList<PushedNotification>();
 		// 发送push消息
 		if (deviceTokens.size() == 1) {
@@ -84,6 +84,7 @@ public class IosPushServices {
 		List<PushedNotification> successfulNotifications = PushedNotification.findSuccessfulNotifications(notifications);
 		int failed = failedNotifications.size();
 		int successful = successfulNotifications.size();
+		System.out.println("IOS Push Success:" + successful + "  Failed:" + failed);
 		pushManager.stopConnection();
 		return ResultCode.SUCCESS;
 	}
