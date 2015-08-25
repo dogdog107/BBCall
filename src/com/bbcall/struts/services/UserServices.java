@@ -168,7 +168,7 @@ public class UserServices {
 		}
 
 		if (usertype == 2) { // usertype=2时为师傅号，检测注册信息是否完整
-			if (Tools.isEmpty(name, email, language, description)
+			if (Tools.isEmpty(name, email, language)
 					|| mobile == null || gender == null) {
 				return ResultCode.REGISTERINFO_NOTENOUGH;
 			}
