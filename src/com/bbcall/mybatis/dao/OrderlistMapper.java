@@ -120,7 +120,10 @@ public interface OrderlistMapper {
 	public List<Orderlist> getWashOrderlistByParm(
 			@Param("order_status") String order_status,
 			@Param("order_section") String order_section,
-			@Param("order_master_name") String order_master_name);
+			@Param("order_master_name") String order_master_name,
+			@Param("order_book_location_code") String order_book_location_code,
+			@Param("order_id") String order_id,
+			@Param("order_time") String order_time);
 
 	// 更新订单详情
 	public void updateOrder(Orderlist order);

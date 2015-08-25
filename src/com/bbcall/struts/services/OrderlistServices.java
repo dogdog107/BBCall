@@ -999,7 +999,8 @@ public class OrderlistServices {
 	// ##
 	// ################################################################################
 	public int getWashOrderlist(String order_status, String order_section,
-			String order_master_name, Integer pagenum) {
+			String order_master_name, String order_book_location_code,
+			String order_id, String order_time, Integer pagenum) {
 
 		// Map<String, Object> params = new HashMap<String, Object>();
 		//
@@ -1016,7 +1017,8 @@ public class OrderlistServices {
 		PageHelper.startPage(pagenum, 10);
 
 		orderlistinfos = orderlistMapper.getWashOrderlistByParm(order_status,
-				order_section, order_master_name);
+				order_section, order_master_name, order_book_location_code,
+				order_id, order_time);
 
 		return ResultCode.SUCCESS;
 	}
