@@ -70,6 +70,7 @@ public class OrderlistAction extends ActionSupport {
 	private String sortparm;
 	private String order_type_list;
 	private Integer pagenum; // 页面页数
+	private String order_time;
 
 	private List<String> orderFileFileName = new ArrayList<String>(); // 文件名
 
@@ -212,7 +213,11 @@ public class OrderlistAction extends ActionSupport {
 								registerid);
 			} else if (drivetype.equals(2)) {
 				// 苹果推送
-//				iosPushServices.iosPush(iosList, "BBCall notification - Your order request has been accepted");
+				iosPushServices
+						.iosPush(
+								iosList,
+								"BBCall notification - Your order request has been accepted",
+								2);
 			}
 
 		} catch (Exception e) {
@@ -279,7 +284,11 @@ public class OrderlistAction extends ActionSupport {
 						registerid);
 			} else if (drivetype.equals(2)) {
 				// 苹果推送
-//				iosPushServices.iosPush(iosList, "BBCall notification - You have new completed Order");
+				iosPushServices
+						.iosPush(
+								iosList,
+								"BBCall notification - You have new completed Order",
+								2);
 			}
 
 		} catch (Exception e) {
@@ -369,6 +378,42 @@ public class OrderlistAction extends ActionSupport {
 
 	public String unorderlistJson() throws Exception {
 		unorderlist();
+		return "json";
+	}
+
+	public String sortunorderlist() throws Exception {
+		dataMap = new HashMap<String, Object>(); // 新建dataMap来储存JSON字符串
+		dataMap.clear(); // dataMap中的数据将会被Struts2转换成JSON字符串，所以这里要先清空其中的数据
+
+		int result = 1;
+
+		int order_master_id = Integer.parseInt(user_id);
+		int order_sort_status = Integer.parseInt(order_status);
+
+		result = orderlistServices.getUnOrdersForMaster2(order_master_id,
+				order_sort_status, pagenum);
+
+		if (result == ResultCode.SUCCESS) {
+			List<Orderlist> orderlist = orderlistServices.orderlistinfos();
+			// for (int j = 0; j < orderlist.size(); j++) {
+			// referdocServices.getReferdoc(orderlist.get(j)
+			// .getOrder_type_code());
+			// referdoclist.add(referdocServices.referdocinfo());
+			// }
+			dataMap.put("orderlist", orderlist);
+			dataMap.putAll(pageinfo2map.pageInfoMap(orderlist));// 把分页信息放进dataMap
+			// dataMap.put("referdoclist", referdoclist);
+			dataMap.putAll(Tools.JsonHeadMap(result, true));
+			// dataMap.put("resultcode", result);
+			// dataMap.put("errmsg", ResultCode.getErrmsg(result));
+			// dataMap.put("unorderlistResult", true);
+		}
+
+		return SUCCESS;
+	}
+
+	public String sortunorderlistJson() throws Exception {
+		sortunorderlist();
 		return "json";
 	}
 
@@ -702,9 +747,15 @@ public class OrderlistAction extends ActionSupport {
 	public String getwashorderlistasc() throws Exception {
 		dataMap = new HashMap<String, Object>(); // 新建dataMap来储存JSON字符串
 		dataMap.clear(); // dataMap中的数据将会被Struts2转换成JSON字符串，所以这里要先清空其中的数据
+		//
+		// if(order_book_location_code == "0" ||
+		// order_book_location_code.equals("0")) {
+		// order_book_location_code = null;
+		// }
 
 		int result = orderlistServices.getWashOrderlist(order_status,
-				order_section, order_master_name, pagenum);
+				order_section, order_master_name, order_book_location_code,
+				order_id, order_time, pagenum);
 		// List<Referdoc> referdoclist = new ArrayList<Referdoc>();
 
 		if (result == ResultCode.SUCCESS) {
@@ -1263,6 +1314,14 @@ public class OrderlistAction extends ActionSupport {
 
 	public void setIosPushServices(IosPushServices iosPushServices) {
 		this.iosPushServices = iosPushServices;
+	}
+
+	public String getOrder_time() {
+		return order_time;
+	}
+
+	public void setOrder_time(String order_time) {
+		this.order_time = order_time;
 	}
 
 }

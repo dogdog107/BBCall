@@ -380,6 +380,27 @@ public class OrderlistServices {
 		return ResultCode.SUCCESS;
 	}
 
+	public int getUnOrdersForMaster2(int user_id, int order_status,
+			Integer pagenum) {
+
+		String[] skilllist = null;
+		User user = userMapper.getUserById(user_id);
+		skilllist = user.getUser_skill().split(";");
+
+		// 当传进来的pagenum为空 或者 pagenum == 0 时，显示第一页
+		if (pagenum == null || pagenum == 0)
+			pagenum = 1;
+
+		// PageHelper.startPage(PageNum, PageSize)
+		// 获取第1页，10条内容，当PageSize=0时会查询出全部的结果
+		PageHelper.startPage(pagenum, 10);
+
+		orderlistinfos = orderlistMapper.getUnOrdersBySkill2(skilllist,
+				user_id, order_status);
+
+		return ResultCode.SUCCESS;
+	}
+
 	public int getUnOrdersForAdm(Integer pagenum) {
 
 		// 当传进来的pagenum为空 或者 pagenum == 0 时，显示第一页
@@ -999,7 +1020,8 @@ public class OrderlistServices {
 	// ##
 	// ################################################################################
 	public int getWashOrderlist(String order_status, String order_section,
-			String order_master_name, Integer pagenum) {
+			String order_master_name, String order_book_location_code,
+			String order_id, String order_time, Integer pagenum) {
 
 		// Map<String, Object> params = new HashMap<String, Object>();
 		//
@@ -1016,7 +1038,8 @@ public class OrderlistServices {
 		PageHelper.startPage(pagenum, 10);
 
 		orderlistinfos = orderlistMapper.getWashOrderlistByParm(order_status,
-				order_section, order_master_name);
+				order_section, order_master_name, order_book_location_code,
+				order_id, order_time);
 
 		return ResultCode.SUCCESS;
 	}

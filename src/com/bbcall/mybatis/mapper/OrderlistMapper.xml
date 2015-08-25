@@ -142,6 +142,24 @@
 		order by 
 		order_book_time 
 	</select>
+	
+	<select id="getUnOrdersBySkill2" resultMap="OrderResultMap">
+		select * from 
+		ORDERLIST where order_status=#{order_status,jdbcType=INTEGER} 
+		<if test="ordertypelist!=null and ordertypelist.length!=0">
+			and order_type_code in 
+			<foreach collection="ordertypelist" item="order_type_code"
+				index="index" open="(" close=")" separator=",">
+				#{order_type_code}
+			</foreach>
+		</if>
+		 and order_book_time >= CURRENT_TIMESTAMP 
+		 and order_user_id not in (select blacklist_user_id from 
+		BLACKLIST where 
+		blacklist_master_id=#{order_master_id,jdbcType=INTEGER}) 
+		order by 
+		order_book_time 
+	</select>
 
 	<select id="getOrdersByMasterSkill2" resultMap="OrderResultMap">
 		select * from 
@@ -289,6 +307,18 @@
 		<if test="order_master_name != null and order_master_name != ''">
 
 			and order_master_name = #{order_master_name}
+		</if>
+		<if test="order_book_location_code != null and order_book_location_code != ''">
+
+			and order_book_location_code = #{order_book_location_code}
+		</if>
+		<if test="order_id != null and order_id != ''">
+
+			and order_id = #{order_id}
+		</if>
+		<if test="order_time != null and order_time != ''">
+
+			and date_format(order_book_time,'%m/%d/%Y') = #{order_time}
 		</if>
 		 order by order_book_time asc, order_create_time asc
 	</select>
