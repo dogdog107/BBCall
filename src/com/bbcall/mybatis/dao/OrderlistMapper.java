@@ -20,35 +20,16 @@ public interface OrderlistMapper {
 	public List<Orderlist> getComOrdersByUserAccount(
 			@Param("order_user_id") int order_user_id);
 
-	// // 通过订单类型、师傅账号、技能类型取得未完成订单列表
-	// public List<Orderlist> getOrdersByMasterLocation(
-	// @Param("order_status") int order_status,
-	// @Param("order_book_location_code") int order_book_location_code,
-	// @Param("order_master_id") int order_master_id);
-	//
-	// // 通过订单类型、师傅账号、技能类型取得未完成订单列表
-	// public List<Orderlist> getOrdersByMasterLocation2(
-	// @Param("order_status") int order_status,
-	// @Param("order_book_location_code") int order_book_location_code,
-	// @Param("order_master_id") int order_master_id);
-
-	// // 通过订单类型、师傅账号、技能类型取得未完成订单列表
-	// public List<Orderlist> getOrdersByMasterSkill(
-	// @Param("order_status") int order_status,
-	// @Param("order_type_list") String[] order_type_list,
-	// @Param("order_master_id") int order_master_id);
-
 	// 通过订单类型、师傅账号、技能类型取得未完成订单列表
 	public List<Orderlist> getUnOrdersBySkill(
 			@Param("ordertypelist") String[] ordertypelist,
 			@Param("order_master_id") int order_master_id);
-
-	//
-	// // 通过订单类型、师傅账号、技能类型取得未完成订单列表
-	// public List<Orderlist> getOrdersByMasterSkill2(
-	// @Param("order_status") int order_status,
-	// @Param("order_type_code") int order_type_code,
-	// @Param("order_master_id") int order_master_id);
+	
+	// 通过订单类型、师傅账号、技能类型取得未完成订单列表
+		public List<Orderlist> getUnOrdersBySkill2(
+				@Param("ordertypelist") String[] ordertypelist,
+				@Param("order_master_id") int order_master_id,
+				@Param("order_status") int order_status);
 
 	// 通过师傅账号/技能类型/订单地区取得未完成订单列表 (按发布时间排序)
 	public List<Orderlist> getUnOrdersByMasterLocation(
@@ -56,12 +37,6 @@ public interface OrderlistMapper {
 			@Param("order_book_location_code") String order_book_location_code,
 			@Param("sortparm") String sortparm,
 			@Param("order_master_id") int order_master_id);
-
-	// // 通过师傅账号/技能类型/订单地区取得未完成订单列表 (按工作截止时间排序)
-	// public List<Orderlist> getUnOrdersByBookTime(
-	// @Param("order_type_code") int order_type_code,
-	// @Param("order_book_location_code") int order_book_location_code,
-	// @Param("order_master_id") int order_master_id);
 
 	// 通过师傅账号取得已完成订单列表
 	public List<Orderlist> getComOrdersByMasterAccount(
@@ -162,7 +137,7 @@ public interface OrderlistMapper {
 	public void change(@Param("order_id") int order_id,
 			@Param("order_status") int order_status,
 			@Param("order_remark") String order_remark);
-	
+
 	public void changeForMaster(@Param("order_id") int order_id,
 			@Param("order_remark") String order_remark,
 			@Param("order_master_id") String order_master_id,

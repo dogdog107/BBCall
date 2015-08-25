@@ -380,6 +380,27 @@ public class OrderlistServices {
 		return ResultCode.SUCCESS;
 	}
 
+	public int getUnOrdersForMaster2(int user_id, int order_status,
+			Integer pagenum) {
+
+		String[] skilllist = null;
+		User user = userMapper.getUserById(user_id);
+		skilllist = user.getUser_skill().split(";");
+
+		// 当传进来的pagenum为空 或者 pagenum == 0 时，显示第一页
+		if (pagenum == null || pagenum == 0)
+			pagenum = 1;
+
+		// PageHelper.startPage(PageNum, PageSize)
+		// 获取第1页，10条内容，当PageSize=0时会查询出全部的结果
+		PageHelper.startPage(pagenum, 10);
+
+		orderlistinfos = orderlistMapper.getUnOrdersBySkill2(skilllist,
+				user_id, order_status);
+
+		return ResultCode.SUCCESS;
+	}
+
 	public int getUnOrdersForAdm(Integer pagenum) {
 
 		// 当传进来的pagenum为空 或者 pagenum == 0 时，显示第一页
