@@ -10,8 +10,15 @@ function pagechange(pagenum){
 	getwashorder(global_status, global_section, global_mastername,global_booktime,global_orderid, global_bookcode,pagenum);
 }
 
-function onload() {
-	getwashorder();
+function onload(global_status, global_section, global_mastername,global_booktime,global_orderid, global_bookcode) {
+	getsub();
+	global_status =  $("#order_status").val();
+	global_section = $("#order_section").val();
+	global_mastername = $("#order_master_name").val();
+	global_booktime = $("#order_time").val();
+	global_bookcode = $("#order_book_location_code").val();
+	global_orderid = $("#order_id").val();
+	getwashorder(global_status, global_section, global_mastername,global_booktime,global_orderid, global_bookcode);
 }
 
 function getwashorder(status,section,mastername,booktime,orderid,bookcode,pagenumber) {
@@ -113,18 +120,22 @@ function searchwash() {
 
 function getsub() {
 	var addresscode = $("#adscode_2").val();
+	$("#order_book_location_code").empty();
 	if (addresscode == 1) {
+		$("#order_book_location_code").append("<option value=''>--請選擇鎮區--</option>");
 		$("#order_book_location_code").append("<option value='810101'>中西區</option>");
 		$("#order_book_location_code").append("<option value='810102'>灣仔區</option>");
 		$("#order_book_location_code").append("<option value='810103'>東區</option>");
 		$("#order_book_location_code").append("<option value='810104'>南區</option>");
 	} else if (addresscode == 2) {
+		$("#order_book_location_code").append("<option value=''>--請選擇鎮區--</option>");
 		$("#order_book_location_code").append("<option value='810201'>油尖旺區</option>");
 		$("#order_book_location_code").append("<option value='810202'>深水埗區</option>");
 		$("#order_book_location_code").append("<option value='810203'>九龍城區</option>");
 		$("#order_book_location_code").append("<option value='810204'>黃大仙區</option>");
 		$("#order_book_location_code").append("<option value='810205'>觀塘區</option>");
 	} else if (addresscode == 3) {
+		$("#order_book_location_code").append("<option value=''>--請選擇鎮區--</option>");
 		$("#order_book_location_code").append("<option value='810301'>北區</option>");
 		$("#order_book_location_code").append("<option value='810302'>大埔區</option>");
 		$("#order_book_location_code").append("<option value='810303'>沙田區</option>");
@@ -134,6 +145,8 @@ function getsub() {
 		$("#order_book_location_code").append("<option value='810307'>元朗區</option>");
 		$("#order_book_location_code").append("<option value='810308'>葵青區</option>");
 		$("#order_book_location_code").append("<option value='810309'>離島區</option>");
+	} else {
+		$("#order_book_location_code").append("<option value=''>--請選擇鎮區--</option>");
 	}
 	
 }

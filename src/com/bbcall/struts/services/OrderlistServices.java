@@ -1084,6 +1084,25 @@ public class OrderlistServices {
 		return ResultCode.SUCCESS;
 	}
 
+	public int sortOrderlist(String order_status, String order_master_name,
+			String order_book_location_code, String order_id,
+			String order_time, Integer pagenum) {
+
+		// 当传进来的pagenum为空 或者 pagenum == 0 时，显示第一页
+		if (pagenum == null || pagenum == 0)
+			pagenum = 1;
+
+		// PageHelper.startPage(PageNum, PageSize)
+		// 获取第1页，10条内容，当PageSize=0时会查询出全部的结果
+		PageHelper.startPage(pagenum, 10);
+
+		orderlistinfos = orderlistMapper.getOrderlistByParm(order_status,
+				order_master_name, order_book_location_code, order_id,
+				order_time);
+
+		return ResultCode.SUCCESS;
+	}
+
 	public int getOrderlist1(Integer pagenum) {
 
 		// 当传进来的pagenum为空 或者 pagenum == 0 时，显示第一页

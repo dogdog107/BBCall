@@ -7,7 +7,7 @@
 <meta http-equiv=content-type content="text/html; charset=utf-8" />
 <link rel="shortcut icon" href="${pageContext.request.contextPath }/page/img/BBCallicon_32X32.ico" type="image/x-icon" />
 <link href="${pageContext.request.contextPath }/page/css/mine.css" type="text/css" rel="stylesheet" />
-
+<link href="${pageContext.request.contextPath }/page/css/tcal.css" type="text/css" rel="stylesheet" />
 
 <%
 	String path = request.getContextPath();
@@ -34,8 +34,12 @@
 
 	<div class="div_search">
 		<span>
+			<span>预约时间：</span>
+				<input type="text" name="order_time" id="order_time" class="tcal"></input>
+				&nbsp;
 				訂單狀態：
 				<select id="order_status" name="order_status" style="width: 100px;">
+					<option value="">--請選擇--</option>
 					<option value="1">新建訂單</option>
 					<option value="7">已出價訂單</option>
 					<option value="2">待評價訂單</option>
@@ -44,8 +48,28 @@
 					<option value="5">正在清洗</option>
 					<option value="6">正在配送</option>
 				</select>
-				<input id="global_user_id" type="text" name="user_id" value="${sessionScope.user_id}" style="display:none"></input>
+		</span>
+	</div>
+	<div class="div_search">
+		<span>
+				<span>地点：</span>
+				<select id="adscode_2" onchange="getsub()">
+					<option value="0">--請選擇城市--</option>
+					<option value="1">香港島</option>
+					<option value="2">九龍</option>
+					<option value="3">新界</option>
+				</select>
+				<select id="order_book_location_code" name="order_book_location_code">
+					<option value="">--請選擇鎮區--</option>
+				</select>
+				&nbsp;
+				<span>序号：</span>
+				<input type="text" name="order_id" id="order_id"></input>
+				&nbsp;
+				<span>師傅名：</span>
+				<input type="text" name="order_master_name" id="order_master_name"></input>
 				<input value="查詢" type="submit" onclick="searchorder()"/>
+
 		</span>
 	</div>
 	<div id="div_message" class="div_message" style="display: none">
@@ -106,5 +130,7 @@
 	src="${pageContext.request.contextPath }/jquery/orderlistPage.js?token=${sessionScope.user.user_token}"></script>
 	<script type="text/javascript"
 		src="${pageContext.request.contextPath }/jquery/paging.js"></script>
+	<script type="text/javascript"
+		src="${pageContext.request.contextPath }/jquery/tcal.js"></script>
 </body>
 </html>

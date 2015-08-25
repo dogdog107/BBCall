@@ -322,6 +322,34 @@
 		</if>
 		 order by order_book_time asc, order_create_time asc
 	</select>
+	
+	<select id="getOrderlistByParm" resultMap="OrderResultMap">
+		select * from 
+		ORDERLIST 
+		<where>
+		<if test="order_status != null and order_status != ''">
+
+			and order_status = #{order_status}
+		</if>
+		<if test="order_master_name != null and order_master_name != ''">
+
+			and order_master_name = #{order_master_name}
+		</if>
+		<if test="order_book_location_code != null and order_book_location_code != ''">
+
+			and order_book_location_code = #{order_book_location_code}
+		</if>
+		<if test="order_id != null and order_id != ''">
+
+			and order_id = #{order_id}
+		</if>
+		<if test="order_time != null and order_time != ''">
+
+			and date_format(order_book_time,'%m/%d/%Y') = #{order_time}
+		</if>
+		</where> 
+		 order by order_book_time asc, order_create_time asc
+	</select>
 
 	<select id="getWashOrders" resultMap="OrderResultMap">
 		select * from ORDERLIST 

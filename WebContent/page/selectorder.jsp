@@ -115,7 +115,7 @@
 				 
 				<tr>
 					<td colspan="2" align="center">
-					<input type="button" value="取消(Cancel)" Onclick="location='${pageContext.request.contextPath}/orderlist_unorderlist.action?user_id=${sessionScope.user_id}&offset=0'" /></td>
+					<input type="button" value="取消(Cancel)" Onclick="history.go(-1)" /></td>
 				</tr>
 			</table>
 		</form>
