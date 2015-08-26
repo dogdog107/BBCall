@@ -199,8 +199,7 @@
 
 	<select id="getUnOrdersByMasterLocation" resultMap="OrderResultMap">
 		select * from  
-		ORDERLIST where (order_status=1 or order_status=7)  
-		and order_type_code in 
+		ORDERLIST where order_type_code in 
 		<foreach collection="ordertypelist" item="order_type_code"
 			index="index" open="(" close=")" separator=",">
 			#{order_type_code}
@@ -209,7 +208,15 @@
 
 		 and order_book_location_code=#{order_book_location_code} 
 		</if>
-		 and order_book_time >= CURRENT_TIMESTAMP
+		<choose>
+			<when test="order_status != null and order_status != ''">
+			 and order_status=#{order_status}  
+			</when>
+			<otherwise>
+			 and (order_status=1 or order_status=7) 
+			</otherwise>
+		</choose>
+		 and order_book_time >= CURRENT_TIMESTAMP 
 		 and order_user_id 
 		not in (select blacklist_user_id from 
 		BLACKLIST where 

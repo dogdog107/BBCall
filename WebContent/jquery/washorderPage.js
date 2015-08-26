@@ -11,7 +11,6 @@ function pagechange(pagenum){
 }
 
 function onload(global_status, global_section, global_mastername,global_booktime,global_orderid, global_bookcode) {
-	getsub();
 	global_status =  $("#order_status").val();
 	global_section = $("#order_section").val();
 	global_mastername = $("#order_master_name").val();

@@ -446,7 +446,7 @@ public class OrderlistServices {
 	// ################################################################################
 
 	public int getUnOrderlist(String skilllist, String locationlist,
-			int master_id, String sortparm, Integer pagenum) {
+			int master_id, String order_status, String sortparm, Integer pagenum) {
 
 		orderlistinfos = null;
 		String[] sklist = null;
@@ -467,7 +467,7 @@ public class OrderlistServices {
 		PageHelper.startPage(pagenum, 10);
 
 		orderlistinfos = orderlistMapper.getUnOrdersByMasterLocation(sklist,
-				locationlist, sortparm, master_id);
+				locationlist, order_status, sortparm, master_id);
 
 		return ResultCode.SUCCESS;
 	}

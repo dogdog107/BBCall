@@ -491,9 +491,9 @@ public class OrderlistAction extends ActionSupport {
 		dataMap.clear(); // dataMap中的数据将会被Struts2转换成JSON字符串，所以这里要先清空其中的数据
 
 		int order_user_id = Integer.parseInt(user_id);
-
+		
 		int result = orderlistServices.getUnOrderlist(skilllist, locationlist,
-				order_user_id, sortparm, pagenum);
+				order_user_id, order_status, sortparm, pagenum);
 		// List<Referdoc> referdoclist = new ArrayList<Referdoc>();
 
 		if (result == ResultCode.SUCCESS) {

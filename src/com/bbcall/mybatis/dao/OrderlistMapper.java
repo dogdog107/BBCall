@@ -35,6 +35,7 @@ public interface OrderlistMapper {
 	public List<Orderlist> getUnOrdersByMasterLocation(
 			@Param("ordertypelist") String[] ordertypelist,
 			@Param("order_book_location_code") String order_book_location_code,
+			@Param("order_status") String order_status,
 			@Param("sortparm") String sortparm,
 			@Param("order_master_id") int order_master_id);
 

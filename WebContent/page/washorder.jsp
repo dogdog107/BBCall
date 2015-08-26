@@ -68,14 +68,26 @@
 		<div class="div_search">
 		<span>
 				<span>地点：</span>
-				<select id="adscode_2" onchange="getsub()">
-					<option value="0">--請選擇城市--</option>
-					<option value="1">香港島</option>
-					<option value="2">九龍</option>
-					<option value="3">新界</option>
-				</select>
 				<select id="order_book_location_code" name="order_book_location_code">
-					<option value="">--請選擇鎮區--</option>
+					<option value="">--請選擇--</option>
+					<option value='810101'>香港島->中西區</option>
+					<option value='810102'>香港島->灣仔區</option>
+					<option value='810103'>香港島->東區</option>
+					<option value='810104'>香港島->南區</option>
+					<option value='810201'>九龍->油尖旺區</option>
+					<option value='810202'>九龍->深水埗區</option>
+					<option value='810203'>九龍->九龍城區</option>
+					<option value='810204'>九龍->黃大仙區</option>
+					<option value='810205'>九龍->觀塘區</option>
+					<option value='810301'>新界->北區</option>
+					<option value='810302'>新界->大埔區</option>
+					<option value='810303'>新界->沙田區</option>
+					<option value='810304'>新界->西貢區</option>
+					<option value='810305'>新界->荃灣區</option>
+					<option value='810306'>新界->屯門區</option>
+					<option value='810307'>新界->元朗區</option>
+					<option value='810308'>新界->葵青區</option>
+					<option value='810309'>新界->離島區</option>
 				</select>
 				&nbsp;
 				<span>序号：</span>
