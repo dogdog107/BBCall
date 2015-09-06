@@ -117,6 +117,14 @@ public class LoginInterceptor extends AbstractInterceptor {
 			// 查看username
 			String[] usernameParam = (String[]) invocation
 					.getInvocationContext().getParameters().get("username");
+			if (usernameParam == null) {
+				accessResult =ResultCode.REQUIREINFO_NOTENOUGH;
+				errmsg = "(Login) Require information not enough.";
+				logger.info("userOpr:[null][" + actionName + "]" + errmsg);
+				System.out.println(errmsg);
+				return invocation.invoke();
+			}
+			
 			String username = usernameParam[0];
 			if (!Tools.isEmpty(username)) {
 				int checkUserNameResult = userServices.checkUserName(username);// 调用checkUserName方法并得到返回码
