@@ -13,6 +13,7 @@
     	<result column="user_id" property="user_id" jdbcType="INTEGER" />
     	<result column="user_account" property="user_account" jdbcType="VARCHAR" />
     	<result column="user_skill" property="user_skill" jdbcType="INTEGER" />
+    	<result column="user_skill_name" property="user_skill_name" jdbcType="VARCHAR" />
     	<result column="user_skill_url" property="user_skill_url" jdbcType="VARCHAR" />
     	<result column="user_skill_status" property="user_skill_status" jdbcType="INTEGER" />
     	<result column="user_skill_create_time" property="user_skill_create_time" jdbcType="TIMESTAMP" />
@@ -32,12 +33,14 @@
 		US.user_id AS user_id,
 		U.user_account AS user_account,
 		US.user_skill AS user_skill,
+		RD.referdoc_type AS user_skill_name,
 		user_skill_url,
 		user_skill_status,
 		user_skill_create_time
 		FROM
 		USERSKILL US
 		LEFT JOIN USER U ON US.user_id = U.user_id
+		LEFT JOIN REFERDOC RD ON US.user_skill = RD.referdoc_id
 		WHERE
 		US.user_id = #{user_id}
 	</select>
@@ -49,12 +52,14 @@
 		US.user_id AS user_id,
 		U.user_account AS user_account,
 		US.user_skill AS user_skill,
+		RD.referdoc_type AS user_skill_name,
 		user_skill_url,
 		user_skill_status,
 		user_skill_create_time
 		FROM
 		USERSKILL US
 		LEFT JOIN USER U ON US.user_id = U.user_id
+		LEFT JOIN REFERDOC RD ON US.user_skill = RD.referdoc_id
 		WHERE
 		userskill_id = #{userskill_id}
 	</select>
@@ -65,12 +70,14 @@
 		US.user_id AS user_id,
 		U.user_account AS user_account,
 		US.user_skill AS user_skill,
+		RD.referdoc_type AS user_skill_name,
 		user_skill_url,
 		user_skill_status,
 		user_skill_create_time
 		FROM
 		USERSKILL US
 		LEFT JOIN USER U ON US.user_id = U.user_id
+		LEFT JOIN REFERDOC RD ON US.user_skill = RD.referdoc_id
 		ORDER BY
 		IF (user_skill_status = 0, 0, 1), user_skill_create_time DESC
 	</select>
@@ -81,12 +88,14 @@
 		US.user_id AS user_id,
 		U.user_account AS user_account,
 		US.user_skill AS user_skill,
+		RD.referdoc_type AS user_skill_name,
 		user_skill_url,
 		user_skill_status,
 		user_skill_create_time
 		FROM
 		USERSKILL US
 		LEFT JOIN USER U ON US.user_id = U.user_id
+		LEFT JOIN REFERDOC RD ON US.user_skill = RD.referdoc_id
 		where
 		US.user_id=#{user_id} AND US.user_skill=#{user_skill}
 	</select>

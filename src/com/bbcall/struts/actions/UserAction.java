@@ -19,6 +19,7 @@ import com.bbcall.functions.ObjectToMap;
 import com.bbcall.functions.Tools;
 import com.bbcall.mybatis.table.User;
 import com.bbcall.mybatis.table.UserSkill;
+import com.bbcall.struts.services.DevicePushServices;
 import com.bbcall.struts.services.MailServices;
 import com.bbcall.struts.services.UserServices;
 import com.bbcall.struts.services.UserSkillServices;

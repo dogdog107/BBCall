@@ -28,6 +28,8 @@ public class UserSkillServices {
 	private ReferdocServices referdocServices;
 	@Autowired
 	private FileUploadServices fileUploadServices;
+	@Autowired
+	private DevicePushServices devicePushServices;
 	
 	private List<UserSkill> userSkillList;
 	
@@ -155,13 +157,13 @@ public class UserSkillServices {
 		
 		UserSkill tempUserSkill = new UserSkill();
 		tempUserSkill = userSkillMapper.getUserSkillByUserIdAndSkill(userid, userskill);
-		
+		User tempUser = userMapper.getUserById(userid);
+		String pushMsg = "";
 		if (tempUserSkill != null) {
 			switch (userskillstatus) {
 			case 0: // 未审核状态
-				break;
+				return ResultCode.SUCCESS;
 			case 1: // 审核通过
-				User tempUser = userMapper.getUserById(userid);
 				String orgUserSkill = tempUser.getUser_skill();
 				if (!orgUserSkill.contains(userskill.toString())) {
 					orgUserSkill = orgUserSkill + ";" + userskill.toString();
@@ -188,14 +190,24 @@ public class UserSkillServices {
 				}
 				tempUser.setUser_skill_name(skillName); // 更新对应用户的技能信息
 				userMapper.updateUser(tempUser);
+				
+				// 推送的文字
+				pushMsg = "Dear " + tempUser.getUser_name() + ", Your Skill has been approved by BBCall Admin.";
 				break;
 			case 2: // 审核不通过
+				
+				// 推送的文字
+				pushMsg = "Dear " + tempUser.getUser_name() + ", Your Skill has been rejected by BBCall Admin, please re-submit again.";
 				break;
 			default:
 				return ResultCode.REQUIREINFO_ERROR;
 			}
 			tempUserSkill.setUser_skill_status(userskillstatus);
 			userSkillMapper.updateUserSkillById(tempUserSkill);
+			
+			// 审核消息推送
+			devicePushServices.devicePush(tempUser.getUser_driver(), tempUser.getUser_push_token(), pushMsg, tempUser.getUser_type());
+			
 			return ResultCode.SUCCESS;
 		} else {
 			return ResultCode.USERSKILLINFO_NOTEXIST;

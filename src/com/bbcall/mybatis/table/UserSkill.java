@@ -16,6 +16,7 @@ public class UserSkill {
 	private int userskill_id;
 	private int user_id;
 	private Integer user_skill;
+	private String user_skill_name;
 	private String user_skill_url;
 	private Integer user_skill_status;
 	private Timestamp user_skill_create_time;
@@ -76,6 +77,14 @@ public class UserSkill {
 
 	public void setUser_account(String user_account) {
 		this.user_account = user_account;
+	}
+
+	public String getUser_skill_name() {
+		return user_skill_name;
+	}
+
+	public void setUser_skill_name(String user_skill_name) {
+		this.user_skill_name = user_skill_name;
 	}
 
 }
