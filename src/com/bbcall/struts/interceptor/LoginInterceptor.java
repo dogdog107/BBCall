@@ -122,7 +122,7 @@ public class LoginInterceptor extends AbstractInterceptor {
 				errmsg = "(Login) Require information not enough.";
 				logger.info("userOpr:[null][" + actionName + "]" + errmsg);
 				System.out.println(errmsg);
-				return invocation.invoke();
+				return "login";
 			}
 			
 			String username = usernameParam[0];

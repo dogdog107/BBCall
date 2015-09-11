@@ -23,9 +23,9 @@ public class IosPushServices {
 	 * 需要javaPNS_2.2.jar包
 	 ***************************************************/
 	private static String rootPath = System.getProperty("webApp.root");
-	private static final String p12FilePath_customer = rootPath + "WEB-INF/IosCert/customer.p12";
+	private static final String p12FilePath_customer = rootPath + "WEB-INF/IosCert/customer_prod.p12";
 	private static final String p12Password_customer = "4753"; //此处注意导出的证书密码不能为空因为空密码会报错
-	private static final String p12FilePath_master = rootPath + "WEB-INF/IosCert/master.p12";
+	private static final String p12FilePath_master = rootPath + "WEB-INF/IosCert/master_prod.p12";
 	private static final String p12Password_master = "4753"; //此处注意导出的证书密码不能为空因为空密码会报错
 	
 	private PushQueue customerQueue;

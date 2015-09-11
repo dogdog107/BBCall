@@ -27,7 +27,7 @@
 				<!-- 停用(true)/启用(false) 登录验证拦截器 -->
 				<param name="disable">false</param>
 				<param name="excludeAction">
-					user_register,user_registerJson,user_logout,user_forgetPassword,user_forgetPasswordJson,address_checkChildAdsList,address_checkChildAdsListJson,address_checkAdsList,address_checkAdsListJson,advert_showAdvertJson,advert_showActiveAdvertSummaryListJson,upload_orderUploadJson,referdoc_getsubskillJson,referdoc_getchildlistJson
+					user_register,user_registerJson,user_logout,user_forgetPassword,user_forgetPasswordJson,address_checkChildAdsList,address_checkChildAdsListJson,address_checkAdsList,address_checkAdsListJson,advert_showAdvertJson,advert_showActiveAdvertSummaryListJson,upload_orderUploadJson,referdoc_getsubskillJson,referdoc_getchildlistJson,system_getAndroidVersionJson,system_getIosVersionJson,system_getServerVersionJson
 				</param>
 				<param name="sessionCheckName">user_token</param>
 			</interceptor>
@@ -218,13 +218,13 @@
 				<param name="root">dataMap</param>
 			</result>
 		</action>
-		
+
 		<action name="gcm_*" method="{1}" class="gcmAction">
 
 			<result name="success">/page/sendsuccess.jsp</result>
-			
+
 			<result name="exception">/page/senderror.jsp</result>
-			
+
 			<result type="json" name="json">
 				<param name="root">dataMap</param>
 				<!-- <param name="excludeProperties">userinfo.user_password</param> -->
@@ -312,6 +312,13 @@
 				<!-- 设置缓冲大小 -->
 				<param name="bufferSize">2048</param>
 			</result>
+			<result type="json" name="json">
+				<param name="root">dataMap</param>
+			</result>
+		</action>
+		
+		<!-- System Action -->
+		<action name="system_*" method="{1}" class="systemAction">
 			<result type="json" name="json">
 				<param name="root">dataMap</param>
 			</result>
