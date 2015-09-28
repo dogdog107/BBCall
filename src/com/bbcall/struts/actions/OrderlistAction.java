@@ -210,14 +210,14 @@ public class OrderlistAction extends ActionSupport {
 				gcmServices
 						.sendtouser(
 								"BBCall notification - Your order request has been accepted",
-								registerid);
+								registerid, orderid);
 			} else if (drivetype.equals(2)) {
 				// 苹果推送
 				iosPushServices
 						.iosPush(
 								iosList,
 								"BBCall notification - Your order request has been accepted",
-								2);
+								2, orderid);
 			}
 
 		} catch (Exception e) {
@@ -281,14 +281,14 @@ public class OrderlistAction extends ActionSupport {
 			if (drivetype.equals(1)) {
 				gcmServices.sendtouser(
 						"BBCall notification - You have new completed Order",
-						registerid);
+						registerid, orderid);
 			} else if (drivetype.equals(2)) {
 				// 苹果推送
 				iosPushServices
 						.iosPush(
 								iosList,
 								"BBCall notification - You have new completed Order",
-								2);
+								2, orderid);
 			}
 
 		} catch (Exception e) {

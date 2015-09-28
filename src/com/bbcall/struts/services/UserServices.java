@@ -168,10 +168,11 @@ public class UserServices {
 		}
 
 		if (usertype == 2) { // usertype=2时为师傅号，检测注册信息是否完整
-			if (Tools.isEmpty(name, email, language)
-					|| mobile == null || gender == null) {
-				return ResultCode.REGISTERINFO_NOTENOUGH;
-			}
+// 苹果审核不通过。。师傅注册模块资料太全
+//			if (Tools.isEmpty(name, email, language)
+//					|| mobile == null || gender == null) {
+//				return ResultCode.REGISTERINFO_NOTENOUGH;
+//			}
 			registermode = checkRegisterMode(token); // 判断register的模式:1=user,2=admin
 			defaultaccess = "master_default"; // 分配master_default权限
 		}

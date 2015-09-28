@@ -47,7 +47,7 @@ public class GcmAction extends ActionSupport {
 		List<String> registeridList = userServices.getPushTokenByDriver(1, null);
 
 		System.out.println(datamsg);
-		int result = gcmServices.sendtogoogle(datamsg, registeridList);
+		int result = gcmServices.sendtogoogle(datamsg, registeridList, null);
 
 		System.out.println("result : " + result);
 		if (result == ResultCode.SUCCESS) {
@@ -77,7 +77,7 @@ public class GcmAction extends ActionSupport {
 
 		int result = 0;
 		if (userPushTokenList != null && userPushTokenList.size() > 0) {
-			result = iosPushServices.iosPush(userPushTokenList, datamsg, 1);
+			result = iosPushServices.iosPush(userPushTokenList, datamsg, 1, null);
 			if (result != ResultCode.SUCCESS) {
 				dataMap.putAll(Tools.JsonHeadMap(result, false));
 				return "exception";
@@ -85,7 +85,7 @@ public class GcmAction extends ActionSupport {
 		}
 
 		if (masterPushTokenList != null && masterPushTokenList.size() > 0) {
-			result = iosPushServices.iosPush(masterPushTokenList, datamsg, 2);
+			result = iosPushServices.iosPush(masterPushTokenList, datamsg, 2, null);
 			if (result != ResultCode.SUCCESS) {
 				dataMap.putAll(Tools.JsonHeadMap(result, false));
 				return "exception";

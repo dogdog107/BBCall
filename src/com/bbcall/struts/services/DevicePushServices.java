@@ -18,7 +18,7 @@ public class DevicePushServices {
 	private IosPushServices iosPushServices;
 
 	public int devicePush(Integer deviceType, String deviceToken, String msg,
-			Integer userType) {
+			Integer userType, Integer orderId) {
 		if (deviceType == null || Tools.isEmpty(deviceToken))
 			return ResultCode.REQUIREINFO_NOTENOUGH;
 
@@ -28,7 +28,7 @@ public class DevicePushServices {
 		try {
 			if (deviceType.equals(1)) {
 				// 谷歌推送
-				gcmServices.sendtouser(msg, deviceToken);
+				gcmServices.sendtouser(msg, deviceToken, orderId);
 			} else if (deviceType.equals(2)) {
 				// 苹果推送
 				if (userType == null) {
@@ -36,7 +36,7 @@ public class DevicePushServices {
 				}
 				List<String> deviceTokens = new ArrayList<String>();
 				deviceTokens.add(deviceToken);
-				iosPushServices.iosPush(deviceTokens, msg, userType);
+				iosPushServices.iosPush(deviceTokens, msg, userType, orderId);
 			}
 		} catch (Exception e) {
 			e.printStackTrace();

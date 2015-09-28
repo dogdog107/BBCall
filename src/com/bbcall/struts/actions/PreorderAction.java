@@ -85,10 +85,10 @@ public class PreorderAction extends ActionSupport {
 			iosList.add(registerid);
 
 			if (drivetype.equals(1)) {
-				gcmServices.sendtouser("BBCall notification - New Master wants to apply your Order", registerid);
+				gcmServices.sendtouser("BBCall notification - New Master wants to apply your Order", registerid, preorderid);
 			} else if (drivetype.equals(2)) {
 				// 苹果推送
-				iosPushServices.iosPush(iosList, "BBCall notification - New Master wants to apply your Order",1);
+				iosPushServices.iosPush(iosList, "BBCall notification - New Master wants to apply your Order",1, preorderid);
 			}
 
 		} catch (Exception e) {

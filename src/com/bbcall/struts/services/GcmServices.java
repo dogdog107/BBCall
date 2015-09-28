@@ -28,7 +28,7 @@ public class GcmServices {
 	@Autowired
 	private UserMapper userMapper;
 
-	public int sendtogoogle(String datamsg, List<String> registeridList)
+	public int sendtogoogle(String datamsg, List<String> registeridList, Integer orderId)
 			throws Exception {
 
 		int constant1 = 100;
@@ -40,11 +40,15 @@ public class GcmServices {
 		notification.put("title", "BBCall notification");
 		notification.put("text", datamsg);
 		notification.put("body", datamsg);
+		if (orderId != null)
+			notification.put("orderid", orderId);
 
 		JSONObject data = new JSONObject();
 		data.put("data", datamsg);
 		data.put("message", datamsg);
 		data.put("msg", datamsg);
+		if (orderId != null)
+			data.put("orderid", orderId);
 
 		List<String> reslist = new ArrayList<String>();
 		List<String> nullString = new ArrayList<String>();
@@ -208,23 +212,29 @@ public class GcmServices {
 
 	}
 
-	public int sendtouser(String datamsg, String registerid) throws Exception {
+	public int sendtouser(String datamsg, String registerid, Integer orderId) throws Exception {
 
 		JSONObject notification = new JSONObject();
 		notification.put("title", "BBCall notification");
 		notification.put("text", datamsg);
 		notification.put("body", datamsg);
+		if (orderId != null)
+			notification.put("orderid", orderId);
 
 		JSONObject data = new JSONObject();
 		data.put("data", datamsg);
 		data.put("message", datamsg);
 		data.put("msg", datamsg);
-
+		if (orderId != null)
+			data.put("orderid", orderId);
+		
 		JSONObject jsonObject = new JSONObject();
 		jsonObject.put("notification", notification);
 		jsonObject.put("to", registerid);
 		jsonObject.put("data", data);
-
+		if (orderId != null)
+			jsonObject.put("orderid", orderId);
+		
 		System.out.println(jsonObject);
 
 		URL url = new URL("https://gcm-http.googleapis.com/gcm/send");

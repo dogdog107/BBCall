@@ -90,7 +90,7 @@ public class IosPushServices {
 	 * @param msg
 	 * @throws Exception
 	 */
-	public int iosPush(List<String> deviceTokens, String msg, Integer usertype) throws Exception {
+	public int iosPush(List<String> deviceTokens, String msg, Integer usertype, Integer orderId) throws Exception {
 		
 		if (usertype == null) {
 			return ResultCode.REQUIREINFO_NOTENOUGH;
@@ -114,6 +114,10 @@ public class IosPushServices {
 		payLoad.addAlert(msg); // 消息内容
 		payLoad.addBadge(1); // iphone应用图标上小红圈上的数值
 		payLoad.addSound("default");// 铃音
+		
+		if (orderId != null) {
+			payLoad.addCustomDictionary("orderid", orderId);
+		}
 		
 		// 发送push消息
 		for (String token : deviceTokens) {
