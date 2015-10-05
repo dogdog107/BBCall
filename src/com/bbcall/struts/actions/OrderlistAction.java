@@ -17,6 +17,7 @@ import com.bbcall.functions.ResultCode;
 import com.bbcall.functions.Tools;
 import com.bbcall.mybatis.table.Orderlist;
 import com.bbcall.mybatis.table.User;
+import com.bbcall.struts.services.DevicePushServices;
 import com.bbcall.struts.services.GcmServices;
 import com.bbcall.struts.services.IosPushServices;
 import com.bbcall.struts.services.OrderlistServices;
@@ -42,6 +43,9 @@ public class OrderlistAction extends ActionSupport {
 	@Autowired
 	private GcmServices gcmServices;
 
+	@Autowired
+	private DevicePushServices devicePushServices;
+	
 	private Map<String, Object> dataMap;
 	private PageInfoToMap pageinfo2map = new PageInfoToMap();// 新建PageInfoToMap对象
 
@@ -206,20 +210,26 @@ public class OrderlistAction extends ActionSupport {
 			List<String> iosList = new ArrayList<String>();
 			iosList.add(registerid);
 
-			if (drivetype.equals(1)) {
-				gcmServices
-						.sendtouser(
-								"BBCall notification - Your order request has been accepted",
-								registerid, orderid);
-			} else if (drivetype.equals(2)) {
-				// 苹果推送
-				iosPushServices
-						.iosPush(
-								iosList,
-								"BBCall notification - Your order request has been accepted",
-								2, orderid);
+//			if (drivetype.equals(1)) {
+//				gcmServices
+//						.sendtouser(
+//								"BBCall notification - Your order request has been accepted",
+//								registerid, orderid);
+//			} else if (drivetype.equals(2)) {
+//				// 苹果推送
+//				iosPushServices
+//						.iosPush(
+//								iosList,
+//								"BBCall notification - Your order request has been accepted",
+//								2, orderid);
+//			}
+			
+			if (drivetype != 0 && !Tools.isEmpty(registerid)) {
+				// msgID = 1
+				//default: BBCall notification - Your order request has been accepted.
+				devicePushServices.devicePush(drivetype, registerid, 1, userServices.getUserinfo().getUser_type(), orderid);
 			}
-
+			
 		} catch (Exception e) {
 			// TODO: handle exception
 			e.printStackTrace();
@@ -278,19 +288,24 @@ public class OrderlistAction extends ActionSupport {
 			List<String> iosList = new ArrayList<String>();
 			iosList.add(registerid);
 
-			if (drivetype.equals(1)) {
-				gcmServices.sendtouser(
-						"BBCall notification - You have new completed Order",
-						registerid, orderid);
-			} else if (drivetype.equals(2)) {
-				// 苹果推送
-				iosPushServices
-						.iosPush(
-								iosList,
-								"BBCall notification - You have new completed Order",
-								2, orderid);
-			}
+//			if (drivetype.equals(1)) {
+//				gcmServices.sendtouser(
+//						"BBCall notification - You have new completed Order",
+//						registerid, orderid);
+//			} else if (drivetype.equals(2)) {
+//				// 苹果推送
+//				iosPushServices
+//						.iosPush(
+//								iosList,
+//								"BBCall notification - You have new completed Order",
+//								2, orderid);
+//			}
 
+			if (drivetype != 0 && !Tools.isEmpty(registerid)) {
+				// msgID = 2
+				// default: BBCall notification - You have new completed Order.
+				devicePushServices.devicePush(drivetype, registerid, 2, userServices.getUserinfo().getUser_type(), orderid);
+			}
 		} catch (Exception e) {
 			// TODO: handle exception
 			e.printStackTrace();

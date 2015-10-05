@@ -90,7 +90,7 @@ public class IosPushServices {
 	 * @param msg
 	 * @throws Exception
 	 */
-	public int iosPush(List<String> deviceTokens, String msg, Integer usertype, Integer orderId) throws Exception {
+	public int iosPush(List<String> deviceTokens, String msg, Integer usertype, Integer orderId, String msgType) throws Exception {
 		
 		if (usertype == null) {
 			return ResultCode.REQUIREINFO_NOTENOUGH;
@@ -117,6 +117,9 @@ public class IosPushServices {
 		
 		if (orderId != null) {
 			payLoad.addCustomDictionary("orderid", orderId);
+		}
+		if (msgType != null) {
+			payLoad.addCustomDictionary("msgtype", msgType);
 		}
 		
 		// 发送push消息

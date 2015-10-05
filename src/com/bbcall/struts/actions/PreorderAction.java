@@ -14,6 +14,7 @@ import com.bbcall.functions.PageInfoToMap;
 import com.bbcall.functions.ResultCode;
 import com.bbcall.functions.Tools;
 import com.bbcall.mybatis.table.Preorder;
+import com.bbcall.struts.services.DevicePushServices;
 import com.bbcall.struts.services.GcmServices;
 import com.bbcall.struts.services.IosPushServices;
 import com.bbcall.struts.services.OrderlistServices;
@@ -40,7 +41,10 @@ public class PreorderAction extends ActionSupport {
 
 	@Autowired
 	private UserServices userServices;
-
+	
+	@Autowired
+	private DevicePushServices devicePushServices;
+	
 	private String preorder_id;
 	private String preorder_master_account;
 	private Timestamp preorder_create_time;
@@ -84,11 +88,17 @@ public class PreorderAction extends ActionSupport {
 			List<String> iosList = new ArrayList<String>();
 			iosList.add(registerid);
 
-			if (drivetype.equals(1)) {
-				gcmServices.sendtouser("BBCall notification - New Master wants to apply your Order", registerid, preorderid);
-			} else if (drivetype.equals(2)) {
-				// 苹果推送
-				iosPushServices.iosPush(iosList, "BBCall notification - New Master wants to apply your Order",1, preorderid);
+//			if (drivetype.equals(1)) {
+//				gcmServices.sendtouser("BBCall notification - New Master wants to apply your Order", registerid, preorderid);
+//			} else if (drivetype.equals(2)) {
+//				// 苹果推送
+//				iosPushServices.iosPush(iosList, "BBCall notification - New Master wants to apply your Order",1, preorderid);
+//			}
+			
+			if (drivetype != 0 && !Tools.isEmpty(registerid)) {
+				// msgID = 3
+				// default: BBCall notification - New Master wants to apply your Order.
+				devicePushServices.devicePush(drivetype, registerid, 3, userServices.getUserinfo().getUser_type(), preorderid);
 			}
 
 		} catch (Exception e) {

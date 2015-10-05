@@ -224,6 +224,42 @@ public class FileUploadAction extends ActionSupport {
 		return "json";
 	}
 	
+	public String referdocUpload() throws Exception {
+		System.out.println("Here is FileUploadAction.referdocUpload()");
+		savePath = "referdocPic";
+		String storePath = ServletActionContext.getServletContext()
+				.getRealPath(savePath); // 得到保存文件的路径
+		String uploadFileType = uploadFileName.substring(uploadFileName
+				.lastIndexOf(".") + 1); // 封装上传文件后缀
+		
+		SimpleDateFormat df = new SimpleDateFormat("yyyyMMdd");//设置日期格式
+		String tempDate = df.format(new Date()); // new Date()为获取当前系统时间
+		String storeFileName = tempDate + randomCode.getNoncestr() + "." + uploadFileType; // 封装保存文件名
+		
+		int result = fileUploadServices.uploadFile(upload, uploadFileName, storePath, storeFileName);
+		dataMap.clear(); // dataMap中的数据将会被Struts2转换成JSON字符串，所以这里要先清空其中的数据
+
+		if (result == ResultCode.SUCCESS) {
+			picurl = fileUploadServices.getFileurl();
+			dataMap.put("picurl", picurl); // 放入一个是否操作成功的标识
+			dataMap.putAll(Tools.JsonHeadMap(result, true));
+			System.out.println(dataMap);
+			logger.info("userOpr:[referdocUpload]" + dataMap);  
+			return "referdocUploadSuccess";
+		} else {
+			fileUploadServices.deleteFile(storePath);
+			dataMap.putAll(Tools.JsonHeadMap(result, false));
+			System.out.println(dataMap);
+			System.out.println("referdocUpload Failed");
+			logger.info("userOpr:[referdocUpload]" + dataMap);  
+			return "referdocUploadFailed";
+		}
+	}
+	public String referdocUploadJson() throws Exception {
+		System.out.println("Here is FileUploadAction.referdocUploadJson()");
+		referdocUpload();
+		return "json";
+	}
 	// public String uploadFile() throws Exception {
 	//
 	// // 保存文件的地址
@@ -353,5 +389,4 @@ public class FileUploadAction extends ActionSupport {
 	public void setFileUploadServices(FileUploadServices fileUploadServices) {
 		this.fileUploadServices = fileUploadServices;
 	}
-
 }

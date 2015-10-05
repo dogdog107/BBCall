@@ -34,7 +34,8 @@ public interface OrderlistMapper {
 	// 通过师傅账号/技能类型/订单地区取得未完成订单列表 (按发布时间排序)
 	public List<Orderlist> getUnOrdersByMasterLocation(
 			@Param("ordertypelist") String[] ordertypelist,
-			@Param("order_book_location_code") String order_book_location_code,
+//			@Param("order_book_location_code") String order_book_location_code,
+			@Param("order_book_location_code") String[] order_book_location_code,
 			@Param("order_status") String order_status,
 			@Param("sortparm") String sortparm,
 			@Param("order_master_id") int order_master_id);

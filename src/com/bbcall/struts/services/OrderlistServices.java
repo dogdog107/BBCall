@@ -4,6 +4,7 @@ import java.math.BigInteger;
 import java.sql.Timestamp;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.List;
 
 import org.apache.log4j.Logger;
@@ -12,6 +13,7 @@ import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Service;
 
 import com.bbcall.functions.ResultCode;
+import com.bbcall.functions.Tools;
 import com.bbcall.mybatis.dao.AddressListMapper;
 import com.bbcall.mybatis.dao.OrderlistMapper;
 import com.bbcall.mybatis.dao.PreorderMapper;
@@ -450,14 +452,28 @@ public class OrderlistServices {
 
 		orderlistinfos = null;
 		String[] sklist = null;
+		String[] lclist = null;
 
-		if (skilllist.equals("")) {
+		if (Tools.isEmpty(skilllist)) {
 			User user = userMapper.getUserById(master_id);
 			sklist = user.getUser_skill().split(";");
 		} else {
 			sklist = skilllist.split(";");
 		}
 
+		if (!Tools.isEmpty(locationlist)) {
+			List<AddressList> adsList = new ArrayList<AddressList>();
+			adsList = addressListMapper.getAddressByParentno(Integer.parseInt(locationlist));
+			if (!adsList.isEmpty()) {
+				lclist = new String[adsList.size()];
+				for (int i = 0; i < adsList.size(); i++) {
+					lclist[i] = adsList.get(i).getAreano().toString();
+				}
+			} else {
+				lclist = new String[1];
+				lclist[0] = locationlist;
+			}
+		}
 		// 当传进来的pagenum为空 或者 pagenum == 0 时，显示第一页
 		if (pagenum == null || pagenum == 0)
 			pagenum = 1;
@@ -467,7 +483,7 @@ public class OrderlistServices {
 		PageHelper.startPage(pagenum, 10);
 
 		orderlistinfos = orderlistMapper.getUnOrdersByMasterLocation(sklist,
-				locationlist, order_status, sortparm, master_id);
+				lclist, order_status, sortparm, master_id);
 
 		return ResultCode.SUCCESS;
 	}

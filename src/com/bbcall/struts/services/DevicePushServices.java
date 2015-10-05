@@ -8,6 +8,7 @@ import org.springframework.stereotype.Service;
 
 import com.bbcall.functions.ResultCode;
 import com.bbcall.functions.Tools;
+import com.bbcall.mybatis.dao.PushMessageMapper;
 
 @Service("devicePushServices")
 public class DevicePushServices {
@@ -16,9 +17,20 @@ public class DevicePushServices {
 	private GcmServices gcmServices;
 	@Autowired
 	private IosPushServices iosPushServices;
-
+	@Autowired
+	private PushMessageMapper pushMessageMapper;
+	
+	/**
+	 * devicePush By message
+	 * @param deviceType
+	 * @param deviceToken
+	 * @param msg
+	 * @param userType
+	 * @param orderId
+	 * @return
+	 */
 	public int devicePush(Integer deviceType, String deviceToken, String msg,
-			Integer userType, Integer orderId) {
+			Integer userType, Integer orderId, String msgType) {
 		if (deviceType == null || Tools.isEmpty(deviceToken))
 			return ResultCode.REQUIREINFO_NOTENOUGH;
 
@@ -28,7 +40,7 @@ public class DevicePushServices {
 		try {
 			if (deviceType.equals(1)) {
 				// 谷歌推送
-				gcmServices.sendtouser(msg, deviceToken, orderId);
+				gcmServices.sendtouser(msg, deviceToken, orderId, msgType);
 			} else if (deviceType.equals(2)) {
 				// 苹果推送
 				if (userType == null) {
@@ -36,11 +48,26 @@ public class DevicePushServices {
 				}
 				List<String> deviceTokens = new ArrayList<String>();
 				deviceTokens.add(deviceToken);
-				iosPushServices.iosPush(deviceTokens, msg, userType, orderId);
+				iosPushServices.iosPush(deviceTokens, msg, userType, orderId, msgType);
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
 		return ResultCode.SUCCESS;
+	}
+	
+	/**
+	 * devicePush By message ID
+	 * @param deviceType
+	 * @param deviceToken
+	 * @param msgId
+	 * @param userType
+	 * @param orderId
+	 * @return
+	 */
+	public int devicePush(Integer deviceType, String deviceToken, Integer msgId, Integer userType, Integer orderId) {
+		String msgContent = pushMessageMapper.getPushMessageByMsgId(msgId).getMsg_content();
+		String msgType = pushMessageMapper.getPushMessageByMsgId(msgId).getMsg_type();
+		return devicePush(deviceType, deviceToken, msgContent, userType,orderId, msgType);
 	}
 }

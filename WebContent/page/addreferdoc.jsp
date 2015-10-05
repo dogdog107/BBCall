@@ -7,14 +7,8 @@
 <meta http-equiv=content-type content="text/html; charset=utf-8" />
 <link rel="shortcut icon" href="${pageContext.request.contextPath }/page/img/BBCallicon_32X32.ico" type="image/x-icon" />
 <link href="${pageContext.request.contextPath }/page/css/mine.css" type="text/css" rel="stylesheet" />
-<script type="text/javascript"
-	src="${pageContext.request.contextPath }/jquery/jquery-1.8.3.js"></script>
-<script type="text/javascript"
-	src="${pageContext.request.contextPath }/jquery/addrefPage.js"></script>
-<script type="text/javascript">
-	var token = "${sessionScope.user.user_token}";
-	var link = "${pageContext.request.contextPath}";
-</script>
+<!--WebUploader引入CSS-->
+<link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath }/page/WebUploader/webuploader.css" />
 <%
   String path=request.getContextPath();
 %>
@@ -43,11 +37,13 @@
 		<div style="font-size: 13px; margin: 10px 5px;">
 			<form id="referdoc_add" action="referdoc_add" method="post">
 			
-				<table class="table_list" border="1" width="100%">
+				<table class="table_update" border="1" width="100%">
                 <tbody id="datas">
                 	<tr>
+                		<td style="width:400px;">
+                			添加
+                		</td>
                 		<td>
-                			添加 
                 			<select id="referdoc_level" name="referdoc_level">
 								<option value="2">二級項</option>
 							</select>
@@ -61,7 +57,7 @@
 						<td>參考類型歸屬</td>
 						<td>
 							<select name="referdoc_parentno" id="referdoc_parentno">
-								<option value='0'>请选择</option>
+								<option value='0'>請選擇</option>
 							</select>
 						</td>
 					</tr>
@@ -70,7 +66,7 @@
 						<td><input type="text" name="referdoc_price" id="referdoc_price" value="0"></input></td>
 					</tr>
 					<tr id="flag_tr" style="display:none">
-						<td>是否固定价格</td>
+						<td>是否固定價格</td>
 						<td>
 							<select name="referdoc_flag" id="referdoc_flag">
 								<option id="select2" value="false" selected="selected">false</option>
@@ -78,16 +74,48 @@
 							</select>
 						</td>
 					</tr>
-                    <tr align="center">
-                    	<td><input type="submit" value="添加"></input></td>
-					    <td><input type="button" value="返回" Onclick="location='${pageContext.request.contextPath}/referdoc_getlist.action'"></input></td>
+					<tr>
+						<td>Apps內 正常時圖片 (Normal Photo)</td>
+						<td><input type="hidden" id="referdoc_pic_url"
+							name="referdoc_pic_url" value="" /> <!--用来存放item-->
+							<div id="normalPhoto" class="uploader-list">
+								<img id="normalPhotoImgTemp" src='' height='100' width='100'>
+							</div>
+							<div id="normalPhotoPicker">選擇圖片</div></td>
 					</tr>
-                </tbody>
+					<tr>
+						<td>Apps內 點擊時圖片 (Down Photo)</td>
+						<td><input type="hidden" id="referdoc_downpic_url"
+							name="referdoc_downpic_url" value="" /> <!--用来存放item-->
+							<div id="downPhoto" class="uploader-list">
+								<img id="downPhotoImgTemp" src='' height='100' width='100'>
+							</div>
+							<div id="downPhotoPicker">選擇圖片</div></td>
+					</tr>
+					<tr align="center">
+						<td colspan="2"><input type="submit" value="添加"></input> <input
+							type="button" value="返回"
+							onclick="location='${pageContext.request.contextPath}/referdoc_getlist.action'"></input></td>
+					</tr>
+				</tbody>
                 
             </table>
 				
 			</form>
 		</div>
 	<div class="footer"></div>
+	<script type="text/javascript">
+		// 添加全局站点信息
+		var BASE_URL = '${pageContext.request.contextPath }';
+		var token = "${sessionScope.user.user_token}";
+		var link = "${pageContext.request.contextPath}";
+	</script>
+	<script type="text/javascript"
+		src="${pageContext.request.contextPath }/jquery/jquery-1.8.3.js"></script>
+	<!--WebUploader引入JS-->
+	<script type="text/javascript"
+		src="${pageContext.request.contextPath }/page/WebUploader/webuploader.js"></script>
+	<script type="text/javascript"
+		src="${pageContext.request.contextPath }/jquery/addrefPage.js"></script>
 </body>
 </html>

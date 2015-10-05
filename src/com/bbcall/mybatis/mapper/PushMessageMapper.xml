@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper    PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<!-- 
+	这里namespace必须是UserMapper接口的全类名路径，
+	不然运行的时候要报错 "is not known to the MapperRegistry" 
+-->
+
+<mapper namespace="com.bbcall.mybatis.dao.PushMessageMapper">
+
+    <!--mybatis ehcache缓存配置 -->
+    <!-- 以下两个<cache>标签二选一,第一个可以输出日志,第二个不输出日志 -->
+	<cache type="org.mybatis.caches.ehcache.LoggingEhcache" />
+	<!-- <cache type="org.mybatis.caches.ehcache.EhcacheCache"/> -->
+
+	<resultMap id="PushMessageResultMap" type="com.bbcall.mybatis.table.PushMessage" >
+    	<id column="msg_id" property="msg_id" jdbcType="INTEGER" />
+    	<result column="msg_type" property="msg_type" jdbcType="VARCHAR" />
+    	<result column="msg_content" property="msg_content" jdbcType="VARCHAR" />
+	</resultMap>
+
+	<insert id="addPushMessage" parameterType="PushMessage"
+		useGeneratedKeys="true" keyProperty="msg_id">
+		insert into PUSHMESSAGE(msg_id, msg_type, msg_content)
+		values(#{msg_id}, #{msg_type}, #{msg_content})
+	</insert>
+
+	<update id="updatePushMessage" parameterType="PushMessage">
+		update PUSHMESSAGE
+		set
+		msg_content=#{msg_content}
+		where
+		msg_id=#{msg_id}
+	</update>
+
+	<delete id="deletePushMessageByMsgId" parameterType="int">
+		delete from
+		PUSHMESSAGE where msg_id=#{msg_id}
+	</delete>
+
+	<select id="getPushMessageByMsgId" parameterType="int"
+		resultMap="PushMessageResultMap">
+		SELECT
+		msg_id, msg_type, msg_content
+		FROM
+		PUSHMESSAGE
+		WHERE
+		msg_id =
+		#{msg_id}
+	</select>
+
+	<select id="getAll" resultMap="PushMessageResultMap">
+		SELECT
+		msg_id, msg_type, msg_content
+		FROM
+		PUSHMESSAGE
+	</select>
+</mapper>    

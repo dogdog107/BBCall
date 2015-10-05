@@ -212,7 +212,7 @@ public class GcmServices {
 
 	}
 
-	public int sendtouser(String datamsg, String registerid, Integer orderId) throws Exception {
+	public int sendtouser(String datamsg, String registerid, Integer orderId, String msgType) throws Exception {
 
 		JSONObject notification = new JSONObject();
 		notification.put("title", "BBCall notification");
@@ -220,6 +220,8 @@ public class GcmServices {
 		notification.put("body", datamsg);
 		if (orderId != null)
 			notification.put("orderid", orderId);
+		if (msgType != null)
+			notification.put("msgtype", msgType);
 
 		JSONObject data = new JSONObject();
 		data.put("data", datamsg);
@@ -227,6 +229,8 @@ public class GcmServices {
 		data.put("msg", datamsg);
 		if (orderId != null)
 			data.put("orderid", orderId);
+		if (msgType != null)
+			notification.put("msgtype", msgType);
 		
 		JSONObject jsonObject = new JSONObject();
 		jsonObject.put("notification", notification);
@@ -234,6 +238,8 @@ public class GcmServices {
 		jsonObject.put("data", data);
 		if (orderId != null)
 			jsonObject.put("orderid", orderId);
+		if (msgType != null)
+			notification.put("msgtype", msgType);
 		
 		System.out.println(jsonObject);
 

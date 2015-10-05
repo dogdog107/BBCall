@@ -47,7 +47,7 @@ public class ReferdocServices {
 
 	public int addReferdoc(String referdoc_type, String referdoc_parentno,
 			int referdoc_level, double referdoc_price, String referdoc_flag,
-			Integer pagenum) {
+			Integer pagenum, String referdoc_pic_url, String referdoc_downpic_url) {
 		// TODO Auto-generated method stub
 
 		int parentno = 0;
@@ -67,7 +67,9 @@ public class ReferdocServices {
 				referdoc.setReferdoc_level(referdoc_level);
 				referdoc.setReferdoc_price(referdoc_price);
 				referdoc.setReferdoc_flag(Boolean.parseBoolean(referdoc_flag));
-
+				referdoc.setReferdoc_pic_url(referdoc_pic_url);
+				referdoc.setReferdoc_downpic_url(referdoc_downpic_url);
+				
 				referdocMapper.addReferdoc(referdoc);
 
 				// 当传进来的pagenum为空 或者 pagenum == 0 时，显示第一页

@@ -11,6 +11,8 @@
 		<result column="referdoc_level" property="referdoc_level" jdbcType="INTEGER" />
 		<result column="referdoc_price" property="referdoc_price" jdbcType="DECIMAL" />
 		<result column="referdoc_flag" property="referdoc_flag" jdbcType="BIT" />
+		<result column="referdoc_pic_url" property="referdoc_pic_url" jdbcType="VARCHAR" />
+		<result column="referdoc_downpic_url" property="referdoc_downpic_url" jdbcType="VARCHAR" />
 	</resultMap>
 
 	<insert id="addReferdoc" parameterType="com.bbcall.mybatis.table.Referdoc"
@@ -20,11 +22,15 @@
 		referdoc_parentno,
 		referdoc_level,
 		referdoc_price,
+		referdoc_pic_url,
+		referdoc_downpic_url,
 		referdoc_flag) values
 		(#{referdoc_type},
 		#{referdoc_parentno},
 		#{referdoc_level},
 		#{referdoc_price},
+		#{referdoc_pic_url},
+		#{referdoc_downpic_url},
 		#{referdoc_flag})
 	</insert>
 	<select id="getReferdoc" parameterType="int"
@@ -73,6 +79,8 @@
 		referdoc_parentno=#{referdoc_parentno},
 		referdoc_level=#{referdoc_level},
 		referdoc_price=#{referdoc_price},
+		referdoc_pic_url=#{referdoc_pic_url},
+		referdoc_downpic_url=#{referdoc_downpic_url},
 		referdoc_flag=#{referdoc_flag}
 		where
 		referdoc_id=#{referdoc_id}

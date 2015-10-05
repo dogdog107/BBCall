@@ -206,7 +206,9 @@ public class UserSkillServices {
 			userSkillMapper.updateUserSkillById(tempUserSkill);
 			
 			// 审核消息推送
-			devicePushServices.devicePush(tempUser.getUser_driver(), tempUser.getUser_push_token(), pushMsg, tempUser.getUser_type(), null);
+			if (tempUser.getUser_driver() != 0 && !Tools.isEmpty(tempUser.getUser_push_token())) {
+				devicePushServices.devicePush(tempUser.getUser_driver(), tempUser.getUser_push_token(), pushMsg, tempUser.getUser_type(), null, "master_skill");
+			}
 			
 			return ResultCode.SUCCESS;
 		} else {

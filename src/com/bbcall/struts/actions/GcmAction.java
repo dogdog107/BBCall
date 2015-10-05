@@ -77,7 +77,7 @@ public class GcmAction extends ActionSupport {
 
 		int result = 0;
 		if (userPushTokenList != null && userPushTokenList.size() > 0) {
-			result = iosPushServices.iosPush(userPushTokenList, datamsg, 1, null);
+			result = iosPushServices.iosPush(userPushTokenList, datamsg, 1, null, null);
 			if (result != ResultCode.SUCCESS) {
 				dataMap.putAll(Tools.JsonHeadMap(result, false));
 				return "exception";
@@ -85,7 +85,7 @@ public class GcmAction extends ActionSupport {
 		}
 
 		if (masterPushTokenList != null && masterPushTokenList.size() > 0) {
-			result = iosPushServices.iosPush(masterPushTokenList, datamsg, 2, null);
+			result = iosPushServices.iosPush(masterPushTokenList, datamsg, 2, null, null);
 			if (result != ResultCode.SUCCESS) {
 				dataMap.putAll(Tools.JsonHeadMap(result, false));
 				return "exception";

@@ -32,6 +32,8 @@ public class ReferdocAction extends ActionSupport {
 	private int referdoc_level;
 	private String referdoc_price;
 	private String referdoc_flag;
+	private String referdoc_pic_url;
+	private String referdoc_downpic_url;
 	private List<String> order_type_code_list;
 	private Integer pagenum; // 页面页数
 
@@ -52,7 +54,7 @@ public class ReferdocAction extends ActionSupport {
 
 		int result = referdocServices.addReferdoc(referdoc_type,
 				referdoc_parentno, referdoc_level, price, referdoc_flag,
-				pagenum);
+				pagenum, referdoc_pic_url, referdoc_downpic_url);
 
 		if (result == ResultCode.SUCCESS) {
 			List<Referdoc> referdoclist = referdocServices.referdocinfos();
@@ -452,6 +454,22 @@ public class ReferdocAction extends ActionSupport {
 
 	public void setPagenum(Integer pagenum) {
 		this.pagenum = pagenum;
+	}
+
+	public String getReferdoc_pic_url() {
+		return referdoc_pic_url;
+	}
+
+	public void setReferdoc_pic_url(String referdoc_pic_url) {
+		this.referdoc_pic_url = referdoc_pic_url;
+	}
+
+	public String getReferdoc_downpic_url() {
+		return referdoc_downpic_url;
+	}
+
+	public void setReferdoc_downpic_url(String referdoc_downpic_url) {
+		this.referdoc_downpic_url = referdoc_downpic_url;
 	}
 
 }

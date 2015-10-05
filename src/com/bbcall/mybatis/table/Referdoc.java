@@ -17,6 +17,8 @@ public class Referdoc {
 	private int referdoc_level;
 	private double referdoc_price;
 	private boolean referdoc_flag;
+	private String referdoc_pic_url;
+	private String referdoc_downpic_url;
 
 	public int getReferdoc_id() {
 		return referdoc_id;
@@ -64,6 +66,22 @@ public class Referdoc {
 
 	public void setReferdoc_flag(boolean referdoc_flag) {
 		this.referdoc_flag = referdoc_flag;
+	}
+
+	public String getReferdoc_pic_url() {
+		return referdoc_pic_url;
+	}
+
+	public void setReferdoc_pic_url(String referdoc_pic_url) {
+		this.referdoc_pic_url = referdoc_pic_url;
+	}
+
+	public String getReferdoc_downpic_url() {
+		return referdoc_downpic_url;
+	}
+
+	public void setReferdoc_downpic_url(String referdoc_downpic_url) {
+		this.referdoc_downpic_url = referdoc_downpic_url;
 	}
 
 }

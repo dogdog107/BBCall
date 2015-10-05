@@ -204,9 +204,18 @@
 			index="index" open="(" close=")" separator=",">
 			#{order_type_code}
 		</foreach>
+		<!-- 		
 		<if	test="order_book_location_code != null and order_book_location_code != ''">
-
 		 and order_book_location_code=#{order_book_location_code} 
+		</if>
+		 -->
+		 
+		<if	test="order_book_location_code != null">
+		 and order_book_location_code in
+			<foreach collection="order_book_location_code" item="order_book_location_code"
+				index="index" open="(" close=")" separator=",">
+				#{order_book_location_code} 
+			</foreach>
 		</if>
 		<choose>
 			<when test="order_status != null and order_status != ''">
