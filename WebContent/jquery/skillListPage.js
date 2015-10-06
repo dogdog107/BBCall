@@ -28,7 +28,7 @@ function checkSkillList(pagenum){
 			"pagenum" : pagenum
 		},
 		success : function(data) {
-			if (data.result) {
+			if (data.result && data.skilllist != null && data.skilllist != "") {
 				//*初始化分页条
 				if (data.lastPageNum == 1){
 					//当只有一页时隐藏分页条
@@ -80,9 +80,14 @@ function checkSkillList(pagenum){
 			} else {
 				//隐藏分页条
 				$("#page_bar").hide(300);
-				$("#message").html(
-						"<font color=red>Page Fail ! " + data.errmsg
-								+ "</font>");
+				if (data.skilllist == null || data.skilllist == "") {
+					$("#message").html(
+							"<font color=red>Page Fail ! Empty Skill List.</font>");
+				} else {
+					$("#message").html(
+							"<font color=red>Page Fail ! " + data.errmsg
+							+ "</font>");
+				}
 				$("#div_message").show(300).delay(10000).hide(300);
 			}
 		}

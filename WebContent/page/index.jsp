@@ -8,8 +8,23 @@
 <meta http-equiv=cache-control content=no-cache />
 <meta http-equiv=expires content=-1000 />
 <link rel="shortcut icon" href="${pageContext.request.contextPath }/page/img/BBCallicon_32X32.ico" type="image/x-icon" />
-<title>管理中心 v1.0</title>
+<title>管理中心</title>
+<script type="text/javascript"
+	src="${pageContext.request.contextPath }/jquery/jquery-1.8.3.js"></script>
+<script type="text/javascript">
+	var token = "${sessionScope.user_token}";
+	$(function() {
+		$.post(
+			"${pageContext.request.contextPath}/system_getServerVersionJson.action",
+			function(data) {
+				if (data.result) {
+					document.title = "管理中心 V" + data.version;
+				}
+			});
+	});
+</script>
 </head>
+
 <frameset border=0 framespacing=0 rows="60, *" frameborder=0>
 	<frame name=head src="${pageContext.request.contextPath }/page/head.jsp" frameborder=0 noresize scrolling=no>
 	<frameset cols="170, *">
