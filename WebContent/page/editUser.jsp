@@ -19,6 +19,7 @@
 	src="${pageContext.request.contextPath }/jquery/editUserPage.js?token=${sessionScope.user_token}"></script>
 <script type="text/javascript">
 		var token = "${sessionScope.user_token}";
+		var account = "${account}";
 		var usertype = "${usertype}";
 		var gender = "${gender}";
 		var status = "${status}";
@@ -96,7 +97,7 @@
 				<tr>
 					<td>帳號 (Account)</td>
 					<td><input type="text" name="account" id="account"
-						value="${sessionScope.user_account}" /><span id="checkAccountResult"></span></td>
+						value="${account}" /><span id="checkAccountResult"></span></td>
 				</tr>
 				<tr>
 					<td>修改密碼 (Change Password)</td>
@@ -124,12 +125,12 @@
 				<tr>
 					<td>手機號碼 (User Mobile)</td>
 					<td><input type="text" name="mobile" id="mobile"
-						value="${sessionScope.user_mobile}" /><span id="checkMobileResult"></span></td>
+						value="${mobile}" /><span id="checkMobileResult"></span></td>
 				</tr>
 				<tr>
 					<td>電子郵箱 (User Email)</td>
 					<td><input type="text" name="email" id="email"
-						value="${sessionScope.user_email}" /><span id="checkEmailResult"></span></td>
+						value="${email}" /><span id="checkEmailResult"></span></td>
 				</tr>
 				<tr>
 					<td>用戶語言 (User Language)</td>
