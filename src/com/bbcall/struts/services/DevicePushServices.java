@@ -9,6 +9,7 @@ import org.springframework.stereotype.Service;
 import com.bbcall.functions.ResultCode;
 import com.bbcall.functions.Tools;
 import com.bbcall.mybatis.dao.PushMessageMapper;
+import com.bbcall.mybatis.table.PushMessage;
 
 @Service("devicePushServices")
 public class DevicePushServices {
@@ -69,5 +70,38 @@ public class DevicePushServices {
 		String msgContent = pushMessageMapper.getPushMessageByMsgId(msgId).getMsg_content();
 		String msgType = pushMessageMapper.getPushMessageByMsgId(msgId).getMsg_type();
 		return devicePush(deviceType, deviceToken, msgContent, userType,orderId, msgType);
+	}
+	
+	/**
+	 * Get All push Message from system.
+	 * @return
+	 */
+	public List<PushMessage> getPushMessage() {
+		return pushMessageMapper.getAll();
+	}
+	
+	/**
+	 * update Push Message.
+	 * @param msgId
+	 * @param msgContents
+	 * @return
+	 */
+	public int updatePushMessage(Integer msgId, String msgContents) {
+		
+		if (msgId == null || Tools.isEmpty(msgContents)) {
+			return ResultCode.REQUIREINFO_NOTENOUGH;
+		}
+		
+		PushMessage pushMessage = new PushMessage();
+		pushMessage = pushMessageMapper.getPushMessageByMsgId(msgId);
+		
+		if (pushMessage == null) {
+			return ResultCode.REQUIREINFO_ERROR;
+		} else {
+			pushMessage.setMsg_content(msgContents);
+			pushMessageMapper.updatePushMessage(pushMessage);
+		}
+		
+		return ResultCode.SUCCESS;
 	}
 }

@@ -219,6 +219,7 @@
 			</result>
 		</action>
 
+		<!-- GCM Push message Action -->
 		<action name="gcm_*" method="{1}" class="gcmAction">
 
 			<result name="success">/page/sendsuccess.jsp</result>

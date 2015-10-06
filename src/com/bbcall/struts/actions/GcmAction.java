@@ -1,6 +1,7 @@
 package com.bbcall.struts.actions;
 
 import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -10,6 +11,9 @@ import org.springframework.stereotype.Controller;
 
 import com.bbcall.functions.ResultCode;
 import com.bbcall.functions.Tools;
+import com.bbcall.mybatis.table.PushMessage;
+import com.bbcall.mybatis.table.UserSkill;
+import com.bbcall.struts.services.DevicePushServices;
 import com.bbcall.struts.services.GcmServices;
 import com.bbcall.struts.services.IosPushServices;
 import com.bbcall.struts.services.UserServices;
@@ -28,11 +32,17 @@ public class GcmAction extends ActionSupport {
 	
 	@Autowired
 	private UserServices userServices;
-
-	private Map<String, Object> dataMap;
+	
+	@Autowired
+	private DevicePushServices decicDevicePushServices;
+	
+	private Map<String, Object> dataMap = new LinkedHashMap<String, Object>(); // 新建dataMap来储存JSON字符串
 
 	private String datamsg;
 	private Integer usertype;
+	
+	private Integer msgid;
+	private String msgcontents;
 
 	@Override
 	public String execute() throws Exception {
@@ -64,6 +74,7 @@ public class GcmAction extends ActionSupport {
 	public String sendmsgJson() throws Exception {
 		System.out.println("sendmsgJson");
 		sendmsg();
+		sendmsgIos();
 		return "json";
 	}
 
@@ -104,6 +115,51 @@ public class GcmAction extends ActionSupport {
 		return "json";
 	}
 
+	/**
+	 * getPushMessage
+	 * @return
+	 * @throws Exception
+	 */
+	public String getPushMessage() throws Exception {
+		List<PushMessage> pushMsg = decicDevicePushServices.getPushMessage();
+		dataMap.clear(); // dataMap中的数据将会被Struts2转换成JSON字符串，所以这里要先清空其中的数据
+		dataMap.put("pushMessage", pushMsg);
+		dataMap.putAll(Tools.JsonHeadMap(ResultCode.SUCCESS, true));
+		return SUCCESS;
+	}
+	public String getPushMessageJson() throws Exception {
+		getPushMessage();
+		return "json";
+	}
+	
+	/**
+	 * updatePushMessage
+	 * @return
+	 * @throws Exception
+	 */
+	public String updatePushMessage() throws Exception {
+		dataMap.clear();
+		int result = decicDevicePushServices.updatePushMessage(msgid, msgcontents);
+		if (result == ResultCode.SUCCESS) {
+			dataMap.putAll(Tools.JsonHeadMap(result, true));
+			System.out.println(dataMap);
+//			logger.info("userOpr:[UserUpdate][Updated ID: " + userid + "]" + Tools.JsonHeadMap(result, true));
+			return SUCCESS;
+		} else {
+			dataMap.putAll(Tools.JsonHeadMap(result, false));
+			System.out.println(dataMap);
+			return INPUT;
+		}
+	}
+	public String updatePushMessageJson() throws Exception {
+		updatePushMessage();
+		return "json";
+	}
+	
+	/**
+	 * Getter & Setter
+	 * @return
+	 */
 	public Map<String, Object> getDataMap() {
 		return dataMap;
 	}
@@ -138,6 +194,22 @@ public class GcmAction extends ActionSupport {
 
 	public void setUsertype(Integer usertype) {
 		this.usertype = usertype;
+	}
+
+	public Integer getMsgid() {
+		return msgid;
+	}
+
+	public void setMsgid(Integer msgid) {
+		this.msgid = msgid;
+	}
+
+	public String getMsgcontents() {
+		return msgcontents;
+	}
+
+	public void setMsgcontents(String msgcontents) {
+		this.msgcontents = msgcontents;
 	}
 
 }

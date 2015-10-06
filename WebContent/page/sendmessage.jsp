@@ -7,11 +7,6 @@
 <meta http-equiv=content-type content="text/html; charset=utf-8" />
 <link rel="shortcut icon" href="${pageContext.request.contextPath }/page/img/BBCallicon_32X32.ico" type="image/x-icon" />
 <link href="${pageContext.request.contextPath }/page/css/mine.css" type="text/css" rel="stylesheet" />
-<script type="text/javascript">
-	var token = "${sessionScope.user.user_token}";
-	var link = "${pageContext.request.contextPath}";
-
-</script>
 
 <%
   String path=request.getContextPath();
@@ -40,19 +35,17 @@
         <div style="font-size: 13px; margin: 10px 5px;">
         <form id="gcm_sendmsg" action="gcm_sendmsg" method="post">
 		<table class="table_list" border="1" width="100%">
-                <tbody id="datas">
+                <tbody id="data1">
                 	<tr style="font-weight: bold;">
                 		
                         <td>推送內容： </td>
                     </tr>
-                    
-       
-					<tr id="template">
+					<tr>
 						<td align="left">
 							<textarea rows="5" cols="100" id="datamsg" name="datamsg"></textarea>
 						</td>
 					</tr>
-					<tr id="template">
+					<tr>
 						<td>
 							<input type="submit" value="發送"/>
 						</td>
@@ -62,9 +55,43 @@
                 </tbody>
             </table>
             </form>
-        </div>
+            <div style="height:50px"></div>
+		<table class="table_list" border="1" width="100%">
+			<tbody id="datas">
+			<tr style="font-weight: bold;">
+				<td colspan="20">
+					系統內推送管理<br />
+					System Message Push Management
+				</td>
+			</tr>
+				<tr style="color: #1c94c4">
+					<td width="120px">簡訊序號<br />Message ID
+					</td>
+					<td width="120px">簡訊類型<br />Message Type
+					</td>
+					<td width="600px">簡訊內容<br />Message Contents
+					</td>
+					<td colspan="2" align="center">操作<br />Operations
+					</td>
+				</tr>
+				<tr id="template" style="display: none; font-size: 12px;">
+					<td id="msgid"></td>
+					<td id="msgtype"></td>
+					<td><textarea rows="3" cols="70" id="msgcontents"></textarea></td>
+					<td id="status_operation"><input id="btnRevise" type="submit" value="修改/Revise"
+						onclick="" /></td>
+				</tr>
+			</tbody>
+		</table>
+	</div>
 	<div class="footer"></div>
+	<script type="text/javascript">
+		var token = "${sessionScope.user_token}";
+		var link = "${pageContext.request.contextPath}";
+	</script>
 	<script type="text/javascript"
 		src="${pageContext.request.contextPath }/jquery/jquery-1.8.3.js"></script>
+	<script type="text/javascript"
+		src="${pageContext.request.contextPath }/jquery/sendmessagePage.js"></script>
 </body>
 </html>
