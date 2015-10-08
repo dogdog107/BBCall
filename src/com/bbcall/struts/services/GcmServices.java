@@ -230,7 +230,7 @@ public class GcmServices {
 		if (orderId != null)
 			data.put("orderid", orderId);
 		if (msgType != null)
-			notification.put("msgtype", msgType);
+			data.put("msgtype", msgType);
 		
 		JSONObject jsonObject = new JSONObject();
 		jsonObject.put("notification", notification);
@@ -239,7 +239,7 @@ public class GcmServices {
 		if (orderId != null)
 			jsonObject.put("orderid", orderId);
 		if (msgType != null)
-			notification.put("msgtype", msgType);
+			jsonObject.put("msgtype", msgType);
 		
 		System.out.println(jsonObject);
 
