@@ -260,6 +260,29 @@ public class FileUploadAction extends ActionSupport {
 		referdocUpload();
 		return "json";
 	}
+	
+	/**
+	 * fileDelete
+	 * @return
+	 * @throws Exception
+	 */
+	public String fileDelete() throws Exception {
+		dataMap.clear(); 
+		int result = fileUploadServices.deleteFile(picurl);
+		if (result == ResultCode.SUCCESS) {
+			dataMap.putAll(Tools.JsonHeadMap(result, true));
+			logger.info("userOpr:[fileDelete] Deleted: " + picurl);  
+		} else {
+			dataMap.putAll(Tools.JsonHeadMap(result, false));
+			logger.info("userOpr:[fileDelete] Delete fail: " + picurl);  
+		}
+		return null;
+	}
+	public String fileDeleteJson() throws Exception {
+		fileDelete();
+		return "json";
+	}
+	
 	// public String uploadFile() throws Exception {
 	//
 	// // 保存文件的地址

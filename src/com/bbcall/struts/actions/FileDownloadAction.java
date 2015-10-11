@@ -94,7 +94,7 @@ public class FileDownloadAction extends ActionSupport {
 	public String getFileList() throws Exception {
 		dataMap.clear();
 		System.out.println(fileType);
-		if (fileType == null || (!fileType.equals("Grade") && !fileType.equals("Trade") && !fileType.equals("User"))) {
+		if (fileType == null || (!fileType.equals("Grade") && !fileType.equals("Trade") && !fileType.equals("User") && !fileType.equals("System"))) {
 			dataMap.putAll(Tools.JsonHeadMap(ResultCode.REQUIREINFO_ERROR, false));
 			logger.info("userOpr:[getFileList]" + Tools.JsonHeadMap(ResultCode.REQUIREINFO_ERROR, false));  
 			return null;

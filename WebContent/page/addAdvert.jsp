@@ -86,7 +86,7 @@
 						<input type="hidden" id="advertisement_bigphoto_url" name="advertisement_bigphoto_url" value="" />
 						<!--用来存放item-->
 						<div id="bigPhoto" class="uploader-list"><img id="bigPhotoImgTemp" src='' height='200' width='400'></div>
-						<div id="bigPhotoPicker">选择图片</div>
+						<div id="bigPhotoPicker"><span id="bigPhotoPickerValue">選擇圖片</span></div>
 					</td>
 				</tr>
 				<tr>
@@ -95,7 +95,7 @@
 						<input type="hidden" id="advertisement_smallphoto_url" name="advertisement_smallphoto_url" value="" />
 						<!--用来存放item-->
 						<div id="smallPhoto" class="uploader-list"><img id="smallPhotoImgTemp" src='' height='100' width='100'></div>
-						<div id="smallPhotoPicker">选择图片</div>
+						<div id="smallPhotoPicker"><span id="smallPhotoPickerValue">選擇圖片</span></div>
 					</td>
 				</tr>
 				<tr>

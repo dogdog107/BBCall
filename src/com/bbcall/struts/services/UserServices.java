@@ -410,6 +410,7 @@ public class UserServices {
 			}
 			if (usertype == 5) {
 				user.setUser_type(1);
+				user.setUser_access_group("user_default");
 				userMapper.updateUser(user);
 			} else {
 				userMapper.addUserByAccount(user);// 把用户信息插入数据表
@@ -1192,6 +1193,48 @@ public class UserServices {
 			}
 		} else {
 			return ResultCode.USERID_ERROR;
+		}
+	}
+	
+	/**
+	 * updateToken
+	 * @param userid
+	 * @param token
+	 * @return
+	 */
+	public int updateToken(Integer userid, String token){
+		System.out.println("Here is UserServices.updateToken method...");
+		if (userid == null)
+			return ResultCode.REQUIREINFO_NOTENOUGH;
+		User tempUser = userMapper.getUserById(userid);
+		if (tempUser != null) {
+			tempUser.setUser_token(token);
+			userMapper.updateToken(tempUser);
+			return ResultCode.SUCCESS;
+		} else {
+			return ResultCode.USERID_ERROR;
+		}
+	}
+	
+	/**
+	 * logout
+	 * @param userid
+	 * @param pushtoken
+	 * @param token
+	 * @return
+	 */
+	public int logout(Integer userid, String pushtoken, String token) {
+		int result1 = updateToken(userid, token);
+		int result2 = updateUserPushToken(userid, pushtoken);
+
+		if (result1 == ResultCode.SUCCESS && result2 == ResultCode.SUCCESS) {
+			return ResultCode.SUCCESS;
+		}
+
+		if (result1 > result2) {
+			return result1;
+		} else {
+			return result2;
 		}
 	}
 	

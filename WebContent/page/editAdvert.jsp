@@ -7,7 +7,8 @@
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <link rel="shortcut icon" href="${pageContext.request.contextPath }/page/img/BBCallicon_32X32.ico" type="image/x-icon" />
 <link href="${pageContext.request.contextPath }/page/css/mine.css" type="text/css" rel="stylesheet" />
-
+<!--WebUploader引入CSS-->
+<link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath }/page/WebUploader/webuploader.css" />
 <title>新增廣告 (Add Advertisement)</title>
 </head>
 <body onload="onload()">
@@ -78,18 +79,18 @@
 					<td>廣告大標圖 (AD Big Photo)</td>
 					<td>
 						<input type="hidden" id="advertisement_bigphoto_url" name="advertisement_bigphoto_url" value="${advertisement_bigphoto_url }" />
-						<img id="big_photo" name="advertisement_bigphoto_url" src="${advertisement_bigphoto_url }" height="200" width="400" /><br/>
-						<span style="color:red">圖片不能編輯</span>
-						<!-- <input type="file" name="upload" id="upload" onchange="" class="" /> -->
+						<%-- <img id="big_photo" name="advertisement_bigphoto_url" src="${advertisement_bigphoto_url }" height="200" width="400" /><br/> --%>
+						<div id="bigPhoto" class="uploader-list"><img id="bigPhotoImgTemp" src='${advertisement_bigphoto_url }' height='200' width='400'></div>
+						<div id="bigPhotoPicker"><span id="bigPhotoPickerValue">修改圖片</span></div>
 					</td>
 				</tr>
 				<tr>
 					<td>廣告小標圖 (AD Small Photo)</td>
 					<td>
 						<input type="hidden" id="advertisement_smallphoto_url" name="advertisement_smallphoto_url" value="${advertisement_smallphoto_url }" />
-						<img id="small_photo" name="advertisement_smallphoto_url" src="${advertisement_smallphoto_url }" height="100" width="100" /><br/>
-						<span style="color:red">圖片不能編輯</span>
-						<!-- <input type="file" name="upload" id="upload" onchange="" class="" /> -->
+						<%-- <img id="small_photo" name="advertisement_smallphoto_url" src="${advertisement_smallphoto_url }" height="100" width="100" /><br/> --%>
+						<div id="smallPhoto" class="uploader-list"><img id="smallPhotoImgTemp" src='${advertisement_smallphoto_url }' height='100' width='100'></div>
+						<div id="smallPhotoPicker"><span id="smallPhotoPickerValue">修改圖片</span></div>
 					</td>
 				</tr>
 				<tr>
@@ -98,7 +99,7 @@
 				<tr>
 					<td colspan="2">
 						<input type="hidden" id="advertisement_content" name="advertisement_content" value="" />
-						<script id="editor" type="text/plain" style="width:99%;height:400px;">${advertisement_content}</script>
+						<script id="editor" type="text/plain" style="width:99%;height:400px;"></script>
 					</td>
 				</tr>
 				<tr>
@@ -117,9 +118,11 @@
 		// 添加全局站点信息
 		var BASE_URL = '${pageContext.request.contextPath }';
 		var token = '${sessionScope.user_token}';
+		var link = "${pageContext.request.contextPath}";
 		var advertType = '${advertisement_type }';
 		var updateResult = "${updateResult}";
 		var updateErrmsg = "${dataMap.errmsg}";
+		var content = "${advertisement_content}";
 	</script>
 	
 	<!--引入jquery-->
@@ -137,7 +140,11 @@
 	<!--建议手动加在语言，避免在ie下有时因为加载语言失败导致编辑器加载失败-->
 	<!--这里加载的语言文件会覆盖你在配置项目里添加的语言类型，比如你在配置项目里配置的是英文，这里加载的中文，那最后就是中文-->
 	<!-- <script type="text/javascript" charset="utf-8" src="UEditor/lang/zh-cn/zh-cn.js"></script> -->
-
+	
+	<!--WebUploader引入JS-->
+	<script type="text/javascript"
+		src="${pageContext.request.contextPath }/page/WebUploader/webuploader.js"></script>
+		
 	<!-- 页面JS文件 -->
 	<script type="text/javascript" charset="utf-8"
 		src="${pageContext.request.contextPath }/jquery/editAdvertPage.js"></script>

@@ -49,6 +49,10 @@ jQuery(function() {
 
     // 当有文件添加进来的时候
     uploader.on( 'fileQueued', function( file ) {
+        if ($("#normalPhotoImg").length > 0) {
+        	deltefiles($( '#referdoc_pic_url' ).val());
+        	$("#normalPhotoImg").remove();
+        }
         var $li = $(
                 '<div id="' + file.id + '" class="file-item thumbnail">' +
                     '<img>' +
@@ -67,7 +71,9 @@ jQuery(function() {
             }
 
             $img.attr( 'src', src );
-            $("#normalPhotoImgTemp").remove();
+            if ($("#normalPhotoImgTemp").length > 0) {
+            	$("#normalPhotoImgTemp").remove();
+            }
         }, thumbnailWidth, thumbnailHeight );
     });
 
@@ -97,7 +103,7 @@ jQuery(function() {
     // 文件上传成功，给item添加成功class, 用样式标记上传成功。
     uploader.on( 'uploadSuccess', function( file, response ) {
         $( '#'+file.id ).addClass('upload-state-done');
-        $( '#normalPhotoPicker' ).remove();
+        $( '#normalPhotoPickerValue' ).text("修改圖片");
         $( '#referdoc_pic_url' ).val(response.picurl);
     });
 
@@ -116,6 +122,7 @@ jQuery(function() {
     // 完成上传完了，成功或者失败，先删除进度条。
     uploader.on( 'uploadComplete', function( file ) {
         $( '#'+file.id ).find('.progress').remove();
+        $( '#'+file.id ).attr("id", "normalPhotoImg");
     });
 });
 
@@ -170,6 +177,10 @@ jQuery(function() {
 	
 	// 当有文件添加进来的时候
 	uploader.on( 'fileQueued', function( file ) {
+        if ($("#downPhotoImg").length > 0) {
+        	deltefiles($( '#referdoc_pic_url' ).val());
+        	$("#downPhotoImg").remove();
+        }
 		var $li = $(
 				'<div id="' + file.id + '" class="file-item thumbnail">' +
 				'<img>' +
@@ -188,7 +199,9 @@ jQuery(function() {
 			}
 			
 			$img.attr( 'src', src );
-			$("#downPhotoImgTemp").remove();
+			if ($("#downPhotoImgTemp").length > 0) {
+				$("#downPhotoImgTemp").remove();
+			}
 		}, thumbnailWidth, thumbnailHeight );
 	});
 	
@@ -218,7 +231,7 @@ jQuery(function() {
 	// 文件上传成功，给item添加成功class, 用样式标记上传成功。
 	uploader.on( 'uploadSuccess', function( file, response ) {
 		$( '#'+file.id ).addClass('upload-state-done');
-		$( '#downPhotoPicker' ).remove();
+		$( '#downPhotoPickerValue' ).text("修改圖片");
 		$( '#referdoc_downpic_url' ).val(response.picurl);
 	});
 	
@@ -238,9 +251,26 @@ jQuery(function() {
 	// 完成上传完了，成功或者失败，先删除进度条。
 	uploader.on( 'uploadComplete', function( file ) {
 		$( '#'+file.id ).find('.progress').remove();
+		$( '#'+file.id ).attr("id", "downPhotoImg");
 	});
 });
 
+function deltefiles(filePath){
+	$.ajax({
+		type : "post",
+		url : "${pageContext.request.contextPath}/upload_fileDeleteJson.action",
+		data : {
+			"picurl" : filePath,
+			"token" : token
+		},
+		success : function(data) {
+			if (data.result) {
+			} else {
+				alert(data.errmsg);
+			}
+		}
+	});
+}
 
 function onload() {
 	var level = document.getElementById('referdoc_level').value;

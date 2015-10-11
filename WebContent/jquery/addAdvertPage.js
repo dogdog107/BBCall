@@ -137,6 +137,10 @@ jQuery(function() {
 
     // 当有文件添加进来的时候
     uploader.on( 'fileQueued', function( file ) {
+        if ($("#bigPhotoImg").length > 0) {
+        	deltefiles($( '#advertisement_bigphoto_url' ).val());
+        	$("#bigPhotoImg").remove();
+        }
         var $li = $(
                 '<div id="' + file.id + '" class="file-item thumbnail">' +
                     '<img>' +
@@ -155,7 +159,9 @@ jQuery(function() {
             }
 
             $img.attr( 'src', src );
-            $("#bigPhotoImgTemp").remove();
+            if ($("#bigPhotoImgTemp").length > 0) {
+            	$("#bigPhotoImgTemp").remove();
+            }
         }, thumbnailWidth, thumbnailHeight );
     });
 
@@ -185,7 +191,7 @@ jQuery(function() {
     // 文件上传成功，给item添加成功class, 用样式标记上传成功。
     uploader.on( 'uploadSuccess', function( file, response ) {
         $( '#'+file.id ).addClass('upload-state-done');
-        $( '#bigPhotoPicker' ).remove();
+        $( '#bigPhotoPickerValue' ).text("修改圖片");
         $( '#advertisement_bigphoto_url' ).val(response.picurl);
     });
 
@@ -204,6 +210,7 @@ jQuery(function() {
     // 完成上传完了，成功或者失败，先删除进度条。
     uploader.on( 'uploadComplete', function( file ) {
         $( '#'+file.id ).find('.progress').remove();
+        $( '#'+file.id ).attr("id", "bigPhotoImg");
     });
 });
 
@@ -258,6 +265,10 @@ jQuery(function() {
 	
 	// 当有文件添加进来的时候
 	uploader.on( 'fileQueued', function( file ) {
+        if ($("#smallPhotoImg").length > 0) {
+        	deltefiles($( '#advertisement_smallphoto_url' ).val());
+        	$("#smallPhotoImg").remove();
+        }
 		var $li = $(
 				'<div id="' + file.id + '" class="file-item thumbnail">' +
 				'<img>' +
@@ -276,7 +287,9 @@ jQuery(function() {
 			}
 			
 			$img.attr( 'src', src );
-			$("#smallPhotoImgTemp").remove();
+			if($("#smallPhotoImgTemp").length > 0) {
+				$("#smallPhotoImgTemp").remove();
+			}
 		}, thumbnailWidth, thumbnailHeight );
 	});
 	
@@ -306,7 +319,7 @@ jQuery(function() {
 	// 文件上传成功，给item添加成功class, 用样式标记上传成功。
 	uploader.on( 'uploadSuccess', function( file, response ) {
 		$( '#'+file.id ).addClass('upload-state-done');
-		$( '#smallPhotoPicker' ).remove();
+		$( '#smallPhotoPickerValue' ).text("修改圖片");
 		$( '#advertisement_smallphoto_url' ).val(response.picurl);
 	});
 	
@@ -326,6 +339,7 @@ jQuery(function() {
 	// 完成上传完了，成功或者失败，先删除进度条。
 	uploader.on( 'uploadComplete', function( file ) {
 		$( '#'+file.id ).find('.progress').remove();
+		$( '#'+file.id ).attr("id", "smallPhotoImg");
 	});
 });
 
@@ -336,6 +350,7 @@ var ue = UE.getEditor('editor');
 //    //需要ready后执行，否则可能报错
 //    editor.setContent("欢迎使用UEditor！");
 //})
+
 //拿一级项技能表
 function getParentSkillList(idname) {
 	$.ajax({
@@ -376,6 +391,23 @@ function getChildSkillList(parentcode) {
 					$('<label><input name="skillcodepart" id="skillcodepartid_' + data.referdoclist[j].referdoc_id + '" type="radio" value="' + data.referdoclist[j].referdoc_id + '" />' + data.referdoclist[j].referdoc_type + '&nbsp;&nbsp;</label>').appendTo($childskill);
 				}
 				$childskill.show(300);
+			} else {
+				alert(data.errmsg);
+			}
+		}
+	});
+}
+
+function deltefiles(filePath){
+	$.ajax({
+		type : "post",
+		url : "${pageContext.request.contextPath}/upload_fileDeleteJson.action",
+		data : {
+			"picurl" : filePath,
+			"token" : token
+		},
+		success : function(data) {
+			if (data.result) {
 			} else {
 				alert(data.errmsg);
 			}

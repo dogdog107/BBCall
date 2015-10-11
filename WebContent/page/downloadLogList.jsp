@@ -35,6 +35,7 @@
 					<option value="User">用戶操作日誌(User Operation)</option>
 					<option value="Trade">交易日誌(Trade Operation)</option>
 					<option value="Grade">評分日誌(Grade Operation)</option>
+					<option value="System">系統日誌(Grade Operation)</option>
 			</select>
 				<div id="div_message" class="div_message" style="display: none">
 					<span id="message"> </span>

@@ -90,6 +90,9 @@ public class ResultCode {
 	public static Integer NODEID_ERROR = 30001;// 论坛id不存在
 	public static Integer TOPICID_ERROR = 31001;// 主题id不存在
 
+	// 文件错误码8XXXX
+	public static Integer FILE_NOTEXIST = 80001;// 文件不存在
+	
 	// 版本错误码90XXX
 	public static Integer VERSIONCODE_ERROR = 90001;// 版本号有误
 
@@ -299,6 +302,11 @@ public class ResultCode {
 			break;
 		case 31001:
 			errmsg = "invalid topic_id";
+			break;
+		
+		// 文件类
+		case 80001:
+			errmsg = "file not exist";
 			break;
 
 		// 版本类

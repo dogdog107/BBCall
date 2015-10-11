@@ -81,16 +81,18 @@
 							<div id="normalPhoto" class="uploader-list">
 								<img id="normalPhotoImgTemp" src='' height='100' width='100'>
 							</div>
-							<div id="normalPhotoPicker">選擇圖片</div></td>
+							<div id="normalPhotoPicker">
+								<span id="normalPhotoPickerValue">選擇圖片</span>
+							</div></td>
 					</tr>
 					<tr>
-						<td>Apps內 點擊時圖片 (Down Photo)</td>
+						<td>Apps內 點擊時圖片 (Pressed Photo)</td>
 						<td><input type="hidden" id="referdoc_downpic_url"
 							name="referdoc_downpic_url" value="" /> <!--用来存放item-->
 							<div id="downPhoto" class="uploader-list">
 								<img id="downPhotoImgTemp" src='' height='100' width='100'>
 							</div>
-							<div id="downPhotoPicker">選擇圖片</div></td>
+							<div id="downPhotoPicker"><span id="downPhotoPickerValue">選擇圖片</span></div></td>
 					</tr>
 					<tr align="center">
 						<td colspan="2"><input type="submit" value="添加"></input> <input

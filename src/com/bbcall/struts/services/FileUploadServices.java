@@ -84,8 +84,10 @@ public class FileUploadServices {
 		File destFile = new File(storeRootPath + deleteFilePath);
 		if (destFile.exists()) {
 			destFile.delete();
+			return ResultCode.SUCCESS;
+		} else {
+			return ResultCode.FILE_NOTEXIST;
 		}
-		return ResultCode.SUCCESS;
 	}
 
 	public String getFileurl() {
