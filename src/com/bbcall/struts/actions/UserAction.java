@@ -19,7 +19,6 @@ import com.bbcall.functions.ObjectToMap;
 import com.bbcall.functions.Tools;
 import com.bbcall.mybatis.table.User;
 import com.bbcall.mybatis.table.UserSkill;
-import com.bbcall.struts.services.DevicePushServices;
 import com.bbcall.struts.services.MailServices;
 import com.bbcall.struts.services.UserServices;
 import com.bbcall.struts.services.UserSkillServices;
@@ -413,22 +412,22 @@ public class UserAction extends ActionSupport implements SessionAware{
 	 * @return
 	 * @throws Exception
 	 */
-	public String verifyUserSkill() throws Exception{
-		dataMap.clear(); // dataMap中的数据将会被Struts2转换成JSON字符串，所以这里要先清空其中的数据
-		int result = userSkillServices.verifyUserSkill(userid, skillcode, skillstatus);
-		if (result == ResultCode.SUCCESS) {
-			dataMap.putAll(Tools.JsonHeadMap(result, true));
-			logger.info("userOpr:[verifyUserSkill]" + Tools.JsonHeadMap(result, true));
-		} else {
-			dataMap.putAll(Tools.JsonHeadMap(result, false));
-			logger.info("userOpr:[verifyUserSkill]" + Tools.JsonHeadMap(result, false));
-		}
-		return SUCCESS;
-	}
-	public String verifyUserSkillJson() throws Exception{
-		verifyUserSkill();
-		return "json";
-	}
+//	public String verifyUserSkill() throws Exception{
+//		dataMap.clear(); // dataMap中的数据将会被Struts2转换成JSON字符串，所以这里要先清空其中的数据
+//		int result = userSkillServices.verifyUserSkill(userid, skillcode, skillstatus);
+//		if (result == ResultCode.SUCCESS) {
+//			dataMap.putAll(Tools.JsonHeadMap(result, true));
+//			logger.info("userOpr:[verifyUserSkill]" + Tools.JsonHeadMap(result, true));
+//		} else {
+//			dataMap.putAll(Tools.JsonHeadMap(result, false));
+//			logger.info("userOpr:[verifyUserSkill]" + Tools.JsonHeadMap(result, false));
+//		}
+//		return SUCCESS;
+//	}
+//	public String verifyUserSkillJson() throws Exception{
+//		verifyUserSkill();
+//		return "json";
+//	}
 	
 	/**
 	 * verifyUserSkillBySkillId 通过skillid审批用户技能

@@ -74,41 +74,46 @@ public class UserSkillServices {
 	 * @param userskillurl
 	 * @return
 	 */
-	public int addUserSkill(Integer userid, Integer userskill, String userskillurl) {
+	public int addUserSkill(Integer userid, Integer userskill,
+			String userskillurl) {
 		if (userid == null || userskill == null || Tools.isEmpty(userskillurl))
 			return ResultCode.REQUIREINFO_NOTENOUGH;
-		
+
 		referdocServices.getReferdoc(userskill); // 检测userskill是否正确
-		if (referdocServices.referdocinfo() == null) 
+		if (referdocServices.referdocinfo() == null)
 			return ResultCode.REQUIREINFO_ERROR;
-		UserSkill existUserSkill = userSkillMapper.getUserSkillByUserIdAndSkill(userid, userskill);
-		if (existUserSkill == null || existUserSkill.getUser_skill_status().equals(2)) {
-			UserSkill tempUserSkill = new UserSkill();
-			tempUserSkill.setUser_id(userid);
-			tempUserSkill.setUser_skill(userskill);
-			// 清除开头为;的符号
-			while(userskillurl.startsWith(";")){
-				userskillurl = userskillurl.substring(1, userskillurl.length());
-			}
-			// 清除结尾为;的符号
-			while(userskillurl.endsWith(";")){
-				userskillurl = userskillurl.substring(0, userskillurl.length() - 1);
-			}
-			tempUserSkill.setUser_skill_url(userskillurl);
-			userSkillMapper.addUserSkill(tempUserSkill);
-			return ResultCode.SUCCESS;
-		} else {
-			switch (existUserSkill.getUser_skill_status()) {
-			case 0:
-				return ResultCode.USERSKILL_PENDING;
-			case 1:
-				return ResultCode.USERSKILL_ACTIVE;
-			case 2:
-				return ResultCode.USERSKILL_REJECT;
-			default:
-				return ResultCode.UNKNOWN_ERROR;
+		List<UserSkill> existUserSkill = userSkillMapper
+				.getUserSkillByUserIdAndSkill(userid, userskill);
+		for (int i = 0; i < existUserSkill.size(); i++) {
+			if (existUserSkill.get(i) != null
+					&& !existUserSkill.get(i).getUser_skill_status().equals(2)) {
+				switch (existUserSkill.get(i).getUser_skill_status()) {
+				case 0:
+					return ResultCode.USERSKILL_PENDING;
+				case 1:
+					return ResultCode.USERSKILL_ACTIVE;
+				case 2:
+					return ResultCode.USERSKILL_REJECT;
+				default:
+					return ResultCode.UNKNOWN_ERROR;
+				}
 			}
 		}
+		UserSkill tempUserSkill = new UserSkill();
+		tempUserSkill.setUser_id(userid);
+		tempUserSkill.setUser_skill(userskill);
+		// 清除开头为;的符号
+		while (userskillurl.startsWith(";")) {
+			userskillurl = userskillurl.substring(1, userskillurl.length());
+		}
+		// 清除结尾为;的符号
+		while (userskillurl.endsWith(";")) {
+			userskillurl = userskillurl.substring(0, userskillurl.length() - 1);
+		}
+		tempUserSkill.setUser_skill_url(userskillurl);
+		userSkillMapper.addUserSkill(tempUserSkill);
+		return ResultCode.SUCCESS;
+
 	}
 	
 	/**
@@ -125,23 +130,29 @@ public class UserSkillServices {
 		referdocServices.getReferdoc(userskill); // 检测userskill是否正确
 		if (referdocServices.referdocinfo() == null) 
 			return ResultCode.REQUIREINFO_ERROR;
-		UserSkill tempUserSkill = new UserSkill();
-		tempUserSkill = userSkillMapper.getUserSkillByUserIdAndSkill(userid, userskill);
+//		UserSkill tempUserSkill = new UserSkill();
+		List<UserSkill> tempUserSkill = userSkillMapper.getUserSkillByUserIdAndSkill(userid, userskill);
 		
-		if (tempUserSkill != null) {
-			if(!userskillurl.equals(tempUserSkill.getUser_skill_url())){
-				fileUploadServices.deleteFile(tempUserSkill.getUser_skill_url());// 先删除之前的头像文件
-				tempUserSkill.setUser_skill_url(userskillurl);
-				tempUserSkill.setUser_skill_status(0); // 设置为未审核状态
-				userSkillMapper.updateUserSkillById(tempUserSkill);
-				return ResultCode.SUCCESS;
-			} else {
-				return ResultCode.USERSKILLINFO_ISSAME;
+		for (int i = 0; i < tempUserSkill.size(); i++) {
+			if (tempUserSkill.get(i) == null) {
+				return ResultCode.USERSKILLINFO_NOTEXIST;
 			}
-		} else {
-			return ResultCode.USERSKILLINFO_NOTEXIST;
+			if (tempUserSkill.get(i).getUser_skill_status().equals(0)) {
+				if(!userskillurl.equals(tempUserSkill.get(i).getUser_skill_url())){
+					String[] tempUrl = tempUserSkill.get(i).getUser_skill_url().split(";");
+					for (int j = 0; j < tempUrl.length; j++) {
+						fileUploadServices.deleteFile(tempUrl[j]);// 先删除之前的证书文件
+					}
+					tempUserSkill.get(i).setUser_skill_url(userskillurl);
+					tempUserSkill.get(i).setUser_skill_status(0); // 设置为未审核状态
+					userSkillMapper.updateUserSkillById(tempUserSkill.get(i));
+					return ResultCode.SUCCESS;
+				} else {
+					return ResultCode.USERSKILLINFO_ISSAME;
+				}
+			}
 		}
-		
+		return ResultCode.USERSKILLINFO_NOTEXIST;
 	}
 	
 	/**
@@ -151,70 +162,70 @@ public class UserSkillServices {
 	 * @param userskillstatus
 	 * @return
 	 */
-	public int verifyUserSkill(Integer userid, Integer userskill, Integer userskillstatus) {
-		if (userid == null || userskill == null || userskillstatus == null)
-			return ResultCode.REQUIREINFO_NOTENOUGH;
-		
-		UserSkill tempUserSkill = new UserSkill();
-		tempUserSkill = userSkillMapper.getUserSkillByUserIdAndSkill(userid, userskill);
-		User tempUser = userMapper.getUserById(userid);
-		String pushMsg = "";
-		if (tempUserSkill != null) {
-			switch (userskillstatus) {
-			case 0: // 未审核状态
-				return ResultCode.SUCCESS;
-			case 1: // 审核通过
-				String orgUserSkill = tempUser.getUser_skill();
-				if (!orgUserSkill.contains(userskill.toString())) {
-					orgUserSkill = orgUserSkill + ";" + userskill.toString();
-				}
-				
-				// 清除开头为;的符号
-				while(orgUserSkill.startsWith(";")){
-					orgUserSkill = orgUserSkill.substring(1, orgUserSkill.length());
-				}
-				// 清除结尾为;的符号
-				while(orgUserSkill.endsWith(";")){
-					orgUserSkill = orgUserSkill.substring(0, orgUserSkill.length() - 1);
-				}
-				tempUser.setUser_skill(orgUserSkill); // 更新对应用户的技能信息
-				
-				String skillName = referdocServices.getReferlist(orgUserSkill);
-				// 清除开头为;的符号
-				while(skillName.startsWith(";")){
-					skillName = skillName.substring(1, skillName.length());
-				}
-				// 清除结尾为;的符号
-				while(skillName.endsWith(";")){
-					skillName = skillName.substring(0, skillName.length() - 1);
-				}
-				tempUser.setUser_skill_name(skillName); // 更新对应用户的技能信息
-				userMapper.updateUser(tempUser);
-				
-				// 推送的文字
-				pushMsg = "Dear " + tempUser.getUser_name() + ", Your Skill has been approved by BBCall Admin.";
-				break;
-			case 2: // 审核不通过
-				
-				// 推送的文字
-				pushMsg = "Dear " + tempUser.getUser_name() + ", Your Skill has been rejected by BBCall Admin, please re-submit again.";
-				break;
-			default:
-				return ResultCode.REQUIREINFO_ERROR;
-			}
-			tempUserSkill.setUser_skill_status(userskillstatus);
-			userSkillMapper.updateUserSkillById(tempUserSkill);
-			
-			// 审核消息推送
-			if (tempUser.getUser_driver() != 0 && !Tools.isEmpty(tempUser.getUser_push_token())) {
-				devicePushServices.devicePush(tempUser.getUser_driver(), tempUser.getUser_push_token(), pushMsg, tempUser.getUser_type(), null, "master_skill");
-			}
-			
-			return ResultCode.SUCCESS;
-		} else {
-			return ResultCode.USERSKILLINFO_NOTEXIST;
-		}
-	}
+//	public int verifyUserSkill(Integer userid, Integer userskill, Integer userskillstatus) {
+//		if (userid == null || userskill == null || userskillstatus == null)
+//			return ResultCode.REQUIREINFO_NOTENOUGH;
+//		
+//		UserSkill tempUserSkill = new UserSkill();
+//		tempUserSkill = userSkillMapper.getUserSkillByUserIdAndSkill(userid, userskill);
+//		User tempUser = userMapper.getUserById(userid);
+//		String pushMsg = "";
+//		if (tempUserSkill != null) {
+//			switch (userskillstatus) {
+//			case 0: // 未审核状态
+//				return ResultCode.SUCCESS;
+//			case 1: // 审核通过
+//				String orgUserSkill = tempUser.getUser_skill();
+//				if (!orgUserSkill.contains(userskill.toString())) {
+//					orgUserSkill = orgUserSkill + ";" + userskill.toString();
+//				}
+//				
+//				// 清除开头为;的符号
+//				while(orgUserSkill.startsWith(";")){
+//					orgUserSkill = orgUserSkill.substring(1, orgUserSkill.length());
+//				}
+//				// 清除结尾为;的符号
+//				while(orgUserSkill.endsWith(";")){
+//					orgUserSkill = orgUserSkill.substring(0, orgUserSkill.length() - 1);
+//				}
+//				tempUser.setUser_skill(orgUserSkill); // 更新对应用户的技能信息
+//				
+//				String skillName = referdocServices.getReferlist(orgUserSkill);
+//				// 清除开头为;的符号
+//				while(skillName.startsWith(";")){
+//					skillName = skillName.substring(1, skillName.length());
+//				}
+//				// 清除结尾为;的符号
+//				while(skillName.endsWith(";")){
+//					skillName = skillName.substring(0, skillName.length() - 1);
+//				}
+//				tempUser.setUser_skill_name(skillName); // 更新对应用户的技能信息
+//				userMapper.updateUser(tempUser);
+//				
+//				// 推送的文字
+//				pushMsg = "Dear " + tempUser.getUser_name() + ", Your Skill has been approved by BBCall Admin.";
+//				break;
+//			case 2: // 审核不通过
+//				
+//				// 推送的文字
+//				pushMsg = "Dear " + tempUser.getUser_name() + ", Your Skill has been rejected by BBCall Admin, please re-submit again.";
+//				break;
+//			default:
+//				return ResultCode.REQUIREINFO_ERROR;
+//			}
+//			tempUserSkill.setUser_skill_status(userskillstatus);
+//			userSkillMapper.updateUserSkillById(tempUserSkill);
+//			
+//			// 审核消息推送
+//			if (tempUser.getUser_driver() != 0 && !Tools.isEmpty(tempUser.getUser_push_token())) {
+//				devicePushServices.devicePush(tempUser.getUser_driver(), tempUser.getUser_push_token(), pushMsg, tempUser.getUser_type(), null, "master_skill");
+//			}
+//			
+//			return ResultCode.SUCCESS;
+//		} else {
+//			return ResultCode.USERSKILLINFO_NOTEXIST;
+//		}
+//	}
 	
 	/**
 	 * verifyUserSkillBySkillId 通过skillid审批用户技能
@@ -232,11 +243,12 @@ public class UserSkillServices {
 		if (tempUserSkill != null) {
 			Integer userid = tempUserSkill.getUser_id();
 			Integer userskill = tempUserSkill.getUser_skill();
+			User tempUser = userMapper.getUserById(userid);
+			Integer pushMsgId = null;
 			switch (userskillstatus) {
 			case 0: // 未审核状态
 				break;
 			case 1: // 审核通过
-				User tempUser = userMapper.getUserById(userid);
 				String orgUserSkill = tempUser.getUser_skill();
 				if (!orgUserSkill.contains(userskill.toString())) {
 					orgUserSkill = orgUserSkill + ";" + userskill.toString();
@@ -263,14 +275,39 @@ public class UserSkillServices {
 				}
 				tempUser.setUser_skill_name(skillName); // 更新对应用户的技能信息
 				userMapper.updateUser(tempUser);
+				
+				// pushMsgId = 4 : BBCall notification - Your skill has been approved by BBCall admin.
+				pushMsgId = 4;
 				break;
 			case 2: // 审核不通过
+				
+				// pushMsgId = 5 : BBCall notification - Your skill has been rejected by BBCall admin, please re-submit again.
+				pushMsgId = 5;
 				break;
 			default:
 				return ResultCode.REQUIREINFO_ERROR;
 			}
 			tempUserSkill.setUser_skill_status(userskillstatus);
 			userSkillMapper.updateUserSkillById(tempUserSkill);
+			
+			// 审核通过时，删除同一用户下，相同技能的，状态为不通过的列表
+			if (userskillstatus.equals(1)) {
+				List<UserSkill> userSkillList = userSkillMapper.getUserSkillByUserIdAndSkill(userid, userskill);
+				for (int i = 0; i < userSkillList.size(); i++) {
+					if (userSkillList.get(i) != null && userSkillList.get(i).getUser_skill_status().equals(2)) {
+						String[] tempUrl = userSkillList.get(i).getUser_skill_url().split(";");
+						for (int j = 0; j < tempUrl.length; j++) {
+							fileUploadServices.deleteFile(tempUrl[j]);// 先删除之前的证书文件
+						}
+						userSkillMapper.deleteUserSkillBySkillId(userSkillList.get(i).getUserskill_id()); // 删除列表记录
+					}
+				}
+			}
+			
+			// 审核消息推送
+			if (tempUser.getUser_driver() != 0 && !Tools.isEmpty(tempUser.getUser_push_token())) {
+				devicePushServices.devicePush(tempUser.getUser_driver(), tempUser.getUser_push_token(), pushMsgId, tempUser.getUser_type(), null);
+			}
 			return ResultCode.SUCCESS;
 		} else {
 			return ResultCode.USERSKILLINFO_NOTEXIST;

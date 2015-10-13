@@ -29,7 +29,7 @@ public interface UserSkillMapper {
 	public UserSkill getUserSkillBySkillId(Integer userskill_id);
 	
 	// 通过userid获取用户技能
-	public UserSkill getUserSkillByUserIdAndSkill(
+	public List<UserSkill> getUserSkillByUserIdAndSkill(
 			@Param("user_id") Integer user_id,
 			@Param("user_skill") Integer user_skill);
 }
