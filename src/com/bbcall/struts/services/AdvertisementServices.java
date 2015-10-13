@@ -191,33 +191,52 @@ public class AdvertisementServices {
 	}
 	
 	// ListAll advertisement service
-	public List<Advertisement> getAllAdvertList(Integer pagenum){
+	public List<Advertisement> getAllAdvertList(Integer pagenum, String order_col, String order_value){
 		//当传进来的pagenum为空 或者 pagenum == 0 时，显示第一页
 		if (pagenum == null || pagenum == 0)
 			pagenum = 1;
 		
+		// 防止sql注入攻击
+		if (!Tools.isEmpty(order_col)
+				&& (!order_col.contains("advertisement") || order_col.length() > 25)) {
+			return null;
+		}
+		if (!Tools.isEmpty(order_value) && !order_value.equalsIgnoreCase("asc")
+				&& !order_value.equalsIgnoreCase("desc")) {
+			return null;
+		}
 	    //PageHelper.startPage(PageNum, PageSize) 
 		//获取第1页，10条内容，当PageSize=0时会查询出全部的结果
 	    PageHelper.startPage(pagenum, 20);
 
 	    //紧跟着的第一个select方法会被分页
-		advertList = advertisementMapper.getAllAdvert();
+		advertList = advertisementMapper.getAllAdvert(order_col, order_value);
 		return advertList;
 	}
 	
 	// ListAll advertisement summary service
-	public List<Advertisement> getAllAdvertSummaryList(Integer pagenum){
+	public List<Advertisement> getAllAdvertSummaryList(Integer pagenum, String order_col, String order_value){
 		//当传进来的pagenum为空 或者 pagenum == 0 时，显示第一页
 		if (pagenum == null || pagenum == 0)
 			pagenum = 1;
 		
-	    //PageHelper.startPage(PageNum, PageSize, "order by") 
+		// 防止sql注入攻击
+		if (!Tools.isEmpty(order_col)
+				&& (!order_col.contains("advertisement") || order_col.length() > 25)) {
+			return null;
+		}
+		if (!Tools.isEmpty(order_value) && !order_value.equalsIgnoreCase("asc")
+				&& !order_value.equalsIgnoreCase("desc")) {
+			return null;
+		}
+		//PageHelper.startPage(PageNum, PageSize, "order by") 
 		//获取第1页，10条内容，当PageSize=0时会查询出全部的结果
 //	    PageHelper.startPage(pagenum, 5, "advertisement_create_time desc");
-	    PageHelper.startPage(pagenum, 20);
-
-	    //紧跟着的第一个select方法会被分页
-		advertList = advertisementMapper.getAllAdvertSummary();
+		PageHelper.startPage(pagenum, 20);
+		
+		//紧跟着的第一个select方法会被分页
+		advertList = advertisementMapper.getAllAdvertSummary(order_col, order_value);
+		
 		return advertList;
 	}
 	

@@ -41,7 +41,17 @@
 	<div class="div_content">
 		<div class="div_search">
 			<span>
-			<input id="btnNew" type="submit" value="增加廣告/New AD" onclick="location.href='advert_showAddAdvertPage.action'"/>
+					<input id="btnNew" type="submit" value="增加廣告/New AD" onclick="location.href='advert_showAddAdvertPage.action'"/>
+					<select name="order_col" id="order_col" onchange="col_name_change(this.value)">
+						<option value="default">默認排序(Default)</option>
+						<option value="advertisement_id">按廣告序號(ID)</option>
+						<option value="advertisement_type">按廣告類型(Type)</option>
+						<option value="advertisement_create_time">按創建時間(CreateTime)</option>
+					</select>
+					<select name="order_value" id="order_value" onchange="order_value_change(this.value)" style="display: none">
+						<option value='ASC'>升序(ASC)</option>
+						<option value='DESC'>降序(DESC)</option>
+					</select>
 			</span>
 			<div id="div_message" class="div_message" style="display: none">
 				<span id="message"> </span>

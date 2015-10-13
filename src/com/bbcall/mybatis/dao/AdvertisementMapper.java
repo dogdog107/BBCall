@@ -28,10 +28,14 @@ public interface AdvertisementMapper {
 			@Param("advertisement_status") Integer advertisement_status);
 	
 	// 显示全部广告 get all advertisements
-	public List<Advertisement> getAllAdvert();
+	public List<Advertisement> getAllAdvert(
+			@Param("order_col") String order_col,
+			@Param("order_value") String order_value);
 	
 	// 显示全部广告的概要 get all advertisements Summary
-	public List<Advertisement> getAllAdvertSummary();
+	public List<Advertisement> getAllAdvertSummary(
+			@Param("order_col") String order_col,
+			@Param("order_value") String order_value);
 	
 	// 显示active的广告 get active advertisements
 	public List<Advertisement> getActiveAdvert();

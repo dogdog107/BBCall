@@ -58,7 +58,19 @@
 		advertisement_create_time
 		from ADVERTISEMENT AM LEFT JOIN REFERDOC RD ON RD.referdoc_id = AM.advertisement_type
 		ORDER BY
-		IF (advertisement_status = 1, 0, 1), IF (advertisement_istop = 1, 0, 1), advertisement_create_time DESC
+		<choose>
+			<when test="order_col!=null and order_col!=''">
+				${order_col}
+				<trim prefix=" ">
+					<if test="order_value!=null and order_value!=''">
+						${order_value}
+					</if>
+				</trim>
+			</when>
+			<otherwise>
+				IF (advertisement_status = 1, 0, 1), IF (advertisement_istop = 1, 0, 1), advertisement_create_time DESC
+			</otherwise>
+		</choose>
 	</select>
 	
 	<select id="getAllAdvertSummary" resultMap="AdvertisementResultMap">
@@ -73,8 +85,20 @@
 		advertisement_status,
 		advertisement_create_time
 		from ADVERTISEMENT AM LEFT JOIN REFERDOC RD ON RD.referdoc_id = AM.advertisement_type
-		ORDER BY
-		IF (advertisement_status = 1, 0, 1), IF (advertisement_istop = 1, 0, 1), advertisement_create_time DESC
+		ORDER BY 
+		<choose>
+			<when test="order_col!=null and order_col!=''">
+				${order_col}
+				<trim prefix=" ">
+					<if test="order_value!=null and order_value!=''">
+						${order_value}
+					</if>
+				</trim>
+			</when>
+			<otherwise>
+				IF (advertisement_status = 1, 0, 1), IF (advertisement_istop = 1, 0, 1), advertisement_create_time DESC
+			</otherwise>
+		</choose>
 	</select>
 	
 	<select id="getActiveAdvert" resultMap="AdvertisementResultMap">

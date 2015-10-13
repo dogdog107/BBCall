@@ -1249,6 +1249,17 @@ public class UserServices {
 			pageSize = 20; // 默认显示内容条数
 		}
 		
+		// 防止sql注入攻击
+		if (!Tools.isEmpty(where_col) && (!where_col.contains("user_") || where_col.length() > 17)) {
+			return ResultCode.REQUIREINFO_ERROR;
+		}
+		if (!Tools.isEmpty(where_col2) && (!where_col2.contains("user_") || where_col2.length() > 17)) {
+			return ResultCode.REQUIREINFO_ERROR;
+		}
+		if (!Tools.isEmpty(order_col) && (!order_col.contains("user_") || order_col.length() > 22)) {
+			return ResultCode.REQUIREINFO_ERROR;
+		}
+		
 	    //PageHelper.startPage(PageNum, PageSize) 
 		//获取第1页，10条内容，当PageSize=0时会查询出全部的结果
 	    PageHelper.startPage(pagenum, pageSize);
@@ -1273,6 +1284,11 @@ public class UserServices {
 		//当传进来的pagenum为空 或者 pagenum == 0 时，显示第一页
 		if (pagenum == null || pagenum == 0)
 			pagenum = 1;
+		
+		// 防止sql注入攻击
+		if (!Tools.isEmpty(col_name) && (!col_name.contains("user_") || col_name.length() > 22)) {
+			return ResultCode.REQUIREINFO_ERROR;
+		}
 		
 	    //PageHelper.startPage(PageNum, PageSize) 
 		//获取第1页，10条内容，当PageSize=0时会查询出全部的结果

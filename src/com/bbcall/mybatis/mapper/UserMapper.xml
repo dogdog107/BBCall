@@ -160,10 +160,10 @@
 		from USER
 		<trim prefix="where" prefixOverrides="AND |OR ">
 			<if test="where_col!=null and where_value!=null and where_col!='' and where_value!=''">  
-           		AND ${where_col}=#{where_value}
+           		AND ${where_col} like CONCAT('%',#{where_value},'%') 
         	</if>
 			<if test="where_col2!=null and where_value2!=null and where_col2!='' and where_value2!=''">  
-           		AND ${where_col2}=#{where_value2}
+           		AND ${where_col2} like CONCAT('%',#{where_value2},'%') 
         	</if>
         </trim>
 		<if test="order_col!=null and order_value!=null and order_col!='' and order_value!=''">  
@@ -182,7 +182,7 @@
 		from USER
 		<where>
 			<if test="col_name!=null and search_value!=null and col_name!='' and search_value!=''">  
-            	${col_name}=#{search_value}
+            	${col_name} like CONCAT('%',#{search_value},'%') 
         	</if>  
 		</where>
 		<if test="col_name!=null and specify_value!=null and col_name!='' and specify_value!=''">  

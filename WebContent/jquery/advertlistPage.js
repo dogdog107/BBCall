@@ -1,4 +1,5 @@
-
+var global_order_col = '';
+var global_order_value = '';
 
 function onload() {
 	if (token == "" || token == null) {
@@ -15,17 +16,19 @@ function onload() {
 
 //调用pagechange方法
 function pagechange(pagenum){
-	checkAdvertList(pagenum);
+	checkAdvertList(global_order_col, global_order_value, pagenum);
 }
 
-function checkAdvertList(pagenum){
+function checkAdvertList(order_col, order_value, pagenum){
 	$
 	.ajax({
 		type : "post",
 		url : "${pageContext.request.contextPath}/advert_showAllAdvertSummaryListJson.action",
 		data : {
 			"token" : token,
-			"pagenum" : pagenum
+			"pagenum" : pagenum,
+			"order_col" : order_col,
+			"order_value" : order_value
 		},
 		success : function(data) {
 			if (data.result && data.advertList != null && data.advertList != "") {
@@ -266,4 +269,31 @@ function checkAdvertType(typecode, idname){
 			}
 		}
 	});
+}
+
+
+function col_name_change(colname_value) {
+	if (colname_value == "default") {
+		$("#order_value").hide(300);
+		global_order_col = "";
+		global_order_value = "";
+		checkAdvertList(global_order_col, global_order_value);
+		$("#message").html("<font color=green> Sorting by " + colname_value + " </font>");
+		$("#div_message").show(300).delay(3000).hide(300);
+	} else {
+		$("#order_value").val("ASC");
+		$("#order_value").show(300);
+		global_order_col = colname_value;
+		global_order_value = "";
+		checkAdvertList(global_order_col, global_order_value);
+		$("#message").html("<font color=green> Sorting by " + colname_value + " </font>");
+		$("#div_message").show(300).delay(3000).hide(300);
+	}
+}
+
+function order_value_change(order_value) {
+	global_order_value = order_value;
+	checkAdvertList(global_order_col, global_order_value);
+	$("#message").html("<font color=green> Sorting by " + global_order_col + " " + global_order_value + " </font>");
+	$("#div_message").show(300).delay(3000).hide(300);
 }

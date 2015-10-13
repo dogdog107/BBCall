@@ -59,6 +59,10 @@ public class AdvertisementAction extends ActionSupport{
 	// others parameters
 	private String updateResult;
 	
+	// sort parameters
+	private String order_col;
+	private String order_value;
+	
 	/**
 	 * addAdvert Action
 	 * @author Roger Luo
@@ -155,7 +159,7 @@ public class AdvertisementAction extends ActionSupport{
 	 * @throws Exception
 	 */
 	public String showAllAdvertList() throws Exception {
-		advertList = advertisementServices.getAllAdvertList(pagenum);
+		advertList = advertisementServices.getAllAdvertList(pagenum, order_col, order_value);
 		dataMap.clear(); // dataMap中的数据将会被Struts2转换成JSON字符串，所以这里要先清空其中的数据
 		dataMap.put("advertList", advertList);
 		dataMap.putAll(pageinfo2map.pageInfoMap(advertList));// 把分页信息放进dataMap
@@ -174,7 +178,7 @@ public class AdvertisementAction extends ActionSupport{
 	 * @throws Exception
 	 */
 	public String showAllAdvertSummaryList() throws Exception {
-		advertList = advertisementServices.getAllAdvertSummaryList(pagenum);
+		advertList = advertisementServices.getAllAdvertSummaryList(pagenum, order_col, order_value);
 		dataMap.clear(); // dataMap中的数据将会被Struts2转换成JSON字符串，所以这里要先清空其中的数据
 		dataMap.put("advertList", advertList);
 		dataMap.putAll(pageinfo2map.pageInfoMap(advertList));// 把分页信息放进dataMap
@@ -463,5 +467,17 @@ public class AdvertisementAction extends ActionSupport{
 
 	public void setUpdateResult(String updateResult) {
 		this.updateResult = updateResult;
+	}
+	public String getOrder_col() {
+		return order_col;
+	}
+	public void setOrder_col(String order_col) {
+		this.order_col = order_col;
+	}
+	public String getOrder_value() {
+		return order_value;
+	}
+	public void setOrder_value(String order_value) {
+		this.order_value = order_value;
 	}
 }

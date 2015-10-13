@@ -1,9 +1,9 @@
 package com.bbcall.functions;
 
 public class VersionControl {
-	private static String androidVer = "1.0.1";
+	private static String androidVer = "1.0.2";
 	private static String iosVer = "1.0.0";
-	private static String serverVer = "1.2.1";
+	private static String serverVer = "1.3.0";
 	
 	public static String getAndroidVer() {
 		return androidVer;
