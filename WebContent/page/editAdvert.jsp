@@ -122,12 +122,12 @@
 		var advertType = '${advertisement_type }';
 		var updateResult = "${updateResult}";
 		var updateErrmsg = "${dataMap.errmsg}";
-		var content = "${advertisement_content}";
+		var content = '${advertisement_content}';
 	</script>
 	
 	<!--引入jquery-->
 	<script type="text/javascript"
-	src="${pageContext.request.contextPath }/jquery/jquery-1.8.3.js"></script>
+	src="${pageContext.request.contextPath }/jquery/jquery-1.10.2.min.js"></script>
 	
 	<!-- UEditor配置文件 -->
 	<script type="text/javascript" charset="utf-8"

@@ -81,7 +81,7 @@
 					</td>
 				</tr>
 				<tr>
-					<td>廣告大標圖 (AD Big Photo)</td>
+					<td>廣告大標圖 (AD Big Photo)<br/><span style="color:red;font-size:12px">*僅在此廣告置頂時顯示在頂部banner</span></td>
 					<td> 
 						<input type="hidden" id="advertisement_bigphoto_url" name="advertisement_bigphoto_url" value="" />
 						<!--用来存放item-->
@@ -104,7 +104,7 @@
 				<tr>
 					<td colspan="2">
 						<input type="hidden" id="advertisement_content" name="advertisement_content" value="" />
-						<script id="editor" type="text/plain" style="width:99%;height:400px;"></script>
+						<script id="editor" type="text/plain" style="width:99%;height:400px;">請在此輸入廣告的內容</script>
 					</td>
 				</tr>
 				<tr>
@@ -127,7 +127,7 @@
 	
 	<!--引入jquery-->
 	<script type="text/javascript"
-	src="${pageContext.request.contextPath }/jquery/jquery-1.8.3.js"></script>
+	src="${pageContext.request.contextPath }/jquery/jquery-1.10.2.min.js"></script>
 	
 	<!--WebUploader引入JS-->
 	<script type="text/javascript"

@@ -398,7 +398,20 @@ function onload(){
 
 function validate() {
 	var ADContent = UE.getEditor('editor').getContent();
-	$( '#advertisement_content' ).val(ADContent);
+	
+	// 临时修改所有图片的宽度 width="300px"
+	var ADContentSplit = ADContent.split('<img ');
+	for(var i = 0;i<ADContentSplit.length;i++){
+		if(i != 0){
+			if(ADContentSplit[i].indexOf('width=') == -1){
+				var tempstr = ADContentSplit[i];
+				ADContentSplit[i] = 'width="300px" ' + tempstr;
+			}
+		}
+	}
+	var ADContentConv = ADContentSplit.join('<img ');
+	
+	$( '#advertisement_content' ).val(ADContentConv);
 	
 	
 	var objs2 = document.getElementsByName('skillcodepart');
