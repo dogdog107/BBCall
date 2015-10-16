@@ -90,6 +90,7 @@ function checkAdvertList(order_col, order_value, pagenum){
 					
 				});
 			} else {
+				$("tr[id^='advertlist_']").remove();
 				//隐藏分页条
 				$("#page_bar").hide(300);
 				if (data.advertList == null || data.advertList == "") {

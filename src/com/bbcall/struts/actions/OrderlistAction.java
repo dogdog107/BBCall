@@ -76,6 +76,9 @@ public class OrderlistAction extends ActionSupport {
 	private Integer pagenum; // 页面页数
 	private String order_time;
 
+	private String order_col;
+	private String order_value;
+	
 	private List<String> orderFileFileName = new ArrayList<String>(); // 文件名
 
 	@Override
@@ -439,7 +442,7 @@ public class OrderlistAction extends ActionSupport {
 
 		int result = orderlistServices.sortOrderlist(order_status,
 				order_master_name, order_book_location_code, order_id,
-				order_time, pagenum);
+				order_time, order_col, order_value, pagenum);
 
 		// int status = 1;
 		// if (order_status != null && !order_status.equals("")) {
@@ -774,7 +777,7 @@ public class OrderlistAction extends ActionSupport {
 
 		int result = orderlistServices.getWashOrderlist(order_status,
 				order_section, order_master_name, order_book_location_code,
-				order_id, order_time, pagenum);
+				order_id, order_time, order_col, order_value, pagenum);
 		// List<Referdoc> referdoclist = new ArrayList<Referdoc>();
 
 		if (result == ResultCode.SUCCESS) {
@@ -1341,6 +1344,22 @@ public class OrderlistAction extends ActionSupport {
 
 	public void setOrder_time(String order_time) {
 		this.order_time = order_time;
+	}
+
+	public String getOrder_col() {
+		return order_col;
+	}
+
+	public void setOrder_col(String order_col) {
+		this.order_col = order_col;
+	}
+
+	public String getOrder_value() {
+		return order_value;
+	}
+
+	public void setOrder_value(String order_value) {
+		this.order_value = order_value;
 	}
 
 }

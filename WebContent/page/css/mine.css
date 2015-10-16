@@ -30,6 +30,16 @@ TEXTAREA {
     border: solid #1c94c4 1px;
     overflow: hidden
 }
+.div_search2{
+    font-size: 13px;
+    margin: 10px 5px;
+    padding-left: 10px;
+    line-height: 30px;
+    height:60px;
+    background-color: #E8F2FC;
+    border: solid #1c94c4 1px;
+    overflow: hidden
+}
 .div_merge{
     font-size: 13px;
     margin: 10px 5px;

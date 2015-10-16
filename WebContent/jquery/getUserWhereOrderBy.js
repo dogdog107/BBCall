@@ -124,6 +124,7 @@ function checkUserList(order_col, order_value, where_col, where_value, where_col
 				// 显示数据
 //				$("#datas").show(300);
 			} else {
+				$("tr[id^='userlist_']").remove();
 				//隐藏分页条
 				$("#page_bar").hide(300);
 				$("#message").html(

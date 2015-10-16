@@ -1037,7 +1037,7 @@ public class OrderlistServices {
 	// ################################################################################
 	public int getWashOrderlist(String order_status, String order_section,
 			String order_master_name, String order_book_location_code,
-			String order_id, String order_time, Integer pagenum) {
+			String order_id, String order_time, String order_col, String order_value, Integer pagenum) {
 
 		// Map<String, Object> params = new HashMap<String, Object>();
 		//
@@ -1049,13 +1049,23 @@ public class OrderlistServices {
 		if (pagenum == null || pagenum == 0)
 			pagenum = 1;
 
+		// 防止sql注入攻击
+		if (!Tools.isEmpty(order_col)
+				&& (!order_col.contains("order_") || order_col.length() > 17)) {
+			return ResultCode.REQUIREINFO_ERROR;
+		}
+		if (!Tools.isEmpty(order_value) && !order_value.equalsIgnoreCase("asc")
+				&& !order_value.equalsIgnoreCase("desc")) {
+			return ResultCode.REQUIREINFO_ERROR;
+		}
+		
 		// PageHelper.startPage(PageNum, PageSize)
 		// 获取第1页，10条内容，当PageSize=0时会查询出全部的结果
-		PageHelper.startPage(pagenum, 10);
+		PageHelper.startPage(pagenum, 20);
 
 		orderlistinfos = orderlistMapper.getWashOrderlistByParm(order_status,
 				order_section, order_master_name, order_book_location_code,
-				order_id, order_time);
+				order_id, order_time, order_col, order_value);
 
 		return ResultCode.SUCCESS;
 	}
@@ -1102,19 +1112,29 @@ public class OrderlistServices {
 
 	public int sortOrderlist(String order_status, String order_master_name,
 			String order_book_location_code, String order_id,
-			String order_time, Integer pagenum) {
+			String order_time, String order_col, String order_value, Integer pagenum) {
 
 		// 当传进来的pagenum为空 或者 pagenum == 0 时，显示第一页
 		if (pagenum == null || pagenum == 0)
 			pagenum = 1;
-
+		
+		// 防止sql注入攻击
+		if (!Tools.isEmpty(order_col)
+				&& (!order_col.contains("order_") || order_col.length() > 17)) {
+			return ResultCode.REQUIREINFO_ERROR;
+		}
+		if (!Tools.isEmpty(order_value) && !order_value.equalsIgnoreCase("asc")
+				&& !order_value.equalsIgnoreCase("desc")) {
+			return ResultCode.REQUIREINFO_ERROR;
+		}
+		
 		// PageHelper.startPage(PageNum, PageSize)
 		// 获取第1页，10条内容，当PageSize=0时会查询出全部的结果
-		PageHelper.startPage(pagenum, 10);
+		PageHelper.startPage(pagenum, 20);
 
 		orderlistinfos = orderlistMapper.getOrderlistByParm(order_status,
 				order_master_name, order_book_location_code, order_id,
-				order_time);
+				order_time, order_col, order_value);
 
 		return ResultCode.SUCCESS;
 	}

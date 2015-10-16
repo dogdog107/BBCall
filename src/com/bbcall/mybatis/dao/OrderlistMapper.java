@@ -100,15 +100,19 @@ public interface OrderlistMapper {
 			@Param("order_master_name") String order_master_name,
 			@Param("order_book_location_code") String order_book_location_code,
 			@Param("order_id") String order_id,
-			@Param("order_time") String order_time);
+			@Param("order_time") String order_time,
+			@Param("order_col") String order_col,
+			@Param("order_value") String order_value);
 	
 	// 获取所有洗衣订单按照订单状态排序
-		public List<Orderlist> getOrderlistByParm(
-				@Param("order_status") String order_status,
-				@Param("order_master_name") String order_master_name,
-				@Param("order_book_location_code") String order_book_location_code,
-				@Param("order_id") String order_id,
-				@Param("order_time") String order_time);
+	public List<Orderlist> getOrderlistByParm(
+			@Param("order_status") String order_status,
+			@Param("order_master_name") String order_master_name,
+			@Param("order_book_location_code") String order_book_location_code,
+			@Param("order_id") String order_id,
+			@Param("order_time") String order_time,
+			@Param("order_col") String order_col,
+			@Param("order_value") String order_value);
 
 	// 更新订单详情
 	public void updateOrder(Orderlist order);

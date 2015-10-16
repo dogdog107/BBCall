@@ -56,7 +56,7 @@
 			
 			<table border="1" width="100%" class="table_update">
 				<tr id="orderid_tr" style="display:none">
-					<td>訂單ID (OrderID)</td>
+					<td width="300px">訂單ID (OrderID)</td>
 					<td>
 					<input name="order_id" id="order_id" />
 					</td>
@@ -65,8 +65,7 @@
 					<td>訂單照片 (OrderPhoto)</td>
 					<td style="color: #880000">
 						<s:iterator value="dataMap.orderFileFileName" id="number">
-							<img
-								src="<s:property value="number"/>" height='60' width='60'></img>
+							<img src="<s:property value="number"/>" height='60' width='60'></img>
 						</s:iterator>
 						</td>
 				</tr>

@@ -52,8 +52,8 @@
 			
 			<table border="1" width="100%" class="table_update">
 				<tr id="orderid_tr">
-					<td>訂單ID (OrderID)</td>
-					<td  id="orderid">
+					<td width="300px">訂單ID (OrderID)</td>
+					<td id="orderid">
 					</td>
 				</tr>
 				<tr style="display:none">
@@ -71,7 +71,7 @@
 						</td>
 				</tr>
 				<tr>
-					<td>預約時間  (Order Book Time)</td>
+					<td>預約時間 (Order Book Time)</td>
 					<td id="order_book_time">
 					</td>
 				</tr>

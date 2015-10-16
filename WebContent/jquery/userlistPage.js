@@ -118,6 +118,7 @@ function checkUserList(col_name, specify_value, search_value, pagenum){
 				// 显示数据
 //				$("#datas").show(300);
 			} else {
+				$("tr[id^='userlist_']").remove();
 				//隐藏分页条
 				$("#page_bar").hide(300);
 				$("#message").html(
