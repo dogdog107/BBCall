@@ -219,12 +219,13 @@ public class PreorderServices {
 		// 当传进来的pagenum为空 或者 pagenum == 0 时，显示第一页
 		if (pagenum == null || pagenum == 0)
 			pagenum = 1;
-
-		// PageHelper.startPage(PageNum, PageSize)
-		// 获取第1页，10条内容，当PageSize=0时会查询出全部的结果
-		PageHelper.startPage(pagenum, 10);
-		preorderinfos = preorderMapper
-				.getPreordersByAccount(preorder_master_id);
+		if (preorder_master_id != 0) {
+			// PageHelper.startPage(PageNum, PageSize)
+			// 获取第1页，10条内容，当PageSize=0时会查询出全部的结果
+			PageHelper.startPage(pagenum, 10);
+			preorderinfos = preorderMapper
+					.getPreordersByAccount(preorder_master_id);
+		}
 
 		return ResultCode.SUCCESS;
 	}

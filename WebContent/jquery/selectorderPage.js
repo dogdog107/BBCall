@@ -85,7 +85,7 @@ function showPreOrder() {
 								} else {
 									row.find("#masterPhoto").html("<img align='center' src=" + n.preorder_master_pic + " height='60' width='60'>");
 								}
-								row.find("#masterSkill").text(n.preorder_master_skill);
+//								row.find("#masterSkill").text(n.preorder_master_skill);
 								row.find("#btnDelete").attr("onclick", "deletePreOrder(this.id)");
 								row.find("#btnDelete").attr("id", "btnDelete_" + n.preorder_id);
 								row.attr("id", "preOrder_" + n.preorder_id);// 改变绑定好数据的行的id
@@ -101,29 +101,31 @@ function showPreOrder() {
 				}
 			});
 }
-//
-//function deletePreOrder(idname) {
-//	var userid = idname.split("_")[1];
-//	if (confirm('確定要刪除用戶(ID:'+ userid +')嗎？\n Confirm to delete user (ID:'+ userid +')?')) {
-//		$.ajax({
-//			type : "post",
-//			url : "${pageContext.request.contextPath}/user_deleteUserByIdJson.action",
-//			data : {
-//				"token" : token,
-//				"userid" : userid
-//			},
-//			success : function(data) {
-//				if (data.result) {
-//					var rowname = "userlist_" + userid;
-//					$("#message").html("<font color=green> (ID:"+ userid +") Delete Success ! </font>");
-//					$("#div_message").show(300).delay(5000).hide(300);
-//					$("#" + rowname).hide(300).remove();
-//				} else {
-//					$("#message").html("<font color=red> (ID:"+ userid +") Delete Failed ! " + data.errmsg + "</font>");
-//					$("#div_message").show(300).delay(5000).hide(300);
-//					alert("Delete failed. " + data.errmsg);
-//				}
-//			}
-//		});
-//	}
-//}
+
+function deletePreOrder(idname) {
+	var preOrderId = idname.split("_")[1];
+	if (confirm('確定要刪除競價訂單(ID:'+ preOrderId +')嗎？\n Confirm to delete bid order (ID:'+ preOrderId +')?')) {
+		$.ajax({
+			type : "post",
+			url : "${pageContext.request.contextPath}/preorder_deleteJson.action",
+			data : {
+				"token" : token,
+				"preorder_id" : preOrderId,
+				"preorder_master_id" : 1
+				
+			},
+			success : function(data) {
+				if (data.result) {
+					var rowname = "preOrder_" + preOrderId;
+					$("#message").html("<font color=green> (ID:"+ preOrderId +") Delete Success ! </font>");
+					$("#div_message").show(300).delay(5000).hide(300);
+					$("#" + rowname).hide(300);
+				} else {
+					$("#message").html("<font color=red> (ID:"+ preOrderId +") Delete Failed ! " + data.errmsg + "</font>");
+					$("#div_message").show(300).delay(5000).hide(300);
+					alert("Delete failed. " + data.errmsg);
+				}
+			}
+		});
+	}
+}

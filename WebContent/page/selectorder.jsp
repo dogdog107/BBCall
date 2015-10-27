@@ -113,7 +113,8 @@
 				 
 				<tr>
 					<td colspan="2" align="center">
-					<input type="button" value="取消(Cancel)" Onclick="history.go(-1)" /></td>
+					<!-- <input type="button" value="取消(Cancel)" Onclick="history.go(-1)" /> -->
+					<input type="button" value="返回(Back)" Onclick="history.go(-1)" /></td>
 				</tr>
 			</table>
 		</form>
@@ -128,22 +129,22 @@
 			<tr style="color: #1c94c4">
 				<td width="100px">競拍訂單序號<br />Bid Order ID
 				</td>
-				<td width="130px">創建時間<br />Create Time
+				<td width="150px">創建時間<br />Create Time
 				</td>
-				<td width="100px">競拍價格<br />Order Price
+				<td width="80px">競拍價格<br />Order Price
 				</td>
-				<td width="100px">師傅序號<br />Master ID
+				<td width="80px">師傅序號<br />Master ID
 				</td>
-				<td width="100px">師傅帳號<br />Account
+				<td width="150px">師傅帳號<br />Account
 				</td>
-				<td width="100px">師傅評分<br />Grade
+				<td width="60px">師傅評分<br />Grade
 				</td>
-				<td width="100px">師傅姓名<br />Name
+				<td width="150px">師傅姓名<br />Name
 				</td>
-				<td width="80px">師傅照片<br />Photo
+				<td width="60px">師傅照片<br />Photo
 				</td>
-				<td width="100px">師傅技能<br />Skill
-				</td>
+<!-- 				<td width="100px">師傅技能<br />Skill
+				</td> -->
 				<td colspan="2" align="center">操作<br />Operations
 				</td>
 			</tr>
@@ -156,7 +157,7 @@
 				<td id="masterGrade"></td>
 				<td id="masterName"></td>
 				<td id="masterPhoto"></td>
-				<td id="masterSkill"></td>
+				<!-- <td id="masterSkill"></td> -->
 				<td><input id="btnDelete" type="submit" value="刪除/Delete"
 					onclick="" /></td>
 			</tr>
