@@ -311,8 +311,8 @@ public class ReferdocServices {
 			pagenum = 1;
 
 		// PageHelper.startPage(PageNum, PageSize)
-		// 获取第1页，10条内容，当PageSize=0时会查询出全部的结果
-		PageHelper.startPage(pagenum, 10);
+		// 获取第1页，20条内容，当PageSize=0时会查询出全部的结果
+		PageHelper.startPage(pagenum, 20);
 
 		referdocinfos = referdocMapper.getReferdoclist(referdoc_parentno);
 

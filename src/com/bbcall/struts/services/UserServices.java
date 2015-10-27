@@ -78,7 +78,7 @@ public class UserServices {
 	// ##
 	// ################################################################################
 
-	public int register(String token, String account, String password,
+	public int register(Integer userid, String token, String account, String password,
 			Integer usertype, String name, String picurl, BigInteger mobile,
 			Integer gender, String email, String language, String skill,
 			String description, String accessgroup, Integer addresscode,
@@ -93,64 +93,105 @@ public class UserServices {
 			return ResultCode.USERTYPE_ERROR;
 		}
 		
-		if(usertype == 5) { // usertype=5时为临时客户号，检测注册信息是否完整
-			// ***** 添加手机号mobile 判断格式 *****
-			if (mobile != null) {
-				if (Tools.isNumeric(mobile.toString())
-						&& (mobile.toString().length() >= 8)) {
-					int checkMobileResult = checkUserName(mobile.toString()); // 调用checkUserName方法检测手机号是否唯一并得到返回码
-					User tempuser = new User();
-					if (checkMobileResult == ResultCode.USERNAME_NOTEXIST) { // 检测用户名是否存在
-						tempuser.setUser_type(usertype);
-						tempuser.setUser_mobile(mobile);
-						tempuser.setUser_account("guest_" + mobile.toString());
-						tempuser.setUser_password(encrypt.getDigestOfString(mobile.toString().getBytes()));
-						tempuser.setUser_access_group("guest_default");
-						tempuser.setUser_status(1);
-						// ***** 添加用户推送信息 *****
-						if(driver != null && (driver.equals(1) || driver.equals(2))) {
-							if (!Tools.isEmpty(pushtoken)) {
-								tempuser.setUser_driver(driver);
-								tempuser.setUser_push_token(pushtoken);
-							}
-						}
-						userMapper.addUserByAccount(tempuser);
-						tempuser = userMapper.getUserByMobile(mobile);
-						// ***** 更新用户token *****
-						RandomCode randomCode = new RandomCode();
-						String newtoken = randomCode.getToken();// 正确则创建新token，并更新数据库
-						while (null != userMapper.getUserByToken(newtoken)) {// 确保token唯一
-							newtoken = randomCode.getToken();
-						}
-						tempuser.setUser_token(newtoken);
-						userMapper.updateToken(tempuser);
-						
-						tempuser.setUser_login_time(new Timestamp(new Date().getTime()));
-						userMapper.updateLoginTime(tempuser);// 插入 login 时间
-
-						userinfo = tempuser;// 返回更新的user对象给userinfo
-						
-						return ResultCode.SUCCESS;
-					} else {
-						// ***** 检测 account & password 是否符合格式 *****
-						if (!Tools.isEmpty(account, password)) {
-							if (account.length() < 6) {
-								return ResultCode.USERACCOUNT_ERROR;
-							} else if (password.length() < 6) {
-								return ResultCode.USERPASSWORD_ERROR;
-							}
-						} else {
-							return ResultCode.USERNAME_EXIST;
-						}
-					}
-				} else {
-					return ResultCode.USERMOBILE_ERROR;
+		if (usertype == 5) { // usertype=5时为临时客户号，检测注册信息是否完整
+			// ***** 检测 account & password 是否符合格式 *****
+			if (!Tools.isEmpty(account, password)) {
+				if (account.length() < 6) {
+					return ResultCode.USERACCOUNT_ERROR;
+				} else if (password.length() < 6) {
+					return ResultCode.USERPASSWORD_ERROR;
 				}
 			} else {
-				return ResultCode.REQUIREINFO_NOTENOUGH;
+			RandomCode randomCode = new RandomCode();
+			User tempuser = new User();
+			tempuser.setUser_type(usertype);
+			tempuser.setUser_account("guest_" + randomCode.getSmallChar());
+			tempuser.setUser_password(encrypt.getDigestOfString(randomCode.getSmallChar().getBytes()));
+			tempuser.setUser_access_group("guest_default");
+			tempuser.setUser_status(1);
+			// ***** 添加用户推送信息 *****
+			if (driver != null && (driver.equals(1) || driver.equals(2))) {
+				if (!Tools.isEmpty(pushtoken)) {
+					tempuser.setUser_driver(driver);
+					tempuser.setUser_push_token(pushtoken);
+				}
+			}
+			userMapper.addUserByAccount(tempuser);
+			// ***** 更新用户token *****
+			String newtoken = randomCode.getToken();// 正确则创建新token，并更新数据库
+			while (null != userMapper.getUserByToken(newtoken)) {// 确保token唯一
+				newtoken = randomCode.getToken();
+			}
+			tempuser.setUser_token(newtoken);
+			userMapper.updateToken(tempuser);
+
+			tempuser.setUser_login_time(new Timestamp(new Date().getTime()));
+			userMapper.updateLoginTime(tempuser);// 插入 login 时间
+
+			userinfo = tempuser;// 返回更新的user对象给userinfo
+
+			return ResultCode.SUCCESS;
 			}
 		}
-		
+//		
+//		if(usertype == 5) { // usertype=5时为临时客户号，检测注册信息是否完整
+//			// ***** 添加手机号mobile 判断格式 *****
+//			if (mobile != null) {
+//				if (Tools.isNumeric(mobile.toString())
+//						&& (mobile.toString().length() >= 8)) {
+//					int checkMobileResult = checkUserName(mobile.toString()); // 调用checkUserName方法检测手机号是否唯一并得到返回码
+//					User tempuser = new User();
+//					if (checkMobileResult == ResultCode.USERNAME_NOTEXIST) { // 检测用户名是否存在
+//						tempuser.setUser_type(usertype);
+//						tempuser.setUser_mobile(mobile);
+//						tempuser.setUser_account("guest_" + mobile.toString());
+//						tempuser.setUser_password(encrypt.getDigestOfString(mobile.toString().getBytes()));
+//						tempuser.setUser_access_group("guest_default");
+//						tempuser.setUser_status(1);
+//						// ***** 添加用户推送信息 *****
+//						if(driver != null && (driver.equals(1) || driver.equals(2))) {
+//							if (!Tools.isEmpty(pushtoken)) {
+//								tempuser.setUser_driver(driver);
+//								tempuser.setUser_push_token(pushtoken);
+//							}
+//						}
+//						userMapper.addUserByAccount(tempuser);
+//						tempuser = userMapper.getUserByMobile(mobile);
+//						// ***** 更新用户token *****
+//						RandomCode randomCode = new RandomCode();
+//						String newtoken = randomCode.getToken();// 正确则创建新token，并更新数据库
+//						while (null != userMapper.getUserByToken(newtoken)) {// 确保token唯一
+//							newtoken = randomCode.getToken();
+//						}
+//						tempuser.setUser_token(newtoken);
+//						userMapper.updateToken(tempuser);
+//						
+//						tempuser.setUser_login_time(new Timestamp(new Date().getTime()));
+//						userMapper.updateLoginTime(tempuser);// 插入 login 时间
+//						
+//						userinfo = tempuser;// 返回更新的user对象给userinfo
+//						
+//						return ResultCode.SUCCESS;
+//					} else {
+//						// ***** 检测 account & password 是否符合格式 *****
+//						if (!Tools.isEmpty(account, password)) {
+//							if (account.length() < 6) {
+//								return ResultCode.USERACCOUNT_ERROR;
+//							} else if (password.length() < 6) {
+//								return ResultCode.USERPASSWORD_ERROR;
+//							}
+//						} else {
+//							return ResultCode.USERNAME_EXIST;
+//						}
+//					}
+//				} else {
+//					return ResultCode.USERMOBILE_ERROR;
+//				}
+//			} else {
+//				return ResultCode.REQUIREINFO_NOTENOUGH;
+//			}
+//		}
+
 		// ***** 检测 account & password 是否符合格式 *****
 		if (!Tools.isEmpty(account, password)) {
 			if (account.length() < 6) {
@@ -212,6 +253,18 @@ public class UserServices {
 			
 			User user = new User(); // 实例化用户对象
 			
+			if (usertype == 5) {
+				user = userMapper.getUserById(userid);
+				if (user == null) {
+					return ResultCode.USERID_ERROR;
+				}
+				if (user.getUser_type() != 5) {
+					return ResultCode.REQUIREINFO_ERROR;
+				}
+				registermode = 1;
+				defaultaccess = "user_default"; // 分配user_default权限
+			}
+			
 			// ***** 添加手机号mobile 判断格式 *****
 			if (mobile != null) {
 				if (Tools.isNumeric(mobile.toString())
@@ -220,19 +273,33 @@ public class UserServices {
 					if (checkMobileResult == ResultCode.USERNAME_NOTEXIST) {// 检测用户名是否存在
 						user.setUser_mobile(mobile);
 					} else {
-						if (usertype == 5) {
-							user = userinfo;
-							user.setUser_mobile(mobile);
-							registermode = 1;
-							defaultaccess = "user_default"; // 分配user_default权限
-						} else {
-							return checkMobileResult;
-						}
+						return checkMobileResult;
 					}
 				} else {
 					return ResultCode.USERMOBILE_ERROR;
 				}
 			}
+//			// ***** 添加手机号mobile 判断格式 *****
+//			if (mobile != null) {
+//				if (Tools.isNumeric(mobile.toString())
+//						&& (mobile.toString().length() >= 8)) {
+//					int checkMobileResult = checkUserName(mobile.toString());// 调用checkUserName方法检测手机号是否唯一并得到返回码
+//					if (checkMobileResult == ResultCode.USERNAME_NOTEXIST) {// 检测用户名是否存在
+//						user.setUser_mobile(mobile);
+//					} else {
+//						if (usertype == 5) {
+//							user = userinfo;
+//							user.setUser_mobile(mobile);
+//							registermode = 1;
+//							defaultaccess = "user_default"; // 分配user_default权限
+//						} else {
+//							return checkMobileResult;
+//						}
+//					}
+//				} else {
+//					return ResultCode.USERMOBILE_ERROR;
+//				}
+//			}
 			
 			// ***** 添加account *****
 			user.setUser_account(account);
@@ -430,7 +497,6 @@ public class UserServices {
 			registerResult = ResultCode.SUCCESS;
 		} else {
 			registerResult = ResultCode.USERNAME_EXIST;
-			System.out.println(checkUserNameResult);
 		}
 		return registerResult;
 	}
@@ -922,6 +988,13 @@ public class UserServices {
 		if (null != user) {
 			int checkUserStatusResult = checkUserStatusValue(user.getUser_status());
 			if (checkUserStatusResult == ResultCode.USERSTATUS_ACTIVE) {
+				
+				// 不检测访客token过期
+				if (user.getUser_type() == 5) {
+					userinfo = user;// 返回更新的user对象给userinfo
+					return ResultCode.SUCCESS;
+				}
+				
 				long currenttime = new Date().getTime();
 				long logintime = user.getUser_login_time().getTime();
 				long duringtime = currenttime - logintime;

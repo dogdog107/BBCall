@@ -19,7 +19,8 @@ public interface UserMapper {
 //	List<User> findAll();
 
 	// 通过帐号创建用户
-	public void addUserByAccount(User user);
+//	public void addUserByAccount(User user);
+	public Integer addUserByAccount(User user);
 	
 	// 通过手机号创建用户
 //	public void addUserByMobile(User user);

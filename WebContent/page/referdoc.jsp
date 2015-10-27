@@ -41,7 +41,10 @@
 				</select>
 				<input value="查詢" type="submit" onclick="referdoc_parentno_change()"/>
 			</span>
-			
+		<div id="div_message" class="div_message" style="display: none">
+			<span id="message">
+			</span>
+		</div>			
 		</div>
 		<div class="div_merge">
 			<span>
@@ -49,26 +52,23 @@
 			</span>
 			
 		</div>
-        
-		<div id="div_message" class="div_message" style="display: none">
-			<span id="message">
-			</span>
-		</div>
         <div style="font-size: 13px; margin: 10px 5px;">
 		<table class="table_list" border="1" width="100%">
                 <tbody id="datas">
                 	<tr style="font-weight: bold;">
                 		
-                        <td>级别</td>
-                        <td>訂單類型</td>
-                        <td>訂單參考價格</td>
-                        <td>固定价格</td>
-                        <td colspan="4" align="left">操作</td>
+                        <td width="100px">一級項</td>
+                        <td width="100px">二級項</td>
+                        <td width="200px">訂單類型</td>
+                        <td width="200px">訂單參考價格</td>
+                        <td width="100px">是否固定價格</td>
+                        <td colspan="2" align="left">操作</td>
                     </tr>
                     
 					<tr id="template" style="display:none">
 						
-						<td id="referlevel"></td>
+						<td id="referlevel1"></td>
+						<td id="referlevel2"></td>
 						<td style="display:none"><input type="text" id="referid"></input></td>
 						<td><input type="text" id="refertype" readonly="true"></input></td>
 						<td><input type="text" id="referprice" ></input></td>
@@ -80,8 +80,8 @@
 						</td>
 						<td style="display:none"><input type="text" id="referparentno" ></input></td>
 						<td align="left">
-						<input id="referupdate" type="submit" value="修改" onclick=""/>
-						<input id="referdelete" type="submit" value="刪除" onclick=""/>
+						<input id="referupdate" type="submit" value="修改/Update" onclick=""/>
+						<input id="referdelete" type="submit" value="刪除/Delete" onclick=""/>
 						</td>
 					</tr>
                     

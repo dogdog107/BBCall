@@ -741,9 +741,8 @@ public class OrderlistAction extends ActionSupport {
 
 			String[] url = null;
 			String picurl = orderlist.getOrder_pic_url();
-
 			if (picurl != null) {
-				url = orderlist.getOrder_pic_url().split(";");
+				url = orderlist.getOrder_pic_url().split(",");
 				for (int i = 0; i < url.length; i++) {
 					orderFileFileName.add(url[i]);
 				}

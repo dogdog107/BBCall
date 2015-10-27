@@ -59,13 +59,14 @@ function getlist(parentno,pagenum) {
 					row.find("#referid").val(n.referdoc_id);
 					row.find("#referid").attr("id","referid_"+n.referdoc_id);
 					if (n.referdoc_level == 1) {
-						row.find("#referlevel").text("一級項");
+						row.find("#referlevel1").text("一級項");
 						row.find("#referdelete").attr("style", "display:none");
 					} else {
-						row.find("#referlevel").text("二級項");
+//						row.find("#referlevel1").text("┣");
+						row.find("#referlevel2").text("二級項");
 						row.find("#referdelete").attr("onclick", "location.href='referdoc_delete.action?referdoc_id=" + n.referdoc_id + "&pagenum='");
 					}
-					row.find("#referlevel").attr("id","referlevel_"+n.referdoc_id);
+//					row.find("#referlevel").attr("id","referlevel_"+n.referdoc_id);
 					row.find("#referparentno").val(n.referdoc_parentno);
 					row.find("#referparentno").attr("id","referparentno_"+n.referdoc_id);
 					row.find("#refertype").val(n.referdoc_type);
@@ -132,13 +133,14 @@ function referdoc_parentno_change() {
 					row.find("#referid").val(n.referdoc_id);
 					row.find("#referid").attr("id","referid_"+n.referdoc_id);
 					if (n.referdoc_level == 1) {
-						row.find("#referlevel").text("一級項");
+						row.find("#referlevel1").text("一級項");
 						row.find("#referdelete").attr("style", "display:none");
 					} else {
-						row.find("#referlevel").text("二級項");
+//						row.find("#referlevel1").text("┣");
+						row.find("#referlevel2").text("二級項");
 						row.find("#referdelete").attr("onclick", "location.href='referdoc_delete.action?referdoc_id=" + n.referdoc_id + "&pagenum='");
 					}
-					row.find("#referlevel").attr("id","referlevel_"+n.referdoc_id);
+//					row.find("#referlevel").attr("id","referlevel_"+n.referdoc_id);
 					row.find("#referparentno").val(n.referdoc_parentno);
 					row.find("#referparentno").attr("id","referparentno_"+n.referdoc_id);
 					row.find("#refertype").val(n.referdoc_type);
@@ -191,56 +193,62 @@ function referdoclist_update(formnum) {
 		},
 		success : function(data) {
 			if (data.result) {
-				//*初始化分页条
-				if (data.lastPageNum <= 1){
-					//当只有一页时隐藏分页条
-					$("#page_bar").hide(300);
-				} else {
-					//显示分页条
-					$("#page_bar").show(300);
-					//当前页页码
-					$("#xiye").html(data.currentPageNum);
-					//尾页页码
-					$("#mo").html(data.totalpagesNum);
-				}
-				// 清除现有列表
-//				$("#datas").hide();
-				$("tr[id^='referdoc_']").remove();
-				// 拿出列表
-				var templist = data.referdoclist;
-				
-				$.each(templist, function(i, n) {
-					var row = $("#template").clone();
-					row.find("#referid").val(n.referdoc_id);
-					row.find("#referid").attr("id","referid_"+n.referdoc_id);
-					if (n.referdoc_level == 1) {
-						row.find("#referlevel").text("一級項");
-						row.find("#referdelete").attr("style", "display:none");
-					} else {
-						row.find("#referlevel").text("二級項");
-						row.find("#referdelete").attr("onclick", "location.href='referdoc_delete.action?referdoc_id=" + n.referdoc_id + "&pagenum='");
-					}
-					row.find("#referlevel").attr("id","referlevel_"+n.referdoc_id);
-					row.find("#referparentno").val(n.referdoc_parentno);
-					row.find("#referparentno").attr("id","referparentno_"+n.referdoc_id);
-					row.find("#refertype").val(n.referdoc_type);
-					row.find("#refertype").attr("id","refertype_"+n.referdoc_id);
-					row.find("#referprice").val(n.referdoc_price);
-					row.find("#referprice").attr("id","referprice_"+n.referdoc_id);
-					if (n.referdoc_flag) {
-						row.find("#referflag").html("<select name='referdoc_flag' id='referdoc_flag_" + n.referdoc_id + "'> <option id='select1' value='true' selected='selected'>true</option> <option id='select2' value='false'>false</option>");
-					} else {
-						row.find("#referflag").html("<select name='referdoc_flag' id='referdoc_flag_" + n.referdoc_id + "'> <option id='select2' value='false' selected='selected'>false</option> <option id='select1' value='true'>true</option>");
-					}
-					row.find("#referflag").attr("id","referflag_"+n.referdoc_id);
-					
-					row.find("#referupdate").attr("onclick", "referdoclist_update("+n.referdoc_id+")");
-					row.attr("id", "referdoc_" + n.referdoc_id);// 改变绑定好数据的行的id
-					row.appendTo("#datas");// 添加到模板的容器中
-					row.toggle(300);
-				});
+//				//*初始化分页条
+//				if (data.lastPageNum <= 1){
+//					//当只有一页时隐藏分页条
+//					$("#page_bar").hide(300);
+//				} else {
+//					//显示分页条
+//					$("#page_bar").show(300);
+//					//当前页页码
+//					$("#xiye").html(data.currentPageNum);
+//					//尾页页码
+//					$("#mo").html(data.totalpagesNum);
+//				}
+//				// 清除现有列表
+////				$("#datas").hide();
+//				$("tr[id^='referdoc_']").remove();
+//				// 拿出列表
+//				var templist = data.referdoclist;
+//				
+//				$.each(templist, function(i, n) {
+//					var row = $("#template").clone();
+//					row.find("#referid").val(n.referdoc_id);
+//					row.find("#referid").attr("id","referid_"+n.referdoc_id);
+//					if (n.referdoc_level == 1) {
+//						row.find("#referlevel1").text("一級項");
+//						row.find("#referdelete").attr("style", "display:none");
+//					} else {
+//						row.find("#referlevel2").text("二級項");
+//						row.find("#referdelete").attr("onclick", "location.href='referdoc_delete.action?referdoc_id=" + n.referdoc_id + "&pagenum='");
+//					}
+//					row.find("#referlevel").attr("id","referlevel_"+n.referdoc_id);
+//					row.find("#referparentno").val(n.referdoc_parentno);
+//					row.find("#referparentno").attr("id","referparentno_"+n.referdoc_id);
+//					row.find("#refertype").val(n.referdoc_type);
+//					row.find("#refertype").attr("id","refertype_"+n.referdoc_id);
+//					row.find("#referprice").val(n.referdoc_price);
+//					row.find("#referprice").attr("id","referprice_"+n.referdoc_id);
+//					if (n.referdoc_flag) {
+//						row.find("#referflag").html("<select name='referdoc_flag' id='referdoc_flag_" + n.referdoc_id + "'> <option id='select1' value='true' selected='selected'>true</option> <option id='select2' value='false'>false</option>");
+//					} else {
+//						row.find("#referflag").html("<select name='referdoc_flag' id='referdoc_flag_" + n.referdoc_id + "'> <option id='select2' value='false' selected='selected'>false</option> <option id='select1' value='true'>true</option>");
+//					}
+//					row.find("#referflag").attr("id","referflag_"+n.referdoc_id);
+//					
+//					row.find("#referupdate").attr("onclick", "referdoclist_update("+n.referdoc_id+")");
+//					row.attr("id", "referdoc_" + n.referdoc_id);// 改变绑定好数据的行的id
+//					row.appendTo("#datas");// 添加到模板的容器中
+//					row.toggle(300);
+//				});
 				// 显示数据
 //				$("#datas").show(300);
+				var typeId = "refertype_"+formnum;
+				$("#" + typeId).attr("style", "border:solid #55AA00 2px;");
+				$("#" + typeId).show(300);
+				$("#message").html("<font color=green> (ID:"+ formnum +") Update Success ! </font>");
+				$("#div_message").show(300).delay(5000).hide(300);
+				
 			} else {
 				//隐藏分页条
 				$("#page_bar").hide(300);

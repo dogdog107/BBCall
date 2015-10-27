@@ -210,7 +210,7 @@ public class UserAction extends ActionSupport implements SessionAware{
 		System.out.println("Here is UserAction.register");
 
 		dataMap.clear(); // dataMap中的数据将会被Struts2转换成JSON字符串，所以这里要先清空其中的数据
-		int result = userServices.register(token, account, password, usertype, name, picurl, mobile, gender, email, language, skill, description, accessgroup, addresscode, address, grade, driver, pushtoken); // 调用userServices.register
+		int result = userServices.register(userid, token, account, password, usertype, name, picurl, mobile, gender, email, language, skill, description, accessgroup, addresscode, address, grade, driver, pushtoken); // 调用userServices.register
 
 		if (result == ResultCode.SUCCESS) {
 //			Integer newuserid = userServices.getUserinfo().getUser_id();
