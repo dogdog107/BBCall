@@ -1,36 +1,48 @@
 function onload() {
-	document.getElementById('order_id').value = order_id;
-	document.getElementById('order_book_time').value = order_book_time;
-	document.getElementById('order_book_location').value = order_book_location;
-	document.getElementById('order_create_time').value = order_create_time;
-	document.getElementById('order_contact_name').value = order_contact_name;
-	document.getElementById('order_contact_mobile').value = order_contact_mobile;
-	document.getElementById('order_remark').value = order_remark;
-	document.getElementById('order_description').value = order_description;
+//	document.getElementById('order_id').value = order_id;
+//	document.getElementById('order_book_time').value = order_book_time;
+//	document.getElementById('order_book_location').value = order_book_location;
+//	document.getElementById('order_create_time').value = order_create_time;
+//	document.getElementById('order_contact_name').value = order_contact_name;
+//	document.getElementById('order_contact_mobile').value = order_contact_mobile;
+//	document.getElementById('order_remark').value = order_remark;
+//	document.getElementById('order_description').value = order_description;
 	
 	switch (order_status) {
 		case "1":
-			document.getElementById('order_status').value = "新建訂單";
+//			document.getElementById('order_status').value = "新建訂單";
+			$('#order_status').append("新建訂單");
 			break;
 		case "2":
-			document.getElementById('order_status').value = "待評價訂單";
+//			document.getElementById('order_status').value = "待評價訂單";
+			$('#order_status').append("待評價訂單");
 			break;
 		case "3":
-			document.getElementById('order_status').value = "已評價訂單";
+//			document.getElementById('order_status').value = "已評價訂單";
+			$('#order_status').append("已評價訂單");
 			break;
 		case "4":
-			document.getElementById('order_status').value = "收到貨物";
+//			document.getElementById('order_status').value = "收到貨物";
+			$('#order_status').append("收到貨物");
 			break;
 		case "5":
-			document.getElementById('order_status').value = "正在清洗";
+//			document.getElementById('order_status').value = "正在清洗";
+			$('#order_status').append("正在清洗");
 			break;
 		case "6":
-			document.getElementById('order_status').value = "正在配送";
+//			document.getElementById('order_status').value = "正在配送";
+			$('#order_status').append("正在配送");
 			break;
 		case "7":
-			document.getElementById('order_status').value = "已出價訂單";
+//			document.getElementById('order_status').value = "已出價訂單";
+			$('#order_status').append("已出價訂單");
 			break;
 	}
+	
+	if (order_master_id != null && order_master_id != "" && order_master_id != 0) {
+		$('#order_master_id').append(order_master_id);
+	}
+	
 	showPhoto();
 	
 	if (order_status == 7) {
@@ -51,9 +63,9 @@ function showPhoto() {
 			}
 			tempPhoto.appendTo("#order_pic");
 		}
-		$("#orderPhoto_0").text(">> 查看 <<");
+		$("#orderPhoto_0").text(">> 查看 / View <<");
 	} else {
-		$("#order_pic").text("無");
+		$("#order_pic").text("無照片 / No Photo");
 	}
 }
 

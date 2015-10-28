@@ -93,7 +93,9 @@ function getorderlist(status,mastername,booktime,orderid,bookcode, order_col, or
 						break;
 					}
 					row.find("#orderview").attr("onclick", "location.href='orderlist_selectother.action?order_id=" + n.order_id +"'");
-					row.attr("id", "orderlist_" + n.referdoc_id);// 改变绑定好数据的行的id
+					row.find("#btnDelete").attr("onclick", "deleteOrder(this.id)");
+					row.find("#btnDelete").attr("id", "btnDelete_" + n.order_id);
+					row.attr("id", "orderlist_" + n.order_id);// 改变绑定好数据的行的id
 					row.appendTo("#datas");// 添加到模板的容器中
 					row.toggle(300);
 				});
@@ -116,7 +118,32 @@ function getorderlist(status,mastername,booktime,orderid,bookcode, order_col, or
 		}
 	});
 }
-
+function deleteOrder(idname){
+	var orderid = idname.split("_")[1];
+	if (confirm('確定要刪除訂單(ID:'+ orderid +')嗎？\n Confirm to delete Order (ID:'+ orderid +')?')) {
+		$.ajax({
+			type : "post",
+			url : "${pageContext.request.contextPath}/orderlist_deleteJson.action",
+			data : {
+				"token" : token,
+				"order_id" : orderid,
+				"user_id" : user_id
+			},
+			success : function(data) {
+				if (data.result) {
+					var rowname = "orderlist_" + orderid;
+					$("#message").html("<font color=green> (ID:"+ orderid +") Delete Success ! </font>");
+					$("#div_message").show(300).delay(5000).hide(300);
+					$("#" + rowname).hide(300);
+				} else {
+					$("#message").html("<font color=red> (ID:"+ orderid +") Delete Failed ! " + data.errmsg + "</font>");
+					$("#div_message").show(300).delay(5000).hide(300);
+					alert("Delete failed. " + data.errmsg);
+				}
+			}
+		});
+	}
+}
 function searchorder() {
 	global_status =  $("#order_status").val();
 	global_mastername = $("#order_master_name").val();

@@ -656,7 +656,7 @@ public class UserAction extends ActionSupport implements SessionAware{
 	public String checkUserName() throws Exception {
 		System.out.println("Here is UserAction.checkUserName");
 		dataMap.clear(); // dataMap中的数据将会被Struts2转换成JSON字符串，所以这里要先清空其中的数据
-		int result = userServices.checkUserName(username);// 调用userServices.checkUserName
+		int result = userServices.checkUserName(username, null);// 调用userServices.checkUserName
 		if (result == ResultCode.USERNAME_NOTEXIST) {
 			dataMap.putAll(Tools.JsonHeadMap(result, true));
 			System.out.println(dataMap);
@@ -740,7 +740,7 @@ public class UserAction extends ActionSupport implements SessionAware{
 	 */
 	public String forgetPassword() throws Exception {
 		dataMap.clear(); // dataMap中的数据将会被Struts2转换成JSON字符串，所以这里要先清空其中的数据
-		int chkUsernameResult = userServices.checkUserName(username);// 调用userServices.checkUserName
+		int chkUsernameResult = userServices.checkUserName(username, null);// 调用userServices.checkUserName
 		if (chkUsernameResult == ResultCode.REQUIREINFO_NOTENOUGH || chkUsernameResult == ResultCode.USERNAME_NOTEXIST) {
 			dataMap.putAll(Tools.JsonHeadMap(chkUsernameResult, false));
 			logger.info("userOpr:[forgetPassword][" + username + "]" + Tools.JsonHeadMap(chkUsernameResult, false));

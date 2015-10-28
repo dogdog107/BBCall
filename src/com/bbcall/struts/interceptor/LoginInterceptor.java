@@ -127,7 +127,7 @@ public class LoginInterceptor extends AbstractInterceptor {
 			
 			String username = usernameParam[0];
 			if (!Tools.isEmpty(username)) {
-				int checkUserNameResult = userServices.checkUserName(username);// 调用checkUserName方法并得到返回码
+				int checkUserNameResult = userServices.checkUserName(username, null);// 调用checkUserName方法并得到返回码
 				if (checkUserNameResult != ResultCode.USERNAME_NOTEXIST) {
 					String accessgroup = userServices.getUserinfo()
 							.getUser_access_group(); // 引用user对象

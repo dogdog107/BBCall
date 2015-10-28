@@ -10,8 +10,9 @@
 <link href="${pageContext.request.contextPath }/page/css/tcal.css" type="text/css" rel="stylesheet" />
 
 <script type="text/javascript">
-	var token = "${sessionScope.user.user_token}";
 	var link = "${pageContext.request.contextPath}";
+	var user_id = ${sessionScope.user_id};
+	var token = "${sessionScope.user_token}";
 </script>
 
 <%
@@ -116,12 +117,12 @@
 			<tbody id="datas">
 				<tr style="font-weight: bold;">
 					<td width="40px">序號</td>
-					<td width="100px">訂單類型</td>
-					<td width="180px">訂單生成時間</td>
-					<td width="180px">預約時間</td>
-					<td width="300px">預約地點</td>
+					<td width="80px">訂單類型</td>
+					<td width="160px">訂單生成時間</td>
+					<td width="160px">預約時間</td>
+					<td width="250px">預約地點</td>
 					<td width="100px">負責師傅</td>
-					<td width="100px">訂單狀態</td>
+					<td width="80px">訂單狀態</td>
 					<td colspan="2" align="center">操作</td>
 				</tr>
 					<tr id="template" style="display:none">
@@ -133,7 +134,7 @@
 						<td id="ordermastername"></td>
 						<td id="orderstatus"></td>
 						<td>
-							<input id="orderview" type="submit" value="修改" onclick=""/>
+							<input id="orderview" type="submit" value="修改" onclick=""/><input id="btnDelete" type="submit" value="删除" onclick=""/>
 						</td>
 					</tr>
 

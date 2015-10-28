@@ -247,7 +247,7 @@ public class UserServices {
 		System.out.println("Registermode: " + registermode);
 		
 		int registerResult;// 新建返回值
-		int checkUserNameResult = checkUserName(account);// 调用checkUserName方法并得到返回码
+		int checkUserNameResult = checkUserName(account, null);// 调用checkUserName方法并得到返回码
 
 		if (checkUserNameResult == ResultCode.USERNAME_NOTEXIST) {// 检测用户名是否存在
 			
@@ -269,7 +269,7 @@ public class UserServices {
 			if (mobile != null) {
 				if (Tools.isNumeric(mobile.toString())
 						&& (mobile.toString().length() >= 8)) {
-					int checkMobileResult = checkUserName(mobile.toString());// 调用checkUserName方法检测手机号是否唯一并得到返回码
+					int checkMobileResult = checkUserName(mobile.toString(), null);// 调用checkUserName方法检测手机号是否唯一并得到返回码
 					if (checkMobileResult == ResultCode.USERNAME_NOTEXIST) {// 检测用户名是否存在
 						user.setUser_mobile(mobile);
 					} else {
@@ -391,7 +391,7 @@ public class UserServices {
 			// ***** 添加邮箱email *****
 			if (!Tools.isEmpty(email)) {
 				if (email.contains("@")) {
-					int checkEmailResult = checkUserName(email);// 调用checkUserName方法检测邮箱地址是否唯一并得到返回码
+					int checkEmailResult = checkUserName(email, null);// 调用checkUserName方法检测邮箱地址是否唯一并得到返回码
 					if (checkEmailResult == ResultCode.USERNAME_NOTEXIST) {// 检测用户名是否存在
 						user.setUser_email(email);
 					} else {
@@ -535,7 +535,7 @@ public class UserServices {
 		if (Tools.isEmpty(username, password))// 检测参数是否为空、null
 			return ResultCode.REQUIREINFO_NOTENOUGH;
 
-		int checkUserNameResult = checkUserName(username);// 调用checkUserName方法并得到返回码
+		int checkUserNameResult = checkUserName(username, null);// 调用checkUserName方法并得到返回码
 
 		// 判断用户名的类型：
 		if (checkUserNameResult != ResultCode.USERNAME_NOTEXIST) {
@@ -728,7 +728,7 @@ public class UserServices {
 		// ***** 检测account *****
 		if (!Tools.isEmpty(account) && !account.equals(user.getUser_account())) {
 			if (account.length() >= 6){
-				int checkAccountResult = checkUserName(account);// 调用checkUserName方法检测账号是否唯一并得到返回码
+				int checkAccountResult = checkUserName(account, user.getUser_id());// 调用checkUserName方法检测账号是否唯一并得到返回码
 				if (checkAccountResult == ResultCode.USERNAME_NOTEXIST) {// 检测用户名是否存在
 					user.setUser_account(account);
 					changecount++;
@@ -802,7 +802,7 @@ public class UserServices {
 		if (mobile != null && !mobile.equals(user.getUser_mobile())) {
 			if (Tools.isNumeric(mobile.toString())
 					&& (mobile.toString().length() >= 8)) {
-				int checkMobileResult = checkUserName(mobile.toString());// 调用checkUserName方法检测手机号是否唯一并得到返回码
+				int checkMobileResult = checkUserName(mobile.toString(), user.getUser_id());// 调用checkUserName方法检测手机号是否唯一并得到返回码
 				if (checkMobileResult == ResultCode.USERNAME_NOTEXIST) {// 检测用户名是否存在
 					user.setUser_mobile(mobile);
 					changecount++;
@@ -829,7 +829,7 @@ public class UserServices {
 		// ***** 检测email *****
 		if (!Tools.isEmpty(email) && !email.equals(user.getUser_email())) {
 			if (email.contains("@")) {
-				int checkEmailResult = checkUserName(email);// 调用checkUserName方法检测邮箱地址是否唯一并得到返回码
+				int checkEmailResult = checkUserName(email, user.getUser_id());// 调用checkUserName方法检测邮箱地址是否唯一并得到返回码
 				if (checkEmailResult == ResultCode.USERNAME_NOTEXIST) {// 检测用户名是否存在
 					user.setUser_email(email);
 					changecount++;
@@ -844,6 +844,11 @@ public class UserServices {
 		}
 		// ***** 检测language *****
 		if (!Tools.isEmpty(language) && !language.equals(user.getUser_language())) {
+			
+			if (!language.contains("Chinese") && !language.contains("Cantonese") && !language.contains("English")) {
+				return ResultCode.USERLANGUAGE_ERROR;
+			}
+			
 			// 清除开头为;的符号
 			while(language.startsWith(";")){
 				language = language.substring(1, language.length());
@@ -1017,7 +1022,7 @@ public class UserServices {
 	// ## 检测用户名是否存在
 	// ###################
 
-	public int checkUserName(String username) {
+	public int checkUserName(String username, Integer userid) {
 		System.out.println("Here is UserServices.checkUserName method...");
 
 		if (Tools.isEmpty(username))
@@ -1034,15 +1039,23 @@ public class UserServices {
 		if (username.contains("@")) { // 判断登录名是否为邮箱地址
 			userinfo = userMapper.getUserByEmail(username);
 			if (null != userinfo) {
-				System.out.println("Username_email exist");
-				return ResultCode.USERNAME_EMAIL;
+				if (userinfo.getUser_id().equals(userid)) {
+					return ResultCode.USERNAME_NOTEXIST;
+				} else {
+					System.out.println("Username_email exist");
+					return ResultCode.USERNAME_EMAIL;
+				}
 			}
 		}
 
 		userinfo = userMapper.getUserByAccount(username);
 		if (null != userinfo) { // 判断登录名是否为帐号
-			System.out.println("Username_account exist");
-			return ResultCode.USERNAME_ACCOUNT;
+			if (userinfo.getUser_id().equals(userid)) {
+				return ResultCode.USERNAME_NOTEXIST;
+			} else {
+				System.out.println("Username_account exist");
+				return ResultCode.USERNAME_ACCOUNT;
+			}
 		} else {
 			return ResultCode.USERNAME_NOTEXIST;
 		}
