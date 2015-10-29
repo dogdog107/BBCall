@@ -52,8 +52,28 @@ function checkSkillList(pagenum){
 					row.find("#userid").text(n.user_id);
 					row.find("#useraccount").text(n.user_account);
 					row.find("#useraccount").text(n.user_account);
+//					row.find("#skillname").text(n.user_skill_name);
+					if (n.user_skill_url != null && n.user_skill_url != "") {
+						var photoUrl = n.user_skill_url.split(';');
+						var photoBox = "skillPhoto_" + n.userskill_id;
+						for (var i = 0; i < photoUrl.length; i++) {
+							var tempPhoto = row.find("#PhotoBtn").clone();
+							tempPhoto.attr("href", photoUrl[i]);// 改变绑定好数据的行的id
+							tempPhoto.attr("data-lightbox", photoBox);// 改变绑定好数据的行的id
+							tempPhoto.attr("id", photoBox + "_" + i);
+							if (i > 0) {
+								tempPhoto.attr("display","none");
+							}
+//							tempPhoto.appendTo("#order_pic");
+							row.find("#skillname").append(tempPhoto);
+						}
+						var photoBox0 = photoBox + "_0";
+						row.find("#" + photoBox0).text(n.user_skill_name);
+					} else {
+						row.find("#skillname").text(n.user_skill_name);
+					}
 					row.find("#skillname").attr("id", "skillname_" + n.userskill_id);
-					checkSkillName(n.user_skill, "skillname_" + n.userskill_id);
+//					checkSkillName(n.user_skill, "skillname_" + n.userskill_id);
 					switch (n.user_skill_status) {
 					case 0:
 						row.find("#skillstatus").html("<span style='color:#EE7700'>Pending</span>");

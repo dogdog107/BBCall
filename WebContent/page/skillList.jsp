@@ -7,7 +7,9 @@
 <meta http-equiv="content-type" content="text/html; charset=utf-8" />
 <link rel="shortcut icon" href="${pageContext.request.contextPath }/page/img/BBCallicon_32X32.ico" type="image/x-icon" />
 <link href="${pageContext.request.contextPath }/page/css/mine.css" type="text/css" rel="stylesheet" />
-
+<link
+	href="${pageContext.request.contextPath }/page/lightbox2/css/lightbox.css"
+	type="text/css" rel="stylesheet" />
 </head>
 <body onload="onload()">
 
@@ -63,7 +65,7 @@
 						<td id="skillid"></td>
 						<td id="userid"></td>
 						<td id="useraccount"></td>
-						<td id="skillname"></td>
+						<td id="skillname"><a id="PhotoBtn" href="" title=""></a></td>
 						<td id="skillstatus"></td>
 						<td id="createtime"></td>
 						<td id="status_operation">
@@ -109,5 +111,8 @@
 	src="${pageContext.request.contextPath }/jquery/skillListPage.js?token=${sessionScope.user_token}"></script>
 <script type="text/javascript"
 	src="${pageContext.request.contextPath }/jquery/paging.js"></script>
+	<!-- 引入 Lightbox (压缩文件) -->
+	<script type="text/javascript"
+		src="${pageContext.request.contextPath }/page/lightbox2/js/lightbox.min.js"></script>
 </body>
 </html>

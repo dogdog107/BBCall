@@ -160,8 +160,8 @@ function showPendingSkill() {
 				$.each(skilllist, function(i, n) {
 					if (n.user_skill_status == 0) {
 						var row = $("#template").clone();
-						var fullurl = n.user_skill_url.split(";");
-						if(fullurl.length > 0){
+						if(n.user_skill_url != null && n.user_skill_url != ""){
+							var fullurl = n.user_skill_url.split(";");
 							for (var j = 0; j < fullurl.length; j++) {
 								var tempPSkill = $("#PSkill").clone();
 								tempPSkill.attr("href", fullurl[j]);// 改变绑定好数据的行的id
@@ -172,6 +172,8 @@ function showPendingSkill() {
 								}
 								tempPSkill.appendTo(row);
 							}
+						} else {
+							row.append("<a id='pendingSkill_" + n.user_skill + "_0'></a>");
 						}
 						row.find("#skillStatusOpr").val(n.user_skill_status);
 						row.find("#skillStatusOpr").attr("id", "skillStatusOpr_" + n.userskill_id);

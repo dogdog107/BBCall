@@ -55,6 +55,15 @@ public class LoginInterceptor extends AbstractInterceptor {
 			session = invocation.getInvocationContext().getSession();
 			System.out.println("session:" + session);
 			while (session.size() != 0 && session.get(sessionCheckName) != null && !Tools.isEmpty(session.get(sessionCheckName).toString())) {
+				
+				int tokenResult = userServices.checkUserToken(session.get(sessionCheckName).toString());
+				if (tokenResult != ResultCode.SUCCESS) {
+					String errmsg = "(session) " + ResultCode.getErrmsg(tokenResult) + ", Please contact your Admin.";
+					logger.info("userOpr:" + errmsg);
+					invocation.getInvocationContext().getSession().clear();
+					return "login";
+				}
+				
 				// 输出 log4j 信息
 				logger.info("userOpr:[" + session.get("user_id") + "]" + session.get("user_account") + " - " + actionName);  
 				// 检测到sessionCheckName,放行 并进入access Validation.
@@ -156,6 +165,7 @@ public class LoginInterceptor extends AbstractInterceptor {
 			}
 			break;
 		case "session": // session check access
+
 			if (session.get("user_access_group") == null
 			|| Tools.isEmpty(session.get("user_access_group")
 					.toString())) {

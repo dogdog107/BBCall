@@ -51,8 +51,9 @@ function onload() {
 }
 
 function showPhoto() {
-	var photoUrl = order_pic.replace('[','').replace(']','').split(',');
-	if (photoUrl.length > 1) {
+	var tempUrl = order_pic.replace('[','').replace(']','');
+	if (tempUrl != null && tempUrl != "") {
+		var photoUrl = tempUrl.split(',');
 		for (var i = 0; i < photoUrl.length; i++) {
 			var tempPhoto = $("#PhotoBtn").clone();
 			tempPhoto.attr("href", photoUrl[i]);// 改变绑定好数据的行的id
@@ -86,7 +87,7 @@ function showPreOrder() {
 								var row = $("#template").clone();
 								row.find("#preOrderId").text(n.preorder_id);
 								row.find("#createTime").text(n.preorder_create_time.replace("T", " "));
-								row.find("#price").text(n.preorder_price);
+								row.find("#price").text("$" + n.preorder_price);
 								row.find("#masterId").text(n.preorder_master_id);
 								row.find("#masterAccount").text(n.preorder_master_account);
 								row.find("#masterGrade").text(n.preorder_master_grade);
