@@ -49,8 +49,8 @@ public class IosPushServices {
 	 
 		/* Create the queue */ 
 	 	// true：表示的是产品发布推送服务 false：表示的是产品测试推送服务
-	 	customerQueue = Push.queue(p12FilePath_customer, p12Password_customer, false, threads);
-	 	masterQueue = Push.queue(p12FilePath_master, p12Password_master, false, threads);
+	 	customerQueue = Push.queue(p12FilePath_customer, p12Password_customer, true, threads);
+	 	masterQueue = Push.queue(p12FilePath_master, p12Password_master, true, threads);
 	 
 		/* Start the queue (all threads and connections and initiated) */ 
 	 	customerQueue.start();
@@ -101,9 +101,11 @@ public class IosPushServices {
 		switch (usertype) {
 		case 1:
 			queue = customerQueue;
+			System.out.println("Using Ios Customer Push Queue.");
 			break;
 		case 2:
 			queue = masterQueue;
+			System.out.println("Using Ios Master Push Queue.");
 			break;
 		default:
 			return ResultCode.USERTYPE_ERROR;
