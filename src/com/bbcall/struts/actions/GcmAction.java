@@ -34,7 +34,7 @@ public class GcmAction extends ActionSupport {
 	private UserServices userServices;
 	
 	@Autowired
-	private DevicePushServices decicDevicePushServices;
+	private DevicePushServices devicePushServices;
 	
 	private Map<String, Object> dataMap = new LinkedHashMap<String, Object>(); // 新建dataMap来储存JSON字符串
 
@@ -88,7 +88,9 @@ public class GcmAction extends ActionSupport {
 
 		int result = 0;
 		if (userPushTokenList != null && userPushTokenList.size() > 0) {
-			result = iosPushServices.iosPush(userPushTokenList, datamsg, 1, null, null);
+//			result = iosPushServices.iosPush(userPushTokenList, datamsg, 1, null, null);
+			result = devicePushServices.devicePush(2, userPushTokenList, datamsg, 1, null, null);
+//			result = devicePushServices.devicePush(2, userPushTokenList, 3, 1, 503);
 			if (result != ResultCode.SUCCESS) {
 				dataMap.putAll(Tools.JsonHeadMap(result, false));
 				return "exception";
@@ -96,7 +98,9 @@ public class GcmAction extends ActionSupport {
 		}
 
 		if (masterPushTokenList != null && masterPushTokenList.size() > 0) {
-			result = iosPushServices.iosPush(masterPushTokenList, datamsg, 2, null, null);
+//			result = iosPushServices.iosPush(masterPushTokenList, datamsg, 2, null, null);
+			result = devicePushServices.devicePush(2, masterPushTokenList, datamsg, 2, null, null);
+//			result = devicePushServices.devicePush(2, masterPushTokenList, 3, 2, 503);
 			if (result != ResultCode.SUCCESS) {
 				dataMap.putAll(Tools.JsonHeadMap(result, false));
 				return "exception";
@@ -121,7 +125,7 @@ public class GcmAction extends ActionSupport {
 	 * @throws Exception
 	 */
 	public String getPushMessage() throws Exception {
-		List<PushMessage> pushMsg = decicDevicePushServices.getPushMessage();
+		List<PushMessage> pushMsg = devicePushServices.getPushMessage();
 		dataMap.clear(); // dataMap中的数据将会被Struts2转换成JSON字符串，所以这里要先清空其中的数据
 		dataMap.put("pushMessage", pushMsg);
 		dataMap.putAll(Tools.JsonHeadMap(ResultCode.SUCCESS, true));
@@ -139,7 +143,7 @@ public class GcmAction extends ActionSupport {
 	 */
 	public String updatePushMessage() throws Exception {
 		dataMap.clear();
-		int result = decicDevicePushServices.updatePushMessage(msgid, msgcontents);
+		int result = devicePushServices.updatePushMessage(msgid, msgcontents);
 		if (result == ResultCode.SUCCESS) {
 			dataMap.putAll(Tools.JsonHeadMap(result, true));
 			System.out.println(dataMap);

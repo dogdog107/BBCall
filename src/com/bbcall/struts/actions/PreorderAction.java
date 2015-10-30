@@ -98,7 +98,9 @@ public class PreorderAction extends ActionSupport {
 			if (drivetype != 0 && !Tools.isEmpty(registerid)) {
 				// msgID = 3
 				// default: BBCall notification - New Master wants to apply your Order.
-				devicePushServices.devicePush(drivetype, registerid, 3, userServices.getUserinfo().getUser_type(), preorderid);
+				List<String> deviceTokens = new ArrayList<String>();
+				deviceTokens.add(registerid);
+				devicePushServices.devicePush(drivetype, deviceTokens, 3, userServices.getUserinfo().getUser_type(), preorderid);
 			}
 
 		} catch (Exception e) {

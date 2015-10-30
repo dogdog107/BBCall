@@ -230,7 +230,9 @@ public class OrderlistAction extends ActionSupport {
 			if (drivetype != 0 && !Tools.isEmpty(registerid)) {
 				// msgID = 1
 				//default: BBCall notification - Your order request has been accepted.
-				devicePushServices.devicePush(drivetype, registerid, 1, userServices.getUserinfo().getUser_type(), orderid);
+				List<String> deviceTokens = new ArrayList<String>();
+				deviceTokens.add(registerid);
+				devicePushServices.devicePush(drivetype, deviceTokens, 1, userServices.getUserinfo().getUser_type(), orderid);
 			}
 			
 		} catch (Exception e) {
@@ -307,7 +309,9 @@ public class OrderlistAction extends ActionSupport {
 			if (drivetype != 0 && !Tools.isEmpty(registerid)) {
 				// msgID = 2
 				// default: BBCall notification - You have new completed Order.
-				devicePushServices.devicePush(drivetype, registerid, 2, userServices.getUserinfo().getUser_type(), orderid);
+				List<String> deviceTokens = new ArrayList<String>();
+				deviceTokens.add(registerid);
+				devicePushServices.devicePush(drivetype, deviceTokens, 2, userServices.getUserinfo().getUser_type(), orderid);
 			}
 		} catch (Exception e) {
 			// TODO: handle exception

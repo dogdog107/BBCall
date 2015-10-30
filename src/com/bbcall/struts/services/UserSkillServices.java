@@ -1,5 +1,6 @@
 package com.bbcall.struts.services;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.apache.log4j.Logger;
@@ -306,7 +307,9 @@ public class UserSkillServices {
 			
 			// 审核消息推送
 			if (tempUser.getUser_driver() != 0 && !Tools.isEmpty(tempUser.getUser_push_token())) {
-				devicePushServices.devicePush(tempUser.getUser_driver(), tempUser.getUser_push_token(), pushMsgId, tempUser.getUser_type(), null);
+				List<String> deviceTokens = new ArrayList<String>();
+				deviceTokens.add(tempUser.getUser_push_token());
+				devicePushServices.devicePush(tempUser.getUser_driver(), deviceTokens, pushMsgId, tempUser.getUser_type(), null);
 			}
 			return ResultCode.SUCCESS;
 		} else {

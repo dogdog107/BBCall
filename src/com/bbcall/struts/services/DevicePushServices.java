@@ -30,9 +30,9 @@ public class DevicePushServices {
 	 * @param orderId
 	 * @return
 	 */
-	public int devicePush(Integer deviceType, String deviceToken, String msg,
+	public int devicePush(Integer deviceType, List<String> deviceTokens, String msg,
 			Integer userType, Integer orderId, String msgType) {
-		if (deviceType == null || Tools.isEmpty(deviceToken))
+		if (deviceType == null || deviceTokens.size() <= 0)
 			return ResultCode.REQUIREINFO_NOTENOUGH;
 
 		if (deviceType != 1 && deviceType != 2)
@@ -41,14 +41,16 @@ public class DevicePushServices {
 		try {
 			if (deviceType.equals(1)) {
 				// 谷歌推送
-				gcmServices.sendtouser(msg, deviceToken, orderId, msgType);
+				for (int i = 0; i < deviceTokens.size(); i++) {
+					gcmServices.sendtouser(msg, deviceTokens.get(i), orderId, msgType);
+				}
 			} else if (deviceType.equals(2)) {
 				// 苹果推送
 				if (userType == null) {
 					return ResultCode.REQUIREINFO_NOTENOUGH;
 				}
-				List<String> deviceTokens = new ArrayList<String>();
-				deviceTokens.add(deviceToken);
+//				List<String> deviceTokens = new ArrayList<String>();
+//				deviceTokens.add(deviceToken);
 				iosPushServices.iosPush(deviceTokens, msg, userType, orderId, msgType);
 			}
 		} catch (Exception e) {
@@ -66,10 +68,10 @@ public class DevicePushServices {
 	 * @param orderId
 	 * @return
 	 */
-	public int devicePush(Integer deviceType, String deviceToken, Integer msgId, Integer userType, Integer orderId) {
+	public int devicePush(Integer deviceType, List<String> deviceTokens, Integer msgId, Integer userType, Integer orderId) {
 		String msgContent = pushMessageMapper.getPushMessageByMsgId(msgId).getMsg_content();
 		String msgType = pushMessageMapper.getPushMessageByMsgId(msgId).getMsg_type();
-		return devicePush(deviceType, deviceToken, msgContent, userType,orderId, msgType);
+		return devicePush(deviceType, deviceTokens, msgContent, userType,orderId, msgType);
 	}
 	
 	/**
