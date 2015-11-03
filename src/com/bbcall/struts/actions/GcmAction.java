@@ -1,5 +1,6 @@
 package com.bbcall.struts.actions;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
@@ -43,6 +44,8 @@ public class GcmAction extends ActionSupport {
 	
 	private Integer msgid;
 	private String msgcontents;
+	
+	private String pushToken;
 
 	@Override
 	public String execute() throws Exception {
@@ -82,28 +85,37 @@ public class GcmAction extends ActionSupport {
 
 		dataMap = new HashMap<String, Object>(); // 新建dataMap来储存JSON字符串
 		dataMap.clear(); // dataMap中的数据将会被Struts2转换成JSON字符串，所以这里要先清空其中的数据
-
-		List<String> userPushTokenList = userServices.getPushTokenByDriver(2, 1);
-		List<String> masterPushTokenList = userServices.getPushTokenByDriver(2, 2);
-
 		int result = 0;
-		if (userPushTokenList != null && userPushTokenList.size() > 0) {
-//			result = iosPushServices.iosPush(userPushTokenList, datamsg, 1, null, null);
-			result = devicePushServices.devicePush(2, userPushTokenList, datamsg, 1, null, null);
-//			result = devicePushServices.devicePush(2, userPushTokenList, 3, 1, 503);
+		if (!Tools.isEmpty(pushToken) && usertype != null) {
+			List<String> pushTokenList = new ArrayList<String>();
+			pushTokenList.add(pushToken);
+			result = devicePushServices.devicePush(2, pushTokenList, datamsg, usertype, null, null);
 			if (result != ResultCode.SUCCESS) {
 				dataMap.putAll(Tools.JsonHeadMap(result, false));
 				return "exception";
 			}
-		}
-
-		if (masterPushTokenList != null && masterPushTokenList.size() > 0) {
+		} else {
+			List<String> userPushTokenList = userServices.getPushTokenByDriver(2, 1);
+			List<String> masterPushTokenList = userServices.getPushTokenByDriver(2, 2);
+			
+			if (userPushTokenList != null && userPushTokenList.size() > 0) {
+//			result = iosPushServices.iosPush(userPushTokenList, datamsg, 1, null, null);
+				result = devicePushServices.devicePush(2, userPushTokenList, datamsg, 1, null, null);
+//			result = devicePushServices.devicePush(2, userPushTokenList, 3, 1, 503);
+				if (result != ResultCode.SUCCESS) {
+					dataMap.putAll(Tools.JsonHeadMap(result, false));
+					return "exception";
+				}
+			}
+			
+			if (masterPushTokenList != null && masterPushTokenList.size() > 0) {
 //			result = iosPushServices.iosPush(masterPushTokenList, datamsg, 2, null, null);
-			result = devicePushServices.devicePush(2, masterPushTokenList, datamsg, 2, null, null);
+				result = devicePushServices.devicePush(2, masterPushTokenList, datamsg, 2, null, null);
 //			result = devicePushServices.devicePush(2, masterPushTokenList, 3, 2, 503);
-			if (result != ResultCode.SUCCESS) {
-				dataMap.putAll(Tools.JsonHeadMap(result, false));
-				return "exception";
+				if (result != ResultCode.SUCCESS) {
+					dataMap.putAll(Tools.JsonHeadMap(result, false));
+					return "exception";
+				}
 			}
 		}
 
@@ -214,6 +226,14 @@ public class GcmAction extends ActionSupport {
 
 	public void setMsgcontents(String msgcontents) {
 		this.msgcontents = msgcontents;
+	}
+
+	public String getPushToken() {
+		return pushToken;
+	}
+
+	public void setPushToken(String pushToken) {
+		this.pushToken = pushToken;
 	}
 
 }
