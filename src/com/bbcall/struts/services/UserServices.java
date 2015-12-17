@@ -139,7 +139,7 @@ public class UserServices {
 //			if (mobile != null) {
 //				if (Tools.isNumeric(mobile.toString())
 //						&& (mobile.toString().length() >= 8)) {
-//					int checkMobileResult = checkUserName(mobile.toString()); // 调用checkUserName方法检测手机号是否唯一并得到返回码
+//					int checkMobileResult = checkUserName(mobile.toString(), null); // 调用checkUserName方法检测手机号是否唯一并得到返回码
 //					User tempuser = new User();
 //					if (checkMobileResult == ResultCode.USERNAME_NOTEXIST) { // 检测用户名是否存在
 //						tempuser.setUser_type(usertype);
