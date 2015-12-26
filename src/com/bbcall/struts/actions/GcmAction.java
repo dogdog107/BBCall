@@ -13,7 +13,6 @@ import org.springframework.stereotype.Controller;
 import com.bbcall.functions.ResultCode;
 import com.bbcall.functions.Tools;
 import com.bbcall.mybatis.table.PushMessage;
-import com.bbcall.mybatis.table.UserSkill;
 import com.bbcall.struts.services.DevicePushServices;
 import com.bbcall.struts.services.GcmServices;
 import com.bbcall.struts.services.IosPushServices;
@@ -95,8 +94,23 @@ public class GcmAction extends ActionSupport {
 				return "exception";
 			}
 		} else {
-			List<String> userPushTokenList = userServices.getPushTokenByDriver(2, 1);
-			List<String> masterPushTokenList = userServices.getPushTokenByDriver(2, 2);
+			List<String> userPushTokenList = new ArrayList<String>();
+			List<String> masterPushTokenList = new ArrayList<String>();
+			switch (usertype) {
+			case 1:
+				userPushTokenList = userServices.getPushTokenByDriver(2, 1);
+				masterPushTokenList = null;
+				break;
+			case 2:
+				masterPushTokenList = userServices.getPushTokenByDriver(2, 2);
+				userPushTokenList = null;
+				break;
+
+			default:
+				userPushTokenList = userServices.getPushTokenByDriver(2, 1);
+				masterPushTokenList = userServices.getPushTokenByDriver(2, 2);
+				break;
+			}
 			
 			if (userPushTokenList != null && userPushTokenList.size() > 0) {
 //			result = iosPushServices.iosPush(userPushTokenList, datamsg, 1, null, null);

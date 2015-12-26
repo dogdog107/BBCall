@@ -95,7 +95,7 @@ public class UserServices {
 		
 		if (usertype == 5) { // usertype=5时为临时客户号，检测注册信息是否完整
 			// ***** 检测 account & password 是否符合格式 *****
-			if (!Tools.isEmpty(account, password)) {
+			if (!Tools.isEmpty(account, email, password) && mobile != null) {
 				if (account.length() < 6) {
 					return ResultCode.USERACCOUNT_ERROR;
 				} else if (password.length() < 6) {
@@ -204,6 +204,9 @@ public class UserServices {
 		}
 
 		if (usertype == 1) { // usertype=1时为用户号，检测注册信息是否完整
+			if (mobile == null) {
+				return ResultCode.REGISTERINFO_NOTENOUGH;
+			}
 			registermode = checkRegisterMode(token); // 判断register的模式:1=user,2=admin
 			defaultaccess = "user_default"; // 分配user_default权限
 		}
@@ -214,6 +217,9 @@ public class UserServices {
 //					|| mobile == null || gender == null) {
 //				return ResultCode.REGISTERINFO_NOTENOUGH;
 //			}
+			if (mobile == null) {
+				return ResultCode.REGISTERINFO_NOTENOUGH;
+			}
 			registermode = checkRegisterMode(token); // 判断register的模式:1=user,2=admin
 			defaultaccess = "master_default"; // 分配master_default权限
 		}

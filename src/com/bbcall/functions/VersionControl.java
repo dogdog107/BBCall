@@ -3,7 +3,7 @@ package com.bbcall.functions;
 public class VersionControl {
 	private static String androidVer = "1.0.5";
 	private static String iosVer = "1.0.0";
-	private static String serverVer = "1.4.3";
+	private static String serverVer = "1.4.4";
 	
 	public static String getAndroidVer() {
 		return androidVer;
