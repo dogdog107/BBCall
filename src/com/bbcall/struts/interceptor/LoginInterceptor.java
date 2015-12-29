@@ -84,10 +84,18 @@ public class LoginInterceptor extends AbstractInterceptor {
 						// 检测到token,放行 并进入access Validation.
 						return accessValidate(invocation,"token");
 					} else {
-						ValueStack stack = invocation.getStack();
-						stack.set("dataMap", dataMap);
-						dataMap.putAll(Tools.JsonHeadMap(result, false));
-						return "interceptorjson";
+						// 判断是否Json请求
+						if (actionName.contains("Json")){
+							// Json请求时返回json串
+							dataMap.clear(); // dataMap中的数据将会被Struts2转换成JSON字符串，所以这里要先清空其中的数据
+							ValueStack stack = invocation.getStack();
+							stack.set("dataMap", dataMap);
+							dataMap.putAll(Tools.JsonHeadMap(result, false));
+							return "interceptorjson";
+						} else {
+							// 不是Json请求的返回login页面
+							return "login";
+						}
 					}
 				}
 			}
