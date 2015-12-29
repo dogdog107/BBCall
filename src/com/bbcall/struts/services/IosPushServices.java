@@ -100,6 +100,7 @@ public class IosPushServices {
 		
 		switch (usertype) {
 		case 1:
+		case 5:
 			queue = customerQueue;
 			System.out.println("Using Ios Customer Push Queue.");
 			break;
